@@ -48,7 +48,7 @@ class CrmServiceProvider extends PanelProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'crm');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'crm');
         $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'crm');
 
         $this->publishes([
@@ -56,11 +56,11 @@ class CrmServiceProvider extends PanelProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/crm'),
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/crm'),
         ], 'views');
 
         $this->publishes([
-            __DIR__ . '/../../public' => public_path('vendor/crm'),
+            __DIR__ . '/../public' => public_path('vendor/crm'),
         ], 'public');
     }
 
