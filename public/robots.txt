@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Sitemap: https://Buttour.com.sa/sitemap.xml

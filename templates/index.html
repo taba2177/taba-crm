@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Image Replacer Dashboard</title>
+        <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            .tabs-container {
+                overflow-x: auto;
+                white-space: nowrap;
+                margin-bottom: 20px;
+            }
+            .nav-tabs .nav-link {
+                display: inline-block;
+            }
+            .image-item {
+                margin: 15px 0;
+                text-align: center;
+                padding: 15px;
+                background-color: #f9fafb;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+            }
+            .image-item img {
+                max-width: 100%;
+                height: auto;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .image-item p {
+                margin: 5px 0;
+            }
+            .form-control-file,
+            .form-control,
+            .btn,
+            .form-check-input {
+                margin-top: 5px;
+            }
+            .alert {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                display: none;
+            }
+            .btn-success {
+                width: 100%;
+            }
+            .form-check-label {
+                margin-left: 5px;
+            }
+            .form-control-file {
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1 class="text-center">Image Replacer Tool</h1>
+
+            <!-- Success/Error Message -->
+            <div id="message" class="alert alert-dismissible fade" role="alert">
+                <span id="message-text"></span>
+                <button
+                    type="button"
+                    class="close"
+                    onclick="hideMessage()"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs for Blade File Filtering -->
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a
+                            href="#"
+                            onclick="filterImages('all', this)"
+                            class="nav-link active"
+                            >All Pages</a
+                        >
+                    </li>
+                    {% for blade_file in blade_files %}
+                    <li class="nav-item">
+                        <a
+                            href="#"
+                            onclick="filterImages('{{ blade_file.replace('\\', '/') }}', this)"
+                            class="nav-link"
+                            >{{ blade_file.split('/')[2].replace('\\', '/')}}</a
+                        >
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <button onclick="optimizeAllImages()" class="btn btn-warning mb-3">
+                Optimize All Images
+            </button>
+
+            <!-- Image List -->
+            <div class="row" id="image-list">
+                {% for image in images %}
+                <div
+                    class="col-md-3 image-item"
+                    data-blade-file="{{ image.blade_file.replace('\\', '/') }}"
+                >
+                    <img
+                        src="{{ url_for('serve_html_files', filename=image.name) }}"
+                        alt="{{ image.name }}"
+                    />
+                    <p><strong>{{ image.name.split('/')[-1] }}</strong></p>
+                    <p>Density: {{ image.density }}</p>
+                    <p>Page: {{ image.blade_file.split('/')[-1] }}</p>
+                    <p>Size: {{ image.size }} KB</p>
+                    <form
+                        action="/replace"
+                        method="post"
+                        enctype="multipart/form-data"
+                        onsubmit="replaceImage(event, {{ loop.index }})"
+                    >
+                        <input
+                            type="file"
+                            name="new_image"
+                            accept="image/*"
+                            required
+                            class="form-control-file"
+                        />
+                        <input
+                            type="hidden"
+                            name="old_image"
+                            value="{{ image.name }}"
+                        />
+                        <input
+                            type="hidden"
+                            name="blade_file"
+                            value="{{ image.blade_file.replace('\\', '/') }}"
+                        />
+                        <div class="form-check mt-2">
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                name="optimize"
+                                id="optimize{{ loop.index }}"
+                                checked
+                            />
+                            <label
+                                class="form-check-label"
+                                for="optimize{{ loop.index }}"
+                                >Optimize</label
+                            >
+                        </div>
+                        <button type="submit" class="btn btn-success mt-2">
+                            Replace Image
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <script>
+            // Filter images by blade file
+            function filterImages(bladeFile, link) {
+                document
+                    .querySelectorAll(".nav-link")
+                    .forEach((link) => link.classList.remove("active"));
+                link.classList.add("active");
+
+                document.querySelectorAll(".image-item").forEach((item) => {
+                    item.style.display =
+                        bladeFile === "all" ||
+                        item.getAttribute("data-blade-file") === bladeFile
+                            ? "block"
+                            : "none";
+                });
+            }
+
+            // Show message with auto-hide
+            function showMessage(type, text) {
+                const messageEl = document.getElementById("message");
+                messageEl.classList.remove("alert-success", "alert-danger");
+                messageEl.classList.add(
+                    type === "success" ? "alert-success" : "alert-danger"
+                );
+                document.getElementById("message-text").innerText = text;
+                messageEl.style.display = "block";
+                messageEl.classList.add("show");
+
+                setTimeout(() => {
+                    hideMessage();
+                }, 3000);
+            }
+
+            function hideMessage() {
+                const messageEl = document.getElementById("message");
+                messageEl.classList.remove("show");
+                messageEl.style.display = "none";
+            }
+
+            function replaceImage(event, index) {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+
+                fetch("/replace", { method: "POST", body: formData })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            showMessage(
+                                "success",
+                                "Image replaced successfully!"
+                            );
+                            location.reload();
+                        } else {
+                            showMessage(
+                                "danger",
+                                "Image replacement failed: " + data.error
+                            );
+                        }
+                    })
+                    .catch(() =>
+                        showMessage("danger", "Unexpected error occurred!")
+                    );
+            }
+
+            function optimizeAllImages() {
+                fetch("/optimize-all-images", { method: "POST" })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            showMessage(
+                                "success",
+                                "All images optimized successfully!"
+                            );
+                            location.reload();
+                        } else {
+                            showMessage(
+                                "danger",
+                                "Optimization failed: " + data.error
+                            );
+                        }
+                    })
+                    .catch(() =>
+                        showMessage("danger", "Unexpected error occurred!")
+                    );
+            }
+        </script>
+    </body>
+</html>
