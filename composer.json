@@ -32,7 +32,7 @@
         "spatie/laravel-export": "^1.2",
         "spatie/laravel-sitemap": "^7.3",
         "symfony/ux-cropperjs": "^2.25",
-        "z3d0x/filament-logger": "^0.7.0"
+        "z3d0x/filament-logger": "^0.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",
