@@ -16,7 +16,7 @@ use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
 
 class PageResource extends Resource
 {
-    protected static ?string $model = Page::class;
+    protected static ?string $model = \Taba\Crm\Models\Page::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 

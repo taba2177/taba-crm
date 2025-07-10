@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Taba\Crm\Models;
+
+use Taba\Crm\Models\PostCategory;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

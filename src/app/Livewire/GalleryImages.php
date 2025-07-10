@@ -33,7 +33,7 @@ class GalleryImages extends Component
         if (!request()->routeIs('home')) {
 
         $this->setSeoMetadata();}
-        $query = Studio::active()->with('product')
+        $query = \Taba\Crm\Models\Studio::active()->with('product')
             ->when($this->show !== 'all', fn($q) => $q->where('id', '!=', 10)->limit(2)->inRandomOrder())
             ->when($this->show === 'all', fn($q) => $q->latest()->inRandomOrder());
 

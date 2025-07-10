@@ -17,7 +17,7 @@ use App\Models\PostCategory;
 Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category:slug}', [CategoryPreviewController::class, 'category'])->name('preview.category');
 
-Route::get('/', Home::class)->name('home');
+Route::get('/', \Taba\Crm\Livewire\Home::class)->name('home');
 
 // Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
 
@@ -188,7 +188,7 @@ Route::get('/homepage-section-preview', function () {
 
     $postCategory = null;
     if ($postCategoryId) {
-        $postCategory = App\Models\PostCategory::find($postCategoryId);
+        $postCategory = \Taba\Crm\Models\PostCategory::find($postCategoryId);
     }
 
     return view($component, [

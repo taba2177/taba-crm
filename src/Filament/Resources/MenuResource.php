@@ -12,7 +12,7 @@ use Filament\Tables\Table;
 
 class MenuResource extends Resource
 {
-    protected static ?string $model = Menu::class;
+    protected static ?string $model = \Taba\Crm\Models\Menu::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 

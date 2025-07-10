@@ -16,7 +16,7 @@ class UserResource extends Resource
     /**
      * The resource model.
      */
-    protected static ?string $model = User::class;
+    protected static ?string $model = \Taba\Crm\Models\User::class;
 
     /**
      * The resource navigation icon.

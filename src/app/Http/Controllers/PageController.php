@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 
 class PageController extends Controller
 {

@@ -7,7 +7,7 @@ use App\Models\banner;
 use App\Models\offers;
 use App\Models\Post;
 use App\Models\ProductCategory;
-use App\Models\review;
+use Taba\Crm\Models\review;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
 use App\Models\PostCategory;

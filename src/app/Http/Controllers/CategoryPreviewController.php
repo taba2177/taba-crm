@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\PostCategory;
+use Taba\Crm\Models\PostCategory;
 use Illuminate\Http\Request;
 
 class CategoryPreviewController extends Controller

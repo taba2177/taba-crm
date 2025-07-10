@@ -54,7 +54,7 @@ class PostCategory extends Model
 
     public function children()
     {
-        return $this->hasMany(PostCategory::class, 'parent_id');
+        return $this->hasMany(static::class, 'parent_id');
     }
 
         /**

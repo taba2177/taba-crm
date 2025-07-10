@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire;
+namespace Taba\Crm\Livewire;
 
-use App\Models\advertisement;
-use App\Models\banner;
-use App\Models\Product;
-use App\Models\ProductCategory;
+use Taba\Crm\Models\advertisement;
+use Taba\Crm\Models\banner;
+use Taba\Crm\Models\Product;
+use Taba\Crm\Models\ProductCategory;
 use Illuminate\Http\Client\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\SchemaOrg\Schema;
 
-class Home extends Component
+class Home2 extends Component
 {
 
     use WithPagination;
@@ -21,7 +21,7 @@ class Home extends Component
 
     public function mount()
     {
-        $this->categories = ProductCategory::all();
+        $this->categories = \Taba\Crm\Models\ProductCategory::all();
     }
 
     public function loadMore()
@@ -49,24 +49,24 @@ class Home extends Component
                     ->author(Schema::organization()->name($title))
             );
 
-        //     $products = Product::with('product_category')
+        //     $products = \Taba\Crm\Models\Product::with('product_category')
         //         ->active()
         //         ->latest('created_at')
         //         ->paginate(6);
 
-        // $categories = ProductCategory::active();
+        // $categories = \Taba\Crm\Models\ProductCategory::active();
         // ->scopeactive();
 
-        $products = Product::with('product_category')
+        $products = \Taba\Crm\Models\Product::with('product_category')
             ->active()
             // ->latest('created_at')
             ->paginate($this->perPage);
 
             $categories =$this->categories;
 
-            $banners = banner::all();
+            $banners = \Taba\Crm\Models\banner::all();
 
-            $advertisements = advertisement::all();
+            $advertisements = \Taba\Crm\Models\advertisement::all();
 
         return view('livewire.home', compact('products','banners','advertisements','categories'));
     }

@@ -12,7 +12,7 @@ class CreatePost extends CreateRecord
     /**
      * The resource model.
      */
-    protected static string $resource = PostResource::class;
+    protected static string $resource = \Taba\Crm\Filament\Resources\PostResource::class;
 
     // gethederactions
     protected function getHeaderActions(): array

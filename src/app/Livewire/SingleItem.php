@@ -63,7 +63,7 @@ class SingleItem extends Component
         $this->setSeoMetadata();
 
         $relatedProducts = Cache::remember('related_products_' . $this->productId, 3600, function () {
-            return Product::where('id', '!=', $this->productId)
+            return \Taba\Crm\Models\Product::where('id', '!=', $this->productId)
                 ->inRandomOrder()
                 ->paginate(8);
         });

@@ -16,7 +16,7 @@ class Services extends Component
     {
         $this->setSeoMetadata();
 
-        $this->reviews = review::where('rating', 5)->get()->take(20);
+        $this->reviews = \Taba\Crm\Models\review::where('rating', 5)->get()->take(20);
 
         return view('livewire.services', [
             'reviews' => $this->reviews,

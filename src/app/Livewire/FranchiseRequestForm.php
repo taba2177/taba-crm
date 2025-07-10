@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace Taba\Crm\Livewire;
 
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;

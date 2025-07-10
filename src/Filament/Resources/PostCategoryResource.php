@@ -21,7 +21,7 @@ class PostCategoryResource extends Resource
 {
     use Translatable;
 
-    protected static ?string $model = PostCategory::class;
+    protected static ?string $model = \Taba\Crm\Models\PostCategory::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

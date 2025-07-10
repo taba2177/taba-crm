@@ -33,7 +33,7 @@ class FloatingTimer extends Component
     public function mount()
     {
         $this->advertisements = advertisement::active()->get();
-        $this->offer = Offers::active()->get()->last();
+        $this->offer = \Taba\Crm\Models\Offers::active()->get()->last();
     }
     public function render()
     {

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Taba\Crm\Models;
+
+use Taba\Crm\Models\Post;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;

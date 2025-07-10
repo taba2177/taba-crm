@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\works;
+use Taba\Crm\Models\works;
 use Illuminate\Http\Request;
 
 class WorksController extends Controller

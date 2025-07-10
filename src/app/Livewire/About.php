@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace Taba\Crm\Livewire;
 
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;

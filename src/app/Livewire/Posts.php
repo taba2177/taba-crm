@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire;
+namespace Taba\Crm\Livewire;
 
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
 
@@ -10,7 +10,7 @@ class Posts extends Component
 {
     public function show(Post $post)
     {
-        $relatedPosts = Post::with('postCategory')->published()->where('id', '!=', $post->id)
+        $relatedPosts = \Taba\Crm\Models\Post::with('postCategory')->published()->where('id', '!=', $post->id)
             ->latest()
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->take(3)
@@ -29,7 +29,7 @@ class Posts extends Component
     {
         // seo()
         //     ->title($title = config('app.name') .' | '. 'تصنيع تفصيل ستائر جاهزة لكل المساحات - صن رول للستائر')
-        //     ->description($description = ' افضل الستائر و الخامات بافضل أسعار ستائر غرف النوم رول وامريكي مقاومة للحرار اين تجد ستائر لمكتبك -افضل خيار المستشفيات - كيف اختار ستائر المنزل')
+        //     ->description($description = ' افضل الستائر و الخامات بافضل أسعار ستائر غرف النوم رول وامريكي مقاومة للحرار اين تجد ستائر لمكتبك -افضل خيار المستشبيات - كيف اختار ستائر المنزل')
         //     ->canonical($url = route('posts'))
         //     ->addSchema(
         //         Schema::webPage()
@@ -40,12 +40,12 @@ class Posts extends Component
         //     );
         if (!request()->routeIs('home')) {
         $this->setSeoMetadata();
-         $posts = Post::with('postCategory')->published()
+         $posts = \Taba\Crm\Models\Post::with('postCategory')->published()
             ->latest('published_at')
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->get(); // Execute the query and get the results
         }else{
-            $posts = Post::with('postCategory')->published()
+            $posts = \Taba\Crm\Models\Post::with('postCategory')->published()
             ->latest('published_at')
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->take(3)->get();
@@ -76,7 +76,7 @@ class Posts extends Component
         //     ->addSchema(
         //         Schema::webPage()
         //             ->name(config('app.name'))
-        //             ->description('اشتر افضل الستائر و الخامات بافضل أسعار ستائر غرف النوم رول وامريكي مقاومة للحرار اين تجد ستائر لمكتبك - افضل خيار المستشفيات - كيف اختار ستائر المنزل')
+        //             ->description('اشتر افضل الستائر و الخامات بافضل أسعار ستائر غرف النوم رول وامريكي مقاومة للحرار اين تجد ستائر لمكتبك - افضل خيار المستشبيات - كيف اختار ستائر المنزل')
         //             ->url(route('services'))
         //             ->author(Schema::organization()->name(config('app.name')))
         //     );

@@ -69,7 +69,7 @@ class PostController extends Controller
 
     protected function getRelatedPosts(Post $post)
     {
-        return Post::published()
+        return \Taba\Crm\Models\Post::published()
             ->forCategory($post->postCategory->slug)
             ->where('id', '!=', $post->id)
             ->latest()

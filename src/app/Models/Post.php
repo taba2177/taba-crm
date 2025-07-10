@@ -10,6 +10,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Spatie\Translatable\HasTranslations;
 
+use Taba\Crm\Models\User;
+use Taba\Crm\Models\Tag;
+use Taba\Crm\Models\PostCategory;
+
 
 
 class Post extends Model
@@ -204,7 +208,7 @@ class Post extends Model
      */
     public function getEditUrlAttribute()
     {
-        return PostResource::getUrl('edit', ['record' => $this]);
+        return \Taba\Crm\Filament\Resources\PostResource::getUrl('edit', ['record' => $this]);
     }
 
     /**

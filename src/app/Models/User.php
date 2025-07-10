@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Taba\Crm\Models;
+
+use Taba\Crm\Models\Post;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;

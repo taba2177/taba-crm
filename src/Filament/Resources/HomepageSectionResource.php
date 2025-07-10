@@ -62,7 +62,7 @@ class HomepageSectionResource extends Resource
                 Placeholder::make('preview_section')
                     ->label('Preview')
                     ->content(function (\Filament\Forms\Get $get) {
-                        $postCategory = PostCategory::find($get('post_category_id'));
+                        $postCategory = \Taba\Crm\Models\PostCategory::find($get('post_category_id'));
                         $componentView = 'components.homepage.' . $get('component_view');
 
                         if (!$get('component_view')) {

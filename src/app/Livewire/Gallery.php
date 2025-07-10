@@ -68,7 +68,7 @@ class Gallery extends Component
 
             if ($parentCategory) {
                 // Get all child category IDs
-                $childCategoryIds = ProductCategory::where('parent_id', $parentCategory->id)->pluck('id')->toArray();
+                $childCategoryIds = \Taba\Crm\Models\ProductCategory::where('parent_id', $parentCategory->id)->pluck('id')->toArray();
 
                 // Include the parent and its child categories in the product query
                 $query->whereIn('product_category_id', array_merge([$parentCategory->id], $childCategoryIds));
