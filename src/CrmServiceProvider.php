@@ -87,6 +87,8 @@ class CrmServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/tailwind.config.js' => base_path('tailwind.config.js'),
                 __DIR__.'/tailwind.admin.js' => base_path('tailwind.admin.js'),
+                // vite
+                __DIR__.'/vite.config.js' => base_path('vite.config.js'),
             ], ['crm','crm-tailwind']);
 
             $this->publishes([

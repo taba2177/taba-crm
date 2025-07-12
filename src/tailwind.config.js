@@ -698,6 +698,10 @@ module.exports = {
         require("@tailwindcss/typography"),
         require("tailwindcss-rtl"),
         require("flowbite/plugin"),
+        require("tailwindcss-animate"),
+        require("tailwindcss/nesting"),
+        require("tailwindcss"),
+        require("autoprefixer"),
         function ({ addUtilities }) {
             addUtilities({
                 ".mask-fade-horizontal": {
