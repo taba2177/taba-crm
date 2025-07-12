@@ -1,16 +1,8 @@
 <?php
 
-namespace Taba\Crm\Database\Seeders;
+namespace Database\Seeders;
 
-use Taba\Crm\Models\Post;
-use Taba\Crm\Models\PostCategory;
-use Taba\Crm\Models\User;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-
-
 class DatabaseSeeder extends Seeder
 {
     /**
