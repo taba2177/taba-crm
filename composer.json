@@ -1,0 +1,60 @@
+{
+    "name": "taba/crm",
+    "description": "A reusable CRM package for Laravel.",
+    "type": "laravel-package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "taba2177",
+            "email": "tabadev217@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.2",
+        "awcodes/filament-curator": "^3.3",
+        "awcodes/filament-gravatar": "^2.0",
+        "awcodes/filament-tiptap-editor": "^3.5",
+        "bezhansalleh/filament-exceptions": "^2.0",
+        "bezhansalleh/filament-language-switch": "^3.1",
+        "croustibat/filament-jobs-monitor": "^2.4.0",
+        "diglactic/laravel-breadcrumbs": "^10.0",
+        "filament/filament": "^3.2.50",
+        "filament/spatie-laravel-translatable-plugin": "*",
+        "google-gemini-php/client": "^2.3",
+        "guzzlehttp/guzzle": "^7.9",
+        "jeffgreco13/filament-breezy": "^2.2",
+        "laravel/framework": "^10.0 || ^11.0 || ^12.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.3",
+        "pboivin/filament-peek": "^2.2",
+        "romanzipp/laravel-seo": "^2.6",
+        "sinnbeck/markdom": "^2.0",
+        "spatie/laravel-export": "^1.2",
+        "spatie/laravel-sitemap": "^7.3",
+        "symfony/ux-cropperjs": "^2.25",
+        "z3d0x/filament-logger": "^0.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Taba\\Crm\\": "src/",
+            "Taba\\Crm\\Database\\Factories\\": "database/factories/",
+            "Taba\\Crm\\Database\\Seeders\\": "database/seeders/"
+        },
+        "classmap": [
+            "database/seeders"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Taba\\Crm\\CrmServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
