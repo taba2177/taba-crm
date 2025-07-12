@@ -6,27 +6,7 @@ use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\ServiceProvider;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentView;
-use Taba\Crm\Filament\Auth\Login;
-use Awcodes\Curator\CuratorPlugin;
-use Awcodes\FilamentGravatar\GravatarPlugin;
-use Awcodes\FilamentGravatar\GravatarProvider;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
-use Filament\Panel;
-use Filament\Support\Colors\Color;
-use Filament\Widgets;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Jeffgreco13\FilamentBreezy\BreezyCore;
-use Pboivin\FilamentPeek\FilamentPeekPlugin;
-use Filament\SpatieLaravelTranslatablePlugin;
+
 
 
 class CrmServiceProvider extends ServiceProvider
@@ -85,24 +65,24 @@ class CrmServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 // Config
-                __DIR__.'/../config/crm.php' => config_path('crm.php'),
+                __DIR__.'/config/crm.php' => config_path('crm.php'),
             ], ['crm', 'crm-config']);
 
             // Views
             $this->publishes([
-                __DIR__.'/../views' => resource_path('views/vendor/crm'),
+                __DIR__.'/../views' => resource_path('views/'),
             ], ['crm', 'crm-views']);
 
             // Public Assets
             $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/crm'),
+                __DIR__.'/../public' => public_path('vendor/'),
             ], ['crm', 'crm-public']);
 
             // Tailwind Configs (optional separate tag)
             $this->publishes([
                 __DIR__.'/tailwind.config.js' => base_path('tailwind.config.js'),
                 __DIR__.'/tailwind.admin.js' => base_path('tailwind.admin.js'),
-            ], 'crm-tailwind');
+            ], ['crm','crm-tailwind']);
 
             $this->publishes([
                 __DIR__.'/../database/seeders' => database_path('seeders'),
