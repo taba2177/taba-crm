@@ -47,7 +47,7 @@ class CrmPlugin implements Plugin
             )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
             ->enableTwoFactorAuthentication()
             )
-            ->plugin( CuratorPlugin::make(__('Media'))
+            ->plugin(CuratorPlugin::make(__('Media'))
             ->navigationIcon('heroicon-o-photo')
             ->navigationSort(10)
             ->navigationGroup('Collections')
