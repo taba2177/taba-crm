@@ -79,9 +79,9 @@ class CrmServiceProvider extends ServiceProvider
             ], ['crm', 'crm-public']);
 
             $this->publishes([
-                __DIR__.'/resources/js' => resource_path('js/'),
-                __DIR__.'/resources/css' => resource_path('css/'),
-            ], 'resources');
+                __DIR__.'/resources/js' => resource_path('vendor/js/'),
+                __DIR__.'/resources/css' => resource_path('vendor/css/'),
+            ], ['crm','resources']);
 
             // Tailwind Configs (optional separate tag)
             $this->publishes([
