@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace Taba\Crm\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
 use App\Models\Post;
@@ -411,7 +411,7 @@ class PostResource extends Resource
     protected static function getHomepageComponentOptions(): array
     {
         $componentPath = resource_path('views/livewire/post/templates');
-        $componentSection = realpath(dirname(dirname(__DIR__)) . '/resources/views/components/homepage');
+        $componentSection = resource_path('views/components/homepage');
         $files = File::files($componentPath, $componentSection);
         $files = array_merge($files, File::files($componentSection));
         $options = [];

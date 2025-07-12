@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PostCategoryResource\Pages;
+namespace Taba\Crm\Filament\Resources\PostCategoryResource\Pages;
 
 use App\Filament\Resources\PostCategoryResource;
 use App\Models\PostCategory;

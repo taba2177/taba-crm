@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Pages;
+namespace   Taba\Crm\Filament\Resources\PostResource\Pages;
 
 use App\Concerns\HasPreview;
 use App\Filament\Resources\PostResource;
@@ -57,5 +57,5 @@ class EditPost extends EditRecord
                 ->size('sm'),
         ];
     }
-    
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
 use App\Filament\Resources\PostResource\Widgets;

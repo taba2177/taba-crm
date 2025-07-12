@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace Taba\Crm\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
@@ -16,7 +16,7 @@ class UserResource extends Resource
     /**
      * The resource model.
      */
-    protected static ?string $model = \Taba\Crm\Models\User::class;
+    protected static ?string $model = User::class;
 
     /**
      * The resource navigation icon.

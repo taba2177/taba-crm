@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Filament\Resources\PostResource;
+use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Resources\Pages\Page;
 
 class PreviewPost extends Page

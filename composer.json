@@ -1,13 +1,16 @@
 {
     "name": "taba/crm",
+    "description": "A reusable CRM package for Laravel.",
     "type": "laravel-package",
-    "description": "A CRM package for Taba",
-    "keywords": [
-        "laravel",
-        "livewire",
-        "filament"
-    ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "taba2177",
+            "email": "tabadev217@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^8.2",
         "awcodes/filament-curator": "^3.3",
@@ -34,44 +37,24 @@
         "symfony/ux-cropperjs": "^2.25",
         "z3d0x/filament-logger": "^0.8"
     },
-    "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.9",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.18",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^8.1"
-    },
     "autoload": {
         "psr-4": {
-            "Taba\\Crm\\": "src/"
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "Taba\\Crm\\": "src/",
+            "Taba\\Crm\\Database\\Factories\\": "database/factories/",
+            "Taba\\Crm\\Database\\Seeders\\": "database/seeders/"
+        },
+        "classmap": [
+            "database/seeders"
         ]
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Taba\\Crm\\Providers\\CrmServiceProvider"
+                "Taba\\Crm\\CrmServiceProvider"
             ]
         }
     },
     "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+        "sort-packages": true
+    }
 }

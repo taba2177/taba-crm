@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
-use App\Filament\Resources\PostResource;
-use App\Services\GeminiTranslationService;
+use Taba\Crm\Filament\Resources\PostResource;
+use Taba\Crm\Services\GeminiTranslationService;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -142,7 +142,7 @@ class EditPost extends EditRecord
                     $fieldMap[$field] = ['field' => $field];
                 }
             }
-        }
+
 
         if (empty($textsToTranslate)) {
             Notification::make()->id('translation-in-progress')->title('Nothing to translate.')->success()->send();
@@ -191,7 +191,7 @@ class EditPost extends EditRecord
         }
 
         $this->sendCompletionNotification(count($translations), array_keys(array_filter($translations, 'is_null')));
-    }
+
 
         if (empty($textsToTranslate)) {
             Notification::make()->id('translation-in-progress')->title('Nothing to translate.')->success()->send();
@@ -203,7 +203,7 @@ class EditPost extends EditRecord
 
         // 3. Update the form with the results
         // We need to merge translations into the current form state for the new locale
-        $updatedData = $currentNewLocaleData; // Start with current form state for the new locale
+        //$updatedData = $currentNewLocaleData; // Start with current form state for the new locale
 
         foreach ($translations as $key => $translatedText) {
             if ($translatedText === null) continue;
@@ -242,7 +242,7 @@ class EditPost extends EditRecord
         if (!empty($updatedData)) {
             $this->form->fill($updatedData);
         }
-    
+
         $this->sendCompletionNotification(count($translations), array_keys(array_filter($translations, 'is_null')));
     }
 

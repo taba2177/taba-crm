@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
 use Filament\Resources\Pages\CreateRecord;
@@ -12,7 +12,7 @@ class CreatePost extends CreateRecord
     /**
      * The resource model.
      */
-    protected static string $resource = \Taba\Crm\Filament\Resources\PostResource::class;
+    protected static string $resource = PostResource::class;
 
     // gethederactions
     protected function getHeaderActions(): array
