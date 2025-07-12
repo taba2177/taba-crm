@@ -2,9 +2,9 @@
 
 namespace Taba\Crm\Filament\Resources;
 
-use App\Filament\Resources\PostCategoryResource\Pages;
-use App\Filament\Resources\PostCategoryResource\RelationManagers;
-use App\Models\PostCategory;
+use Taba\Crm\Filament\Resources\PostCategoryResource\Pages;
+use Taba\Crm\Filament\Resources\PostCategoryResource\RelationManagers;
+use Taba\Crm\Models\PostCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
