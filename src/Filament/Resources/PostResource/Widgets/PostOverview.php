@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Widgets;
+namespace Taba\Crm\Filament\Resources\PostResource\Widgets;
 
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Number;

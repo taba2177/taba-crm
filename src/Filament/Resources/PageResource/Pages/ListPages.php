@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\PageResource\Pages;
+namespace Taba\Crm\Filament\Resources\PageResource\Pages;
 
-use App\Filament\Resources\PageResource;
+use Taba\Crm\Filament\Resources\PageResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;

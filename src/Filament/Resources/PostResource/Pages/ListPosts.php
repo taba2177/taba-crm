@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
-use App\Filament\Resources\PostResource;
-use App\Filament\Resources\PostResource\Widgets;
+use Taba\Crm\Filament\Resources\PostResource;
+use Taba\Crm\Filament\Resources\PostResource\Widgets;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
@@ -50,7 +50,7 @@ class ListPosts extends ListRecords
         $tabs = [];
 
         // Get all categories from the database
-        $categories = \App\Models\PostCategory::all();
+        $categories = \Taba\Crm\Models\PostCategory::all();
 
         // Loop through the categories and create a tab for each one
         foreach ($categories as $category) {

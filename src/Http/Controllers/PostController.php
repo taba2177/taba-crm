@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\PostCategory;
+use Taba\Crm\Models\Post;
+use Taba\Crm\Models\PostCategory;
 
 class PostController extends Controller
 {

@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\CategoryPreviewController;
+use Taba\Crm\Http\Controllers\CategoryPreviewController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
-use App\Http\Controllers\GoogleTranslateController;
-use App\Livewire\Post\Show as PostShow;
-use App\Livewire\Posts;
-use App\Livewire\Home;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\PreviewController;
-use App\Models\Page;
-use App\Models\PostCategory;
+use Taba\Crm\Http\Controllers\GoogleTranslateController;
+use Taba\Crm\Livewire\Post\Show as PostShow;
+use Taba\Crm\Livewire\Posts;
+use Taba\Crm\Livewire\Home;
+use Taba\Crm\Http\Controllers\PageController;
+use Taba\Crm\Http\Controllers\PostController;
+use Taba\Crm\Http\Controllers\PreviewController;
+use Taba\Crm\Models\Page;
+use Taba\Crm\Models\PostCategory;
 
 Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category:slug}', [CategoryPreviewController::class, 'category'])->name('preview.category');

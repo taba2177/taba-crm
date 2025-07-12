@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
-use App\Filament\Resources\PostResource;
+use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePost extends CreateRecord

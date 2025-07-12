@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ProductCategoryResource\Pages;
+namespace Taba\Crm\Filament\Resources\ProductCategoryResource\Pages;
 
-use App\Filament\Resources\ProductCategoryResource;
+use Taba\Crm\Filament\Resources\ProductCategoryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 

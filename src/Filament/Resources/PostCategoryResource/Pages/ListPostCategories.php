@@ -2,10 +2,10 @@
 
 namespace Taba\Crm\Filament\Resources\PostCategoryResource\Pages;
 
-use App\Filament\Resources\PostCategoryResource;
+use Taba\Crm\Filament\Resources\PostCategoryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use App\Filament\Resources\PostResource\Pages\HasPostPreview;
+use Taba\Crm\Filament\Resources\PostResource\Pages\HasPostPreview;
 
 class ListPostCategories extends ListRecords
 {

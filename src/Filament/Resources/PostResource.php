@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Models\Post;
+use Taba\Crm\Filament\Resources\PostResource\Pages;
+use Taba\Crm\Models\Post;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use Filament\Forms;
@@ -16,11 +16,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Notifications\Notification;
-use App\Services\GeminiTranslationService;
-use App\Models\Tag;
+use Taba\Crm\Services\GeminiTranslationService;
+use Taba\Crm\Models\Tag;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Concerns\Translatable;
-use App\Models\MetadataFillter;
+use Taba\Crm\Models\MetadataFillter;
 use Illuminate\Support\Facades\File;
 use App\Forms\Components\HomepageSectionSelector;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;

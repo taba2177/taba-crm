@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\MenuResource\Pages;
+namespace Taba\Crm\Filament\Resources\MenuResource\Pages;
 
-use App\Filament\Resources\MenuResource;
+use Taba\Crm\Filament\Resources\MenuResource;
 use Filament\Resources\Pages\EditRecord;
 
 class EditMenu extends EditRecord

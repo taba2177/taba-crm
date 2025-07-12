@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire\Post;
+namespace Taba\Crm\Livewire\Post;
 
-use App\Concerns\HasPreview;
-use App\Models\Post;
+use Taba\Crm\Concerns\HasPreview;
+use Taba\Crm\Models\Post;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
-use App\Models\Product;
+use Taba\Crm\Models\Product;
 use Spatie\SchemaOrg\Schema;
 
 class Show extends Component
@@ -127,7 +127,7 @@ class Show extends Component
         seo()->image($this->post->image->url);
     }
 
-    $postCategories = \App\Models\PostCategory::all();
+    $postCategories = \Taba\Crm\Models\PostCategory::all();
     $view = 'livewire.post.show';
 
     foreach ($postCategories as $category) {

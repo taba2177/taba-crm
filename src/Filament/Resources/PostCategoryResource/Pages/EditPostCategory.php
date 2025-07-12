@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Filament\Resources\PostCategoryResource\Pages;
 
-use App\Filament\Resources\PostCategoryResource;
-use App\Models\PostCategory;
+use Taba\Crm\Filament\Resources\PostCategoryResource;
+use Taba\Crm\Models\PostCategory;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;

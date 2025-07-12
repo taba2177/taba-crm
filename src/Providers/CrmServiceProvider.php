@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Providers;
 
-use App\Filament\Auth\Login;
+use Taba\Crm\Filament\Auth\Login;
 use Awcodes\Curator\CuratorPlugin;
 use Awcodes\FilamentGravatar\GravatarPlugin;
 use Awcodes\FilamentGravatar\GravatarProvider;

@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
+use Taba\Crm\Filament\Resources\UserResource\Pages;
+use Taba\Crm\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;

@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Filament\Resources\UserResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use Taba\Crm\Filament\Resources\UserResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

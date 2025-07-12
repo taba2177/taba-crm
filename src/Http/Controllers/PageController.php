@@ -3,7 +3,7 @@
 namespace Taba\Crm\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use App\Models\Page;
+use Taba\Crm\Models\Page;
 use Taba\Crm\Models\Post;
 
 class PageController extends Controller

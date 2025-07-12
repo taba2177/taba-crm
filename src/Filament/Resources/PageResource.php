@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace Taba\Crm\Filament\Resources;
 
-use App\Filament\Fields\PageContent;
-use App\Filament\Resources\PageResource\Pages;
-use App\Models\Page;
+use Taba\Crm\Filament\Fields\PageContent;
+use Taba\Crm\Filament\Resources\PageResource\Pages;
+use Taba\Crm\Models\Page;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;

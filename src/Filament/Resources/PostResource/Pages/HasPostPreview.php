@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
-use App\Filament\Fields\PageContent;
+use Taba\Crm\Filament\Fields\PageContent;
 use Filament\Forms\Components\Component;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasBuilderPreview;

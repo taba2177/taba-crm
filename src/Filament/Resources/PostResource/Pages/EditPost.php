@@ -2,8 +2,8 @@
 
 namespace   Taba\Crm\Filament\Resources\PostResource\Pages;
 
-use App\Concerns\HasPreview;
-use App\Filament\Resources\PostResource;
+use Taba\Crm\Concerns\HasPreview;
+use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;

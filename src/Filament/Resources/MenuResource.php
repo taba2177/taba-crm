@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace Taba\Crm\Filament\Resources;
 
-use App\Filament\Resources\MenuResource\Pages;
-use App\Models\Menu;
+use Taba\Crm\Filament\Resources\MenuResource\Pages;
+use Taba\Crm\Models\Menu;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;

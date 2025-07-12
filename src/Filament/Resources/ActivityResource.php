@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace Taba\Crm\Filament\Resources;
 
 use Z3d0X\FilamentLogger\Resources\ActivityResource as BaseResource;
 
