@@ -87,23 +87,14 @@ class CrmServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/tailwind.config.js' => base_path('tailwind.config.js'),
                 __DIR__.'/tailwind.admin.js' => base_path('tailwind.admin.js'),
-                // vite
                 __DIR__.'/vite.config.js' => base_path('vite.config.js'),
             ], ['crm','crm-tailwind']);
 
             $this->publishes([
-                __DIR__.'/../database/seeders' => database_path('seeders'),
-            ], 'db-seeders');
-
-            // Migrations
-            $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'db-migrations');
-
-            // Factories
-            $this->publishes([
                 __DIR__.'/../database/factories' => database_path('factories'),
-            ], 'db-factories');
+                __DIR__.'/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../database/seeders' => database_path('seeders'),
+            ], ['db','database']);
         }
 
         // if ($this->app->runningInConsole()) {
