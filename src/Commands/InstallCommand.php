@@ -17,22 +17,30 @@ class InstallCommand extends Command
         $this->info('Installing Taba CRM package...');
 
         $this->info('Installing AdminPanelProvider...');
-        Artisan::call('filament:install',['--panels' => true]);
+        // Artisan::call('filament:install',['--panels' => true]);
+        Artisan::call('filament:install', [
+            '--panels' => true,
+            '--no-interaction' => true
+        ]);
 
 
         // Run setup commands for third-party dependencies.
         $this->comment('Publishing required assets for dependencies...');
-        Artisan::call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
-        Artisan::call('curator:install');
+        Artisan::call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true,'--no-interaction' => true
+    ]);
+        Artisan::call('curator:install',['--no-interaction' => true
+    ]);
         // Artisan::call('filament-breezy:install');
 
         // Publish this package's configuration file.
         $this->comment('Publishing package configuration...');
-        Artisan::call('vendor:publish', ['--tag' => 'crm-config', '--force' => true]);
+        Artisan::call('vendor:publish', ['--tag' => 'crm-config', '--force' => true,'--no-interaction' => true
+    ]);
 
         // Run database migrations.
         $this->comment('Running database migrations...');
-        Artisan::call('migrate:fresh');
+        Artisan::call('migrate',['--no-interaction' => true
+    ]);
 
         $this->info('Taba CRM installed successfully!');
         $this->warn('Please complete the final manual steps:');
