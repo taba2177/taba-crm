@@ -11,6 +11,7 @@ use Taba\Crm\Commands\InstallCommand;
 use Jeffgreco13\FilamentBreezy\FilamentBreezyServiceProvider;
 use Awcodes\Curator\CuratorServiceProvider;
 use Pboivin\FilamentPeek\FilamentPeekServiceProvider;
+use Taba\Crm\Commands\demoCommand;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -51,6 +52,7 @@ class CrmServiceProvider extends ServiceProvider
             // Register the custom 'crm:install' command.
             $this->commands([
                 InstallCommand::class,
+                demoCommand::class,
             ]);
 
             // Define publishable assets with tags for user control.

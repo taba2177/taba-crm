@@ -49,7 +49,13 @@ class InstallCommand extends Command
 
         $this->info('Taba CRM installed successfully!');
         $this->warn('Please complete the final manual steps:');
-        $this->line('1. Add `new \Taba\Crm\CrmPlugin()` to your AdminPanelProvider.');
+        $this->line('1. Add `
+        ->plugins([
+                new \Taba\Crm\CrmPlugin(),
+                CuratorPlugin::make(),
+                FilamentPeekPlugin::make()->disablePluginStyles(),
+            ])` to your AdminPanelProvider.
+            ');
         $this->line('2. Run `npm install && npm run dev` to compile frontend assets.');
     }
 }
