@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasAvatar;
+use Taba\Crm\Database\Factories\UserFactory;
 use Taba\Crm\Models\Post;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
@@ -73,5 +74,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+        /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return UserFactory::new(); // <-- Point to the correct factory
     }
 }
