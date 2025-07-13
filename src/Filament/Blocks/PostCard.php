@@ -2,7 +2,7 @@
 
 namespace App\Filament\Blocks;
 
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;

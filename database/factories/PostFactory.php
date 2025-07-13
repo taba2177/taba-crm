@@ -7,7 +7,7 @@ use Faker\Factory as FakerFactory;
 
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Taba\Crm\Models\Post>
  */
 class PostFactory extends Factory
 {

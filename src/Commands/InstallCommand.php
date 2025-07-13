@@ -51,9 +51,9 @@ class InstallCommand extends Command
         $this->warn('Please complete the final manual steps:');
         $this->line('1. Add `
         ->plugins([
-                new \Taba\Crm\CrmPlugin(),
-                CuratorPlugin::make(),
-                FilamentPeekPlugin::make()->disablePluginStyles(),
+                \Taba\Crm\CrmPlugin::make(),
+                \Awcodes\Curator\CuratorPlugin::make(),
+                \Pboivin\FilamentPeek\FilamentPeekPlugin::make()->disablePluginStyles(),
             ])` to your AdminPanelProvider.
             ');
         $this->line('2. Run `npm install && npm run dev` to compile frontend assets.');

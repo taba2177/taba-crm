@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\HomepageSection;
-use App\Models\PostCategory;
+use Taba\Crm\Models\PostCategory;
 use Illuminate\Database\Seeder;
 
 class HomepageSectionSeeder extends Seeder

@@ -5,12 +5,12 @@ namespace App\Livewire;
 use App\Models\advertisement;
 use App\Models\banner;
 use App\Models\offers;
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use App\Models\ProductCategory;
 use Taba\Crm\Models\review;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
-use App\Models\PostCategory;
+use Taba\Crm\Models\PostCategory;
 
 class Home extends Component
 {

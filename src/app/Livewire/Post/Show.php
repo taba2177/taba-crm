@@ -3,10 +3,9 @@
 namespace App\Livewire\Post;
 
 use App\Concerns\HasPreview;
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
-use App\Models\Product;
 use Spatie\SchemaOrg\Schema;
 
 class Show extends Component
@@ -16,7 +15,7 @@ class Show extends Component
     /**
      * The post instance.
      *
-     * @var \App\Models\Post
+     * @var \Taba\Crm\Models\Post
      */
     public $post;
     public $relatedPosts;
@@ -24,7 +23,7 @@ class Show extends Component
     /**
      * Mount the component.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \Taba\Crm\Models\Post  $post
      * @return void
      */
     public function mount($category = null, $post)
@@ -127,7 +126,7 @@ class Show extends Component
         seo()->image($this->post->image->url);
     }
 
-    $postCategories = \App\Models\PostCategory::all();
+    $postCategories = Taba\Crm\Models\PostCategory::all();
     $view = 'livewire.post.show';
 
     foreach ($postCategories as $category) {

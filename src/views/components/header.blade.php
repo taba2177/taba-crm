@@ -1,6 +1,6 @@
 {{-- get categories  --}}
 @php
-$categories = \App\Models\PostCategory::RegisterInHeader();
+$categories = Taba\Crm\Models\PostCategory::RegisterInHeader();
 @endphp
 <!-- header area  -->
 <header class="header-area header-absolute rtl:right-0 rtl:left-none">

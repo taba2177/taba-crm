@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Post;
-use App\Models\PostCategory;
+use Taba\Crm\Models\Post;
+use Taba\Crm\Models\PostCategory;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;

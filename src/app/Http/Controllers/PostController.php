@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\PostCategory;
+use Taba\Crm\Models\Post;
+use Taba\Crm\Models\PostCategory;
 
 class PostController extends Controller
 {
@@ -22,7 +22,7 @@ class PostController extends Controller
             'layout' => 'layouts.main'
         ]);
     }
-    
+
     public function category(PostCategory $category)
     {
         $posts = $category->posts()->published()->latest()->get();
@@ -69,7 +69,7 @@ class PostController extends Controller
 
     protected function getRelatedPosts(Post $post)
     {
-        return \Taba\Crm\Models\Post::published()
+        return Taba\Crm\Models\Post::published()
             ->forCategory($post->postCategory->slug)
             ->where('id', '!=', $post->id)
             ->latest()

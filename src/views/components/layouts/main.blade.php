@@ -296,7 +296,7 @@
 
   {{ $slot }}
 
-  <x-footer />
+  <crm::x-footer />
 
   {{-- <footer>
     <div class="footer-inner bg-seondary-color dark:bg-dark-color">

@@ -108,7 +108,7 @@ Route::get('/homepage-section-preview', function () {
 
     $postCategory = null;
     if ($postCategoryId) {
-        $postCategory = \Taba\Crm\Models\PostCategory::find($postCategoryId);
+        $postCategory = Taba\Crm\Models\PostCategory::find($postCategoryId);
     }
 
     return view($component, [

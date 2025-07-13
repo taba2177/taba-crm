@@ -72,7 +72,8 @@
     </svg>
   </div>
 
-  <x-header />
+  <crm::x-header />
+
 
   {{ $slot }}
 
@@ -96,7 +97,7 @@
   </div>
 
 
-  <x-footer />
+  <crm::x-footer />
 
   <!-- JSS here -->
   <script src="{{ asset("/assets/js/jquery.min.js") }}"></script>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 use Illuminate\Http\Request;
 

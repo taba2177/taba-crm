@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Post; // Ensure you have an App\Models\Post model
-use App\Models\PostCategory; // Ensure you have an App\Models\PostCategory model
+use Taba\Crm\Models\Post; // Ensure you have an Taba\Crm\Models\Post model
+use Taba\Crm\Models\PostCategory; // Ensure you have an Taba\Crm\Models\PostCategory model
 use Faker\Factory as FakerFactory; // Import FakerFactory for Arabic content
 use Illuminate\Support\Str; // Import Str facade for slug generation
 

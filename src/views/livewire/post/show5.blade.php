@@ -90,7 +90,7 @@
                 <ul class="sidebar-categories">
                   @php
                   //get categories from cache using cache
-                  $categories = \App\Models\PostCategory::RegisterInHeader();
+                  $categories = Taba\Crm\Models\PostCategory::RegisterInHeader();
 
                   @endphp
                   @foreach ($categories as $category)

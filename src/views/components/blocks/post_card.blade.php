@@ -1,6 +1,6 @@
 @props(['post_id', 'text'])
 
-@if ($post = \App\Models\Post::find($post_id))
+@if ($post = \Taba\Crm\Models\Post::find($post_id))
     <a
         class="block relative aspect-[4/3] border bg-gray-100"
         href="{{ route('post.show', ['slug' => $post->slug]) }}"

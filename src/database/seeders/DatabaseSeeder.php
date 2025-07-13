@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Post;
-use App\Models\PostCategory;
+use Taba\Crm\Models\Post;
+use Taba\Crm\Models\PostCategory;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Seeder;
