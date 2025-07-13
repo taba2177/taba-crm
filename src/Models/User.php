@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasAvatar;
-use Taba\Crm\Database\Factories\UserFactory;
+use Database\Factories\UserFactory;
 use Taba\Crm\Models\Post;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
