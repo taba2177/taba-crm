@@ -1,43 +1,83 @@
-# Taba CRM
+<div align="center">
+<img src="https://raw.githubusercontent.com/taba-center/taba-logo/main/TABA-LOGO-2022-horizontal.png" alt="Taba CRM Logo" width="400">
+<h1>Taba CRM Package for Laravel</h1>
+<p>
+A complete, "plug-and-play" CRM panel for Laravel, powered by Filament.
+</p>
+<p>
+<a href="https://packagist.org/packages/taba/crm"><img src="https://img.shields.io/packagist/v/taba/crm.svg?style=flat-square" alt="Latest Version on Packagist"></a>
+<a href="https://github.com/taba-center/crm/blob/main/LICENSE.md"><img src="https://img.shields.io/packagist/l/taba/crm.svg?style=flat-square" alt="License"></a>
+<a href="https://packagist.org/packages/taba/crm"><img src="https://img.shields.io/packagist/dt/taba/crm.svg?style=flat-square" alt="Total Downloads"></a>
+</p>
+</div>
 
-A CRM package for Taba.
+Taba CRM is a complete, reusable package that provides a full-featured CRM panel. It includes resources for managing posts, categories, and users, and comes pre-configured with essential plugins for a rich user experience.
 
-## Installation
+✨ Features
+Resource Management: Pre-built Filament resources for Posts, Categories, and Users.
 
-You can install the package via composer:
+Plugin Ecosystem: Integrated with popular plugins like Breezy (Profiles), Curator (Media), and Peek (Previews).
 
-```bash
+Simple Installation: Get up and running with a single custom Artisan command.
+
+Customizable: Publishable assets (config, views, etc.) allow for easy customization.
+
+📋 Prerequisites
+Before you begin, ensure you have a fresh Laravel project with the following configured:
+
+Laravel 10+
+
+Filament 3+ installed (php artisan filament:install --panels)
+
+Database connection set up in your .env file.
+
+🚀 Installation
+Getting started is simple. Follow these steps to integrate Taba CRM into your project.
+
+Step 1: Require with Composer
+First, pull the package into your project.
+
 composer require taba/crm
-```
 
-## Usage
+Step 2: Run the Install Command
+Next, run our custom installation command. This smart command handles all the necessary setup for the package and its dependencies, including publishing assets and running migrations.
 
-After installing the package, you can access the CRM by visiting the `/admin` URL.
+php artisan crm:install
 
-### Publishing Assets
+Note: This command will ask for your confirmation before running. It's a safe and transparent way to set up the required components.
 
-You can publish the package's assets using the following command:
+Step 3: Register the Plugin
+To activate the CRM panel, you need to register the CrmPlugin in your project's AdminPanelProvider.
 
-```bash
-php artisan vendor:publish --provider="Taba\Crm\Providers\CrmServiceProvider" --tag=public
-```
+Open app/Providers/Filament/AdminPanelProvider.php and add the plugin to the plugins() array:
 
-### Publishing Configuration
+use Taba\Crm\CrmPlugin; // 👈 Import the plugin at the top
 
-You can publish the package's configuration file using the following command:
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other panel settings
+        ->plugins([
+            new CrmPlugin(), // 👈 Add this line
+        ]);
+}
 
-```bash
-php artisan vendor:publish --provider="Taba\Crm\Providers\CrmServiceProvider" --tag=config
-```
+Step 4: Compile Frontend Assets
+Finally, compile your project's frontend assets to ensure the admin panel's styles and scripts are loaded correctly.
 
-### Publishing Views
+npm install
+npm run dev
 
-You can publish the package's views using the following command:
+And you're done! 🎉 You can now visit /admin and log in to access your new CRM panel.
 
-```bash
-php artisan vendor:publish --provider="Taba\Crm\Providers\CrmServiceProvider" --tag=views
-```
+🔧 Customization (Optional)
+If you need to modify the package's default behavior, you can publish its assets.
 
-## License
+Configuration: php artisan vendor:publish --tag=crm-config
 
-The Taba CRM is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Views: php artisan vendor:publish --tag=crm-views
+
+Database Files: php artisan vendor:publish --tag=crm-database
+
+📄 License
+The Taba CRM is open-sourced software licensed under the MIT license.
