@@ -1,11 +1,11 @@
 <?php
 
+// FILE: packages/taba/crm/src/CrmPlugin.php
+
 namespace Taba\Crm;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-
-// Import any third-party plugins your package uses
 use Awcodes\Curator\CuratorPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
@@ -20,38 +20,24 @@ class CrmPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        // Register your package's Resources, Pages, and Widgets here
+        // Register the package's own resources, pages, and widgets.
         $panel
             ->resources([
                 \Taba\Crm\Filament\Resources\PostResource::class,
                 \Taba\Crm\Filament\Resources\PostCategoryResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
-            ])
-            ->pages([
-                // \Taba\Crm\Filament\Pages\CustomPage::class,
-            ])
-            ->widgets([
-                // \Taba\Crm\Filament\Widgets\CustomWidget::class,
             ]);
     }
 
     public function boot(Panel $panel): void
     {
-        // This is where you register the OTHER plugins your package depends on
+        // Register the third-party plugins that this package depends on.
         $panel
-            ->plugin(BreezyCore::make()
-            ->myProfile(
+            ->plugin(BreezyCore::make()->myProfile(
                 shouldRegisterUserMenu: false,
-                // shouldRegisterNavigation: true,
-                hasAvatars: true,
-            )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
-            ->enableTwoFactorAuthentication()
-            )
-            ->plugin(CuratorPlugin::make(__('Media'))
-            ->navigationIcon('heroicon-o-photo')
-            ->navigationSort(10)
-            ->navigationGroup('Collections')
-            ->navigationCountBadge())
+                hasAvatars: true
+            )->enableTwoFactorAuthentication())
+            ->plugin(CuratorPlugin::make())
             ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
             ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
     }

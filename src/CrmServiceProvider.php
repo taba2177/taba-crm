@@ -1,103 +1,67 @@
 <?php
 
+// FILE: packages/taba/crm/src/CrmServiceProvider.php
+
 namespace Taba\Crm;
 
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\ServiceProvider;
-use Filament\Facades\Filament;
-use Filament\Support\Facades\FilamentView;
-
-
+use Taba\Crm\Commands\InstallCommand;
 
 class CrmServiceProvider extends ServiceProvider
 {
     /**
-     * Register services.
-     *
-     * @return void
+     * Register any application services.
      */
-    public function register()
+    public function register(): void
     {
-        FilamentView::registerRenderHook(
-            'panels::head.start',
-            fn (): string => '<meta name="robots" content="noindex,nofollow">'
-        );
-        $this->mergeConfigFrom(__DIR__.'/config/crm.php', 'crm');
-
+        // Merge the package's config file with the application's.
+        $this->mergeConfigFrom(__DIR__.'/../config/crm.php', 'crm');
     }
-    protected function loadSeeders($seed_list){
-            $this->callAfterResolving(DatabaseSeeder::class, function ($seeder) use ($seed_list) {
-                    foreach ((array) $seed_list as $path) {
-                        $seeder->call($path);
-                        // here goes the code that will print out in console that the migration was succesful
-                    }
-                });
-            }
 
     /**
-     * Bootstrap services.
-     *
-     * @return void
+     * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // // load seeders
-        // $this->loadSeeders([
-        //     'Taba\\Crm\\Database\\Seeders\\DatabaseSeeder',
-        // ]);
+        // Load package assets with a namespace to prevent conflicts.
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
+        $this->loadViewsFrom(__DIR__.'/../views', 'crm');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        // Register middleware from the package's config file.
         foreach (config('crm.middleware', []) as $alias => $class) {
             $this->app['router']->aliasMiddleware($alias, $class);
         }
 
-        // $this->loadViewsFrom(__DIR__.'/../views', 'crm');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
-
-        Filament::serving(function () {
-            Filament::registerResources([
-                \Taba\Crm\Filament\Resources\PostResource::class,
-                \Taba\Crm\Filament\Resources\PostCategoryResource::class,
-                \Taba\Crm\Filament\Resources\UserResource::class,
-            ]);
-        });
-
+        // Only register commands and publishable assets when running in the console.
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                // Config
-                __DIR__.'/config/crm.php' => config_path('crm.php'),
-            ], ['crm', 'crm-config']);
+            // Register the custom 'crm:install' command.
+            $this->commands([
+                InstallCommand::class,
+            ]);
 
-            // Views
+            // Define publishable assets with tags for user control.
             $this->publishes([
-                __DIR__.'/../views' => resource_path('views/'),
-            ], ['crm', 'crm-views']);
-
-            // Public Assets
-            $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/'),
-            ], ['crm', 'crm-public']);
+                __DIR__.'/../config/crm.php' => config_path('crm.php'),
+            ], 'crm-config');
 
             $this->publishes([
-                __DIR__.'/resources/js' => resource_path('js/'),
-                __DIR__.'/resources/css' => resource_path('css/'),
-            ], ['crm','resources']);
-
-            // Tailwind Configs (optional separate tag)
-            $this->publishes([
-                __DIR__.'/tailwind.config.js' => base_path('tailwind.config.js'),
-                __DIR__.'/tailwind.admin.js' => base_path('tailwind.admin.js'),
-                __DIR__.'/vite.config.js' => base_path('vite.config.js'),
-                __DIR__.'/postcss.config.js' => base_path('postcss.config.js'),
-                __DIR__.'/package.json' => base_path('package.json'),
-            ], ['crm','crm-tailwind']);
+                __DIR__.'/../views' => resource_path('views/vendor/crm'),
+            ], 'crm-views');
 
             $this->publishes([
-                __DIR__.'/../database/factories' => database_path('factories'),
+                __DIR__.'/../public' => public_path('vendor/crm'),
+            ], 'crm-public');
+
+            $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
                 __DIR__.'/../database/seeders' => database_path('seeders'),
-            ], ['db','database']);
+                __DIR__.'/../database/factories' => database_path('factories'),
+            ], 'crm-database');
         }
+    }
+}
 
         // if ($this->app->runningInConsole()) {
         //     //publish tailwind config
@@ -142,7 +106,7 @@ class CrmServiceProvider extends ServiceProvider
         //         __DIR__.'/../database/factories' => database_path('factories'),
         //     ], 'factories');
         // }
-    }
+
     // public function panel(Panel $panel): Panel
     // {
 
@@ -224,5 +188,4 @@ class CrmServiceProvider extends ServiceProvider
     //         ->authMiddleware([
     //             Authenticate::class,
     //         ]);
-    // }
-}
+    //
