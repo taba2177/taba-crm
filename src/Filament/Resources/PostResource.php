@@ -23,7 +23,7 @@ use Filament\Resources\Concerns\Translatable;
 use Taba\Crm\Models\MetadataFillter;
 use Illuminate\Support\Facades\File;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
-
+use Taba\Crm\Filament\Resources\PostResource\Widgets\PostOverview;
 
 class PostResource extends Resource
 {
@@ -33,6 +33,13 @@ class PostResource extends Resource
      */
     protected static ?string $recordTitleAttribute = 'title';
 
+
+    public static function getWidgets(): array
+    {
+        return [
+            PostOverview::class, // <-- Call it here
+        ];
+    }
     /**
      * The resource model.
      */
