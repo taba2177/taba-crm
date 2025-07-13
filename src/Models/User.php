@@ -74,14 +74,4 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         return $this->hasMany(Post::class);
     }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    protected static function newFactory()
-    {
-        return \Taba\Crm\Database\Factories\UserFactory::new();
-    }
 }
