@@ -416,8 +416,8 @@ class PostResource extends Resource
 
     protected static function getHomepageComponentOptions(): array
     {
-        $componentPath = resource_path('views/livewire/post/templates');
-        $componentSection = resource_path('views/components/homepage');
+        $componentPath = resource_path('crm::views/livewire/post/templates');
+        $componentSection = resource_path('crm::views/components/homepage');
         $files = File::files($componentPath, $componentSection);
         $files = array_merge($files, File::files($componentSection));
         $options = [];

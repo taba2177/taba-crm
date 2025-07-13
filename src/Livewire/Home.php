@@ -28,9 +28,9 @@ class Home extends Component
         // Set SEO metadata
         $this->setSeoMetadata();
 
-        return view('livewire.home', [
+        return view('crm::livewire.home', [
             'sections' => $this->sections,
-        ])->layout('components.layouts.app');
+        ])->layout('crm::components.layouts.app');
     }
 
     // public function oddColorText($advertisement)
