@@ -20,7 +20,7 @@ class InstallCommand extends Command
         $this->comment('Publishing required assets for dependencies...');
         Artisan::call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
         Artisan::call('curator:install');
-        Artisan::call('filament-breezy:install');
+        // Artisan::call('filament-breezy:install');
 
         // Publish this package's configuration file.
         $this->comment('Publishing package configuration...');
