@@ -60,7 +60,7 @@ class CrmServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/views' => resource_path('views/vendor/crm'),
-            ], 'crm-views');
+            ], 'crm');
 
             $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/crm'),
