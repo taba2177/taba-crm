@@ -20,8 +20,11 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
-
+        // Programmatically register the service providers of third-party packages.
+        // This makes their commands (like 'filament-breezy:install') available.
+        // $this->app->register(FilamentBreezyServiceProvider::class);
+        // $this->app->register(CuratorServiceProvider::class);
+        // $this->app->register(FilamentPeekServiceProvider::class);
         // Merge the package's config file with the application's.
         $this->mergeConfigFrom(__DIR__.'/../config/crm.php', 'crm');
     }
@@ -31,11 +34,7 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-                // Programmatically register the service providers of third-party packages.
-        // This makes their commands (like 'filament-breezy:install') available.
-        $this->app->register(FilamentBreezyServiceProvider::class);
-        $this->app->register(CuratorServiceProvider::class);
-        $this->app->register(FilamentPeekServiceProvider::class);
+
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
