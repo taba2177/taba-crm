@@ -42,16 +42,6 @@
         "symfony/ux-cropperjs": "^2.25",
         "z3d0x/filament-logger": "^0.8"
     },
-    // "autoload": {
-    //     "psr-4": {
-    //         "Taba\\Crm\\": "src/",
-    //         "Taba\\Crm\\Database\\Factories\\": "database/factories/",
-    //         "Taba\\Crm\\Database\\Seeders\\": "database/seeders/"
-    //     },
-    //     "classmap": [
-    //         "database/seeders"
-    //     ]
-    // },
     "extra": {
         "laravel": {
             "providers": [
