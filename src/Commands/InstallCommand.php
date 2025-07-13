@@ -16,6 +16,10 @@ class InstallCommand extends Command
     {
         $this->info('Installing Taba CRM package...');
 
+        $this->info('Installing AdminPanelProvider...');
+        Artisan::call('filament:install',['--panels' => true]);
+
+
         // Run setup commands for third-party dependencies.
         $this->comment('Publishing required assets for dependencies...');
         Artisan::call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
@@ -28,7 +32,7 @@ class InstallCommand extends Command
 
         // Run database migrations.
         $this->comment('Running database migrations...');
-        Artisan::call('migrate');
+        Artisan::call('migrate:fresh');
 
         $this->info('Taba CRM installed successfully!');
         $this->warn('Please complete the final manual steps:');
