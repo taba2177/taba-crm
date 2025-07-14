@@ -417,13 +417,11 @@ class PostResource extends Resource
     protected static function getHomepageComponentOptions(): array
     {
                 // // Get the base path for the 'crm' view namespace
-                // $crmViewPath = View::getFinder()->getHints()['crm'][0];
-
-                // // Now, construct the correct full paths by appending your subdirectories
-                // $componentPath = $crmViewPath . '/livewire/post/templates';
-                // $componentSection = $crmViewPath . '/components/homepage';
-        $componentPath = resource_path('crm::views/livewire/post/templates');
-        $componentSection = resource_path('crm::views/components/homepage');
+        $crmViewPath = \Illuminate\Support\Facades\View::getFinder()->getHints()['crm'][0];        // // Now, construct the correct full paths by appending your sbdirectories
+        $componentPath = $crmViewPath . '/livewire/post/templates';
+        $componentSection = $crmViewPath . '/components/homepage';
+        // $componentPath = resource_path('crm::views/livewire/post/templates');
+        // $componentSection = resource_path('crm::views/components/homepage');
         $files = File::files($componentPath, $componentSection);
         $files = array_merge($files, File::files($componentSection));
         $options = [];
