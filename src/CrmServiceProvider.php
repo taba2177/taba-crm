@@ -63,6 +63,7 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/views' => resource_path('views/vendor/crm'),
                 __DIR__.'/views/components/homepage/four-cards.blade.php' => resource_path('views/components/homepage/four-cards.blade.php'),
                 __DIR__.'/views/components/layouts' => resource_path('views/components/layouts'),
+                __DIR__.'/views/components/templates' => resource_path('views/components/templates'),
                 __DIR__.'/views/livewire' => resource_path('views/livewire'),
                 __DIR__.'/views/posts' => resource_path('views/posts'),
                 __DIR__.'/views/previews' => resource_path('views/previews'),
