@@ -44,10 +44,10 @@ class CrmPlugin implements Plugin
         ->plugin(BreezyCore::make()
         ->myProfile(
             shouldRegisterUserMenu: false,
-            // shouldRegisterNavigation: true,
+            shouldRegisterNavigation: true,
             hasAvatars: true,
         )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
-        ->enableTwoFactorAuthentication()
+        // ->enableTwoFactorAuthentication()
         )
         ->plugin(CuratorPlugin::make(__('Media'))
         ->navigationIcon('heroicon-o-photo')
