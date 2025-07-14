@@ -32,7 +32,7 @@ class PreviewController extends Controller
             $posts = collect([$post]);
         }
 
-        dd($componentView);
+        // dd($componentView);
         // $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
 
         return view('previews.post', [
