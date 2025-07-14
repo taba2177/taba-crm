@@ -10,7 +10,7 @@ class Posts extends Component
 {
     public function show(Post $post)
     {
-        $relatedPosts = Taba\Crm\Models\Post::with('postCategory')->published()->where('id', '!=', $post->id)
+        $relatedPosts = \Taba\Crm\Models\Post::with('postCategory')->published()->where('id', '!=', $post->id)
             ->latest()
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->take(3)
@@ -40,12 +40,12 @@ class Posts extends Component
         //     );
         if (!request()->routeIs('home')) {
         $this->setSeoMetadata();
-         $posts = Taba\Crm\Models\Post::with('postCategory')->published()
+         $posts = \Taba\Crm\Models\Post::with('postCategory')->published()
             ->latest('published_at')
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->get(); // Execute the query and get the results
         }else{
-            $posts = Taba\Crm\Models\Post::with('postCategory')->published()
+            $posts = \Taba\Crm\Models\Post::with('postCategory')->published()
             ->latest('published_at')
             ->where('slug', 'not like', '%alshot-oalahkam%')
             ->take(3)->get();
