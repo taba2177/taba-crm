@@ -50,7 +50,7 @@ class ListPosts extends ListRecords
         $tabs = [];
 
         // Get all categories from the database
-        $categories = Taba\Crm\Models\PostCategory::all();
+        $categories = \Taba\Crm\Models\PostCategory::all();
 
         // Loop through the categories and create a tab for each one
         foreach ($categories as $category) {

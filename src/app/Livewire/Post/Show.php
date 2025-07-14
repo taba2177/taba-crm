@@ -126,7 +126,7 @@ class Show extends Component
         seo()->image($this->post->image->url);
     }
 
-    $postCategories = Taba\Crm\Models\PostCategory::all();
+    $postCategories = \Taba\Crm\Models\PostCategory::all();
     $view = 'livewire.post.show';
 
     foreach ($postCategories as $category) {
