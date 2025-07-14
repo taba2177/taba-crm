@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Forms\Components;
+namespace Taba\Crm\Filament\Forms\Components;
 
 use Filament\Forms\Components\Field;
 

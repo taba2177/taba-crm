@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Blocks;
+namespace Taba\Crm\Filament\Blocks;
 
-use App\Models\Page;
+use Taba\Crm\Models\Page;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;

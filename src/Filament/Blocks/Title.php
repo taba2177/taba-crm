@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Blocks;
+namespace Taba\Crm\Filament\Blocks;
 
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Menu;
-use App\Models\Page;
+use Taba\Crm\Models\Menu;
+use Taba\Crm\Models\Page;
 use Illuminate\Database\Seeder;
 
 class SiteSeeder extends Seeder

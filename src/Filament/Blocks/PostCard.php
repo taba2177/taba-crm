@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Blocks;
+namespace Taba\Crm\Filament\Blocks;
 
 use Taba\Crm\Models\Post;
 use Filament\Forms\Components\Builder\Block;

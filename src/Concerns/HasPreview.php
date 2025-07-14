@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Concerns;
+namespace Taba\Crm\Concerns;
 
 use Illuminate\Support\Str;
 

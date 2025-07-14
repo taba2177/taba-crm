@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Fields;
+namespace Taba\Crm\Filament\Fields;
 
 use FilamentTiptapEditor\TiptapEditor;
 

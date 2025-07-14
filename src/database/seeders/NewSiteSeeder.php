@@ -6,9 +6,9 @@ use Illuminate\Database\Seeder;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 use Illuminate\Support\Str;
-use App\Models\User;
+use Taba\Crm\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Tag;
+use Taba\Crm\Models\Tag;
 
 class NewSiteSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class NewSiteSeeder extends Seeder
             User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('admin'),
             ]);
         }
 
@@ -28,7 +28,7 @@ class NewSiteSeeder extends Seeder
             [
                 'name' => ['en' => 'Homepage', 'ar' => 'الصفحة الرئيسية'],
                 'slug' => 'homepage',
-                'subtitle' => ['en' => 'Global Digital Marketing', 'ar' => 'التسويق الالكتروني العالمي'],
+                'subtitle' => ['en' => 'Global Digital Marketing', 'ar' => 'الكنب والمجالس العربية'],
                 'description' => ['en' => 'The main landing page of our website, featuring the latest updates and highlights.', 'ar' => 'الصفحة الرئيسية لموقعنا، تعرض آخر التحديثات وأبرز النقاط.'],
                 'order' => 1,
                 'register_in_header' => true,

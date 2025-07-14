@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Fields;
+namespace Taba\Crm\Filament\Fields;
 
-use App\Filament\Blocks\Image;
-use App\Filament\Blocks\Paragraph;
-use App\Filament\Blocks\Title;
+use Taba\Crm\Filament\Blocks\Image;
+use Taba\Crm\Filament\Blocks\Paragraph;
+use Taba\Crm\Filament\Blocks\Title;
 use Filament\Forms\Components\Builder;
 
 class PostContent
