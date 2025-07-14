@@ -132,7 +132,7 @@ class Show extends Component
 
     foreach ($postCategories as $category) {
         if ($this->post->postCategory->slug === $category->slug) {
-            $view = "livewire.post.{$this->post->postCategory->slug}.show";
+            $view = "crm::livewire.post.{$this->post->postCategory->slug}.show";
             break;
         }
     }

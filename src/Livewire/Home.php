@@ -2,9 +2,6 @@
 
 namespace Taba\Crm\Livewire;
 
-use Taba\Crm\Models\Post;
-use Taba\Crm\Models\ProductCategory;
-use Taba\Crm\Models\review;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
 use Taba\Crm\Models\PostCategory;
@@ -28,9 +25,9 @@ class Home extends Component
         // Set SEO metadata
         $this->setSeoMetadata();
 
-        return view('crm::livewire.home', [
+        return view('livewire.home', [
             'sections' => $this->sections,
-        ])->layout('crm::components.layouts.app');
+        ])->layout('components.layouts.app');
     }
 
     // public function oddColorText($advertisement)

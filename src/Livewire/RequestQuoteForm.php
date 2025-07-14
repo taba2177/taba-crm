@@ -86,7 +86,7 @@ class RequestQuoteForm extends Component
         //     return;
         // }
         // Prepare data for submission
-        
+
         $formData = [
             'entry.2036097969' => e($this->name),
             'entry.1147644131' => e($this->phone),
