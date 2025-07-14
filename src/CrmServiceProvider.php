@@ -61,7 +61,7 @@ class CrmServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/views' => resource_path('views/vendor/crm'),
-            ], 'crm');
+            ], 'views');
 
             $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/crm'),
@@ -73,9 +73,9 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/../database/factories' => database_path('factories'),
             ], 'crm-database');
 
-            $this->publishes([
-                __DIR__.'/database/migrations' => database_path('migrations'),
-            ], 'crm-migration');
+            // $this->publishes([
+            //     __DIR__.'/database/migrations' => database_path('migrations'),
+            // ], 'crm-migration');
 
             $this->publishes([
                 __DIR__.'/resources/js' => resource_path('js/'),

@@ -16,7 +16,7 @@ class demoCommand extends Command
     {
 
         $this->comment('Publishing package configuration...');
-        Artisan::call('vendor:publish', ['--tag' => 'crm', '--force' => true,'--no-interaction' => true
+        Artisan::call('vendor:publish', ['--tag' => 'crm', '--no-interaction' => true
     ]);   // Run database migrations
 
         $this->info('Taba CRM demo successfully!');
