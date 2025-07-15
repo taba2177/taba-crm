@@ -1,14 +1,14 @@
 <x-layouts.main>
-  <x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()"
+  <crm::x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()"
     backgroundImage="{{  $posts->first()->getRandomImage() }}">
 
 
-    <x-breadcrumbs :items="[
+    <crm::x-breadcrumbs :items="[
                                 ['label' => 'الرئيسية', 'url' => route('home')],
                                 ['label' => $posts->first()->postCategory->name, 'url' => route('dynamic.route', [$posts->first()->postCategory->slug])],
                                 ['label' => $posts->first()->postCategory->description, 'url' => '']
                                 ]" />
-  </x-banner>
+  </crm::x-banner>
 
   <section id="{{ $posts->first()->postCategory->slug }}">
     <div class="py-60px md:py-20 lg:py-100px xl:py-30">

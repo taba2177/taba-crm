@@ -7,13 +7,13 @@
                 @component("components.homepage.$post->homepage_section_component", ['posts' => $posts])@endcomponent
                 @elseif($post->post_category_id === $cat->id && view()->exists("components.homepage.".$post->postCategory->section_component))
                 <x-layouts.main>
-                  <x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()" backgroundImage="{{  $posts->first()->getRandomImage() }}">
-                    <x-breadcrumbs :items="[
+                  <crm::x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()" backgroundImage="{{  $posts->first()->getRandomImage() }}">
+                    <crm::x-breadcrumbs :items="[
                             ['label' => 'الرئيسية', 'url' => route('home')],
                             ['label' => $posts->first()->postCategory->name, 'url' => route('dynamic.route', [$posts->first()->postCategory->slug])],
                             ['label' => $posts->first()->postCategory->description, 'url' => '']
                         ]" />
-                  </x-banner>
+                  </crm::x-banner>
                   @component("components.homepage.".$post->postCategory->section_component, ['posts' => $posts])@endcomponent
                 </x-layouts.main>
                 @break

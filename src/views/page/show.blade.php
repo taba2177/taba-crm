@@ -1,12 +1,12 @@
 <x-layouts.main :title="$page->title">
 
-  <x-banner :title="$page->title" backgroundImage="{{ $page->image->url ?? asset('/assets/img/breadcrumb/breadcrumb-bg.jpg') }}">
+  <crm::x-banner :title="$page->title" backgroundImage="{{ $page->image->url ?? asset('/assets/img/breadcrumb/breadcrumb-bg.jpg') }}">
 
-    <x-breadcrumbs :items="[
+    <crm::x-breadcrumbs :items="[
           ['label' => 'الرئيسية', 'url' => route('home')],
           ['label' => __($page->slug), 'url' => route('dynamic.route', ['slug' => $page->slug])],]" />
 
-  </x-banner>
+  </crm::x-banner>
 
   <x-container>
     <div class="prose mt-8 mx-auto">

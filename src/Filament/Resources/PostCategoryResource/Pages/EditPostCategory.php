@@ -26,7 +26,6 @@ class EditPostCategory extends EditRecord
 
     protected function getPreviewModalUrl(): ?string
     {
-
         return route('preview.category', [
             'category' => $this->getRecord()->id,
             'data' => $this->form->getState(),
@@ -43,7 +42,6 @@ class EditPostCategory extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-
             PreviewAction::make(),
             Actions\LocaleSwitcher::make()
                 ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))

@@ -8,11 +8,15 @@ use Illuminate\Http\Request;
 
 class PreviewController extends Controller
 {
-    public function post(Post $post)
+    public function post($post_category_id)
     {
-        if (view()->exists('components.homepage.' . request()->input('data.homepage_section_component'))) {
+        $posts = Post::with('postCategory')
+            ->where('post_category_id', $post_category_id)
+            ->get();
+
+            if (view()->exists('components.homepage.' . request()->input('data.homepage_section_component'))) {
             $componentView = 'components.homepage.' . request()->input('data.homepage_section_component');
-            $posts = collect([$post]);
+            // $posts = collect([$post]);
 
             return view('previews.category', [
                 'posts' => $posts,
@@ -20,7 +24,7 @@ class PreviewController extends Controller
             ]);
         } else {
             $componentView = 'livewire.post.templates.' . request()->input('data.homepage_section_component');
-            $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
+            $relatedPosts = $posts->first()->relatedPosts()->published()->latest()->take(4)->get();
 
             // $posts = PostCategory::with(['posts' => function ($query) {
             //     $query->published()->latest();
@@ -29,14 +33,14 @@ class PreviewController extends Controller
             //     ->orderBy('order')
             //     ->get();
 
-            $posts = collect([$post]);
+            // $posts = collect([$post]);
         }
 
         // dd($componentView);
         // $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
 
         return view('previews.post', [
-            'post' => $post,
+            'post' => $posts->first(),
             'componentView' => $componentView,
             'relatedPosts' => $relatedPosts,
         ]);

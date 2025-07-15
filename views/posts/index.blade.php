@@ -17,13 +17,13 @@
 
         @if($componentPath)
         <x-layouts.main>
-          <x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()" backgroundImage="{{  $posts->first()->getRandomImage() }}">
-            <x-breadcrumbs :items="[
+          <crm::x-banner :title="$posts->first()->postCategory->name" :post="$posts->first()" backgroundImage="{{  $posts->first()->getRandomImage() }}">
+            <crm::x-breadcrumbs :items="[
                       ['label' => 'الرئيسية', 'url' => route('home')],
                       ['label' => $posts->first()->postCategory->name, 'url' => route('dynamic.route', [$posts->first()->postCategory->slug])],
                       ['label' => $posts->first()->postCategory->description, 'url' => '']]" />
 
-          </x-banner>
+          </crm::x-banner>
 
             @component($componentPath, ['posts' => $posts]) @endcomponent
         </x-layouts.main>
@@ -36,7 +36,7 @@
 
 
 {{-- Check if a specific template exists for the category --}}
-{{-- 
+{{--
 @if(view()->exists("components.templates.$i"))
 @component("components.templates.{$i}", ['posts' => $posts])@endcomponent
 @else

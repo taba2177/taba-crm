@@ -1,12 +1,12 @@
 <x-layouts.main :title="$post->title">
-    <x-banner :title="$post->title" :post="$post"
+    <crm::x-banner :title="$post->title" :post="$post"
         backgroundImage="{{ asset('/assets/img/breadcrumb/breadcrumb-bg.jpg') }}">
-        <x-breadcrumbs :items="[
+        <crm::x-breadcrumbs :items="[
           ['label' => 'الرئيسية', 'url' => route('home')],
           ['label' => $post->postCategory->name, 'url' => route('dynamic.route', [$post->postCategory->slug])],
           ['label' => $post->title, 'url' => '']
           ]" />
-    </x-banner>
+    </crm::x-banner>
 
     <section id="blogs">
         <div class="py-60px md:py-20 lg:py-100px xl:py-30 dark:bg-black-color">

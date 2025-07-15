@@ -16,7 +16,7 @@ trait HasPostPreview
     protected function getPreviewModalUrl(): ?string
     {
         return route('preview.post', [
-            'post' => $this->getRecord(),
+            'post' => $this->getRecord()->postcategory->id,
             'data' => $this->form->getState(),
         ]);
     }
