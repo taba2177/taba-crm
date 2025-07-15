@@ -28,7 +28,7 @@ class EditPostCategory extends EditRecord
     {
 
         return route('preview.category', [
-            'category' => $this->getRecord(),
+            'category' => $this->getRecord()->id,
             'data' => $this->form->getState(),
         ]);
     }

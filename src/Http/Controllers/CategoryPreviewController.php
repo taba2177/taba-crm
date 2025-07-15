@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class CategoryPreviewController extends Controller
 {
-    public function category(PostCategory $category)
+    public function category( $category_id)
     {
         $componentView = 'components.homepage.' . request()->input('data.section_component');
 
-        // $posts = Post::with('postCategory')
-        //     ->where('post_category_id', $category->id)
-        //     ->get();
-        $posts = $category->posts()->published()->latest()->get();
+        $posts = Post::with('postCategory')
+            ->where('post_category_id', $category_id)
+            ->get();
+        // $posts = $category->posts()->published()->latest()->get();
 
 
         return view('previews.category', [
