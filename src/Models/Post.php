@@ -12,6 +12,7 @@ use Spatie\Translatable\HasTranslations;
 use Taba\Crm\Models\PostCategory;
 use Taba\Crm\Models\Tag;
 use Taba\Crm\Models\User;
+use Taba\Crm\Models\Metadata;
 
 
 
@@ -45,7 +46,7 @@ class Post extends Model
     public $translatable = [
         'title',
         'content',
-        'metadata',
+        // 'metadata',
         'meta_title',
         'meta_description',
     ];
@@ -62,9 +63,28 @@ class Post extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
         'metadata' => 'array',
-        'metadata.nested' => 'array',
+        // 'metadata.nested' => 'array',
         'homepage_section_content' => 'array',
     ];
+
+    public function getTranslatedMetaTextAttribute(): ?string
+    {
+        // Ensure metadata is an array
+        if (!is_array($this->metadata)) {
+            return null;
+        }
+
+        // Loop through the metadata to find a translatable value
+        foreach ($this->metadata as $key => $value) {
+            // Check if the value is an array and looks like a translation object
+            if (is_array($value) && Arr::has($value, app()->getLocale())) {
+                // Return the translation for the current language
+                return $value[app()->getLocale()];
+            }
+        }
+
+        return null; // Return null if no translatable text is found
+    }
 
     //relatedPosts
     public function relatedPosts()
@@ -188,6 +208,11 @@ class Post extends Model
     public function getMeta($key, $default = null)
     {
         return Arr::get($this->metadata ?? [], $key, $default);
+    }
+
+    public function metadata()
+    {
+        return $this->belongsToMany(Metadata::class, 'post_metadata');
     }
 
     public function scopeForCategory($query, $categorySlug)

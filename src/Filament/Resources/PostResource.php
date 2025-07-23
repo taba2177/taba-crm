@@ -293,92 +293,131 @@ class PostResource extends Resource
                                     ->required()
                                     ->translateLabel(),
 
-                    Forms\Components\Repeater::make('metadata')
-                        ->label('Metadata')
-                        ->schema([
-                            Forms\Components\Select::make('key')
-                                ->label('Key')
-                                ->options(MetadataFillter::all()->pluck('key', 'id'))
-                                ->required()
-                                ->createOptionForm([
-                                    Forms\Components\TextInput::make('key')
-                                        ->required()
-                                        ->maxLength(255)
-                                        ->translateLabel(),
-                                    Forms\Components\TagsInput::make('value')
-                                        ->required()
-                                        ->translateLabel(),
-                                ])
-                                ->createOptionUsing(function (array $data) {
-                                    $metadata = MetadataFillter::create([
-                                        'key' => $data['key'],
-                                        'value' => $data['value'],
-                                'key_string' => $data['key'],
-                                    ]);
-                                    return $metadata->id;
-                                })
-                                ->editOptionAction(
-                                    fn(Forms\Components\Actions\Action $action) => $action
-                                        ->form([
-                                            Forms\Components\TextInput::make('key')
-                                                ->required()
-                                                ->maxLength(255)
-                                                ->translateLabel(),
-                                            Forms\Components\TagsInput::make('value')
-                                                ->required()
-                                                ->translateLabel(),
-                                        ])
-                                        ->fillForm(function (string $state): array {
-                                            $record = MetadataFillter::find($state);
-                                            return [
-                                                'key' => $record?->key,
-                                                'value' => $record?->value,
-                                    'key_string' => $record?->key,
 
-                                ];
-                                        })
-                                        ->action(function (array $data, string $state): void {
-                                            MetadataFillter::find($state)->update($data);
-                                        })
-                                )
-                                ->live()
-                                ->afterStateUpdated(function (Get $get, Set $set, string $operation, ?string $old, ?string $state) {
-                                    if ($operation === 'create') {
-                                        $set('value', []);
+                        Forms\Components\KeyValue::make('metadata')
+                            ->keyLabel('Field Name')
+                            ->valueLabel('Field Value')
+                            ->translateLabel()
+                            ->reorderable(),
+
+                        Forms\Components\Repeater::make('metadata')
+                            ->label('Metadata')
+                            ->schema([
+                                // The schema for each repeated item is simple: a key and a value.
+                                Forms\Components\TextInput::make('key')
+                                    ->label('Key')
+                                    ->required()
+                                    ->distinct(),
+
+                                Forms\Components\TextInput::make('value')
+                                    ->label('Value')
+                                    ->required()
+                                    ->translateLabel()
+                                    ->helperText('For translatable text, enter valid JSON. E.g., {"en":"Hello","ar":"مرحبا"}'),
+
+                                Forms\Components\Toggle::make('is_translatable')
+                                    ->label('Is this value translatable?')
+                                    ->live()
+                                    ->columnSpanFull(),
+
+                                // A simple textarea for non-translatable values (like URLs)
+                                // Forms\Components\Textarea::make('value')
+                                //     ->label('Value')
+                                //     // FIX: Make the field required only when it is visible.
+                                //     // ->required(fn (Get $get) => !$get('is_translatable'))
+                                //     ->hidden(fn (Get $get) => $get('is_translatable')) // Hide if translatable is toggled on
+                                //     ->columnSpanFull(),
+
+                                // // Manually create separate fields for each language
+                                // Forms\Components\Textarea::make('value_en')
+                                //     ->label('Value (English)')
+                                //     // FIX: Make the field required only when it is visible.
+                                //     ->required(fn (Get $get) => $get('is_translatable'))
+                                //     ->visible(fn (Get $get) => $get('is_translatable')) // Show only if translatable is toggled on
+                                //     ->columnSpan(1),
+
+                                // Forms\Components\Textarea::make('value_ar')
+                                //     ->label('Value (Arabic)')
+                                //     // FIX: Make the field required only when it is visible.
+                                //     ->required(fn (Get $get) => $get('is_translatable'))
+                                //     ->visible(fn (Get $get) => $get('is_translatable')) // Show only if translatable is toggled on
+                                //     ->columnSpan(1),
+
+                            ])
+                            ->addActionLabel('Add Metadata Field')
+                            ->mutateDehydratedStateUsing(function (?array $state): array {
+                                // This function transforms the Repeater's data into the correct
+                                // key-value format before saving it to the database.
+                                $metadata = [];
+                                if (empty($state)) {
+                                    return $metadata;
+                                }
+                                foreach ($state as $item) {
+                                    if (empty($item['key'])) continue;
+                                    // Try to decode the value as JSON. If it's valid JSON, save it as an array.
+                                    // Otherwise, save it as a plain string.
+                                    $decodedValue = $item['value'];
+                                    if (json_last_error() === JSON_ERROR_NONE && is_array($decodedValue)) {
+                                        $metadata[$item['key']] = $decodedValue;
+                                    } else {
+                                        $metadata[$item['key']] = $item['value'];
                                     }
-                                })
-                                ->translateLabel(),
-                            Forms\Components\Select::make('value')
-                                ->label('Value')
-                                ->options(function (Get $get) {
-                                    $keyId = $get('key');
-                                    if (!$keyId) return [];
-                                    $record = MetadataFillter::find($keyId);
-                                    return collect($record?->value, true)
-                                        ->mapWithKeys(fn($item) => [$item => $item])
-                                        ->toArray();
-                                })
-                                ->searchable()
-                                ->live(),
-                        ])
-                        ->addActionLabel('Add Metadata')
-                        ->translateLabel(),
+
+                                    // if ($item['is_translatable']) {
+                                    //     // If translatable, create an array with 'en' and 'ar' keys.
+                                    //     $metadata[$item['key']] = [
+                                    //         'en' => $item['value_en'],
+                                    //         'ar' => $item['value_ar'],
+                                    //     ];
+                                    // } else {
+                                    //     // Otherwise, save the simple string value.
+                                    //     $metadata[$item['key']] = $item['value'];
+                                    // }
+                                }
+                                return $metadata;
+                            })
+                            ->afterStateHydrated(function (Set $set, ?array $state): void {
+                                // This function runs when the form is loaded. It transforms the
+                                // key-value data from the database back into the format the Repeater needs.
+                                if (is_null($state)) {
+                                    $set('metadata', []);
+                                    return;
+                                }
+                                $repeaterState = [];
+                                foreach ($state as $key => $value) {
+                                        // dd($state);
+                                    $isTranslatable = is_array($value) &&
+                                     (isset($value['en']) ||
+                                      isset($value['ar']));
+                                    $repeaterState[] = [
+                                        'key' => $key,
+                                        // If the value is an array, encode it to a pretty-printed JSON string for the textarea.
+                                        // Otherwise, just use the plain string value.
+                                        'is_translatable' => $isTranslatable,
+                                        'value' => is_array($value) ? json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : $value,
+                                        'value_en' => $isTranslatable ? ($value['en'] ?? '') : '',
+                                        'value_ar' => $isTranslatable ? ($value['ar'] ?? '') : '',
+                                    ];
+                                }
+                                $set('metadata', $repeaterState);
+                            })
+                            ->addActionLabel('Add Metadata'),
 
 
-                    CuratorPicker::make('image_id')
-                                    ->label('Featured Image')
-                                    ->translateLabel(),
+                     CuratorPicker::make('image_id')
+                             ->label('Featured Image')
+                             ->translateLabel(),
 
-                                Forms\Components\DatePicker::make('published_at')
-                                    ->label('Publish Date')
-                                    ->default(now())
-                                    ->required()
-                                    ->translateLabel(),
+                         Forms\Components\DatePicker::make('published_at')
+                             ->label('Publish Date')
+                             ->default(now())
+                             ->required()
+                             ->translateLabel(),
 
-                                Forms\Components\Toggle::make('is_published')
-                                    ->label('Published')
-                                    ->required()
-                                    ->translateLabel(),
+                         Forms\Components\Toggle::make('is_published')
+                             ->label('Published')
+                             ->required()
+                             ->translateLabel(),
 
 
                     Select::make('tags')
