@@ -28,8 +28,8 @@ class InstallCommand extends Command
         Artisan::call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true,'--no-interaction' => true]);
         Artisan::call('curator:install',['--no-interaction' => true]);
 
-        // $this->comment('Publishing breezy dependencies...');
-        // Artisan::call('breezy:install',['--no-interaction' => true]);
+        $this->comment('Publishing breezy dependencies...');
+        Artisan::call('breezy:install',['--no-interaction' => true]);
 
         // Publish this package's configuration file.
         $this->comment('Publishing package configuration...');
