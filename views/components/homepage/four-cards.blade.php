@@ -1,73 +1,76 @@
 @props(['posts'])
 @if(!empty($posts))
-<section id="services"
-  class="overflow-x-hidden bg-primary-color relative after:absolute after:top-10 after:left-5 after:w-650px after:h-550px after:blur-[150px] after:rounded-50% after:bg-gradient-circle-2 after:-z-1 after:-translate-x-1/2 after:opacity-60">
-  <div class="py-60px md:py-20 lg:py-30 overflow-x-hidden">
-    <div class="container">
-      <!-- section heading -->
-      {{-- <div class="max-w-560px">
-        <div class="mb-25px">
-          <span class="text-xs uppercase text-primary-color font-medium relative inline-block wow fadeInUp"
-            data-wow-delay=".3s">{{ $posts->first()->postCategory->name}}</span>
+<section id="services">
+    <div class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
+        <!-- Background gradient effects -->
+        <div class="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
+            aria-hidden="true">
+            <div class="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20"
+                style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
+            </div>
+        </div>
+        <div class="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl sm:top-[-28rem] sm:ml-16 sm:translate-x-0 sm:transform-gpu"
+            aria-hidden="true">
+            <div class="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20"
+                style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
+            </div>
+        </div>
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <!-- Section heading -->
+            <div class="mx-auto max-w-2xl lg:mx-0">
+                <h2 class="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                    {{ $posts->first()->postCategory->name }}</h2>
+                <p class="mt-6 text-lg leading-8 text-gray-300">{{ $posts->first()->postCategory->description }}
+                </p>
+            </div>
+            <!-- Services grid -->
+            <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                @foreach($posts as $index => $post)
+                @php
+                $delays = [0.3, 0.5, 0.7, 0.9];
+                $delay = $delays[$index % 4];
+                @endphp
+                <div
+                    class="flex flex-col rounded-2xl bg-gray-800 p-8 ring-1 ring-gray-700/10 transition-all duration-300 hover:ring-2 hover:ring-indigo-500">
+                    <div class="mb-6">
+                        <span class="inline-flex h-16 w-16 items-center justify-center rounded-xl bg-indigo-600">
+                            @if(!empty($post->icon))
+                            <i class="{{ $post->icon }} text-2xl text-white"></i>
+                            @else
+                            <img src="{{ asset($post->image?->url ?? $post->getRandomImage()) }}"
+                                alt="{{ $post->title ?? '' }}" class="h-8 w-8 object-contain" />
+                            @endif
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold leading-7 text-white">{{ $post->title ?? '' }}</h3>
+                        <div class="mt-3 text-base leading-7 text-gray-300">
+                            @if(!empty($post->excerpt))
+                            {{ $post->excerpt }}
+                            @else
+                            <div class="prose prose-invert max-w-none">
+                                @foreach ($post->blocks as $block)
+                                @switch($block->type)
+                                @case('markdown')
+                                @markdom($block->data->content)
+                                @break
+                                @case('figure')
+                                <crm::x-figure :image="$block->data->image" :alt="$block->data->alt"
+                                    :caption="$block->data->caption" />
+                                @break
+                                @default
+                                @dump($block)
+                                @endswitch
+                                @endforeach
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <a class="absolute inset-0 z-10" href="#"></a>
+                </div>
+                @endforeach
+            </div>
+        </div>
     </div>
-    <h2
-      class="text-3xl md:text-size-35 lg:text-size-40 xl:text-size-45 font-semibold leading-1.2 -tracking-0.02em inline-block text-seondary-color dark:text-white-color wow fadeInUp"
-      data-wow-delay=".4s">
-      {{ $posts->first()->postCategory->description }}
-    </h2>
-  </div> --}}
-  <!-- services grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-    @foreach($posts as $index => $post)
-    @php
-    $delays = [0.3, 0.5, 0.7, 0.9];
-    $delay = $delays[$index % 4];
-    @endphp
-    <div
-      class="rounded-25px relative overflow-hidden p-30px bg-cream-light-color dark:bg-bg-color-6 backdrop-blur-[40px] group transition-all duration-500 before:absolute before:left-0 before:top-0 before:rounded-25px before:w-0 before:h-0 before:transition-all before:duration-500 hover:before:w-full hover:before:h-full before:border-t before:border-l before:border-primary-color before:opacity-0 before:invisible hover:before:opacity-100 hover:before:visible after:absolute after:right-0 after:bottom-0 after:rounded-25px after:w-0 after:h-0 after:transition-all after:duration-500 hover:after:w-full hover:after:h-full after:border-b after:border-r after:border-primary-color after:opacity-0 after:invisible hover:after:opacity-100 hover:after:visible wow fadeInUp"
-      data-wow-delay="{{ $delay }}s">
-      <div class="mb-35px md:mb-75px">
-        <span class="w-16 h-16 bg-primary-color rounded-20px inline-flex justify-center items-center leading-1">
-          @if(!empty($post->icon))
-          <i
-            class="{{ $post->icon }} text-size-34 text-white-color leading-1 inline-flex transition-all duration-500 group-hover:scale-x-[-1]"></i>
-          @else
-          <img src="{{ asset($post->image?->url ?? $post->getRandomImage()) }}" alt="{{ $post->title ?? '' }}"
-            class="w-8 h-8 object-contain" />
-          @endif
-        </span>
-      </div>
-      <div>
-        <h3
-          class="text-xl md:text-size-22 lg:text-2xl xl:text-size-22 2xl:text-2xl mb-15px leading-1.2 font-semibold text-seondary-color dark:text-white-color">
-          {{ $post->title ?? '' }}
-        </h3>
-        <p class="text-primary-color-light dark:text-body-color mb-0 text-size-15">
-          @if(!empty($post->excerpt))
-          {{ $post->excerpt }}
-          @else
-          <span class="prose dark:prose-invert max-w-none text-primary-color-light dark:text-white-color mb-2">
-            @foreach ($post->blocks as $block)
-            @switch($block->type)
-            @case('markdown')
-            @markdom($block->data->content)
-            @break
-            @case('figure')
-            <x-figure :image="$block->data->image" :alt="$block->data->alt" :caption="$block->data->caption" />
-            @break
-            @default
-            @dump($block)
-            @endswitch
-            @endforeach
-          </span>
-          @endif
-        </p>
-      </div>
-      <a class="absolute top-0 left-0 w-full h-full z-1" href="#"></a>
-    </div>
-    @endforeach
-  </div>
-  </div>
-  </div>
 </section>
 @endif
