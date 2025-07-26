@@ -26,20 +26,10 @@ class CrmPlugin implements Plugin
                 \Taba\Crm\Filament\Resources\PostResource::class,
                 \Taba\Crm\Filament\Resources\PostCategoryResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
-            ]);
-    }
+                \Awcodes\Curator\Resources\MediaResource::class,
 
-    public function boot(Panel $panel): void
-    {
-        // Register the third-party plugins that this package depends on.
-        // $panel
-        //     ->plugin(BreezyCore::make()->myProfile(
-        //         shouldRegisterUserMenu: false,
-        //         hasAvatars: true
-        //     )->enableTwoFactorAuthentication())
-        //     ->plugin(CuratorPlugin::make())
-        //     ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
-        //     ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
+            ]);
+
         $panel
         ->plugin(BreezyCore::make()
         ->myProfile(
@@ -57,6 +47,36 @@ class CrmPlugin implements Plugin
         ->navigationCountBadge())
         ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
         ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
+    }
+
+    public function boot(Panel $panel): void
+    {
+        // Register the third-party plugins that this package depends on.
+        // $panel
+        //     ->plugin(BreezyCore::make()->myProfile(
+        //         shouldRegisterUserMenu: false,
+        //         hasAvatars: true
+        //     )->enableTwoFactorAuthentication())
+        //     ->plugin(CuratorPlugin::make())
+        //     ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
+        //     ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
+        // $panel
+        // ->plugin(BreezyCore::make()
+        // ->myProfile(
+        //     shouldRegisterUserMenu: false,
+        //     // shouldRegisterNavigation: true,
+
+        //     hasAvatars: true,
+        // )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
+        // // ->enableTwoFactorAuthentication()
+        // )
+        // ->plugin(CuratorPlugin::make(__('Media'))
+        // ->navigationIcon('heroicon-o-photo')
+        // ->navigationSort(10)
+        // ->navigationGroup('Collections')
+        // ->navigationCountBadge())
+        // ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
+        // ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
     }
 
     public static function make(): static

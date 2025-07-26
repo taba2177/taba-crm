@@ -34,8 +34,11 @@ class PostController extends Controller
         ]);
     }
 
-    public function show(PostCategory $category, Post $post)
+    public function show($category,$post)
     {
+        $category = PostCategory::where('slug', $category)->firstOrFail();
+        $post = Post::where('slug', $post)->firstOrFail();
+
         abort_unless($post->post_category_id === $category->id, 404);
         abort_unless($post->is_published || auth()->check(), 404);
 
