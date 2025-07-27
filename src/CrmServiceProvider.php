@@ -37,7 +37,7 @@ class CrmServiceProvider extends ServiceProvider
 
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
+        $this->loadTranslationsFrom(__DIR__.'/../lang',null);
         $this->loadViewsFrom(__DIR__.'/../views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
