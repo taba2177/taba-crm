@@ -25,6 +25,28 @@ class PostCategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+            protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Collections');
+    }
+
+        protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Post Category'); // Translate your desired label
+    }
+    public static function getHeading(): string
+    {
+        return __('Post Category');
+    }
+    public static function getSubheading(): ?string
+    {
+        return __('Post Category');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
