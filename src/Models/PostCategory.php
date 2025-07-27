@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
+use Taba\Crm\Filament\Resources\PostCategoryResource;
 use Taba\Crm\Models\Post;
 
 class PostCategory extends Model
@@ -55,6 +56,15 @@ class PostCategory extends Model
     public function children()
     {
         return $this->hasMany(PostCategory::class, 'parent_id');
+    }
+    /**
+     * Retrieve the post edit URL.
+     *
+     * @return string
+     */
+    public function getEditUrlAttribute()
+    {
+        return PostCategoryResource::getUrl('edit', ['record' => $this]);
     }
 
         /**

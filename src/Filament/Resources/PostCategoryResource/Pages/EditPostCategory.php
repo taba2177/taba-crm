@@ -49,7 +49,26 @@ class EditPostCategory extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
             // delete
-            Actions\DeleteAction::make(),
-        ];
+              Actions\DeleteAction::make()
+                ->requiresConfirmation()
+                ->modalHeading('Delete category')
+                ->modalDescription('Please choose how to handle posts linked to this category.')
+
+                // This adds the checkbox to the confirmation modal.
+                ->form([
+                    \Filament\Forms\Components\Checkbox::make('delete_posts')
+                        ->label('Also delete all posts in this category.')
+                        ->helperText('If unchecked, posts will be kept but will no longer have a category.'),
+                ])
+
+                ->action(function ($record, array $data) {
+                    if ($data['delete_posts']) {
+                        $record->posts()->delete();
+                    } else {
+                        $record->posts()->update(['post_category_id' => null]);
+                    }
+
+                    $record->delete();
+                }),        ];
     }
 }
