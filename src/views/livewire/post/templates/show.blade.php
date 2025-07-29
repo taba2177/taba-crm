@@ -1,7 +1,7 @@
 <x-layouts.main :title="$post->title">
 
     <div class="container mb-8 sm:mb-24">
-        {{-- <nav class="breadcrumbs w-full py-5">
+        <nav class="breadcrumbs w-full py-5">
             <ol class="flex items-center space-x-2 text-sm text-gray-500 rtl:space-x-reverse">
                 <li><a class="hover:text-primary" href="{{ url('/') }}">الرئيسية</a></li>
                 <li><span class="separator">/</span></li>
@@ -9,20 +9,12 @@
                 <li><span class="separator">/</span></li>
                 <li class="font-semibold text-gray-800" aria-current="page">{{ $post->title }}</li>
             </ol>
-        </nav> --}}
-            <x-breadcrumbs :items="[
-          ['label' => 'الرئيسية', 'url' => route('home')],
-          ['label' => $post->postCategory->name, 'url' => route('dynamic.route', [$post->postCategory->slug])],
-          ['label' => $post->title, 'url' => '']
-          ]" />
-
+        </nav>
         <div class="md:flex items-start gap-8">
 
             <div class="main-content flex-1 bg-white lg:p-8 rounded-md">
 
                 <h1 class="font-bold text-3xl mb-2 leading-10">{{ $post->title }}</h1>
-
-
 
                 <div class="mb-10 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
                     <div class="flex items-center">
@@ -36,8 +28,7 @@
                     @if(auth()->check())
                     <div class="flex items-center">
                         <x-heroicon-s-pencil class="inline-block w-3 h-3 mr-2" />
-                        <a class="inline-flex items-center text-sm text-primary-500 hover:text-primary-600"
-                            href="{{ $post->editUrl }}" title="edit">
+                        <a class="inline-flex items-center text-sm text-primary-500 hover:text-primary-600" href="{{ $post->editUrl }}" title="edit">
                         تعديل <p>Welcome, {{ auth()->user()->name }}</p>
                         </a>
                     </div>
@@ -45,8 +36,7 @@
                 </div>
 
                 @if ($post->image)
-                <img src="{{ $post->image?->url ?? $post->getRandomImage() }}" alt="{{ $post->title }}"
-                    class="h-96 mb-10 w-full object-cover rounded-md" />
+                <img src="{{ $post->image?->url ?? $post->getRandomImage() }}" alt="{{ $post->title }}" class="h-96 mb-10 w-full object-cover rounded-md" />
                 @endif
 
                 <article class="prose max-w-none leading-7 text-sm mb-10">
@@ -89,25 +79,19 @@
 
                 @if($post->tags->isNotEmpty())
                 <div class="post-tag-links mt-10 pt-3 border-t">
-
-
                     <div class="flex items-center justify-between">
                         <div class="post-tags">
                             <span class="tag-links">
                                 @foreach($post->tags as $tag)
-                                <a href="#"
-                                    class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-200">{{ $tag->name }}</a>
+                                <a href="#" class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-200">{{ $tag->name }}</a>
                                 @endforeach
                             </span>
                         </div>
                         <div class="post-social-sharing">
                             <ul class="inline-flex space-x-3 rtl:space-x-reverse">
-                                <li><a href="#" class="text-gray-500 hover:text-primary"><i
-                                            class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="#" class="text-gray-500 hover:text-primary"><i
-                                            class="fa-brands fa-facebook-f"></i></a></li>
-                                <li><a href="#" class="text-gray-500 hover:text-primary"><i
-                                            class="fa-brands fa-x-twitter"></i></a></li>
+                                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-x-twitter"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -123,24 +107,19 @@
                 <div class="space-y-6 bg-white mb-3 py-3 rounded-md">
                     <a href="{{ $relatedPost->url }}" class="flex items-start space-x-4 rtl:space-x-reverse group">
                         <div class="flex-shrink-0">
-                            <img src="{{ $relatedPost->image?->url ?? $relatedPost->getRandomImage() }}"
-                                alt="{{ $relatedPost->title }}"
-                                class="w-28 h-20 object-cover ml-2 rtl:mr-2 rtl:ml-auto rounded-md">
+                            <img src="{{ $relatedPost->image?->url ?? $relatedPost->getRandomImage() }}" alt="{{ $relatedPost->title }}" class="w-28 h-20 object-cover ml-2 rtl:mr-2 rtl:ml-auto rounded-md">
                         </div>
                         <div>
                             <div class="text-xs text-gray-500 mb-1 flex items-center">
                                 <i class="fa-regular fa-clock text-xs rtl:ml-1 ltr:mr-1"></i>
                                 <span>{{ $relatedPost->published_at->translatedFormat('j F Y', 'ar') }}</span>
                             </div>
-                            <h4
-                                class="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
+                            <h4 class="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
                                 {{ $relatedPost->title }}
                             </h4>
                             <div class="text-sm my-1 pros text-sm ">
                                 @markdom($relatedPost->excerpt)
                             </div>
-
-
                         </div>
                     </a>
                 </div>
@@ -150,10 +129,10 @@
         </div>
     </div>
 
-    <div class="contact-cta py-12 bg-gray-50 my-8">
+    <div class="contact-cta py-12 bg-gray-50 my-8 ">
         <div class="container">
             <div class="row space-y-3 rtl:space-y-reverse">
-                <div class="col-lg-12 text-center pb-2 border-1 rounded-md">
+                <div class="col-lg-12 text-center border-1 rounded-md">
                     <i class="icofont-headphone-alt icofont-4x text-primary"></i>
                     <h3 class="text-2xl font-bold bg-white -mt-4">هل تحتاج مساعدة؟</h3>
                     <p class="text-gray-600 my-3">نحن هنا لمساعدتك في أي أسئلة لديك</p>
