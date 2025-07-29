@@ -43,9 +43,13 @@ class InstallCommand extends Command
         $this->comment('Publishing views...');
         Artisan::call('vendor:publish', ['--tag' => 'views', '--force' => true,'--no-interaction' => true]);
     //     // Run database migrations.
-    //     $this->comment('Running database migrations...');
-    //     Artisan::call('migrate',['--no-interaction' => true
-    // ]);
+        $this->comment('Running database migrations...');
+        Artisan::call('migrate',['--no-interaction' => true
+        ]);
+
+        $this->comment('Running database seeder...');
+        Artisan::call('db:seed',['--no-interaction' => true
+        ]);
 
         $this->info('Taba CRM installed successfully!');
         $this->warn('Please complete the final manual steps:');

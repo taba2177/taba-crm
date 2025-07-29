@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
 
 
-        $this->call(NewSiteSeeder::class);
+        // $this->call(NewSiteSeeder::class);
 
 
         // Notification::make()
