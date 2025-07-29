@@ -10,8 +10,6 @@ use Awcodes\Curator\CuratorPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Filament\SpatieLaravelTranslatablePlugin;
-use Taba\Crm\Filament\Pages\GenerateComponentsFromAI;
-use Taba\Crm\Filament\Pages\GenerateSiteFromAI;
 
 class CrmPlugin implements Plugin
 {
@@ -29,6 +27,7 @@ class CrmPlugin implements Plugin
                 \Taba\Crm\Filament\Resources\PostCategoryResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
                 \Awcodes\Curator\Resources\MediaResource::class,
+
             ]);
 
         $panel
@@ -40,10 +39,7 @@ class CrmPlugin implements Plugin
             hasAvatars: true,
         )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
         // ->enableTwoFactorAuthentication()
-        )->pages([
-                GenerateSiteFromAI::class,
-                GenerateComponentsFromAI::class,
-            ])
+        )
         ->plugin(CuratorPlugin::make(__('Media'))
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(10)

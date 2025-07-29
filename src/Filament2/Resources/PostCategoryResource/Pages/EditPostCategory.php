@@ -48,8 +48,7 @@ class EditPostCategory extends EditRecord
                 ->icon('heroicon-o-globe-alt')
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
-
-
+            // delete
               Actions\DeleteAction::make()
                 ->requiresConfirmation()
                 ->modalHeading('Delete category')
@@ -70,7 +69,6 @@ class EditPostCategory extends EditRecord
                     }
 
                     $record->delete();
-                }),
-        ];
+                }),        ];
     }
 }

@@ -1,193 +1,193 @@
 <x-layouts.main :title="$post->title">
-    <crm::x-banner :title="$post->title" :post="$post"
-        backgroundImage="{{ asset('/assets/img/breadcrumb/breadcrumb-bg.jpg') }}">
-        <crm::x-breadcrumbs :items="[
+
+
+<div class="container mb-8 sm:mb-24">
+            <x-breadcrumbs :items="[
           ['label' => 'الرئيسية', 'url' => route('home')],
           ['label' => $post->postCategory->name, 'url' => route('dynamic.route', [$post->postCategory->slug])],
           ['label' => $post->title, 'url' => '']
           ]" />
-    </crm::x-banner>
 
-    <section id="blogs">
-        <div class="py-60px md:py-20 lg:py-100px xl:py-30 dark:bg-black-color">
-            <div class="container">
-                <div class="lg:grid lg:gap-6 lg:grid-cols-12">
-                    <!-- service details -->
-                    <div class="lg:col-start-1 lg:col-span-8">
-                        <div class="group relative flex flex-col items-center wow fadeInUp" data-wow-delay=".3s">
-                            <div class="rounded-lg relative overflow-hidden">
-                                <div class="rounded-t-lg overflow-hidden">
-                                    @if ($post->image)
-                                    <img src="{{ $post->image?->url ?? $post->getRandomImage() }}"
-                                        alt="{{ $post->title }}" class="w-full rounded" />
-                                    @endif
-                                </div>
-
-                                @if (Auth::check())
-                                <div class="border-t pt-4">
-                                    <a class="inline-flex items-center text-sm text-primary hover:text-primary"
-                                        href="{{ $post->editUrl }}" title="edit">
-                                        <x-heroicon-s-pencil class="inline-block w-8 h-8 text-primary-500 mr-2" />
-                                        {{__('Edit Post')}}
-                                    </a>
-                                </div>
-                                @endif
+    <div class="md:flex items-start gap-8">
 
 
-                                <div class="pt-30px md:pt-10">
-                                    <div class="transition-all duration-500">
-                                        <div class="relative z-0">
-                                            <div class="relative z-10">
-                                                {{-- <h3 class="mb-15px md:mb-5">
-                          <span class="text-primary-color-light dark:text-white-color capitalize relative z-0 text-size-35 md:text-size-40 lg:text-size-45 font-bold">
-                            {{ $post->title }}
-                                                </span>
-                                                </h3> --}}
+        <div class="main-content flex-1 bg-white lg:p-8 rounded-md">
 
-                                                {{-- <p class="text-primary-color-light dark:text-white-color mb-15px md:mb-5">
-                          {{ $post->excerpt }}
-                                                </p> --}}
-                                                <div class="px-15px md:px-25px lg:px-10">
-                                                    <x-portfolio.section>
-                                                        <div
-                                                            class="prose dark:prose-invert max-w-none text-primary-color-light dark:text-white-color">
-                                                            @foreach ($post->blocks as $block)
-                                                            @switch($block->type)
-                                                            @case('markdown')
-                                                            @markdom($block->data->content)
-                                                            @break
-                                                            @case('figure')
-                                                            <x-figure :image="$block->data->image"
-                                                                :alt="$block->data->alt"
-                                                                :caption="$block->data->caption" />
-                                                            @break
-                                                            @default
-                                                            @dump($block)
-                                                            @endswitch
-                                                            @endforeach
-                                                        </div>
-                                                    </x-portfolio.section>
-                                                </div>
-                                                @if($post->homepage_section_component &&
-                                                $post->homepage_section_content)
-                                                <div class="px-15px md:px-25px lg:px-10 mb-10 md:mb-50px">
-                                                    @include('components.homepage.' . $post->homepage_section_component,
-                                                    ['content' => $post->homepage_section_content])
-                                                </div>
-                                                @endif
-                                                <!-- process -->
+            <h1 class="font-bold text-3xl mb-2 leading-10">{{ $post->title }}</h1>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- sidebar -->
-                    {{-- pt-50px lg:pt-0 mt-10 lg:mt-0 --}}
-                    <div
-                        class="sidebar lg:col-start-9 lg:col-span-4 h-min border-t border-border-color dark:border-gray-color-3 lg:border-none">
-                        <div class="flex flex-col gap-30px">
-                            <!-- All Services -->
-                            <div class="px-15px md:px-25px py-30px bg-cream-light-color dark:bg-primary-color-light rounded-lg wow fadeInUp"
-                                data-wow-delay=".3s">
-                                <h3
-                                    class="mb-25px text-primary-color dark:text-white-color uppercase relative z-0 text-size-lg md:text-xl font-bold">
-                                    {{ __('Categories') }}
-                                </h3>
-                                <!-- list -->
-
-                                <ul class="sidebar-categories">
-                                    @php
-                                    //get categories from cache using cache
-                                    $categories = \Taba\Crm\Models\PostCategory::RegisterInHeader();
-
-                                    @endphp
-                                    @foreach ($categories as $category)
-                                    <li class="mb-2 {{ $post->postCategory->id == $category->id ? 'active' : ' ' }}">
-                                        <a href="{{route('dynamic.route', [$category->slug])}}"
-                                            class="px-5 pt-15px pb-3 rounded-lg hover:bg-seondary-color text-primary-color-light dark:text-white-color hover:text-white-color transition-all duration-500 flex items-center justify-between gap-x-5 w-full group">
-                                            <span class="inline-flex gap-1 items-start">
-                                                <i
-                                                    class="flaticon-design mr-10px rtl:ml-10px rtl:mr-auto text-size-25 leading-1"></i>
-                                                {{$category->name}}</span>
-                                            <span
-                                                class="text-primary-color-light dark:text-white-color group-hover:text-white-color leading-1 transition-none duration-500"><i
-                                                    class="fas fa-angle-right"></i></span>
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- get in tuouch -->
-                            <div class="px-15px md:px-25px py-30px bg-cream-light-color dark:bg-primary-color-light rounded-lg wow fadeInUp"
-                                data-wow-delay=".3s">
-                                <form>
-                                    <h3
-                                        class="mb-25px text-primary-color dark:text-white-color uppercase relative z-0 text-size-lg md:text-xl font-bold">
-                                        {{ __('Get in Touch') }}
-                                    </h3>
-                                    <div class="flex flex-col gap-10px">
-                                        <!-- name -->
-                                        <div>
-                                            <input type="text" placeholder="{{ __('Name') }}"
-                                                class="text-white-color w-full px-5 py-14px border border-gray-color-3 bg-cream-light-color dark:bg-black-color focus:border-primary-color rounded-lg outline-none focus:outline-none transition-all duration-300 placeholder:text-gray-color leading-1" />
-                                        </div>
-                                        <!-- name -->
-                                        <div>
-                                            <input type="email" placeholder="{{ __('Email') }}"
-                                                class="text-white-color w-full px-5 py-14px border border-gray-color-3 bg-cream-light-color dark:bg-black-color focus:border-primary-color rounded-lg outline-none focus:outline-none transition-all duration-300 placeholder:text-gray-color leading-1" />
-                                        </div>
-                                        <div>
-                                            <textarea cols="1" rows="10" placeholder="{{ __('Your Message') }}"
-                                                class="text-white-color w-full px-5 py-14px border border-gray-color-3 bg-cream-light-color dark:bg-black-color focus:border-primary-color rounded-lg outline-none focus:outline-none transition-all duration-300 placeholder:text-gray-color leading-1"></textarea>
-                                        </div>
-                                        <div class="sm:col-start-1 sm:col-span-2">
-                                            <button type="submit"
-                                                class="text-size-15 font-bold text-white-color capitalize py-17px px-35px bg-200 bg-gradient-secondary hover:bg-[-100%] rounded-full leading-1 transition-all duration-300 w-full text-center">
-                                                {{__('Send Message')}}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+            <div class="mb-10 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
+                <div class="flex items-center">
+                    <i class="fa-regular fa-clock rtl:ml-1 ltr:mr-1"></i>
+                    <span>{{ $post->published_at->translatedFormat('j F Y', 'ar') }}</span>
                 </div>
-                @if($relatedPosts->isNotEmpty())
-                <div class="px-15px md:px-25px lg:px-10 mb-10 md:mb-50px">
-                    <h4 class="mb-15px md:mb-5">
-                        <span
-                            class="text-primary-color-light dark:text-white-color capitalize relative z-0 text-size-35 md:text-size-20 lg:text-size-35 font-bold">
-                            {{ __('related posts') .' '. __('about in') .' '. $post->postCategory->name }}
-                        </span>
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach ($relatedPosts as $post)
-                        <div class="blog-warp">
-                            <a href="{{$post->url}}" title="{{ $post->title }}">
-                                <img src="{{ $post->image?->url ?? $post->getRandomImage() ?? '/assets/images/blog_img_1.jpg' }}"
-                                    alt="{{ $post->image->alt ?? $post->title }}"
-                                    class="img-fluid bordered-img w-full h-auto" loading="lazy"
-                                    style="aspect-ratio: 1/1;" />
-                            </a>
-                            <div class="meta-box mt-4">
-                                <span
-                                    class="text-primary-color-light dark:text-white-color">{{ $post->postCategory->name }}</span>
-                            </div>
-                            <h4 class="h4-md mb-3 mt-2"><a href="{{$post->url}}" title="{{ $post->title }}"
-                                    class="text-primary-color-light dark:text-white-color hover:text-secondary-color">{{$post->title}}</a>
-                            </h4>
-                            <p class="text-primary-color-light dark:text-white-color">{{ $post->excerpt }}</p>
-                        </div>
-                        @endforeach
+
+
+                    <div class="flex items-center">
+                        <i class="fa-regular fa-user rtl:ml-1 ltr:mr-1"></i>
+                        <span>{{ $post->author->name ?? 'admin' }}</span>
                     </div>
-                </div>
+                    @if(auth()->check())
+                    <div class="flex items-center">
+                        <x-heroicon-s-pencil class="inline-block w-3 h-3 rtl:ml-1 ltr:mr-1 border" />
+                        <a class="inline-flex items-center text-sm text-primary-500 hover:text-primary-600" href="{{ $post->editUrl }}" title="edit">
+
+
+                        تعديل <p>Welcome, {{ auth()->user()->name }}</p>
+
+                        </a>
+                    </div>
+
+@endif
+</div>
+
+
+@if ($post->image)
+<img src="{{ $post->image?->url ?? $post->getRandomImage() }}" alt="{{ $post->title }}" class="h-96 mb-10 w-full object-cover rounded-md" />
+
+
                 @endif
 
-            </div>
+
+
+                <article class="prose max-w-none leading-7 text-sm mb-10">
+                    @foreach ($post->blocks as $block)
+                    @switch($block->type)
+                    @case('markdown')
+                    @markdom($block->data->content)
+                    @break
+
+
+
+
+                    @case('figure')
+
+<figure class="my-4">
+    <img src="{{ $block->data->image }}" alt="{{ $block->data->alt }}" class="rounded-md">
+    @if($block->data->caption)
+    <figcaption class="text-center text-gray-500 text-sm mt-2">{{ $block->data->caption }}
+    </figcaption>
+    @endif
+</figure>
+@break
+
+@case('heading')
+<h2 class="font-bold text-2xl mt-6 mb-3">{{ $block->data->content }}</h2>
+@break
+
+@case('quote')
+<blockquote class="border-r-4 border-gray-200 pr-4 my-4 text-gray-600">
+    <p>{{ $block->data->content }}</p>
+</blockquote>
+@break
+
+@case('list')
+<ul class="list-disc pr-5 my-4 space-y-2">
+    @foreach($block->data->items as $item)
+    <li>{{ $item }}</li>
+    @endforeach
+</ul>
+@break
+
+@endswitch
+@endforeach
+
+</article>
+
+
+@if($post->tags->isNotEmpty())
+<div class="post-tag-links mt-10 pt-3 border-t">
+    <div class="flex items-center justify-between">
+        <div class="post-tags">
+            <span class="tag-links">
+                @foreach($post->tags as $tag)
+                <a href="#" class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-200">{{ $tag->name }}</a>
+                @endforeach
+            </span>
+
+
         </div>
-    </section>
+
+        <div class="post-social-sharing">
+            <ul class="inline-flex space-x-3 rtl:space-x-reverse">
+                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-instagram"></i></a></li>
+                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-facebook-f"></i></a></li>
+                <li><a href="#" class="text-gray-500 hover:text-primary"><i class="fa-brands fa-x-twitter"></i></a></li>
+            </ul>
+
+
+                        </div>
+
+                        </div>
+
+                        </div>
+
+
+@endif
+
+
+                </div>
+
+
+
+@if($relatedPosts->isNotEmpty())
+<aside class="sidebar md:w-80 lg:w-96 flex-shrink-0 mt-10 md:mt-0">
+    <h3 class="font-bold text-xl mb-4">مقالات ذات صلة</h3>
+    {{-- Note: Using $relatedPost to avoid conflicts with the main $post object --}}
+    @foreach ($relatedPosts as $relatedPost)
+    <div class="space-y-6 bg-white mb-3 py-3 rounded-md">
+        <a href="{{ $relatedPost->url }}" class="flex items-start space-x-4 rtl:space-x-reverse group">
+            <div class="flex-shrink-0">
+                <img src="{{ $relatedPost->image?->url ?? $relatedPost->getRandomImage() }}" alt="{{ $relatedPost->title }}" class="w-28 h-20 object-cover ml-2 rtl:mr-2 rtl:ml-auto rounded-md">
+            </div>
+
+                        <div>
+
+<div class="text-xs text-gray-500 mb-1 flex items-center">
+    <i class="fa-regular fa-clock text-xs rtl:ml-1 ltr:mr-1"></i>
+    <span>{{ $relatedPost->published_at->translatedFormat('j F Y', 'ar') }}</span>
+</div>
+
+<h4 class="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
+    {{ $relatedPost->title }}
+</h4>
+<div class="text-sm my-1 pros text-sm ">
+    @markdom($relatedPost->excerpt)
+
+</div>
+</div>
+
+</a>
+
+</div>
+
+@endforeach
+
+</aside>
+@endif
+
+
+</div>
+</div>
+
+<div class="contact-cta py-12 bg-gray-50 my-8 ">
+    <div class="container">
+            <div class="row space-y-3 rtl:space-y-reverse">
+
+            <div class="col-lg-12 text-center border-1 rounded-md">
+                <i class="icofont-headphone-alt icofont-4x text-primary"></i>
+                <h3 class="text-2xl font-bold bg-white -mt-4">هل تحتاج مساعدة؟</h3>
+                <p class="text-gray-600 my-3">نحن هنا لمساعدتك في أي أسئلة لديك</p>
+                <x-button href="{{ url('tel:966501253111') }}" label="تواصل معنا" icon="fa-arrow-left" />
+
+
+            </div>
+
+                </div>
+
+
+</div>
+</div>
+
+
 
 </x-layouts.main>

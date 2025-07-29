@@ -67,7 +67,6 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/views/livewire' => resource_path('views/livewire'),
                 __DIR__.'/views/posts' => resource_path('views/posts'),
                 __DIR__.'/views/previews' => resource_path('views/previews'),
-                __DIR__.'/views/filament/pages' => resource_path('views/filament/pages'),
             ], 'views');
 
             $this->publishes([
