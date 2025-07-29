@@ -39,6 +39,9 @@ class InstallCommand extends Command
         $this->comment('Publishing package configuration...');
         Artisan::call('vendor:publish', ['--tag' => 'crm-database', '--force' => true,'--no-interaction' => true]);
 
+        //publish views
+        $this->comment('Publishing views...');
+        Artisan::call('vendor:publish', ['--tag' => 'views', '--force' => true,'--no-interaction' => true]);
     //     // Run database migrations.
     //     $this->comment('Running database migrations...');
     //     Artisan::call('migrate',['--no-interaction' => true
