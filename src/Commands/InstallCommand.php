@@ -137,7 +137,7 @@ class InstallCommand extends Command
     $stub = <<<'EOT'
 module.exports = {
     plugins: {
-        "tailwindcss-nesting": {},
+        "tailwindcss/nesting": {},
         tailwindcss: {},
         autoprefixer: {},
     },
