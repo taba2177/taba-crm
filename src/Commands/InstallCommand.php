@@ -121,7 +121,7 @@ class InstallCommand extends Command
     }
     protected function updatePostCssConfig(): bool
 {
-    $configPath = base_path('postcss.config.js');
+    $configPath = base_path('postcss.config.cjs');
 
     if (File::exists($configPath)) {
         return true; // Assume user has their own config if it already exists.
