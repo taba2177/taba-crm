@@ -1,6 +1,8 @@
 // packages/taba/crm/tailwind-preset.js
 
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 module.exports = {
     content: [
         // Add all the paths your package and its dependencies need
@@ -18,8 +20,20 @@ module.exports = {
         "./vendor/jeffgreco13/filament-breezy/resources/**/*.blade.php",
         "./vendor/pboivin/filament-peek/resources/views/**/*.blade.php",
     ],
+    // theme: {
+    //     extend: {},
+    // },
     theme: {
-        extend: {},
+        colors: {
+            primary: "#b19e59",
+            secondary: "#01362c",
+            ...colors,
+        },
+        extend: {
+            fontFamily: {
+                tajawal: ["Tajawal", "sans-serif"],
+            },
+        },
     },
     plugins: [
         require("@tailwindcss/forms"),

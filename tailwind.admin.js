@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
 
 module.exports = {
     presets: [
@@ -15,4 +16,16 @@ module.exports = {
         "./vendor/jeffgreco13/filament-breezy/resources/**/*.blade.php",
         "./vendor/pboivin/filament-peek/resources/views/**/*.blade.php",
     ],
+    theme: {
+        colors: {
+            primary: "#b19e59",
+            secondary: "#01362c",
+            ...colors,
+        },
+        extend: {
+            fontFamily: {
+                tajawal: ["Tajawal", "sans-serif"],
+            },
+        },
+    },
 };
