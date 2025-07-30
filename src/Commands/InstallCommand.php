@@ -60,18 +60,20 @@ class InstallCommand extends Command
             return;
         }
 
+        // Use a minimal, correct list of essential dependencies
         $packages = [
-            '@tailwindcss/forms' => '^0.5.7',
-            '@tailwindcss/typography' => '^0.5.10',
-            'autoprefixer' => '^10.4.16',
-            'postcss' => '^8.4.32',
-            'tailwindcss' => '^3.3.6',
-            'vite' => '^5.0.0',
+            'tailwindcss' => '^3.4.0',
+            'postcss' => '^8.4.38',
+            'autoprefixer' => '^10.4.19',
+            'vite' => '^7.0.0',
+            'laravel-vite-plugin' => '^2.0.0',
+            '@tailwindcss/forms' => '^0.5.7',      // Keep Filament plugins
+            '@tailwindcss/typography' => '^0.5.10', // Keep Filament plugins
         ];
 
         $packageJson = json_decode(File::get(base_path('package.json')), true);
 
-        // Add or update dependencies
+        // Add or update dependencies in devDependencies
         foreach ($packages as $package => $version) {
             $packageJson['devDependencies'][$package] = $version;
         }
