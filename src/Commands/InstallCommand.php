@@ -140,7 +140,7 @@ EOT;
    protected function updateTailwindConfig(): void
     {
         $configPath = base_path('tailwind.config.js');
-        $presetPath = './packages/taba/crm/tailwind-preset.js'; // Correct path to preset
+        $presetPath = './vendor/taba/crm/tailwind-preset.js'; // Correct path to preset
 
         if (!File::exists($configPath)) {
             // If tailwind.config.js doesn't exist, create a new one using the preset.
