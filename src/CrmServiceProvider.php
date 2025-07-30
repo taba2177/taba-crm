@@ -34,7 +34,10 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        \App::setLocale('ar');
+        \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
+            $switch->locales(['ar', 'en']); // also accepts a closure
+        });
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang',null);
