@@ -44,6 +44,7 @@ class CrmPlugin implements Plugin
                 GenerateSiteFromAI::class,
                 GenerateComponentsFromAI::class,
             ])
+        ->plugin(BreezyCore::make())
         ->plugin(CuratorPlugin::make(__('Media'))
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(10)
@@ -58,7 +59,6 @@ class CrmPlugin implements Plugin
         // Register the third-party plugins that this package depends on.
         $panel
         ->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
-
     }
 
     public static function make(): static
