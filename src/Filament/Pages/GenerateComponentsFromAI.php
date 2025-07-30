@@ -75,8 +75,10 @@ class GenerateComponentsFromAI extends Page implements HasForms
             File::put($path . '/' . $filename, $code);
             $savedFiles[] = $filename;
         }
+        \Illuminate\Support\Facades\Process::run("npm run build");
 
         Notification::make()->success()->title('Components Saved!')->body('The following files have been saved: ' . implode(', ', $savedFiles))->send();
+        
         $this->generatedComponents = null; // Clear after saving
     }
 }
