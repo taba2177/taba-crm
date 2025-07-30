@@ -17,14 +17,16 @@ class InstallCommand extends Command
         $this->info('🚀 Starting Taba CRM installation...');
 
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
+        if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
+        if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
         if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
-        if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
+
 
         $this->info('✅ Taba CRM installed successfully!');
         $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
