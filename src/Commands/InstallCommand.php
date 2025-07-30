@@ -21,6 +21,7 @@ class InstallCommand extends Command
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
+        if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
@@ -113,6 +114,28 @@ class InstallCommand extends Command
         File::put(base_path('package.json'), json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         return true;
     }
+    protected function updatePostCssConfig(): bool
+{
+    $configPath = base_path('postcss.config.js');
+
+    if (File::exists($configPath)) {
+        return true; // Assume user has their own config if it already exists.
+    }
+
+    $stub = <<<'EOT'
+export default {
+    plugins: {
+        'tailwindcss/nesting': {}, // For using nested CSS
+        tailwindcss: {},
+        autoprefixer: {},
+    },
+};
+EOT;
+
+    File::put($configPath, $stub);
+
+    return true;
+}
 
    protected function updateTailwindConfig(): void
     {

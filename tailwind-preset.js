@@ -2,7 +2,6 @@
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    ي
     content: [
         // Add all the paths your package and its dependencies need
         "./vendor/taba/crm/src/**/*.php",
