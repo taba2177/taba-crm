@@ -27,10 +27,9 @@ class InstallCommand extends Command
         if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
 
-        $this->call('serv');
-
         $this->info('✅ Taba CRM installed successfully!');
         $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
+        $this->warn('And Run npm run build again');
 
         return self::SUCCESS;
     }
