@@ -84,9 +84,9 @@ class GenerateComponentService
                         @endswitch
                         @endforeach
                     </div>
-                    figure.blade.php already created 
+                    figure.blade.php already created
                     all static content must be replaced by post data ,the final result must equal the rawcode design ,you must use src="{{ asset(\$post->image?->url ?? \$post->getRandomImage()) }}"
-                use "rtl:" to apply multibale direction design,and in colors just use primary ,secondary,and gray,and white,black,
+                use "rtl:" direction design
                 the new design must be section handling posts must also begin with @props(['posts']) and not @props(['post']) \\n@if(\$posts->isNotEmpty())\\n@php\\n\$post=\$posts->first();\\n@endphp,and has the same post->blocks structure, dont ever use @props(['post']) becouse there is no post in props just posts and all static content must replaced with dynamic content .
                 * **IF** your new design contains **more than one** `<section>` tag, then you MUST break the design into multiple component files (e.g., a main section and a repeatable card).
                 * **ELSE IF** your new design contains only **one** `<section>` tag, you MUST return the entire new design as a **single component file**, just like in the example above. Do not split it.
