@@ -89,14 +89,6 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/resources/css' => resource_path('css/'),
             ], ['crm','resources']);
 
-            // Tailwind Configs (optional separate tag)
-            $this->publishes([
-                __DIR__.'/tailwind.config.js' => base_path('tailwind.config.js'),
-                __DIR__.'/tailwind.admin.js' => base_path('tailwind.admin.js'),
-                __DIR__.'/vite.config.js' => base_path('vite.config.js'),
-                __DIR__.'/postcss.config.js' => base_path('postcss.config.js'),
-                __DIR__.'/package.json' => base_path('package.json'),
-            ], ['crm','crm-tailwind']);
         }
     }
 }
