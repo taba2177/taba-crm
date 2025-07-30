@@ -44,7 +44,9 @@ class CrmPlugin implements Plugin
                 GenerateSiteFromAI::class,
                 GenerateComponentsFromAI::class,
             ])
-        ->plugin(BreezyCore::make())
+        ->default()
+        ->login()
+        ->profile()
         ->plugin(CuratorPlugin::make(__('Media'))
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(10)

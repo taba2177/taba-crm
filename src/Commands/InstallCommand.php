@@ -114,18 +114,84 @@ class InstallCommand extends Command
         return true;
     }
 
-    protected function updateTailwindConfig(): bool
+   protected function updateTailwindConfig(): void
     {
-        // ... This method's logic is complex and fine as is. We'll assume success.
-        // In a real-world scenario, you might add more checks here.
-        parent::updateTailwindConfig();
-        return true;
+        $configPath = base_path('tailwind.config.js');
+        $presetPath = './packages/taba/crm/tailwind-preset.js'; // Correct path to preset
+
+        if (!File::exists($configPath)) {
+            // If tailwind.config.js doesn't exist, create a new one using the preset.
+            $content = "module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n        './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
+            File::put($configPath, $content);
+            $this->info('Created tailwind.config.js with CRM preset.');
+            return;
+        }
+
+        // If it exists, add our preset non-destructively
+        $content = File::get($configPath);
+        $presetRequire = "require('{$presetPath}')";
+
+        if (!str_contains($content, $presetRequire)) {
+            $newContent = preg_replace(
+                '/(presets\s*:\s*\[)/',
+                "$1\n        {$presetRequire},",
+                $content,
+                1,
+                $count
+            );
+
+            if ($count === 0) { // If 'presets' key doesn't exist, add it
+                 $newContent = preg_replace(
+                    '/(module\\.exports\\s*=\\s*{)/',
+                    "$1\n    presets: [{$presetRequire}],",
+                    $content
+                );
+            }
+            File::put($configPath, $newContent);
+            $this->info('Updated tailwind.config.js with CRM preset.');
+        }
     }
 
-    protected function updateViteConfig(): bool
+// packages/taba/crm/src/Commands/InstallCommand.php
+
+    protected function updateViteConfig(): void
     {
-        // ... This method's logic is complex and fine as is.
-        parent::updateViteConfig();
-        return true;
+        $configPath = base_path('vite.config.js');
+        $viteThemePath = "'vendor/taba/crm/src/resources/css/admin.css'";
+
+        // If vite.config.js does not exist, create it from a standard Laravel stub.
+        if (! File::exists($configPath)) {
+            $this->info('vite.config.js not found. Creating a new one for you...');
+            $stub = <<<'EOT'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+            ],
+            refresh: true,
+        }),
+    ],
+});
+EOT;
+            File::put($configPath, $stub);
+        }
+
+        // Now that we know the file exists, inject our theme path if it's missing.
+        $content = File::get($configPath);
+
+        if (! str_contains($content, $viteThemePath)) {
+            $newContent = str_replace(
+                "'resources/js/app.js',",
+                "'resources/js/app.js',\n                {$viteThemePath},",
+                $content
+            );
+            File::put($configPath, $newContent);
+            $this->info('CRM theme path added to vite.config.js.');
+        }
     }
 }
