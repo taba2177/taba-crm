@@ -84,10 +84,6 @@ class InstallCommand extends Command
         if (!$result->successful()) {
             $this->error($result->errorOutput());
         }
-        $result = Process::run('npm install cropperjs');
-        if (!$result->successful()) {
-            $this->error($result->errorOutput());
-        }
         return $result->successful();
     }
 
@@ -108,14 +104,24 @@ class InstallCommand extends Command
         }
 
         $packages = [
-            'tailwindcss' => '^3.4.0', 'postcss' => '^8.4.38', 'autoprefixer' => '^10.4.19',
-            'vite' => '^7.0.0', 'laravel-vite-plugin' => '^2.0.0',
-            '@tailwindcss/forms' => '^0.5.7', '@tailwindcss/typography' => '^0.5.10',
+            'tailwindcss' => '^3.4.0',
+            'postcss' => '^8.4.38',
+            'autoprefixer' => '^10.4.19',
+            'vite' => '^7.0.0',
+            'laravel-vite-plugin' => '^2.0.0',
+            '@tailwindcss/forms' => '^0.5.7',
+            '@tailwindcss/typography' => '^0.5.10',
+            'postcss-nesting' => '^12.1.5', 
+            'cropperjs' => '^1.6.2',
         ];
+
         $packageJson = json_decode(File::get(base_path('package.json')), true);
+
+        // Add or update devDependencies
         foreach ($packages as $package => $version) {
             $packageJson['devDependencies'][$package] = $version;
         }
+
         File::put(base_path('package.json'), json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         return true;
     }
