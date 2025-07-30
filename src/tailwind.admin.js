@@ -2,7 +2,6 @@
 
 module.exports = {
     presets: [
-        require("./tailwind.config"),
         require("./vendor/filament/filament/tailwind.config.preset"),
     ],
     content: [

@@ -4,7 +4,7 @@
 
 @import 'cropperjs/dist/cropper.css';
 
-/* @config '../../tailwind.admin.js'; */
+@config '../../tailwind.admin.js';
 
 .dark .fi-sidebar,
 .dark .fi-sidebar-header,
