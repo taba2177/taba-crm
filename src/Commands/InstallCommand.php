@@ -24,6 +24,7 @@ class InstallCommand extends Command
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
+        if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
 
 
