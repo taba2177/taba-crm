@@ -111,7 +111,7 @@ class InstallCommand extends Command
             'laravel-vite-plugin' => '^2.0.0',
             '@tailwindcss/forms' => '^0.5.7',
             '@tailwindcss/typography' => '^0.5.10',
-            'postcss-nesting' => '^12.1.5', 
+            'postcss-nesting' => '^12.1.5',
             'cropperjs' => '^1.6.2',
         ];
 
@@ -136,7 +136,7 @@ class InstallCommand extends Command
     $stub = <<<'EOT'
 module.exports = {
     plugins: {
-        "tailwindcss/nesting": {},
+        "tailwindcss-nesting": {},
         tailwindcss: {},
         autoprefixer: {},
     },
