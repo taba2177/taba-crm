@@ -65,7 +65,7 @@ class GenerateComponentService
             3.  **Preserve Blade Logic:** You MUST preserve all original Blade logic, variables, and data access (e.g., `\$post->title`, `\$posts->first()->postCategory->name`).
             4.  **Component Structure (IMPORTANT LOGIC):**
                 all static content must be replaced by post data ,the final result must equal the rawcode design ,you must use src="{{ asset(\$post->image?->url ?? \$post->getRandomImage()) }}"
-                use "rtl:" direction design
+                use "rtl:" to support multi direction design
                 the new design must be section handling posts must also begin with @props(['posts']) and not @props(['post']) \\n@if(\$posts->isNotEmpty())\\n@php\\n\$post=\$posts->first();\\n@endphp,and has the same post->blocks structure, dont ever use @props(['post']) becouse there is no post in props just posts and all static content must replaced with dynamic content .
                 * **IF** your new design contains **more than one** `<section>` tag, then you MUST break the design into multiple component files (e.g., a main section and a repeatable card).
                 * **ELSE IF** your new design contains only **one** `<section>` tag, you MUST return the entire new design as a **single component file**, just like in the example above. Do not split it.
