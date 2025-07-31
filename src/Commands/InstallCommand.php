@@ -69,8 +69,10 @@ class InstallCommand extends Command
 
     protected function publishAssets(): bool
     {
-        $this->call('vendor:publish', ['--tag' => 'crm-config', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'crm-database', '--force' => true]);
+        $this->call('vendor:publish', ['--tag' => 'crm-config']);
+        // , '--force' => true]);
+        $this->call('vendor:publish', ['--tag' => 'crm-database']);
+        // , '--force' => true]);
         return true;
     }
 
