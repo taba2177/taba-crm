@@ -156,7 +156,7 @@ EOT;
 
         if (!File::exists($configPath)) {
             // If tailwind.config.js doesn't exist, create a new one using the preset.
-            $content = "module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n        './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
+            $content = "module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n   './resources/views/**/*.blade.php', \n     './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
             File::put($configPath, $content);
             $this->info('Created tailwind.config.js with CRM preset.');
             return;
