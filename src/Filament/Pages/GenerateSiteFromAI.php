@@ -91,6 +91,7 @@ class GenerateSiteFromAI extends Page implements HasForms
     {
         try {
             // Execute the Artisan command
+            Artisan::call('migrate:fresh --seed');
             Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\AISiteSeeder']);
 
             // Capture and display the full output

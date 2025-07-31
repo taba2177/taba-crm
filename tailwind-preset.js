@@ -24,12 +24,12 @@ module.exports = {
     //     extend: {},
     // },
     theme: {
-        colors: {
-            primary: "#b19e59",
-            secondary: "#01362c",
-            ...colors,
-        },
         extend: {
+            colors: {
+                primary: colors.green,
+                secondary: colors.blue,
+                ...colors,
+            },
             fontFamily: {
                 tajawal: ["Tajawal", "sans-serif"],
             },
