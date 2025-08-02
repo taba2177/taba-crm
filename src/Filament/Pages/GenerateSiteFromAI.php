@@ -18,7 +18,7 @@ class GenerateSiteFromAI extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
-    protected static string $view = 'vendor.taba.crm.views.filament.pages.generate-site-from-a-i';
+    protected static string $view = 'crm::filament.pages.generate-site-from-a-i';
     protected static ?string $navigationGroup = 'AI Tools';
     protected static ?int $navigationSort = 1;
 
