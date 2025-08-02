@@ -129,7 +129,7 @@ class NewSiteSeeder extends Seeder
 
 **### YOUR TASK ###**
 Now, using the example above as a strict template, generate a new seeder class named `AISiteSeeder` based on the following unstructured text. Ensure you include the `createPost` helper method and all necessary logic.
-
+and also try to saparate as possiable to be more categories and more posts
 The final output must be **ONLY the raw PHP code** for the seeder class, without the `<?php` tag or any markdown formatting.
 
 **### NEW UNSTRUCTURED TEXT TO PROCESS ###**

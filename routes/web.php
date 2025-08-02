@@ -7,7 +7,7 @@ use Spatie\Sitemap\Tags\Url;
 use Taba\Crm\Http\Controllers\GoogleTranslateController;
 use Taba\Crm\Livewire\Post\Show as PostShow;
 use Taba\Crm\Livewire\Posts;
-use Taba\Crm\livewire\Home;
+use Taba\Crm\Livewire\Home;
 use Taba\Crm\Http\Controllers\PageController;
 use Taba\Crm\Http\Controllers\PostController;
 use Taba\Crm\Http\Controllers\PreviewController;

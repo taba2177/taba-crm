@@ -49,18 +49,13 @@ class GenerateComponentService
 
             ### THE GOLDEN RULES: props(['posts']) ONLY,THE DESIGNS MUST BE EQUAL TO THE RAWCODE DESIGN ###
             Your mission is to take a raw Laravel Blade code snippet and transform it into a visually stunning, self-contained component. The final output must be a component file (or files) that can be rendered directly from a Laravel controller, passing only a single \$posts collection.
-            the post description data in :
-                @foreach (\$post->blocks as \$block)
-                  @switch(\$block->type)
-                  @case('markdown')
-                  @markdom(\$block->data->content)
 
             **### PERFECT OUTPUT EXAMPLE (for a single-section design) ###**
             This example demonstrates the correct output when the new design contains only ONE `<section>` tag. The result is a single JSON key-value pair. The Blade code must be a properly escaped JSON string.
             ```json
-            {
-                "example-section-component.blade.php": "@props(['posts'])\n\n@if(\$posts->isNotEmpty())\n<section class=\"bg-gray-100 dark:bg-gray-900 py-12 sm:py-16 lg:py-20\">\n    <div class=\"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8\">\n        <div class=\"grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3\">\n            @foreach (\$posts as \$post)\n            {{-- Each card is a container for the post's blocks --}}\n            <div class=\"rounded-xl bg-white dark:bg-gray-800 p-6 lg:p-8 shadow-md ring-1 ring-gray-900/5 dark:ring-white/10\">\n                \n                {{-- Renders the exact block structure provided --}}\n                <div class=\"prose prose-sm dark:prose-invert max-w-none\">\n                    @foreach (\$post->blocks as\$block)\n                        @switch(\$block->type)\n                            @case('markdown')\n                                @markdom(\$block->data->content)\n                                @break\n\n                            @case('figure')\n                                {{-- Inlined <figure> to avoid using forbidden props on a sub-component --}}\n                                <figure class=\"!my-5\">\n                                    <img src=\"{{ \$block->data->image }}\" alt=\"{{ \$block->data->alt ?? '' }}\" class=\"w-full rounded-lg object-cover shadow-md\">\n                                    @if(!empty(\$block->data->caption))\n                                        <figcaption class=\"!mt-2 !text-xs !text-center text-gray-500 dark:text-gray-400\">{{ \$block->data->caption }}</figcaption>\n                                    @endif\n                                </figure>\n                                @break\n\n                            @default\n                                @if(app()->isLocal())\n                                    @dump(\$block)\n                                @endif\n                        @endswitch\n                    @endforeach\n                </div>\n\n            </div>\n            @endforeach\n        </div>\n    </div>\n</section>\n@endif\n"
-            }
+                {
+                    "why-choose-us-section.blade.php": "@props(['posts'])\n\n@if(\$posts->isNotEmpty())\n<section class=\"py-20 bg-gradient-to-r from-slate-900/50 to-purple-900/20 rtl:text-right\">\n    <div class=\"container mx-auto px-4 rtl:px-4\">\n        <div class=\"text-center mb-16 rtl:text-right\">\n            <h2 class=\"text-4xl md:text-5xl font-bold mb-6\"><span class=\"gradient-text\">{{ \$posts->first()->postCategory->name }}</span></h2>\n            <p class=\"text-xl text-gray-300 max-w-2xl mx-auto rtl:mx-auto\">{{ \$posts->first()->postCategory->description }}</p>\n        </div>\n        <div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 rtl:gap-8\">\n            @foreach(\$posts as \$post)\n                <div class=\"text-center p-6 rounded-2xl glass-effect hover:scale-105 transition-transform duration-300 rtl:hover:-translate-x-2\">\n                    <div class=\"text-4xl mb-4\">\n                        @if(!empty(\$post->icon))\n                            <i class=\"{{ \$post->icon }}\"></i>\n                        @else\n                            <img src=\"{{ asset(\$post->image?->url ?? \$post->getRandomImage()) }}\" alt=\"{{ \$post->title ?? '' }}\" class=\"w-10 h-10 mx-auto\">\n                        @endif\n                    </div>\n                    <h3 class=\"text-xl font-bold text-white mb-3\">{{ \$post->title ?? '' }}</h3>\n                    <div class=\"prose dark:prose-invert text-gray-300\">\n                        @if(!empty(\$post->excerpt))\n                            {{ \$post->excerpt }}\n                        @else\n                            @foreach (\$post->blocks as \$block)\n                                @switch(\$block->type)\n                                    @case('markdown')\n                                        @markdom(\$block->data->content)\n                                        @break\n                                    @case('figure')\n                                        <x-figure :image=\"\$block->data->image\" :alt=\"\$block->data->alt\" :caption=\"\$block->data->caption\" />\n                                        @break\n                                    @default\n                                        @dump(\$block)\n                                @endswitch\n                            @endforeach\n                        @endif\n                    </div>\n                </div>\n            @endforeach\n        </div>\n    </div>\n</section>\n@endif"
+                }
             ```
             **### END OF EXAMPLE ###**
 
@@ -69,29 +64,13 @@ class GenerateComponentService
             2.  **Create a New, Modern UI:** Use standard Tailwind CSS utilities to create a fresh, professional design.
             3.  **Preserve Blade Logic:** You MUST preserve all original Blade logic, variables, and data access (e.g., `\$post->title`, `\$posts->first()->postCategory->name`).
             4.  **Component Structure (IMPORTANT LOGIC):**
-                            and exstract he content in same this strucrue :
-                    <div class="prose dark:prose-invert">
-                        @foreach (\$post->blocks as \$block)
-                        @switch(\$block->type)
-                        @case('markdown')
-                        @markdom(\$block->data->content)
-                        @break
-                        @case('figure')
-                        <x-figure :image="\$block->data->image" :alt="\$block->data->alt" :caption="\$block->data->caption" />
-                        @break
-                        @default
-                        @dump(\$block)
-                        @endswitch
-                        @endforeach
-                    </div>
-                    figure.blade.php already created
-                    all static content must be replaced by post data ,the final result must equal the rawcode design ,you must use src="{{ asset(\$post->image?->url ?? \$post->getRandomImage()) }}"
-                use "rtl:" direction design
+                all static content must be replaced by post data ,the final result must equal the rawcode design ,you must use src="{{ asset(\$post->image?->url ?? \$post->getRandomImage()) }}"
+                use "rtl:" to support multi direction design
                 the new design must be section handling posts must also begin with @props(['posts']) and not @props(['post']) \\n@if(\$posts->isNotEmpty())\\n@php\\n\$post=\$posts->first();\\n@endphp,and has the same post->blocks structure, dont ever use @props(['post']) becouse there is no post in props just posts and all static content must replaced with dynamic content .
                 * **IF** your new design contains **more than one** `<section>` tag, then you MUST break the design into multiple component files (e.g., a main section and a repeatable card).
                 * **ELSE IF** your new design contains only **one** `<section>` tag, you MUST return the entire new design as a **single component file**, just like in the example above. Do not split it.
             5.  **Output Format:** The final output must be a single, valid JSON object where keys are the filenames and values are the corresponding Blade code. Return **ONLY the raw JSON object**, without any explanations or markdown.
-
+            6.  convert just the design to like below code
             **### NEW BLADE CODE TO REDESIGN & REFACTOR ###**
             ---
             {$rawCode}
