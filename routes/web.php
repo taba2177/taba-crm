@@ -15,7 +15,7 @@ use Taba\Crm\Models\Page;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 
-Route::middleware('web')->group(function () {
+// Route::middleware('web')->group(function () {
 
 Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category:slug}', [CategoryPreviewController::class, 'category'])->name('preview.category');
@@ -50,7 +50,7 @@ Route::get('/{slug}', function ($slug) {
 Route::get('/{category}/{post:slug}', [PostController::class, 'show'])
     ->name('posts.show');
 
-});
+// });
 
 Route::get('/sitemap', function () {
     // Create sitemap instance
