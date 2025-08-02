@@ -17,7 +17,7 @@ class GenerateComponentsFromAI extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-view-columns';
-    protected static string $view = 'filament.pages.generate-components-from-a-i';
+    protected static string $view = 'vendor.taba.crm.views.filament.pages.generate-components-from-a-i';
     protected static ?string $navigationGroup = 'AI Tools';
     protected static ?int $navigationSort = 2;
     protected static ?string $title = 'Generate Blade Components';
@@ -78,7 +78,7 @@ class GenerateComponentsFromAI extends Page implements HasForms
         \Illuminate\Support\Facades\Process::run("npm run build");
 
         Notification::make()->success()->title('Components Saved!')->body('The following files have been saved: ' . implode(', ', $savedFiles))->send();
-        
+
         $this->generatedComponents = null; // Clear after saving
     }
 }
