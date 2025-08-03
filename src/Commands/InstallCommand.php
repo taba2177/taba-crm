@@ -78,7 +78,7 @@ class InstallCommand extends Command
 
     protected function runMigrations(): bool
     {
-        return $this->call('migrate --seed') === 0;
+        return $this->call('migrate') === 0;
     }
 
     protected function runNpmInstall(): bool
