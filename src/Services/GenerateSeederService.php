@@ -113,15 +113,6 @@ class NewSiteSeeder extends Seeder
 {
     public function run(): void
     {
-        // 0. Create a default user if none exists
-        if (User::count() == 0) {
-            User::create([
-                'name' => 'Admin',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-            ]);
-        }
-
         // 1. Create Categories with Descriptions
         \$categories = [
             [
