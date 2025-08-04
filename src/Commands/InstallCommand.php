@@ -17,6 +17,7 @@ class InstallCommand extends Command
         $this->info('🚀 Starting Taba CRM installation...');
 
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
+        if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
