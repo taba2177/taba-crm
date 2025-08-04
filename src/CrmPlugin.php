@@ -41,8 +41,8 @@ class CrmPlugin implements Plugin
         )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
         // ->enableTwoFactorAuthentication()
         )->pages([
-                GenerateSiteFromAI::class,
-                GenerateComponentsFromAI::class,
+                // GenerateSiteFromAI::class,
+                // GenerateComponentsFromAI::class,
             ])
         ->default()
         ->login()
