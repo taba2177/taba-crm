@@ -46,7 +46,7 @@ class CrmPlugin implements Plugin
             ])
         ->default()
         ->login()
-        ->registration() 
+        ->registration()
         ->passwordReset()
         ->emailVerification()
         ->profile()
@@ -61,7 +61,8 @@ class CrmPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        $panel->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
+        // $panel->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
+        $panel->viteTheme('packages/taba/crm/src/resources/css/admin.css');
     }
 
     public static function make(): static

@@ -73,6 +73,16 @@ class PostResource extends Resource
     {
         return __('Custom Page Subheading');
     }
+
+    public static function getModelLabel(): string
+    {
+        return __('Posts');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Posts');
+    }
     /**
      * The resource navigation sort order.
      */

@@ -46,6 +46,15 @@ class PostCategoryResource extends Resource
     {
         return __('Post Category');
     }
+        public static function getModelLabel(): string
+    {
+        return __('Post Category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Post Category');
+    }
 
     public static function form(Form $form): Form
     {
