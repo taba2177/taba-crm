@@ -17,11 +17,6 @@ class ListPostCategories extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('preview')
-                ->label(__('filament.actions.preview.label'))
-                ->icon('heroicon-o-eye')
-                ->color('secondary')
-                ->translateLabel(),
             Actions\LocaleSwitcher::make()
                 ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))
                 ->icon('heroicon-o-globe-alt')

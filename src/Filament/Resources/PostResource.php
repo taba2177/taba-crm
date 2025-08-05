@@ -451,15 +451,14 @@ class PostResource extends Resource
                             ]),
 
                     ]),
-                Forms\Components\Section::make()
-                    ->columnSpan(1)
-                    ->schema([
-                        Forms\Components\Select::make('homepage_section_component')
-                            ->label('Select Homepage Section')
-                            ->options(self::getHomepageComponentOptions())
-                            ->reactive(),
-
-                ]),
+                // Forms\Components\Section::make()
+                //     ->columnSpan(1)
+                //     ->schema([
+                //         Forms\Components\Select::make('homepage_section_component')
+                //             ->label('Select Homepage Section')
+                //             ->options(self::getHomepageComponentOptions())
+                //             ->reactive(),
+                // ]),
             ]);
     }
 

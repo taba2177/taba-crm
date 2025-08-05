@@ -73,20 +73,21 @@ class PostCategoryResource extends Resource
                     ->numeric()
                     ->default(0),
                 Forms\Components\TextInput::make('description')
+                    ->rows(2)
                     ->translateLabel(),
 
                 Forms\Components\TextInput::make('subtitle')
                     ->translateLabel(),
 
-                Forms\Components\Section::make()
-                    ->columnSpan(1)
-                    ->schema([
-                        Forms\Components\Select::make('section_component')
-                            ->label('Select Section')
-                            ->options(self::getHomepageComponentOptions())
-                            ->reactive(),
+                // Forms\Components\Section::make()
+                //     ->columnSpan(1)
+                //     ->schema([
+                //         Forms\Components\Select::make('section_component')
+                //             ->label('Select Section')
+                //             ->options(self::getHomepageComponentOptions())
+                //             ->reactive(),
 
-                    ]),
+                //     ]),
 
             ]);
     }
