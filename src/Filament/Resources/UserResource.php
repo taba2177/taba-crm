@@ -153,4 +153,19 @@ class UserResource extends Resource
            'index' => Pages\ListUsers::route('/'),
         ];
     }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('manage users');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('manage users');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('manage users');
+    }
 }
