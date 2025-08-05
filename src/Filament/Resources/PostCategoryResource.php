@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
+use Illuminate\Database\Eloquent\Model;
 
 class PostCategoryResource extends Resource
 {
@@ -123,7 +124,8 @@ class PostCategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
                 //section_component
                 Tables\Columns\TextColumn::make('section_component')
-                    ->translateLabel(),
+                    ->translateLabel()
+                    ->hidden(fn(): bool => !auth()->user()->can('view component_section')),
                 // ->formatStateUsing(fn(string $state): string => Str::limit(json_encode($state), 50))
                 // ->tooltip(fn(string $state): string => json_encode($state)),
                 // ->toggleable(isToggledHiddenByDefault: true),
@@ -170,5 +172,20 @@ class PostCategoryResource extends Resource
             'create' => Pages\CreatePostCategory::route('/create'),
             'edit' => Pages\EditPostCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create categories');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('edit categories');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('delete categories');
     }
 }

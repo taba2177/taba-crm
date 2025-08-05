@@ -2,6 +2,7 @@
 
 namespace Taba\Crm\Models;
 
+use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +13,12 @@ use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasAvatar;
 use Database\Factories\UserFactory;
+use Spatie\Permission\Traits\HasRoles;
 use Taba\Crm\Models\Post;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable,HasSuperAdmin, HasRoles,TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.

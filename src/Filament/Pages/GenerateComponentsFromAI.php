@@ -22,6 +22,11 @@ class GenerateComponentsFromAI extends Page implements HasForms
     protected static ?int $navigationSort = 2;
     protected static ?string $title = 'Generate Blade Components';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view ai_tools');
+    }
+
     public ?array $data = [];
     public ?array $generatedComponents = null;
 

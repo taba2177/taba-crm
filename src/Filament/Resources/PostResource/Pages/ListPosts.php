@@ -3,7 +3,7 @@
 namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
 use Taba\Crm\Filament\Resources\PostResource;
-use Taba\Crm\Filament\Resources\PostResource\Widgets;
+use Taba\Crm\Filament\Resources;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
@@ -40,8 +40,7 @@ class ListPosts extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            Widgets\PostOverview::class,
-
+            \Taba\Crm\Filament\Widgets\PostOverview::class,
         ];
     }
 

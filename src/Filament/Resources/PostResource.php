@@ -2,6 +2,8 @@
 
 namespace Taba\Crm\Filament\Resources;
 
+use Illuminate\Database\Eloquent\Model;
+
 use Taba\Crm\Filament\Resources\PostResource\Pages;
 use Taba\Crm\Models\Post;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
@@ -23,7 +25,7 @@ use Filament\Resources\Concerns\Translatable;
 use Taba\Crm\Models\MetadataFillter;
 use Illuminate\Support\Facades\File;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
-use Taba\Crm\Filament\Resources\PostResource\Widgets\PostOverview;
+use Filament\Forms\Components\Wizard;
 
 class PostResource extends Resource
 {
@@ -32,14 +34,6 @@ class PostResource extends Resource
      * The resource record title.
      */
     protected static ?string $recordTitleAttribute = 'title';
-
-
-    public static function getWidgets(): array
-    {
-        return [
-            PostOverview::class, // <-- Call it here
-        ];
-    }
     /**
      * The resource model.
      */
@@ -103,13 +97,10 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make()
-                    ->columns(3)
-                    ->schema([
-                        Forms\Components\Section::make()
-                            ->columnSpan(2)
-                            ->schema([
-
+                Wizard::make([
+                    Wizard\Step::make(__('Content'))
+                        ->schema([
+                            Forms\Components\Grid::make(2)->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->placeholder('Enter a title')
                                     ->live(debounce: 500)
@@ -134,10 +125,8 @@ class PostResource extends Resource
                                                     $currentTitle = trim($get('title') ?? '');
 
                                                     if (empty($currentTitle)) {
-                                                        // get ar title
                                                         $currentTitle = $record->getTranslation('title', $currentLocale, false);
                                                         $set('title', $currentTitle);
-                                                        // return;
                                                     }
 
                                                     $translator = app(GeminiTranslationService::class);
@@ -146,7 +135,6 @@ class PostResource extends Resource
                                                         $currentLocale,
                                                         $oppositeLocale
                                                     );
-
 
                                                     if ($translated) {
                                                         $record->setTranslation('title', $oppositeLocale, $translated);
@@ -162,303 +150,147 @@ class PostResource extends Resource
                                                     report($e);
                                                 }
                                             })
-                                            ->hidden(fn(?Post $record): bool => !$record?->exists)
+                                            ->hidden(fn(?Post $record): bool => !auth()->user()->can('view ai_tools') || !$record?->exists)
                                     ),
-
-                                Forms\Components\Select::make('post_category_id')
-                                    ->label(trans('category'))
-                                    ->relationship('postCategory', 'name')
-                                    ->columnSpan(1)
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-                                        // slug
-                                        Forms\Components\TextInput::make('slug')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-                                        //descrioption
-                                        Forms\Components\TextInput::make('description')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-
-                        Forms\Components\TextInput::make('order')
-                            ->default(1)
-                            ->maxLength(2)
-                            ->translateLabel(),
-
-
-                        Forms\Components\Toggle::make('register_in_header')
-                            ->default(true)
-                            ->translateLabel(),
-
-                    ])->editOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-                                        // slug
-                                        Forms\Components\TextInput::make('slug')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-
-                                        //descrioption
-                                        Forms\Components\TextInput::make('description')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-
-                        Forms\Components\TextInput::make('order')
-                            ->default(1)
-                            ->maxLength(2)
-                            ->translateLabel(),
-
-
-                        Forms\Components\Toggle::make('register_in_header')
-                            ->default(true)
-                            ->translateLabel(),
-
-
-                    ]),
-
-
-                                Forms\Components\Builder::make('content')
-                                    ->columnSpanFull()
-                                    ->translateLabel()
-                                    ->default([
-                                        ['type' => 'markdown'],
-                                    ])
-                                    ->blocks([
-                                        Builder\Block::make('markdown')
-                                            ->translateLabel()
-                                            ->schema([
-                                                Forms\Components\MarkdownEditor::make('content')
-                                                    ->translateLabel(),
-                                            ]),
-
-                                        Builder\Block::make('figure')
-                                            ->schema([
-                                                CuratorPicker::make('image')
-                                                    ->required()
-                                                    ->translateLabel(),
-                                                Forms\Components\Fieldset::make()
-                                                    ->label('Details')
-                                                    ->schema([
-                                                        Forms\Components\TextInput::make('alt')
-                                                            ->label('Alt Text')
-                                                            ->placeholder('Enter alt text')
-                                                            ->required()
-                                                            ->maxLength(255)
-                                                            ->translateLabel(),
-
-                                                        Forms\Components\TextInput::make('caption')
-                                                            ->placeholder('Enter a caption')
-                                                            ->maxLength(255)
-                                                            ->translateLabel(),
-                                                    ]),
-
-                                            ]),
-                                    ]),
-                    CuratorPicker::make('images')
-                        ->multiple()
-                        ->translateLabel(),
-                    ]),
-
-                        Forms\Components\Section::make()
-                            ->columnSpan(1)
-                            ->schema([
                                 Forms\Components\TextInput::make('slug')
                                     ->placeholder('Enter a slug')
                                     ->alphaDash()
-
                                     ->unique(ignoreRecord: true)
                                     ->maxLength(255)
                                     ->translateLabel(),
-
-                                Forms\Components\Section::make(__('SEO'))
-                                    ->icon('heroicon-o-photo')
-                                    ->columnSpan(1)
-                                    ->columns(1)
-                                    ->schema([
-                                        Forms\Components\Textarea::make('meta_title')
-                                            ->rows(2)
-                                            ->translateLabel()
-                                            ->maxLength(60),
-
-                                        Forms\Components\Textarea::make('meta_description')
-                                            ->translateLabel()
-                                            ->rows(5)
-                                            ->maxLength(160),
-                                    ]),
-
-                                Forms\Components\Select::make('user_id')
-                                    ->label('Author')
-                                    ->relationship('user', 'name')
-                                    ->default(fn() => auth()->id())
-                                    ->searchable()
-                                    ->required()
-                                    ->translateLabel(),
-
-
-                        Forms\Components\KeyValue::make('metadata')
-                            ->keyLabel('Field Name')
-                            ->valueLabel('Field Value')
-                            ->translateLabel()
-                            ->reorderable(),
-
-                        Forms\Components\Repeater::make('metadata')
-                            ->label('Metadata')
-                            ->schema([
-                                // The schema for each repeated item is simple: a key and a value.
-                                Forms\Components\TextInput::make('key')
-                                    ->label('Key')
-                                    ->required()
-                                    ->distinct(),
-
-                                Forms\Components\TextInput::make('value')
-                                    ->label('Value')
-                                    ->required()
-                                    ->translateLabel()
-                                    ->helperText('For translatable text, enter valid JSON. E.g., {"en":"Hello","ar":"مرحبا"}'),
-
-                                Forms\Components\Toggle::make('is_translatable')
-                                    ->label('Is this value translatable?')
-                                    ->live()
-                                    ->columnSpanFull(),
-
-                                // A simple textarea for non-translatable values (like URLs)
-                                // Forms\Components\Textarea::make('value')
-                                //     ->label('Value')
-                                //     // FIX: Make the field required only when it is visible.
-                                //     // ->required(fn (Get $get) => !$get('is_translatable'))
-                                //     ->hidden(fn (Get $get) => $get('is_translatable')) // Hide if translatable is toggled on
-                                //     ->columnSpanFull(),
-
-                                // // Manually create separate fields for each language
-                                // Forms\Components\Textarea::make('value_en')
-                                //     ->label('Value (English)')
-                                //     // FIX: Make the field required only when it is visible.
-                                //     ->required(fn (Get $get) => $get('is_translatable'))
-                                //     ->visible(fn (Get $get) => $get('is_translatable')) // Show only if translatable is toggled on
-                                //     ->columnSpan(1),
-
-                                // Forms\Components\Textarea::make('value_ar')
-                                //     ->label('Value (Arabic)')
-                                //     // FIX: Make the field required only when it is visible.
-                                //     ->required(fn (Get $get) => $get('is_translatable'))
-                                //     ->visible(fn (Get $get) => $get('is_translatable')) // Show only if translatable is toggled on
-                                //     ->columnSpan(1),
-
-                            ])
-                            ->addActionLabel('Add Metadata Field')
-                            ->mutateDehydratedStateUsing(function (?array $state): array {
-                                // This function transforms the Repeater's data into the correct
-                                // key-value format before saving it to the database.
-                                $metadata = [];
-                                if (empty($state)) {
-                                    return $metadata;
-                                }
-                                foreach ($state as $item) {
-                                    if (empty($item['key'])) continue;
-                                    // Try to decode the value as JSON. If it's valid JSON, save it as an array.
-                                    // Otherwise, save it as a plain string.
-                                    $decodedValue = $item['value'];
-                                    if (json_last_error() === JSON_ERROR_NONE && is_array($decodedValue)) {
-                                        $metadata[$item['key']] = $decodedValue;
-                                    } else {
-                                        $metadata[$item['key']] = $item['value'];
-                                    }
-
-                                    // if ($item['is_translatable']) {
-                                    //     // If translatable, create an array with 'en' and 'ar' keys.
-                                    //     $metadata[$item['key']] = [
-                                    //         'en' => $item['value_en'],
-                                    //         'ar' => $item['value_ar'],
-                                    //     ];
-                                    // } else {
-                                    //     // Otherwise, save the simple string value.
-                                    //     $metadata[$item['key']] = $item['value'];
-                                    // }
-                                }
-                                return $metadata;
-                            })
-                            ->afterStateHydrated(function (Set $set, ?array $state): void {
-                                // This function runs when the form is loaded. It transforms the
-                                // key-value data from the database back into the format the Repeater needs.
-                                if (is_null($state)) {
-                                    $set('metadata', []);
-                                    return;
-                                }
-                                $repeaterState = [];
-                                foreach ($state as $key => $value) {
-                                        // dd($state);
-                                    $isTranslatable = is_array($value) &&
-                                     (isset($value['en']) ||
-                                      isset($value['ar']));
-                                    $repeaterState[] = [
-                                        'key' => $key,
-                                        // If the value is an array, encode it to a pretty-printed JSON string for the textarea.
-                                        // Otherwise, just use the plain string value.
-                                        'is_translatable' => $isTranslatable,
-                                        'value' => is_array($value) ? json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : $value,
-                                        'value_en' => $isTranslatable ? ($value['en'] ?? '') : '',
-                                        'value_ar' => $isTranslatable ? ($value['ar'] ?? '') : '',
-                                    ];
-                                }
-                                $set('metadata', $repeaterState);
-                            })
-                            ->addActionLabel('Add Metadata'),
-
-
-                     CuratorPicker::make('image_id')
-                             ->label('Featured Image')
-                             ->translateLabel(),
-
-                         Forms\Components\DatePicker::make('published_at')
-                             ->label('Publish Date')
-                             ->default(now())
-                             ->required()
-                             ->translateLabel(),
-
-                         Forms\Components\Toggle::make('is_published')
-                             ->label('Published')
-                             ->required()
-                             ->translateLabel(),
-
-
-                    Select::make('tags')
-                                    ->relationship('tags', 'name')
-                                    ->multiple()
-                                    ->preload()
-                                    ->translateLabel()
-                                    ->searchable()
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->translateLabel(),
-                                    ])
-                                    ->createOptionUsing(function (array $data) {
-                                        $tag = Tag::firstorcreate($data);
-                                        return $tag->id;
-                                    }),
-
-
                             ]),
+                            Forms\Components\Select::make('post_category_id')
+                                ->label(trans('category'))
+                                ->relationship('postCategory', 'name')
+                                ->createOptionForm([
+                                    Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('slug')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('description')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('order')->default(1)->maxLength(2)->translateLabel(),
+                                    Forms\Components\Toggle::make('register_in_header')->default(true)->translateLabel(),
+                                ])->editOptionForm([
+                                    Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('slug')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('description')->required()->maxLength(255)->translateLabel(),
+                                    Forms\Components\TextInput::make('order')->default(1)->maxLength(2)->translateLabel(),
+                                    Forms\Components\Toggle::make('register_in_header')->default(true)->translateLabel(),
+                                ]),
+                            Forms\Components\Builder::make('content')
+                                ->columnSpanFull()
+                                ->translateLabel()
+                                ->default([['type' => 'markdown']])
+                                ->blocks([
+                                    Builder\Block::make('markdown')
+                                        ->translateLabel()
+                                        ->schema([
+                                            Forms\Components\MarkdownEditor::make('content')->translateLabel(),
+                                        ]),
+                                    Builder\Block::make('figure')
+                                        ->schema([
+                                            CuratorPicker::make('image')->required()->translateLabel(),
+                                            Forms\Components\Fieldset::make('Details')
+                                                ->schema([
+                                                    Forms\Components\TextInput::make('alt')->label('Alt Text')->placeholder('Enter alt text')->required()->maxLength(255)->translateLabel(),
+                                                    Forms\Components\TextInput::make('caption')->placeholder('Enter a caption')->maxLength(255)->translateLabel(),
+                                                ]),
+                                        ]),
+                                ]),
+                        ]),
 
-                    ]),
-                // Forms\Components\Section::make()
-                //     ->columnSpan(1)
-                //     ->schema([
-                //         Forms\Components\Select::make('homepage_section_component')
-                //             ->label('Select Homepage Section')
-                //             ->options(self::getHomepageComponentOptions())
-                //             ->reactive(),
-                // ]),
+                    Wizard\Step::make(__('Media'))
+                        ->schema([
+                            Forms\Components\Section::make(__('Featured Image'))
+                                ->schema([
+                                    CuratorPicker::make('image_id')->label('Featured Image')->translateLabel(),
+                                ]),
+                            Forms\Components\Section::make(__('Additional Images'))
+                                ->schema([
+                                    CuratorPicker::make('images')->multiple()->translateLabel(),
+                                ]),
+                        ]),
+
+                    Wizard\Step::make(__('SEO & Publishing'))
+                        ->schema([
+                            Forms\Components\Section::make(__('SEO'))
+                                ->icon('heroicon-o-photo')
+                                ->schema([
+                                    Forms\Components\Textarea::make('meta_title')->rows(2)->translateLabel()->maxLength(60),
+                                    Forms\Components\Textarea::make('meta_description')->translateLabel()->rows(5)->maxLength(160),
+                                ]),
+                            Forms\Components\Section::make(__('Publishing'))
+                                ->schema([
+                                    Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
+                                    Forms\Components\Toggle::make('is_published')->label('Published')->required()->translateLabel(),
+                                ]),
+                        ]),
+
+                    Wizard\Step::make(__('Advanced'))
+                        ->schema([
+                            Forms\Components\Section::make(__('Author & Tags'))
+                                ->schema([
+                                    Forms\Components\Select::make('user_id')->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
+                                    Select::make('tags')
+                                        ->relationship('tags', 'name')
+                                        ->multiple()
+                                        ->preload()
+                                        ->translateLabel()
+                                        ->searchable()
+                                        ->createOptionForm([
+                                            Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
+                                        ])
+                                        ->createOptionUsing(function (array $data) {
+                                            $tag = Tag::firstorcreate($data);
+                                            return $tag->id;
+                                        }),
+                                ]),
+                            Forms\Components\Section::make(__('Metadata'))
+                                ->schema([
+                                    Forms\Components\Repeater::make('metadata')
+                                        ->label('Metadata')
+                                        ->schema([
+                                            Forms\Components\TextInput::make('key')->label('Key')->required()->distinct(),
+                                            Forms\Components\TextInput::make('value')->label('Value')->required()->translateLabel()->helperText('For translatable text, enter valid JSON. E.g., {"en":"Hello","ar":"مرحبا"}'),
+                                            Forms\Components\Toggle::make('is_translatable')->label('Is this value translatable?')->live()->columnSpanFull(),
+                                        ])
+                                        ->addActionLabel('Add Metadata Field')
+                                        ->mutateDehydratedStateUsing(function (?array $state): array {
+                                            $metadata = [];
+                                            if (empty($state)) {
+                                                return $metadata;
+                                            }
+                                            foreach ($state as $item) {
+                                                if (empty($item['key'])) continue;
+                                                $decodedValue = $item['value'];
+                                                if (json_last_error() === JSON_ERROR_NONE && is_array($decodedValue)) {
+                                                    $metadata[$item['key']] = $decodedValue;
+                                                } else {
+                                                    $metadata[$item['key']] = $item['value'];
+                                                }
+                                            }
+                                            return $metadata;
+                                        })
+                                        ->afterStateHydrated(function (Set $set, ?array $state): void {
+                                            if (is_null($state)) {
+                                                $set('metadata', []);
+                                                return;
+                                            }
+                                            $repeaterState = [];
+                                            foreach ($state as $key => $value) {
+                                                $isTranslatable = is_array($value) && (isset($value['en']) || isset($value['ar']));
+                                                $repeaterState[] = [
+                                                    'key' => $key,
+                                                    'is_translatable' => $isTranslatable,
+                                                    'value' => is_array($value) ? json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : $value,
+                                                    'value_en' => $isTranslatable ? ($value['en'] ?? '') : '',
+                                                    'value_ar' => $isTranslatable ? ($value['ar'] ?? '') : '',
+                                                ];
+                                            }
+                                            $set('metadata', $repeaterState);
+                                        })
+                                        ->addActionLabel('Add Metadata'),
+                                ]),
+                        ]),
+                ])->columnSpanFull(),
             ]);
     }
 
@@ -540,7 +372,8 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('homepage_section_component')
                     ->label('Homepage Component')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->hidden(fn(): bool => !auth()->user()->can('view component_section')),
 
                 Tables\Columns\TextColumn::make('homepage_section_content')
                     ->label('Homepage Content')
@@ -586,5 +419,20 @@ class PostResource extends Resource
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create posts');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('edit posts');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('delete posts');
     }
 }
