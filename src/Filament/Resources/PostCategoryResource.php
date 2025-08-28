@@ -17,12 +17,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
 use Illuminate\Database\Eloquent\Model;
+use Taba\Crm\Filament\Clusters\Posts;
 
 class PostCategoryResource extends Resource
 {
     use Translatable;
 
     protected static ?string $model = PostCategory::class;
+    protected static ?string $cluster = Posts::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

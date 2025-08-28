@@ -1,6 +1,6 @@
 <?php
 
-namespace Taba\Crm\Filament\Resources;
+namespace Taba\Crm\Filament\Clusters;
 
 use Illuminate\Database\Eloquent\Model;
 

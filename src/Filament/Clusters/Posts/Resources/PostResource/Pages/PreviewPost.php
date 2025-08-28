@@ -1,0 +1,13 @@
+<?php
+
+namespace Taba\Crm\Filament\Clusters\Posts\Resources\Pages;
+
+use Taba\Crm\Filament\Resources\PostResource;
+use Filament\Resources\Pages\Page;
+
+class PreviewPost extends Page
+{
+    protected static string $resource = PostResource::class;
+
+    protected static string $view = 'filament.resources.post-resource.pages.preview-post';
+}

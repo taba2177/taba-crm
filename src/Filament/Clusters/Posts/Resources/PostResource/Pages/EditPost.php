@@ -1,6 +1,6 @@
 <?php
 
-namespace Taba\Crm\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Clusters\Posts\Resources\Pages;
 
 use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;

@@ -4,7 +4,6 @@
 
 namespace Taba\Crm;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Awcodes\Curator\CuratorPlugin;
@@ -66,12 +65,10 @@ class CrmPlugin implements Plugin
             ])
         ->plugin(CuratorPlugin::make(__('Media'))
                         ->pluralLabel(__('Media'))
-
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(10)
         // ->navigationGroup('Collections')
-                        ->navigationGroup(__('Media'))
-
+        ->navigationGroup(__('Media'))
         ->navigationCountBadge())
         ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
         ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
