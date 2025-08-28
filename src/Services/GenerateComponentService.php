@@ -25,7 +25,7 @@ class GenerateComponentService
             throw new \Exception('GEMINI_API_KEY environment variable is not set.');
         }
         $this->geminiClient = Gemini::client($apiKey);
-        $this->model = 'gemini-1.5-pro-latest';
+        $this->model = 'gemini-2.0-flash';
     }
 
     /**

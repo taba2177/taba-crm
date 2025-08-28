@@ -74,8 +74,8 @@ class CrmPlugin implements Plugin
 
         ->navigationCountBadge())
         ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
-        ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
-        ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']));
+        ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
+        ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make());
     }
 
     public function boot(Panel $panel): void

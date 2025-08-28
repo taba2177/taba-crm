@@ -22,11 +22,6 @@ class GenerateSiteFromAI extends Page implements HasForms
     protected static ?string $navigationGroup = 'AI Tools';
     protected static ?int $navigationSort = 1;
 
-    public static function canAccess(): bool
-    {
-        return auth()->user()->can('view ai_tools');
-    }
-
     public ?array $data = [];
     public bool $seederFileExists = false;
     public ?string $seederOutput = null;

@@ -420,19 +420,4 @@ class PostResource extends Resource
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }
-
-    public static function canCreate(): bool
-    {
-        return auth()->user()->can('create posts');
-    }
-
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return auth()->user()->can('edit posts');
-    }
-
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return auth()->user()->can('delete posts');
-    }
 }

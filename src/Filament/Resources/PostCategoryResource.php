@@ -81,15 +81,15 @@ class PostCategoryResource extends Resource
                 Forms\Components\TextInput::make('subtitle')
                     ->translateLabel(),
 
-                // Forms\Components\Section::make()
-                //     ->columnSpan(1)
-                //     ->schema([
-                //         Forms\Components\Select::make('section_component')
-                //             ->label('Select Section')
-                //             ->options(self::getHomepageComponentOptions())
-                //             ->reactive(),
+                Forms\Components\Section::make()
+                    ->columnSpan(1)
+                    ->schema([
+                        Forms\Components\Select::make('section_component')
+                            ->label('Select Section')
+                            ->options(self::getHomepageComponentOptions())
+                            ->reactive(),
 
-                //     ]),
+                    ]),
 
             ]);
     }
@@ -121,6 +121,8 @@ class PostCategoryResource extends Resource
                     ->sortable()->translateLabel()
                     ->toggleable(isToggledHiddenByDefault: true),
 
+
+
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
                 //section_component
                 Tables\Columns\TextColumn::make('section_component')
@@ -131,6 +133,8 @@ class PostCategoryResource extends Resource
                 // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slug')->translateLabel()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('posts_count')->counts('posts')->translateLabel()->label('Number of Posts'),
+
                 Tables\Columns\IconColumn::make('register_in_header')->translateLabel()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('order')->translateLabel()
@@ -172,20 +176,5 @@ class PostCategoryResource extends Resource
             'create' => Pages\CreatePostCategory::route('/create'),
             'edit' => Pages\EditPostCategory::route('/{record}/edit'),
         ];
-    }
-
-    public static function canCreate(): bool
-    {
-        return auth()->user()->can('create categories');
-    }
-
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return auth()->user()->can('edit categories');
-    }
-
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return auth()->user()->can('delete categories');
     }
 }
