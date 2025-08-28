@@ -36,59 +36,59 @@ class EditPost extends EditRecord
                 ->size('sm'),
 
             // The navigation actions are now merged back into the header actions array.
-            ...$this->getNavigationActions(),
+            // ...$this->getNavigationActions(),
         ];
     }
 
     /**
      * Adds Next and Previous navigation actions with post names.
      */
-    protected function getNavigationActions(): array
-    {
-        // We will build the actions array conditionally.
-        $actions = [];
+    // protected function getNavigationActions(): array
+    // {
+    //     // We will build the actions array conditionally.
+    //     $actions = [];
 
-        $recordId = $this->record->id;
+    //     $recordId = $this->record->id;
 
-        // Find the previous post.
-        // We order by ID in descending order to find the closest one.
-        $previous = static::getResource()::getEloquentQuery()
-            ->where('id', '<', $recordId)
-            ->orderBy('id', 'desc')
-            ->first();
+    //     // Find the previous post.
+    //     // We order by ID in descending order to find the closest one.
+    //     $previous = static::getResource()::getEloquentQuery()
+    //         ->where('id', '<', $recordId)
+    //         ->orderBy('id', 'desc')
+    //         ->first();
 
-        // Only add the action if a previous post exists.
-        if ($previous) {
-            $actions[] = Actions\Action::make('previous')
-                // Use the post's title for the label.
-                ->label($previous->title)
-                ->url(fn (): string => static::getResource()::getUrl('edit', ['record' => $previous]))
-                ->icon('heroicon-o-arrow-right')
-                ->color('gray') // Changes the button color to green
-                ->keyBindings(['arrow-right']);
-        }
+    //     // Only add the action if a previous post exists.
+    //     if ($previous) {
+    //         $actions[] = Actions\Action::make('previous')
+    //             // Use the post's title for the label.
+    //             ->label($previous->title)
+    //             ->url(fn (): string => static::getResource()::getUrl('edit', ['record' => $previous]))
+    //             ->icon('heroicon-o-arrow-right')
+    //             ->color('gray') // Changes the button color to green
+    //             ->keyBindings(['arrow-right']);
+    //     }
 
-        // Find the next post.
-        // We order by ID in ascending order to find the closest one.
-        $next = static::getResource()::getEloquentQuery()
-            ->where('id', '>', $recordId)
-            ->orderBy('id', 'asc')
-            ->first();
+    //     // Find the next post.
+    //     // We order by ID in ascending order to find the closest one.
+    //     $next = static::getResource()::getEloquentQuery()
+    //         ->where('id', '>', $recordId)
+    //         ->orderBy('id', 'asc')
+    //         ->first();
 
-        // Only add the action if a next post exists.
-        if ($next) {
-            // Apply a margin-left of 'auto' to push this button to the far right.
-            $actions[] = Actions\Action::make('next')
-                // Use the post's title for the label.
-                ->label($next->title)
-                ->url(fn (): string => static::getResource()::getUrl('edit', ['record' => $next]))
-                // Place the icon on the right for "next" actions.
-                ->icon('heroicon-o-arrow-left')
-                ->iconPosition('after')
-                ->color('gray') // Changes the button color to green
-                ->keyBindings(['arrow-left']);
-        }
+    //     // Only add the action if a next post exists.
+    //     if ($next) {
+    //         // Apply a margin-left of 'auto' to push this button to the far right.
+    //         $actions[] = Actions\Action::make('next')
+    //             // Use the post's title for the label.
+    //             ->label($next->title)
+    //             ->url(fn (): string => static::getResource()::getUrl('edit', ['record' => $next]))
+    //             // Place the icon on the right for "next" actions.
+    //             ->icon('heroicon-o-arrow-left')
+    //             ->iconPosition('after')
+    //             ->color('gray') // Changes the button color to green
+    //             ->keyBindings(['arrow-left']);
+    //     }
 
-        return $actions;
-    }
+    //     return $actions;
+    // }
 }

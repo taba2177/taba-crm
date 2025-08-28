@@ -47,9 +47,7 @@ class PostResource extends Resource
     protected static ?string $model = Post::class;
 
     //cluster
-    protected static ?string $cluster = Posts::class;
-
-
+    // protected static ?string $cluster = Posts::class;
 
     /**
      * The resource icon.
@@ -460,26 +458,42 @@ class PostResource extends Resource
 
     public static function getRecordSubNavigation(Page $page): array
     {
-        // return static::getEloquentQuery()
-        //     ->orderBy('title')
-        //     ->get()
-        //     ->map(function ($post) {
-        //         return NavigationItem::make($post->title)
-        //             ->url(static::getUrl('edit', ['record' => $post]));
-        //     })
-        //     ->all();
-        return $page->generateNavigationItems([
-        //    static::getEloquentQuery()
-        //     ->orderBy('title')
-        //     ->get()
-        //     ->map(function ($post) {
-        //         return NavigationItem::make($post->title)
-        //             ->url(static::getUrl('edit', ['record' => $post]));
-        //     })
-        //     ->all(),
-            Pages\ListPosts::class,
-            Pages\EditPost::class,
-        ]);
+        $record = $page->getRecord();
+        if (!$record) {
+            return [];
+        }
+
+        $previous = static::getEloquentQuery()
+            ->where('id', '<', $record->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $next = static::getEloquentQuery()
+            ->where('id', '>', $record->id)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        $navigationItems = [];
+
+        // Add 'Previous' navigation item if it exists
+        if ($previous) {
+            $navigationItems[] = \Filament\Navigation\NavigationItem::make('Previous')
+                ->label($previous->title)
+                ->url(static::getUrl('edit', ['record' => $previous]))
+                ->icon('heroicon-o-arrow-right')
+                ->sort(1);
+        }
+
+        // Add 'Next' navigation item if it exists
+        if ($next) {
+            $navigationItems[] = \Filament\Navigation\NavigationItem::make('Next')
+                ->label($next->title)
+                ->url(static::getUrl('edit', ['record' => $next]))
+                ->icon('heroicon-o-arrow-left')
+                ->sort(2);
+        }
+
+        return $navigationItems;
     }
 
     /**

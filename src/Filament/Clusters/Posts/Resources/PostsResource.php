@@ -34,7 +34,7 @@ use Filament\Pages\SubNavigationPosition;
 use Taba\Crm\Filament\Clusters\Posts;
 
 
-class PostResource extends Resource
+class PostsResource extends Resource
 {
     use Translatable;
     /**
@@ -448,59 +448,4 @@ class PostResource extends Resource
             ]);
     }
 
-    /**
-     * Get the relationships for the resource.
-     */
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        // return static::getEloquentQuery()
-        //     ->orderBy('title')
-        //     ->get()
-        //     ->map(function ($post) {
-        //         return NavigationItem::make($post->title)
-        //             ->url(static::getUrl('edit', ['record' => $post]));
-        //     })
-        //     ->all();
-        return $page->generateNavigationItems([
-        //    static::getEloquentQuery()
-        //     ->orderBy('title')
-        //     ->get()
-        //     ->map(function ($post) {
-        //         return NavigationItem::make($post->title)
-        //             ->url(static::getUrl('edit', ['record' => $post]));
-        //     })
-        //     ->all(),
-            Pages\ListPosts::class,
-            Pages\EditPost::class,
-        ]);
-    }
-
-    /**
-     * Get the pages for the resource.
-     */
-    public static function getPages(): array
-    {
-        // First, define the pages that should always be available.
-        $pages = [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-        ];
-        // Here is the conditional logic.
-        // We check the total count of Post records in the database.
-        if (Post::count() > 1) {
-            // If the count is greater than one, we add the 'edit' page
-            // to our array of pages.
-            $pages['edit'] = Pages\EditPost::route('/{record}/edit');
-        }
-
-        // Return the final array of pages.
-        return $pages;
-    }
 }

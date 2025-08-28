@@ -24,7 +24,7 @@ class PostCategoryResource extends Resource
     use Translatable;
 
     protected static ?string $model = PostCategory::class;
-    protected static ?string $cluster = Posts::class;
+    // protected static ?string $cluster = Posts::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
