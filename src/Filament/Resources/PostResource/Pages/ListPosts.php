@@ -37,12 +37,12 @@ class ListPosts extends ListRecords
     /**
      * The header widgets.
      */
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            \Taba\Crm\Filament\Widgets\PostOverview::class,
-        ];
-    }
+    // protected function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         PostOverview::class,
+    //     ];
+    // }
 
     public function getTabs(): array
     {
