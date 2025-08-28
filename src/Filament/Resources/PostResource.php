@@ -26,6 +26,8 @@ use Taba\Crm\Models\MetadataFillter;
 use Illuminate\Support\Facades\File;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
 use Filament\Forms\Components\Wizard;
+use Filament\Navigation\NavigationItem;
+use Taba\Crm\Models\PostCategory;
 
 class PostResource extends Resource
 {
@@ -55,6 +57,33 @@ class PostResource extends Resource
     }
     protected static ?string $navigationLabel = null;
 
+    public static function getNavigationParentItem(): ?string
+    {
+        return __('posts');
+    }
+
+    // Add a method to dynamically generate navigation items for each category
+    public static function getNavigationItems(): array
+    {
+        $items = [];
+
+        // Add an 'All Posts' navigation item. This will be active when no category is selected.
+        $items[] = NavigationItem::make(__('All Posts'))
+            ->url(static::getUrl('index'))
+            ->isActiveWhen(fn () => !request()->query('category'));
+
+        $categories = PostCategory::all();
+
+        foreach ($categories as $category) {
+            $items[] = NavigationItem::make($category->name)
+                ->label($category->name)
+                ->url(static::getUrl('index', ['category' => $category->id]))
+                ->icon('heroicon-o-folder') // Use a folder icon for categories
+                ->isActiveWhen(fn () => request()->query('category') == $category->id);
+        }
+
+        return $items;
+    }
     public static function getNavigationLabel(): string
     {
         return __('Posts'); // Translate your desired label
@@ -99,7 +128,8 @@ class PostResource extends Resource
             ->schema([
                 Wizard::make([
                     Wizard\Step::make(__('Content'))
-                        ->schema([
+                    ->icon('heroicon-o-pencil')
+                    ->schema([
                             Forms\Components\Grid::make(2)->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->placeholder('Enter a title')
@@ -198,6 +228,7 @@ class PostResource extends Resource
                         ]),
 
                     Wizard\Step::make(__('Media'))
+                    ->icon('heroicon-o-paper-clip')
                         ->schema([
                             Forms\Components\Section::make(__('Featured Image'))
                                 ->schema([
@@ -210,6 +241,7 @@ class PostResource extends Resource
                         ]),
 
                     Wizard\Step::make(__('SEO & Publishing'))
+                        ->icon('heroicon-o-photo')
                         ->schema([
                             Forms\Components\Section::make(__('SEO'))
                                 ->icon('heroicon-o-photo')
@@ -225,6 +257,7 @@ class PostResource extends Resource
                         ]),
 
                     Wizard\Step::make(__('Advanced'))
+                        ->icon('heroicon-o-adjustments-horizontal')
                         ->schema([
                             Forms\Components\Section::make(__('Author & Tags'))
                                 ->schema([
@@ -290,7 +323,9 @@ class PostResource extends Resource
                                         ->addActionLabel('Add Metadata'),
                                 ]),
                         ]),
-                ])->columnSpanFull(),
+                ])
+                ->skippable()
+                ->columnSpanFull(),
             ]);
     }
 

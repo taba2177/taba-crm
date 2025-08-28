@@ -34,6 +34,16 @@ class ListPosts extends ListRecords
         ];
     }
 
+    protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getTableQuery();
+
+        if ($categoryId = request()->query('category')) {
+            $query->where('post_category_id', $categoryId);
+        }
+
+        return $query;
+    }
     /**
      * The header widgets.
      */
@@ -44,24 +54,22 @@ class ListPosts extends ListRecords
     //     ];
     // }
 
-    public function getTabs(): array
-    {
-        $tabs = [];
+// show posts names as tabs and show edit abillty postedit page under them
+    // public function getTabs(): array
+    // {
+    //     $tabs = [
+    //         'all' => Tab::make()
+    //             ->label(__('All Posts')),
+    //     ];
 
-        // Get all categories from the database
-        $categories = \Taba\Crm\Models\PostCategory::all();
+    //     $posts = \Taba\Crm\Models\Post::all();
 
-        // Loop through the categories and create a tab for each one
-        foreach ($categories as $category) {
-            $tabs[$category->name] = Tab::make()
-                ->label(__($category->name))
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('post_category_id', $category->id));
-        }
+    //     foreach ($posts as $post) {
+    //         $tabs[$post->name] = Tab::make()
+    //             ->label($post->name)
+    //             ->modifyQueryUsing(fn (Builder $query) => $query->where('id', $post->id));
+    //     }
 
-        // Add 'all' tab
-        $tabs['all'] = Tab::make()
-            ->label(__('All Posts'));
-
-        return $tabs;
-    }
+    //     return $tabs;
+    // }
 }
