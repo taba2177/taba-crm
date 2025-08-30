@@ -77,7 +77,7 @@ class PostCategoryResource extends Resource
                     ->default(0),
                 Forms\Components\TextInput::make('description')
                     //add more rows to the textinput
-                    ->rows(5)
+                    // ->rows(5)
                     ->translateLabel(),
 
                 Forms\Components\TextInput::make('subtitle')
