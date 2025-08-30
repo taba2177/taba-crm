@@ -41,7 +41,8 @@
         "sinnbeck/markdom": "^2.0",
         "spatie/laravel-export": "^1.2",
         "spatie/laravel-sitemap": "^7.3",
-        "symfony/ux-cropperjs": "^2.25"
+        "symfony/ux-cropperjs": "^2.25",
+        "z3d0x/filament-logger": "^0.8"
     },
     "extra": {
         "laravel": {
