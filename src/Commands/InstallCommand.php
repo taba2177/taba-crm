@@ -93,7 +93,7 @@ class InstallCommand extends Command
 
     protected function runNpmBuild(): bool
     {
-        $result = Process::run('npm run build');
+        $result = Process::run('npm install tailwindcss @tailwindcss/vite');
         if (!$result->successful()) {
             $this->error($result->errorOutput());
         }
