@@ -1,6 +1,6 @@
 <?php
 
-namespace Taba\Crm\Filament\Resources\PageResource\Pages;
+namespace Taba\Crm\Filament\Clusters\Posts\Resources\Pages;
 
 use Taba\Crm\Filament\Fields\PageContent;
 use Filament\Forms\Components\Component;
@@ -8,21 +8,27 @@ use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasBuilderPreview;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
 
-trait HasPagePreview
+trait HasPostPreview
 {
     use HasPreviewModal;
-    use HasBuilderPreview;
+    // use HasBuilderPreview;
 
+    protected function getPreviewModalUrl(): ?string
+    {
+        return route('preview.post', [
+            'post' => $this->getRecord()->postcategory->id,
+            'data' => $this->form->getState(),
+        ]);
+    }
     protected function getActions(): array
     {
         return [
             PreviewAction::make()->label('Preview Changes'),
         ];
     }
-
     protected function getPreviewModalView(): ?string
     {
-        return 'page.show';
+        return 'page.preview-content';
     }
 
     protected function getPreviewModalDataRecordKey(): ?string
@@ -35,13 +41,13 @@ trait HasPagePreview
         return 'page.preview-content';
     }
 
-    public static function getBuilderEditorSchema(string $builderName): Component|array
-    {
-        return [
-            PageContent::make(
-                name: 'content',
-                context: 'preview',
-            ),
-        ];
-    }
+    // public static function getBuilderEditorSchema(string $builderName): Component|array
+    // {
+    //     return [
+    //         PageContent::make(
+    //             name: 'content',
+    //             context: 'preview',
+    //         ),
+    //     ];
+    // }
 }

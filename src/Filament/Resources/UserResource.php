@@ -43,7 +43,7 @@ class UserResource extends Resource
      */
     protected static ?int $navigationSort = 1;
 
-    protected static bool $shouldRegisterNavigation = false;
+    // protected static bool $shouldRegisterNavigation = false;
 
 
     /**
@@ -89,6 +89,10 @@ class UserResource extends Resource
                     ->required(fn(string $operation): bool => $operation === 'create')
                     ->maxLength(255)
                     ->translateLabel(),
+                Forms\Components\Select::make('roles')
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload(),
             ]);
     }
 

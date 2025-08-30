@@ -37,7 +37,7 @@ return [
         'color' => 'warning',
         'logger' => \Z3d0X\FilamentLogger\Loggers\ModelLogger::class,
         'register' => [
-            //App\Models\User::class,
+            \Taba\Crm\Models\User::class,
         ],
     ],
 

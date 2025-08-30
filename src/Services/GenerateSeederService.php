@@ -19,7 +19,7 @@ class GenerateSeederService
         }
         $this->geminiClient = Gemini::client($apiKey);
         // Using a powerful model is crucial for complex instruction following and code generation.
-        $this->model = 'gemini-1.5-pro-latest';
+        $this->model = 'gemini-2.0-flash';
     }
 
     /**

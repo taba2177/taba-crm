@@ -1,6 +1,7 @@
 <?php
 
-namespace Taba\Crm\Filament\Resources\PostResource\Widgets;
+// namespace Taba\Crm\Filament\Resources\PostResource\Widgets;
+namespace Taba\Crm\Filament\Clusters\Posts\Resources\Widgets;
 
 use Taba\Crm\Models\Post;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;

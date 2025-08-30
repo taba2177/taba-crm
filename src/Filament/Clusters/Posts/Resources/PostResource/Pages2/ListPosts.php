@@ -1,17 +1,20 @@
 <?php
 
-namespace Taba\Crm\Filament\Resources\PostResource\Pages;
+namespace Taba\Crm\Filament\Clusters\Posts\Resources\Pages;
 
 use Taba\Crm\Filament\Resources\PostResource;
 use Taba\Crm\Filament\Resources;
 use Filament\Actions;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
+use Filament\Resources\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
+use Taba\Crm\Concerns\HasPreview;
 
 class ListPosts extends ListRecords
 {
-    use HasPostPreview;
+    use HasPreview;
 
     use ListRecords\Concerns\Translatable;
     /**
@@ -34,16 +37,16 @@ class ListPosts extends ListRecords
         ];
     }
 
-    protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        $query = parent::getTableQuery();
+    // protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    // {
+    //     $query = parent::getTableQuery();
 
-        if ($categoryId = request()->query('category')) {
-            $query->where('post_category_id', $categoryId);
-        }
+    //     if ($categoryId = request()->query('category')) {
+    //         $query->where('post_category_id', $categoryId);
+    //     }
 
-        return $query;
-    }
+    //     return $query;
+    // }
     /**
      * The header widgets.
      */
@@ -54,24 +57,22 @@ class ListPosts extends ListRecords
     //     ];
     // }
 
-    public function getTabs(): array
-    {
-        $tabs = [];
+// show posts names as tabs and show edit abillty postedit page under them
+    // public function getTabs(): array
+    // {
+    //     $tabs = [
+    //         'all' => Tab::make()
+    //             ->label(__('All Posts')),
+    //     ];
 
-        // Get all categories from the database
-        $categories = \Taba\Crm\Models\PostCategory::all();
+    //     $posts = \Taba\Crm\Models\Post::all();
 
-        // Loop through the categories and create a tab for each one
-        foreach ($categories as $category) {
-            $tabs[$category->name] = Tab::make()
-                ->label(__($category->name))
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('post_category_id', $category->id));
-        }
+    //     foreach ($posts as $post) {
+    //         $tabs[$post->name] = Tab::make()
+    //             ->label($post->name)
+    //             ->modifyQueryUsing(fn (Builder $query) => $query->where('id', $post->id));
+    //     }
 
-        // Add 'all' tab
-        $tabs['all'] = Tab::make()
-            ->label(__('All Posts'));
-
-        return $tabs;
-    }
+    //     return $tabs;
+    // }
 }
