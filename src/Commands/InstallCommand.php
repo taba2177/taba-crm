@@ -97,6 +97,8 @@ class InstallCommand extends Command
         if (!$result->successful()) {
             $this->error($result->errorOutput());
         }
+        $result = Process::run('npm install');
+
         return $result->successful();
     }
 
