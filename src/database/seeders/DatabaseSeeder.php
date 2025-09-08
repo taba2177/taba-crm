@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
-use App\Models\User;
+use Taba\Crm\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;

@@ -11,10 +11,14 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\File;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+
 
 class GenerateComponentsFromAI extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
+
 
     protected static ?string $navigationIcon = 'heroicon-o-view-columns';
     protected static string $view = 'crm::filament.pages.generate-components-from-a-i';

@@ -2,12 +2,16 @@
 
 namespace Taba\Crm\Filament\Resources\PostCategoryResource\Pages;
 
+use Taba\Crm\Jobs\GenerateCategoryPreview;
 use Taba\Crm\Filament\Resources\PostCategoryResource;
 use Taba\Crm\Models\PostCategory;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
+use Spatie\Browsershot\Browsershot;
+
 
 class EditPostCategory extends EditRecord
 {
@@ -27,7 +31,7 @@ class EditPostCategory extends EditRecord
     protected function getPreviewModalUrl(): ?string
     {
         return route('preview.category', [
-            'category' => $this->getRecord()->id,
+            'category' => $this->getRecord(),
             'data' => $this->form->getState(),
         ]);
     }
@@ -49,7 +53,22 @@ class EditPostCategory extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
 
+            Actions\Action::make('generate_preview')
+                ->label('Generate Preview Image')
+                ->icon('heroicon-o-camera')
+                ->action(function () {
+                    // Dispatch the job with the current model and form data
+                    // dd($record, $data);
+                    // dd($this->getRecord(), $this->form->getState());
+                    GenerateCategoryPreview::dispatch($this->getRecord(), $this->form->getState());
 
+                    // Give the user feedback
+                    Notification::make()
+                        ->title('Preview generation started')
+                        ->body('The preview image is being generated in the background.')
+                        ->success()
+                        ->send();
+                }),
               Actions\DeleteAction::make()
                 ->requiresConfirmation()
                 ->modalHeading('Delete category')

@@ -54,7 +54,6 @@ class CrmServiceProvider extends ServiceProvider
             // Register the custom 'crm:install' command.
             $this->commands([
                 InstallCommand::class,
-                demoCommand::class,
             ]);
 
             // Define publishable assets with tags for user control.

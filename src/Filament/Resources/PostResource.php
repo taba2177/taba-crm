@@ -191,7 +191,6 @@ class PostResource extends Resource
                                                     report($e);
                                                 }
                                             })
-                                            ->hidden(fn(?Post $record): bool => !auth()->user()->can('view ai_tools') || !$record?->exists)
                                     ),
                                 Forms\Components\TextInput::make('slug')
                                     ->placeholder('Enter a slug')
@@ -418,8 +417,7 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('homepage_section_component')
                     ->label('Homepage Component')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->hidden(fn(): bool => !auth()->user()->can('view component_section')),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('homepage_section_content')
                     ->label('Homepage Content')

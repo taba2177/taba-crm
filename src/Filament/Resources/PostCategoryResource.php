@@ -11,13 +11,17 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use IbrahimBougaoua\RadioButtonImage\RadioButtonImage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
 use Illuminate\Database\Eloquent\Model;
+use JaOcero\RadioDeck\Forms\Components\RadioDeck;
 use Taba\Crm\Filament\Clusters\Posts;
+use Alkoumi\FilamentImageRadioButton\Forms\Components\ImageRadioGroup;
+use Filament\Support\Enums\IconSize;
 
 class PostCategoryResource extends Resource
 {
@@ -84,13 +88,52 @@ class PostCategoryResource extends Resource
                     ->translateLabel(),
 
                 Forms\Components\Section::make()
-                    ->columnSpan(1)
+                    ->columnSpanFull()
                     ->schema([
-                        Forms\Components\Select::make('section_component')
-                            ->label('Select Section')
-                            ->options(self::getHomepageComponentOptions())
-                            ->reactive(),
-
+                        // Forms\Components\Select::make('section_component')
+                        //     ->label('Select Section')
+                        //     ->options(self::getHomepageComponentOptions())
+                        //     ->reactive(),
+                    // RadioDeck::make('section_component')
+                    //         ->label('Select a Layout Style')
+                    //         ->translateLabel()
+                    //         ->options(self::getHomepageComponentOptions()) // Populates labels from the Enum
+                    //         // ->images(CategoryLayout::getImageUrls()) // Populates images from the Enum
+                    //         ->descriptions([
+                    //             'default' => 'A standard, single-column list of posts.',
+                    //             'grid' => 'A responsive grid view for post cards.',
+                    //             'featured_post' => 'Highlights the latest post in a large block.',
+                    //         ])
+                    //         ->columns(3), // Display in 3 columns
+                            // ->default(CategoryLayout::Default), // Set default for new records
+                 RadioDeck::make('section_component')
+                    ->label('Select a Layout Style')
+                    ->required()
+                    ->options(self::getHomepageComponentOptions())
+                    ->iconSize(IconSize::Large)
+                    ->direction('column')
+                    ->color('primary')
+                    ->iconSizes([ // Customize the values for each icon size
+                        'sm' => 'h-full w-full',
+                        'md' => 'h-full w-full',
+                        'lg' => 'h-full w-full',
+                    ])->gap('gap-5')
+                    // ->padding('px-4 px-6')
+                    ->extraCardsAttributes([
+                        'class' => 'mb-5'
+                    ])
+                    ->live(debounce: '500ms')
+                    ->icons(function (): array {
+                        // Get the option keys ('hero-section', 'testimonials', etc.)
+                        $optionKeys = array_keys(self::getHomepageComponentOptions());
+                        // Map each key to its corresponding image path
+                        return collect($optionKeys)
+                            ->mapWithKeys(fn ($key) => [
+                                $key => asset("images/homepage/{$key}.png")
+                            ])
+                            ->all();
+                    })
+                    ->columns(3),
                     ]),
 
             ]);
@@ -101,12 +144,10 @@ class PostCategoryResource extends Resource
         $componentPath = resource_path('views/components/homepage');
         $files = File::files($componentPath);
         $options = [];
-
         foreach ($files as $file) {
             $name = Str::before($file->getFilename(), '.blade.php');
             $options[$name] = Str::title(str_replace('-', ' ', $name));
         }
-
         return $options;
     }
 
@@ -128,8 +169,7 @@ class PostCategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
                 //section_component
                 Tables\Columns\TextColumn::make('section_component')
-                    ->translateLabel()
-                    ->hidden(fn(): bool => !auth()->user()->can('view component_section')),
+                    ->translateLabel(),
                 // ->formatStateUsing(fn(string $state): string => Str::limit(json_encode($state), 50))
                 // ->tooltip(fn(string $state): string => json_encode($state)),
                 // ->toggleable(isToggledHiddenByDefault: true),

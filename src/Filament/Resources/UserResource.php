@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
+    
     /**
      * The resource model.
      */
@@ -93,6 +94,11 @@ class UserResource extends Resource
                     ->multiple()
                     ->relationship('roles', 'name')
                     ->preload(),
+
+                // Using CheckboxList Component
+                Forms\Components\CheckboxList::make('roles')
+                    ->relationship('roles', 'name')
+                    ->searchable(),
             ]);
     }
 
@@ -115,6 +121,7 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->translateLabel(),
+
             ])
             ->filters([
                 //

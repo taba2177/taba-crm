@@ -18,9 +18,7 @@ use Taba\Crm\Models\Post;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
-    use HasApiTokens, HasFactory, Notifiable
-    // ,HasSuperAdmin,
-    ,HasRoles,TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles,TwoFactorAuthenticatable;
     protected string $guard_name = 'web';
 
     /**
@@ -68,8 +66,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('super_admin') || $this->hasRole('admin') || $this->hasRole('client');;
-        return true;
+        return $this->hasRole('super_admin') || $this->hasRole('admin') || $this->hasRole('client');
     }
 
     /**

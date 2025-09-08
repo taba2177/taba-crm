@@ -12,10 +12,14 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+
 
 class GenerateSiteFromAI extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
+
 
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
     protected static string $view = 'crm::filament.pages.generate-site-from-a-i';

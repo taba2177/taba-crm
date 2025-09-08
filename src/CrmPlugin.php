@@ -34,8 +34,8 @@ class CrmPlugin implements Plugin
                 \Taba\Crm\Filament\Resources\PostCategoryResource::class,
                 \Awcodes\Curator\Resources\MediaResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
-                \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
-                \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
+                // \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
+                // \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
             ]);
 
         $panel
@@ -50,6 +50,24 @@ class CrmPlugin implements Plugin
                 GenerateSiteFromAI::class,
                 GenerateComponentsFromAI::class,
             ])
+            // ->plugins([
+            //     FilamentShieldPlugin::make()
+            //         ->gridColumns([
+            //             'default' => 1,
+            //             'sm' => 2,
+            //             'lg' => 3
+            //         ])
+            //         ->sectionColumnSpan(1)
+            //         ->checkboxListColumns([
+            //             'default' => 1,
+            //             'sm' => 2,
+            //             'lg' => 4,
+            //         ])
+            //         ->resourceCheckboxListColumns([
+            //             'default' => 1,
+            //             'sm' => 2,
+            //         ]),
+            // ])
         ->default()
         ->login()
         ->registration()
@@ -62,23 +80,26 @@ class CrmPlugin implements Plugin
                 VisitorAnalytics::class,
                 GlobalStatsOverview::class,
                 RecentActivities::class,
-            ])
+        ])
         ->plugin(CuratorPlugin::make(__('Media'))
-                        ->pluralLabel(__('Media'))
+        // ->pluralLabel(__('Media'))
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(10)
         // ->navigationGroup('Collections')
-        ->navigationGroup(__('Media'))
+        ->navigationGroup(__('Collections'))
         ->navigationCountBadge())
+        ->favicon(asset('images/favicon.png'))
         ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
         ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
-        ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make());
+        ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
+        ->plugin(\Hasnayeen\Themes\ThemesPlugin::make()->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin')))
+        ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
 
     public function boot(Panel $panel): void
     {
         $panel->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
-        // $panel->viteTheme('packages/taba/crm/src/resources/css/admin.css');
+        $panel->viteTheme('packages/taba/crm/src/resources/css/admin.css');
     }
 
     public static function make(): static
@@ -86,12 +107,3 @@ class CrmPlugin implements Plugin
         return app(static::class);
     }
 }
-
-// add suitable roles and polices for my project taba/crm so when i install it in any project will be ready for tow users ,me and the client       │
-// │   and he can edit and add and save posts and categories but he cant change see the component_section or the ai tools
-// Here's the plan:
-//    1. Create "Client" Role: I'll create a new role named "Client".
-//    2. Sync Permissions: I'll run the permissions:sync command to ensure all necessary permissions for Posts and Categories are generated.
-//    3. Create a Seeder for Role-Permission Assignment: I'll create a new database seeder to programmatically assign the relevant permissions (view,
-//       create, edit, delete posts and categories) to the "Client" role. This makes it easy to set up in any new project.
-//    4. Restrict AI Tools Access: I'll modify the GenerateComponentsFromAI and GenerateSiteFromAI pages to restrict access to only "Super Admin" users.

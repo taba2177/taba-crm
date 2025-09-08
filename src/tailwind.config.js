@@ -81,6 +81,8 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./vendor/awcodes/filament-tiptap-editor/resources/**/*.blade.php",
         "./node_modules/flowbite/**/*.js",
+        './vendor/jaocero/radio-deck/resources/views/**/*.blade.php',
+
     ],
     darkMode: "class",
 

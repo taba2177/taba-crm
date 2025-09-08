@@ -2,6 +2,7 @@
 
 namespace Taba\Crm\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Spatie\Activitylog\Models\Activity;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -10,6 +11,8 @@ use Taba\Crm\Filament\Resources\ActivityResource;
 
 class RecentActivities extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected int | string | array $columnSpan = 'full';
 
     protected static ?string $heading = 'Recent Activities';
