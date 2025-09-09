@@ -11,6 +11,7 @@ use Awcodes\Curator\CuratorPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Filament\SpatieLaravelTranslatablePlugin;
+use SebastianBergmann\CodeCoverage\Report\Html\Colors;
 use Taba\Crm\Filament\Pages\GenerateComponentsFromAI;
 use Taba\Crm\Filament\Pages\GenerateSiteFromAI;
 use Taba\Crm\Filament\Widgets\LatestPosts;
@@ -94,12 +95,9 @@ class CrmPlugin implements Plugin
         ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
         ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
         ->plugin(\Hasnayeen\Themes\ThemesPlugin::make()
-        ->registerTheme(
-                        [
-                            \Hasnayeen\Themes\Themes\Sunset::class,
-                        ],
-                        override: true,
-                    )
+        ->registerTheme([\Hasnayeen\Themes\Themes\Sunset::class],
+                            override: true,
+                        )
         )
         // ->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin')))
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
