@@ -4,6 +4,7 @@
 
 namespace Taba\Crm;
 
+use App\Filament\Admin\Themes\Awesome;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Awcodes\Curator\CuratorPlugin;
@@ -92,7 +93,15 @@ class CrmPlugin implements Plugin
         ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
         ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
         ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
-        ->plugin(\Hasnayeen\Themes\ThemesPlugin::make()->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin')))
+        ->plugin(\Hasnayeen\Themes\ThemesPlugin::make()
+        ->registerTheme(
+                        [
+                            \Hasnayeen\Themes\Themes\Sunset::class,
+                        ],
+                        override: true,
+                    )
+        )
+        // ->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin')))
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
 
