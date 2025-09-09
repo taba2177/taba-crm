@@ -46,7 +46,7 @@ class Post extends Model
     public $translatable = [
         'title',
         'content',
-        // 'metadata',
+        'metadata',
         'meta_title',
         'meta_description',
     ];
@@ -63,7 +63,7 @@ class Post extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
         'metadata' => 'array',
-        // 'metadata.nested' => 'array',
+        'metadata.nested' => 'array',
         'homepage_section_content' => 'array',
     ];
 

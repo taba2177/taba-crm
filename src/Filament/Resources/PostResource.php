@@ -288,49 +288,11 @@ class PostResource extends Resource
                                 ]),
                             Forms\Components\Section::make(__('Metadata'))
                                 ->schema([
-                                    Forms\Components\Repeater::make('metadata')
-                                        ->label('Metadata')
-                                        ->schema([
-                                            Forms\Components\TextInput::make('key')->label('Key')->required()->distinct(),
-                                            Forms\Components\TextInput::make('value')->label('Value')->required()->translateLabel()->helperText('For translatable text, enter valid JSON. E.g., {"en":"Hello","ar":"مرحبا"}'),
-                                            Forms\Components\Toggle::make('is_translatable')->label('Is this value translatable?')->live()->columnSpanFull(),
-                                        ])
-                                        ->addActionLabel('Add Metadata Field')
-                                        ->mutateDehydratedStateUsing(function (?array $state): array {
-                                            $metadata = [];
-                                            if (empty($state)) {
-                                                return $metadata;
-                                            }
-                                            foreach ($state as $item) {
-                                                if (empty($item['key'])) continue;
-                                                $decodedValue = $item['value'];
-                                                if (json_last_error() === JSON_ERROR_NONE && is_array($decodedValue)) {
-                                                    $metadata[$item['key']] = $decodedValue;
-                                                } else {
-                                                    $metadata[$item['key']] = $item['value'];
-                                                }
-                                            }
-                                            return $metadata;
-                                        })
-                                        ->afterStateHydrated(function (Set $set, ?array $state): void {
-                                            if (is_null($state)) {
-                                                $set('metadata', []);
-                                                return;
-                                            }
-                                            $repeaterState = [];
-                                            foreach ($state as $key => $value) {
-                                                $isTranslatable = is_array($value) && (isset($value['en']) || isset($value['ar']));
-                                                $repeaterState[] = [
-                                                    'key' => $key,
-                                                    'is_translatable' => $isTranslatable,
-                                                    'value' => is_array($value) ? json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : $value,
-                                                    'value_en' => $isTranslatable ? ($value['en'] ?? '') : '',
-                                                    'value_ar' => $isTranslatable ? ($value['ar'] ?? '') : '',
-                                                ];
-                                            }
-                                            $set('metadata', $repeaterState);
-                                        })
-                                        ->addActionLabel('Add Metadata'),
+                                    Forms\Components\KeyValue::make(__('Metadata'))
+                                        ->keyLabel(__('Field Name'))
+                                        ->valueLabel(__('Field Value'))
+                                        ->translateLabel()
+                                        ->reorderable(),
                                 ]),
                         ]),
                 ])
