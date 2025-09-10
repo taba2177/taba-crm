@@ -1,61 +1,5 @@
 <?php
 
-// namespace App\Jobs;
-
-// use Illuminate\Bus\Queueable;
-// use Illuminate\Contracts\Queue\ShouldQueue;
-// use Illuminate\Foundation\Bus\Dispatchable;
-// use Illuminate\Queue\InteractsWithQueue;
-// use Illuminate\Queue\SerializesModels;
-// use Spatie\Browsershot\Browsershot;
-// use Illuminate\Support\Facades\Cache;
-// use Illuminate\Support\Facades\File;
-// use Taba\Crm\Models\PostCategory; // Make sure this is the correct path to your model
-
-// class GenerateCategoryPreview implements ShouldQueue
-// {
-//     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-//     /**
-//      * Create a new job instance.
-//      *
-//      * @param PostCategory $postCategory The category model instance.
-//      * @param array $formData The current state of the form data.
-//      */
-//     public function __construct(public PostCategory $postCategory,public array $formData)
-//     {
-//         //
-//     }
-
-//     /**
-//      * Execute the job.
-//      */
-//     public function handle(): void
-//     {
-//         $outputDir = public_path('images/homepage');
-//         File::ensureDirectoryExists($outputDir);
-
-//         // Generate a unique path for this record's image
-//         $fileName = "category-{$this->postCategory->id}-" . time() . ".png";
-//         $outputPath = "{$outputDir}/{$fileName}";
-//         $publicPath = "/images/homepage/{$fileName}";
-
-//         // Passing large arrays in a URL is not reliable.
-//         // Instead, we'll cache the data for a few minutes.
-//         $cacheKey = 'preview_data_for_category_' . $this->postCategory->id;
-//         Cache::put($cacheKey, $this->formData, now()->addMinutes(5));
-
-//         // The URL points to our new route that accepts the category and a cache key.
-//         $url = route('preview.category', [
-//             'category' => $this->postCategory->id,
-//             'data' => $cacheKey,
-//         ]);
-//         Browsershot::url($url)
-//             ->windowSize(1200, 630)
-//             ->save($outputPath);
-
-//     }
-// }
 namespace Taba\Crm\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -137,6 +81,7 @@ class GenerateCategoryPreview implements ShouldQueue
                 // Generate and save the screenshot for the component.
                 Browsershot::url($url)
                     ->windowSize(1200, 630)
+                    ->timeout(1200000) // Increase timeout to 120 seconds (2 minutes)
                     ->deviceScaleFactor(2)
                     ->quality(90)
                     ->setDelay(5000)
