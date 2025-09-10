@@ -16,7 +16,7 @@ class GenerateComponentService
      * Most models have token limits around 8k-32k tokens. 4000 characters is a safe
      * and conservative threshold to avoid hitting these limits with the added prompt text.
      */
-    private const CODE_LENGTH_THRESHOLD = 4000;
+    private const CODE_LENGTH_THRESHOLD = 400000;
 
     public function __construct()
     {

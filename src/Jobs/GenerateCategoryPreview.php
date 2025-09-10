@@ -84,9 +84,7 @@ class GenerateCategoryPreview implements ShouldQueue
                     ->timeout(1200000) // Increase timeout to 120 seconds (2 minutes)
                     ->deviceScaleFactor(2)
                     ->quality(90)
-                    // ->setDelay(5000)
                     ->waitUntilNetworkIdle()
-                    ->waitUntil('domcontentloaded')     // More reliable and faster than networkidle
                     ->save($outputPath);
 
                 Log::info("Generated preview for category {$this->postCategory->id} at component {$componentKey}");
