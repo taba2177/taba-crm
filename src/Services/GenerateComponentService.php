@@ -121,7 +121,7 @@ class GenerateComponentService
             * **IF** your new design contains **more than one** `<section>` tag, then you MUST break the design into multiple component files (e.g., a main section and a repeatable card).
             * **ELSE IF** your new design contains only **one** `<section>` tag, you MUST return the entire new design as a **single component file**, just like in the example above. Do not split it.
         5.  **Output Format:** The final output must be a single, valid JSON object where keys are the filenames and values are the corresponding Blade code. Return **ONLY the raw JSON object**, without any explanations or markdown.
-        6.  convert just the design to like below code
+        6.  the result should be in same design and colors of original code
         **### NEW BLADE CODE TO REDESIGN & REFACTOR ###**
         ---
         {$codeChunk}
