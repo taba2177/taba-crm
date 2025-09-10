@@ -53,8 +53,8 @@ class ServicePaymentResource extends Resource
                     ->relationship('user', 'name')
                     ->required()
                     ->translateLabel(),
-                Forms\Components\Select::make('service_id')
-                    ->relationship('service', 'title')
+                Forms\Components\Select::make('post_id')
+                    ->relationship('post', 'title')
                     ->translateLabel(),
                 Forms\Components\TextInput::make('moyasar_payment_id')
                     ->required()
@@ -97,7 +97,7 @@ class ServicePaymentResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make('service.title')
+                Tables\Columns\TextColumn::make('post.title')
                     ->numeric()
                     ->sortable()
                     ->translateLabel(),
