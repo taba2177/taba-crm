@@ -81,9 +81,6 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./vendor/awcodes/filament-tiptap-editor/resources/**/*.blade.php",
         "./node_modules/flowbite/**/*.js",
-        './vendor/jaocero/radio-deck/resources/views/**/*.blade.php',
-        './vendor/bezhansalleh/filament-google-analytics/resources/views/**/*',
-        './vendor/bezhansalleh/filament-google-analytics/src/{Widgets,Support}/*',
 
     ],
     darkMode: "class",

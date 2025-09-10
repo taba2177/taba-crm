@@ -15,6 +15,9 @@ module.exports = {
         "./vendor/filament/**/*.blade.php",
         "./vendor/jeffgreco13/filament-breezy/resources/**/*.blade.php",
         "./vendor/pboivin/filament-peek/resources/views/**/*.blade.php",
+        "./vendor/jaocero/radio-deck/resources/views/**/*.blade.php",
+        "./vendor/bezhansalleh/filament-google-analytics/resources/views/**/*",
+        "./vendor/bezhansalleh/filament-google-analytics/src/{Widgets,Support}/*",
     ],
     theme: {
         extend: {
