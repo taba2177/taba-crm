@@ -110,7 +110,12 @@ class CrmPlugin implements Plugin
         ->favicon(asset('images/favicon.png'))
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
-            \Hasnayeen\Themes\ThemesPlugin::make(),
+            \Hasnayeen\Themes\ThemesPlugin::make()->registerTheme(
+                        [
+                            \Hasnayeen\Themes\Themes\Sunset::class,
+                        ],
+                        override: true,
+                    ),
             SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
             FilamentPeekPlugin::make()->disablePluginStyles()
         ])
