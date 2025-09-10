@@ -99,7 +99,7 @@ class CrmPlugin implements Plugin
                 // Widgets\TopReferrersListWidget::class,
         ])
         ->plugin(CuratorPlugin::make(__('Media'))
-        ->pluralLabel(__('Media'))
+        ->pluralLabel("الوسائط")
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(4)
         ->navigationLabel(__('Media'))
