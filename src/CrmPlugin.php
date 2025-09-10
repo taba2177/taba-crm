@@ -8,6 +8,7 @@ use App\Filament\Admin\Themes\Awesome;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Awcodes\Curator\CuratorPlugin;
+use BezhanSalleh\FilamentGoogleAnalytics\FilamentGoogleAnalyticsPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Filament\SpatieLaravelTranslatablePlugin;
@@ -19,6 +20,7 @@ use Taba\Crm\Filament\Widgets\PostStatsOverview;
 use Taba\Crm\Filament\Widgets\VisitorAnalytics;
 use Taba\Crm\Filament\Widgets\GlobalStatsOverview;
 use Taba\Crm\Filament\Widgets\RecentActivities;
+use BezhanSalleh\FilamentGoogleAnalytics\Widgets;
 
 class CrmPlugin implements Plugin
 {
@@ -35,7 +37,9 @@ class CrmPlugin implements Plugin
                 \Taba\Crm\Filament\Resources\PostResource::class,
                 \Taba\Crm\Filament\Resources\PostCategoryResource::class,
                 \Awcodes\Curator\Resources\MediaResource::class,
+                \Taba\Crm\Filament\Resources\ContactEntryResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
+                \Taba\Crm\Filament\Resources\ServicePaymentResource::class,
                 // \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
                 // \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
             ]);
@@ -44,32 +48,32 @@ class CrmPlugin implements Plugin
         ->plugin(BreezyCore::make()
         ->myProfile(
             shouldRegisterUserMenu: false,
-            // shouldRegisterNavigation: true,
+            shouldRegisterNavigation: true,
             hasAvatars: true,
         )->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
-        // ->enableTwoFactorAuthentication()
+         ->enableTwoFactorAuthentication()
         )->pages([
                 GenerateSiteFromAI::class,
                 GenerateComponentsFromAI::class,
             ])
-            // ->plugins([
-            //     FilamentShieldPlugin::make()
-            //         ->gridColumns([
-            //             'default' => 1,
-            //             'sm' => 2,
-            //             'lg' => 3
-            //         ])
-            //         ->sectionColumnSpan(1)
-            //         ->checkboxListColumns([
-            //             'default' => 1,
-            //             'sm' => 2,
-            //             'lg' => 4,
-            //         ])
-            //         ->resourceCheckboxListColumns([
-            //             'default' => 1,
-            //             'sm' => 2,
-            //         ]),
-            // ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                    ->gridColumns([
+                        'default' => 1,
+                        'sm' => 2,
+                        'lg' => 3
+                    ])
+                    ->sectionColumnSpan(1)
+                    ->checkboxListColumns([
+                        'default' => 1,
+                        'sm' => 2,
+                        'lg' => 4,
+                    ])
+                    ->resourceCheckboxListColumns([
+                        'default' => 1,
+                        'sm' => 2,
+                    ]),
+            ])
         ->default()
         ->login()
         ->registration()
@@ -82,24 +86,34 @@ class CrmPlugin implements Plugin
                 VisitorAnalytics::class,
                 GlobalStatsOverview::class,
                 RecentActivities::class,
+                // Widgets\PageViewsWidget::class,
+                // Widgets\VisitorsWidget::class,
+                // Widgets\ActiveUsersOneDayWidget::class,
+                // Widgets\ActiveUsersSevenDayWidget::class,
+                // Widgets\ActiveUsersTwentyEightDayWidget::class,
+                // Widgets\SessionsWidget::class,
+                // Widgets\SessionsByCountryWidget::class,
+                // Widgets\SessionsDurationWidget::class,
+                // Widgets\SessionsByDeviceWidget::class,
+                // Widgets\MostVisitedPagesWidget::class,
+                // Widgets\TopReferrersListWidget::class,
         ])
         ->plugin(CuratorPlugin::make(__('Media'))
-        // ->pluralLabel(__('Media'))
+        ->pluralLabel(__('Media'))
         ->navigationIcon('heroicon-o-photo')
-        ->navigationSort(10)
-        // ->navigationGroup('Collections')
-        ->navigationGroup(__('Collections'))
+        ->navigationSort(4)
+        ->navigationLabel(__('Media'))
+        ->navigationGroup('collections')
+        // ->navigationGroup(__('Collections'))
         ->navigationCountBadge())
+        ->databaseNotifications()
         ->favicon(asset('images/favicon.png'))
-        ->plugin(FilamentPeekPlugin::make()->disablePluginStyles())
-        ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
-        ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
-        ->plugin(\Hasnayeen\Themes\ThemesPlugin::make())
-        // ->registerTheme([\Hasnayeen\Themes\Themes\Sunset::class],
-        //                     override: true,
-        //                 )
-        // )
-        // ->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin')))
+        ->plugins([
+            // FilamentGoogleAnalyticsPlugin::make(),
+            \Hasnayeen\Themes\ThemesPlugin::make(),
+            SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
+            FilamentPeekPlugin::make()->disablePluginStyles()
+        ])
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
 

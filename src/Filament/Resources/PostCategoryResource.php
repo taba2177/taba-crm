@@ -30,9 +30,14 @@ class PostCategoryResource extends Resource
     protected static ?string $model = PostCategory::class;
     // protected static ?string $cluster = Posts::class;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return number_format(static::getModel()::count());
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-            protected static ?string $navigationGroup = null;
+    protected static ?string $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {

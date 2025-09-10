@@ -10,7 +10,7 @@ class ActivityResource extends BaseResource
      * The resource navigation sort order.
      */
     protected static ?int $navigationSort = 10;
-    protected static bool $shouldRegisterNavigation = false;
+    // protected static bool $shouldRegisterNavigation = false;
     /**
      * Get the navigation badge for the resource.
      */
