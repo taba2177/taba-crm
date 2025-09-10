@@ -20,7 +20,7 @@ class ServicePayment extends Model
      */
     protected $fillable = [
         'user_id',
-        'service_id',
+        'post_id',
         'moyasar_payment_id',
         'status',
         'amount',
@@ -55,7 +55,7 @@ class ServicePayment extends Model
      * Get the service that this payment was for.
      * Note: You should have a Service model for this relation.
      */
-    public function service(): BelongsTo
+    public function post(): BelongsTo
     {
         // Assuming you have a Service model. If not, you can remove this.
         return $this->belongsTo(Post::class);
