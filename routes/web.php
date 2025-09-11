@@ -19,7 +19,11 @@ Route::middleware('web')->group(function () {
 
 Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
-
+Route::get('/lang/change/{lang}', function ($lang) {
+    app()->setLocale($lang);
+    session(['locale' => $lang]);
+    return redirect()->back();
+})->name('lang.switch');
 Route::get('/', Home::class)->name('home');
 
 // Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
