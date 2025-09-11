@@ -341,7 +341,7 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('content')
                     ->translateLabel()
                     ->limit(50) // Limits content to 50 characters, appends "..." automatically
-                    ->tooltip(fn(string $state): string => json_encode($state))
+                    ->tooltip(fn(string $state): string => json_encode($state["content"] ?? '-')) // Shows full content on hover
                     ->size('small')
                     ->sortable()
                     ->searchable(),
