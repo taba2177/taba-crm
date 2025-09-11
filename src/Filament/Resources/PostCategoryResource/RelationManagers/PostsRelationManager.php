@@ -231,18 +231,18 @@ class PostsRelationManager extends RelationManager
                     ->size(32)
                     ->translateLabel(),
 
-                Tables\Columns\TextColumn::make('content')
-                    ->translateLabel()
-                    ->limit(50) // Limits content to 50 characters, appends "..." automatically
-                    ->tooltip(fn(string $state): string => json_encode($state["content"] ?? '-')) // Shows full content on hover
-                    ->size('small')
-                    ->sortable()
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('content')
+                //     ->translateLabel()
+                //     ->limit(50)
+                //     ->formatStateUsing(fn ($state) => dd(json_encode($state, JSON_PRETTY_PRINT)->data) ?? '')
+                //     ->tooltip(fn(array $state): string => json_encode($state, JSON_PRETTY_PRINT)) // Shows full structured content on hover
+                //     ->size('small')
+                //     ->sortable()
+                //     ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Published')
                     ->boolean()
-                    ->sortable()
                     ->translateLabel(),
 
                 Tables\Columns\TextColumn::make('tags.name')
