@@ -338,13 +338,28 @@ class PostResource extends Resource
                     ->size(32)
                     ->translateLabel(),
 
-                // Tables\Columns\TextColumn::make('content')
-                //     ->translateLabel()
-                //     ->limit(50) // Limits content to 50 characters, appends "..." automatically
-                //     ->tooltip(fn(string $state): string => json_encode($state ?? '-')) // Shows full content on hover
-                //     ->size('small')
-                //     ->sortable()
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('content.0.data.content')
+                    ->label(__('Content'))
+                    ->translateLabel()
+                    ->limit(50)
+                    ->formatStateUsing(function (?string $state): string {
+        // Limit the raw markdown string first, then convert
+                    return Str::of($state ?? '')
+                            ->limit(50)
+                            ->markdown();
+                    })
+                    // 2. Tell the column to render the content as HTML
+                    ->html()
+                    // ->tooltip(function (?string $state): string {
+                    //     // For the tooltip, convert the full content to markdown
+                    //     return Str::of($state ?? '')->markdown();
+                    // })
+                    // ->formatStateUsing(fn($record) => $record->content[0]['data']['content']->markdown()->sanitizeHtml())
+
+                    // ->tooltip(fn($record) => $record->content[0]['data']['content']->markdown()->sanitizeHtml()) // Shows full content on hover
+                    ->size('small')
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Author')

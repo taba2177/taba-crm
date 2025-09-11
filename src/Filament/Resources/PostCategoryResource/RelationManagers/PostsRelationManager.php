@@ -20,10 +20,13 @@ use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
-
+use Filament\Resources\RelationManagers\Concerns\Translatable;
+use Illuminate\Support\Arr;
 
 class PostsRelationManager extends RelationManager
 {
+use Translatable;
+
     protected static string $relationship = 'posts';
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -163,6 +166,14 @@ class PostsRelationManager extends RelationManager
                                 ->schema([
                                     CuratorPicker::make('images')->multiple()->translateLabel(),
                                 ]),
+                            Forms\Components\Section::make(__('Metadata'))
+                                ->schema([
+                                    Forms\Components\KeyValue::make(__('Metadata'))
+                                        ->keyLabel(__('Field Name'))
+                                        ->valueLabel(__('Field Value'))
+                                        ->translateLabel()
+                                        ->reorderable(),
+                                ]),
                         ]),
 
                     Wizard\Step::make(__('SEO & Publishing'))
@@ -174,20 +185,7 @@ class PostsRelationManager extends RelationManager
                                     Forms\Components\Textarea::make('meta_title')->rows(2)->translateLabel()->maxLength(60),
                                     Forms\Components\Textarea::make('meta_description')->translateLabel()->rows(5)->maxLength(160),
                                 ]),
-                            Forms\Components\Section::make(__('Publishing'))
-                                ->schema([
-                                    Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
-                                    Forms\Components\Toggle::make('is_published')->label('Published')->required()->translateLabel(),
-                                ]),
-                        ]),
-
-                    Wizard\Step::make(__('Advanced'))
-                        ->icon('heroicon-o-adjustments-horizontal')
-                        ->schema([
-                            Forms\Components\Section::make(__('Author & Tags'))
-                                ->schema([
-                                    Forms\Components\Select::make('user_id')->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
-                                    Select::make('tags')
+                                  Select::make('tags')
                                         ->relationship('tags', 'name')
                                         ->multiple()
                                         ->preload()
@@ -200,15 +198,19 @@ class PostsRelationManager extends RelationManager
                                             $tag = Tag::firstorcreate($data);
                                             return $tag->id;
                                         }),
-                                ]),
-                            Forms\Components\Section::make(__('Metadata'))
+
+                        ]),
+
+                    Wizard\Step::make(__('Advanced'))
+                        ->icon('heroicon-o-adjustments-horizontal')
+                        ->schema([
+                            Forms\Components\Section::make(__('Author & Tags'))
                                 ->schema([
-                                    Forms\Components\KeyValue::make(__('Metadata'))
-                                        ->keyLabel(__('Field Name'))
-                                        ->valueLabel(__('Field Value'))
-                                        ->translateLabel()
-                                        ->reorderable(),
-                                ]),
+                                    Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
+                                    Forms\Components\Select::make('user_id')->columns(2)->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
+                                    Forms\Components\Toggle::make('is_published')->columns(2)->label('Published')->required()->translateLabel(),
+
+                             ]),
                         ]),
                 ])
                 ->skippable()
@@ -231,14 +233,28 @@ class PostsRelationManager extends RelationManager
                     ->size(32)
                     ->translateLabel(),
 
-                // Tables\Columns\TextColumn::make('content')
-                //     ->translateLabel()
-                //     ->limit(50)
-                //     ->formatStateUsing(fn ($state) => dd(json_encode($state, JSON_PRETTY_PRINT)->data) ?? '')
-                //     ->tooltip(fn(array $state): string => json_encode($state, JSON_PRETTY_PRINT)) // Shows full structured content on hover
-                //     ->size('small')
-                //     ->sortable()
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('content.0.data.content')
+                    ->label(__('Content'))
+                    ->translateLabel()
+                    ->limit(50)
+                    ->formatStateUsing(function (?string $state): string {
+        // Limit the raw markdown string first, then convert
+                    return Str::of($state ?? '')
+                            ->limit(50)
+                            ->markdown();
+                    })
+                    // 2. Tell the column to render the content as HTML
+                    ->html()
+                    // ->tooltip(function (?string $state): string {
+                    //     // For the tooltip, convert the full content to markdown
+                    //     return Str::of($state ?? '')->markdown();
+                    // })
+                    // ->formatStateUsing(fn($record) => $record->content[0]['data']['content']->markdown()->sanitizeHtml())
+
+                    // ->tooltip(fn($record) => $record->content[0]['data']['content']->markdown()->sanitizeHtml()) // Shows full content on hover
+                    ->size('small')
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Published')
