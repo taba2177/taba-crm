@@ -19,6 +19,7 @@ module.exports = {
         "./vendor/filament/**/*.blade.php",
         "./vendor/jeffgreco13/filament-breezy/resources/**/*.blade.php",
         "./vendor/pboivin/filament-peek/resources/views/**/*.blade.php",
+        "./vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php",
     ],
     // theme: {
     //     extend: {},

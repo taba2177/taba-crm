@@ -81,7 +81,7 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./vendor/awcodes/filament-tiptap-editor/resources/**/*.blade.php",
         "./node_modules/flowbite/**/*.js",
-
+        "./vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php",
     ],
     darkMode: "class",
 
