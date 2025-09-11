@@ -29,6 +29,7 @@
         "bezhansalleh/filament-shield": "^3.3",
         "croustibat/filament-jobs-monitor": "^2.4.0",
         "diglactic/laravel-breadcrumbs": "^10.0",
+        "diogogpinto/filament-auth-ui-enhancer": "^1.0",
         "filament/filament": "^3.2.50",
         "filament/spatie-laravel-translatable-plugin": "*",
         "google-gemini-php/client": "^2.3",

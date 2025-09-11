@@ -3,6 +3,7 @@
 @import '../../../../../../vendor/pboivin/filament-peek/resources/css/plugin.css';
 
 
+
 @import 'cropperjs/dist/cropper.css';
 
 @config '../../../tailwind.admin.js';

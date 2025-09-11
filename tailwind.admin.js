@@ -18,6 +18,7 @@ module.exports = {
         "./vendor/jaocero/radio-deck/resources/views/**/*.blade.php",
         "./vendor/bezhansalleh/filament-google-analytics/resources/views/**/*",
         "./vendor/bezhansalleh/filament-google-analytics/src/{Widgets,Support}/*",
+        './vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php';
     ],
     theme: {
         extend: {

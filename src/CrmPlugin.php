@@ -21,6 +21,7 @@ use Taba\Crm\Filament\Widgets\VisitorAnalytics;
 use Taba\Crm\Filament\Widgets\GlobalStatsOverview;
 use Taba\Crm\Filament\Widgets\RecentActivities;
 use BezhanSalleh\FilamentGoogleAnalytics\Widgets;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Taba\Crm\Filament\Widgets\OthersAnalytics;
 use Taba\Crm\Filament\Widgets\PaymentAnalytics;
 
@@ -128,7 +129,8 @@ class CrmPlugin implements Plugin
                         override: true,
                     ),
             SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
-            FilamentPeekPlugin::make()->disablePluginStyles()
+            FilamentPeekPlugin::make()->disablePluginStyles(),
+            AuthUIEnhancerPlugin::make(),
         ])
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
