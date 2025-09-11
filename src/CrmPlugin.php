@@ -118,6 +118,7 @@ class CrmPlugin implements Plugin
         ->navigationCountBadge())
         ->databaseNotifications()
         ->favicon(asset('images/favicon.png'))
+        ->brandLogo(fn () => view('components.logo'))
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
             \Hasnayeen\Themes\ThemesPlugin::make()->registerTheme(
