@@ -231,10 +231,10 @@ class PostsRelationManager extends RelationManager
                     ->size(32)
                     ->translateLabel(),
 
-                Tables\Columns\TextColumn::make('content')
+                Tables\Columns\TextColumn::make('content.content')
                     ->translateLabel()
                     ->limit(50) // Limits content to 50 characters, appends "..." automatically
-                    // ->tooltip(fn($record) => $record->content) // Shows full content on hover
+                    ->tooltip(fn(string $state): string => json_encode($state["content"] ?? '-')) // Shows full content on hover
                     ->size('small')
                     ->sortable()
                     ->searchable(),
@@ -246,7 +246,7 @@ class PostsRelationManager extends RelationManager
                     ->translateLabel(),
 
                 Tables\Columns\TextColumn::make('tags.name')
-                    ->label('Tags')
+                    ->label(__('Tags'))
                     ->badge()
                     ->separator(',')
                     ->sortable()
