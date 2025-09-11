@@ -89,7 +89,7 @@ class CrmPlugin implements Plugin
                 VisitorAnalytics::class,
                 // PostStatsOverview::class,
                 // LatestPosts::class,
-                RecentActivities::class,
+                // RecentActivities::class,
                 // GlobalStatsOverview::class,
                 // VisitorAnalytics::class,
                 // PaymentAnalytics::class,
