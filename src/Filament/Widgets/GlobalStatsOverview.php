@@ -119,7 +119,7 @@ class GlobalStatsOverview extends BaseWidget
                 ->chart($this->getChartData(ContactEntry::class, $startDateCurrent))
                 ->icon('heroicon-o-inbox-stack'),
 
-            Stat::make(__('Total Revenue'), '$' . Number::format($totalRevenue, 2))
+            Stat::make(__('Total Revenue'), __('SAR') . Number::format($totalRevenue, 2))
                 ->description(__('Total from all payments'))
                 ->color('primary')
                 ->icon('heroicon-o-banknotes'),
