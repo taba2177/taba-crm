@@ -15,18 +15,7 @@ use Taba\Crm\Models\Page;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 
-Route::middleware('web')->group(function () {
 
-Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
-Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
-Route::get('/lang/change/{lang}', function ($lang) {
-    app()->setLocale($lang);
-    session(['locale' => $lang]);
-    return redirect()->back();
-})->name('lang.switch');
-Route::get('/', Home::class)->name('home');
-
-// Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
 
 // lang.switch'
 Route::get('/lang/change/{lang}', function ($lang) {
@@ -34,6 +23,16 @@ Route::get('/lang/change/{lang}', function ($lang) {
     session(['locale' => $lang]);
     return redirect()->back();
 })->name('lang.switch');
+
+
+Route::middleware('web')->group(function () {
+
+Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
+Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
+
+Route::get('/', Home::class)->name('home');
+
+// Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
 
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
 
