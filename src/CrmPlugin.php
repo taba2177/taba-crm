@@ -130,7 +130,13 @@ class CrmPlugin implements Plugin
                     ),
             SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
             FilamentPeekPlugin::make()->disablePluginStyles(),
-            AuthUIEnhancerPlugin::make(),
+            AuthUIEnhancerPlugin::make()
+            ->showEmptyPanelOnMobile(true)
+            ->formPanelPosition('right')
+            ->formPanelWidth('40%')
+            ->emptyPanelBackgroundImageOpacity('70%')
+            ->emptyPanelBackgroundImageUrl('https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')
+
         ])
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
