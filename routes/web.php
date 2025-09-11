@@ -2,6 +2,7 @@
 
 use Taba\Crm\Http\Controllers\CategoryPreviewController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 use Taba\Crm\Http\Controllers\GoogleTranslateController;
@@ -20,7 +21,7 @@ use Taba\Crm\Models\PostCategory;
 // lang.switch'
 Route::get('/lang/change/{lang}', function ($lang) {
     app()->setLocale($lang);
-    session(['locale' => $lang]);
+    Session(['locale' => $lang]);
     return redirect()->back();
 })->name('lang.switch');
 
