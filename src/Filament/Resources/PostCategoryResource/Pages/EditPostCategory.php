@@ -56,6 +56,8 @@ class EditPostCategory extends EditRecord
             Actions\Action::make('generate_preview')
                 ->label('Generate Preview Image')
                 ->icon('heroicon-o-camera')
+                //just visibale if super admin
+                ->visible(fn () => auth()->user()->is_super_admin)
                 ->action(function () {
                     // Dispatch the job with the current model and form data
                     // dd($record, $data);
