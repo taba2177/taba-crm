@@ -13,7 +13,7 @@ class OthersAnalytics extends ChartWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    protected static ?int $sort = 2; // To display it after other widgets
+    protected static ?int $sort = 3; // To display it after other widgets
 
     protected function getData(): array
     {
