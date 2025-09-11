@@ -234,7 +234,7 @@ class PostsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('content')
                     ->translateLabel()
                     ->limit(50) // Limits content to 50 characters, appends "..." automatically
-                    ->tooltip(fn($record) => $record->content) // Shows full content on hover
+                    // ->tooltip(fn($record) => $record->content) // Shows full content on hover
                     ->size('small')
                     ->sortable()
                     ->searchable(),

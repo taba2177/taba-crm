@@ -168,9 +168,6 @@ class PostCategoryResource extends Resource
                     ->dateTime()
                     ->sortable()->translateLabel()
                     ->toggleable(isToggledHiddenByDefault: true),
-
-
-
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
                 //section_component
                 Tables\Columns\TextColumn::make('section_component')
