@@ -21,6 +21,7 @@ use Taba\Crm\Filament\Widgets\VisitorAnalytics;
 use Taba\Crm\Filament\Widgets\GlobalStatsOverview;
 use Taba\Crm\Filament\Widgets\RecentActivities;
 use BezhanSalleh\FilamentGoogleAnalytics\Widgets;
+use Taba\Crm\Filament\Widgets\OthersAnalytics;
 use Taba\Crm\Filament\Widgets\PaymentAnalytics;
 
 class CrmPlugin implements Plugin
@@ -83,11 +84,18 @@ class CrmPlugin implements Plugin
         ->profile()
         ->widgets([
                 GlobalStatsOverview::class,
-                VisitorAnalytics::class,
                 PaymentAnalytics::class,
+                OthersAnalytics::class,
+                VisitorAnalytics::class,
                 PostStatsOverview::class,
                 LatestPosts::class,
                 RecentActivities::class,
+                // GlobalStatsOverview::class,
+                // VisitorAnalytics::class,
+                // PaymentAnalytics::class,
+                // PostStatsOverview::class,
+                // LatestPosts::class,
+                // RecentActivities::class,
                 // Widgets\PageViewsWidget::class,
                 // Widgets\VisitorsWidget::class,
                 // Widgets\ActiveUsersOneDayWidget::class,
