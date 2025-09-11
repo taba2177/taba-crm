@@ -88,6 +88,7 @@ class PostCategoryResource extends Resource
                     //add more rows to the textinput
                     // ->rows(5)
                     ->translateLabel(),
+                // CuratorPicker::make('image_id')->label('Featured Image')->translateLabel(),
 
                 Forms\Components\TextInput::make('subtitle')
                     ->translateLabel(),
