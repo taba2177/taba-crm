@@ -6,9 +6,9 @@ use Filament\Widgets\ChartWidget;
 
 class VisitorAnalytics extends ChartWidget
 {
-    protected static ?string $heading = 'Visitor Analytics';
+    protected static ?string $heading = 'تحليل الزوار';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 'full/2';
 
     protected function getData(): array
     {
