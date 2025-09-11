@@ -52,36 +52,36 @@ class OthersAnalytics extends ChartWidget
         ];
     }
 
-    protected function getOptions(): array
-    {
-        return [
-            'scales' => [
-                'y' => [
-                    'revenue' => [
-                        'type' => 'linear',
-                        'display' => true,
-                        'position' => 'left',
-                        'title' => [
-                            'display' => true,
-                            'text' => __('Revenue'),
-                        ],
-                    ],
-                    'count' => [
-                        'type' => 'linear',
-                        'display' => true,
-                        'position' => 'right',
-                        'title' => [
-                            'display' => true,
-                            'text' => __('Payments Count'),
-                        ],
-                        'grid' => [
-                            'drawOnChartArea' => false, // Only show grid lines for the first axis
-                        ],
-                    ],
-                ]
-            ],
-        ];
-    }
+    // protected function getOptions(): array
+    // {
+    //     return [
+    //         'scales' => [
+    //             'y' => [
+    //                 'revenue' => [
+    //                     'type' => 'linear',
+    //                     'display' => true,
+    //                     'position' => 'left',
+    //                     'title' => [
+    //                         'display' => true,
+    //                         'text' => __('Revenue'),
+    //                     ],
+    //                 ],
+    //                 'count' => [
+    //                     'type' => 'linear',
+    //                     'display' => true,
+    //                     'position' => 'right',
+    //                     'title' => [
+    //                         'display' => true,
+    //                         'text' => __('Payments Count'),
+    //                     ],
+    //                     'grid' => [
+    //                         'drawOnChartArea' => false, // Only show grid lines for the first axis
+    //                     ],
+    //                 ],
+    //             ]
+    //         ],
+    //     ];
+    // }
 
 
     protected function getType(): string
