@@ -22,6 +22,7 @@ use Taba\Crm\Filament\Widgets\GlobalStatsOverview;
 use Taba\Crm\Filament\Widgets\RecentActivities;
 use BezhanSalleh\FilamentGoogleAnalytics\Widgets;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
+use Filament\Enums\ThemeMode;
 use Taba\Crm\Filament\Widgets\OthersAnalytics;
 use Taba\Crm\Filament\Widgets\PaymentAnalytics;
 
@@ -137,7 +138,7 @@ class CrmPlugin implements Plugin
                 ->emptyPanelBackgroundImageOpacity('70%')
                 ->emptyPanelBackgroundImageUrl('https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')
 
-        ])
+        ])->defaultThemeMode(ThemeMode::Dark)
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
     }
 
