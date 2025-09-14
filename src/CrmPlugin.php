@@ -135,6 +135,7 @@ class CrmPlugin implements Plugin
                 ->showEmptyPanelOnMobile(true)
                 ->formPanelPosition('left')
                 ->formPanelWidth('40%')
+                ->mobileFormPanelPosition('bottom')
                 ->emptyPanelBackgroundImageOpacity('70%')
                 ->emptyPanelBackgroundImageUrl('https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')
 

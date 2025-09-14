@@ -11,7 +11,7 @@ use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
 
 class EditPost extends EditRecord
 {
-    use HasPreview;
+    use HasPreviewModal;
 
     use EditRecord\Concerns\Translatable;
 
@@ -19,6 +19,28 @@ class EditPost extends EditRecord
      * The resource model.
      */
     protected static string $resource = PostResource::class;
+
+
+    protected function getPreviewModalView(): ?string
+    {
+        return 'posts.preview';
+    }
+
+    protected function getPreviewModalUrl(): ?string
+    {
+        return route('preview.post', [
+            'post' => $this->getRecord(),
+            'data' => $this->form->getState(),
+        ]);
+    }
+
+    protected function getPreviewModalData(): array
+    {
+        return [
+            'post' => $this->record,
+        ];
+    }
+
 
     /**
      * The header actions.

@@ -23,7 +23,7 @@ use Taba\Crm\Models\PostCategory;
 
 Route::middleware('web')->group(function () {
 
-Route::get('/preview/post/{post:slug}', [PreviewController::class, 'post'])->name('preview.post');
+Route::get('/preview/post/{post}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
 
 Route::get('/', Home::class)->name('home');
