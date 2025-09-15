@@ -33,6 +33,7 @@ class Post extends Model
         'meta_title',
         'meta_description',
         'image_id',
+        'show_in_home',
         'images',
         'user_id',
         'post_category_id',

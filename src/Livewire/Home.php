@@ -13,7 +13,7 @@ class Home extends Component
     public function mount()
     {
         $this->sections = PostCategory::with(['posts' => function ($query) {
-            $query->published()->latest();
+            $query->where("show_in_home",true)->published()->latest();
         }])
         ->whereNotNull('section_component') // Only fetch categories with a defined section_component
         ->orderBy('order')
@@ -50,34 +50,34 @@ class Home extends Component
     protected function setSeoMetadata()
     {
         seo()
-            ->title('بطور للتسويق الالكتروني | حلول تسويقية مبتكرة')
-            ->description('بطور للتسويق الالكتروني، نقدم حلول تسويقية متكاملة ومبتكرة لتعزيز تواجدك الرقمي وزيادة مبيعاتك.')
+            ->title('مكتب جديان للحلول الهندسية | خدمات هندسية احترافية ومرنة')
+            ->description('مكتب جديان للحلول الهندسية هو مكتب هندسي افتراضي يقدم تصاميم، حسابات، حصر كميات، وخدمات المكتب الفني المساندة لأنظمة الكهرباء والميكانيكا بجودة عالية وسعر منافس. نخدم المؤسسات، شركات المقاولات، مكاتب التصميم والاستشارات الهندسية، وندعمهم خلال ضغط العمل ونرفع معايير الالتزام عبر مهندسين محترفين وفق الكود السعودي والعالمي.')
             ->canonical(route('home'))
             ->addSchema(
                 Schema::localBusiness()
-                    ->name('بطور للتسويق الالكتروني')
-                    ->url('https://btoor.com') // Replace with the actual URL
-                    ->image('https://btoor.com/assets/images/floating_logo.png') // Replace with the actual logo URL
-                    ->telephone('+966501234567') // Replace with the actual phone number
-                    ->priceRange('SAR 99 - SAR 9999') // Adjust the price range as needed
+                    ->name('مكتب جديان للحلول الهندسية')
+                    ->url('https://jadyaan.com') // استبدل بالرابط الفعلي إذا توفر
+                    ->image('https://jadyaan.com/assets/images/logo.png') // استبدل برابط الشعار الفعلي إذا توفر
+                    ->telephone('+966501234567') // استبدل برقم الهاتف الفعلي
+                    ->priceRange('SAR 500 - SAR 20000') // عدل النطاق السعري حسب الحاجة
                     ->contactPoint(
                         Schema::contactPoint()
-                            ->telephone('+966501234567') // Replace with the actual phone number
+                            ->telephone('+966501234567') // استبدل برقم الهاتف الفعلي
                             ->contactType('customer service')
                             ->areaServed('SA')
                             ->availableLanguage(['ar'])
                     )
                     ->geo(
                         Schema::geoCoordinates()
-                            ->latitude('24.774265') // Replace with the actual latitude
-                            ->longitude('46.738586') // Replace with the actual longitude
+                            ->latitude('24.774265') // استبدل بالإحداثيات الفعلية إذا توفر
+                            ->longitude('46.738586')
                     )
                     ->address(
                         Schema::postalAddress()
-                            ->streetAddress('شارع example، حي example') // Replace with the actual street address
+                            ->streetAddress('شارع مثال، حي مثال') // استبدل بالعنوان الفعلي إذا توفر
                             ->addressLocality('الرياض')
                             ->addressRegion('الرياض')
-                            ->postalCode('12345') // Replace with the actual postal code
+                            ->postalCode('12345') // استبدل بالرمز البريدي الفعلي إذا توفر
                             ->addressCountry('SA')
                     )
                     ->openingHoursSpecification(
@@ -92,15 +92,16 @@ class Home extends Component
                                 'Sunday'
                             ])
                             ->opens('09:00')
-                            ->closes('17:00')
+                            ->closes('18:00')
                     )
                     ->sameAs([
-                        'https://www.facebook.com/btoor', // Replace with the actual Facebook page
-                        'https://twitter.com/btoor', // Replace with the actual Twitter page
-                        'https://www.instagram.com/btoor', // Replace with the actual Instagram page
-                        'https://www.linkedin.com/company/btoor', // Replace with the actual LinkedIn page
-                        //'https://www.youtube.com/channel/...' // Replace with the actual YouTube channel if available
+                        // أضف روابط وسائل التواصل الاجتماعي الفعلية إذا توفرت
+                        // 'https://www.facebook.com/jadyaan',
+                        // 'https://twitter.com/jadyaan',
+                        // 'https://www.instagram.com/jadyaan',
+                        // 'https://www.linkedin.com/company/jadyaan',
                     ])
             );
+
     }
 }
