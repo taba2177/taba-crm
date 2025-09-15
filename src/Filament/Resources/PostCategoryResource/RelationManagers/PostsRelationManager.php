@@ -209,7 +209,7 @@ use Translatable;
                                     Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
                                     Forms\Components\Select::make('user_id')->columns(2)->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
                                     Forms\Components\Toggle::make('is_published')->columns(2)->label('Published')->required()->translateLabel(),
-                                    Forms\Components\Checkbox::make('show_in_home')->label('show_in_home')->required()->translateLabel(),
+                                    Forms\Components\Checkbox::make('show_in_home')->label('show_in_home')->translateLabel(),
                              ]),
                         ]),
                 ])

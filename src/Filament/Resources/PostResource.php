@@ -267,7 +267,7 @@ class PostResource extends Resource
                                 ->schema([
                                     Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
                                     Forms\Components\Toggle::make('is_published')->label('Published')->required()->translateLabel(),
-                                    Forms\Components\Checkbox::make('show_in_home')->label('show_in_home')->required()->translateLabel(),
+                                    Forms\Components\Checkbox::make('show_in_home')->label('show_in_home')->translateLabel(),
                                 ]),
                         ]),
 
