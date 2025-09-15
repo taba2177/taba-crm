@@ -295,7 +295,8 @@ use Translatable;
                     // Tables\Actions\ForceDeleteBulkAction::make(),
                     // Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])->defaultSort('order')
+            ->reorderable('order');
         //     ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
         //         SoftDeletingScope::class,
         //     ])

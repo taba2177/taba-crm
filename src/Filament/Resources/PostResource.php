@@ -142,6 +142,10 @@ class PostResource extends Resource
                     ->icon('heroicon-o-pencil')
                     ->schema([
                             Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('order')->translateLabel()
+                                     ->required()
+                                     ->numeric()
+                                     ->default(0),
                                 Forms\Components\TextInput::make('title')
                                     ->placeholder('Enter a title')
                                     ->live(debounce: 500)
@@ -437,7 +441,9 @@ class PostResource extends Resource
                     Tables\Actions\DeleteBulkAction::make()
                         ->translateLabel(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('order')
+            ->reorderable('order');
     }
 
     /**

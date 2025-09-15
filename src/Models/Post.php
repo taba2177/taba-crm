@@ -34,6 +34,7 @@ class Post extends Model
         'meta_description',
         'image_id',
         'show_in_home',
+        "order",
         'images',
         'user_id',
         'post_category_id',
