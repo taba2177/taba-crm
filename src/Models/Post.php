@@ -36,6 +36,7 @@ class Post extends Model
         'show_in_home',
         "order",
         'images',
+        "icon",
         'user_id',
         'post_category_id',
         'metadata', // Add this for custom fields

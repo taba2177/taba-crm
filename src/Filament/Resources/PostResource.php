@@ -31,6 +31,7 @@ use Filament\Resources\Pages\Page;
 use Taba\Crm\Models\PostCategory;
 // SubNavigationPosition
 use Filament\Pages\SubNavigationPosition;
+use Guava\FilamentIconPicker\Forms\IconPicker;
 use Taba\Crm\Filament\Clusters\Posts;
 
 
@@ -251,6 +252,13 @@ class PostResource extends Resource
                             Forms\Components\Section::make(__('Additional Images'))
                                 ->schema([
                                     CuratorPicker::make('images')->multiple()->translateLabel(),
+                                ]),
+
+                            IconPicker::make('icon')->columns(3)->translateLabel()
+                                ->sets([
+                                    'heroicons',
+                                    'forkawesome',
+                                    'fontawesome-solid'
                                 ]),
                         ]),
 
