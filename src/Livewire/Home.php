@@ -13,7 +13,7 @@ class Home extends Component
     public function mount()
     {
         $this->sections = PostCategory::with(['posts' => function ($query) {
-            $query->where("show_in_home",true)->published()->latest()->orderBy('order');
+            $query->where("show_in_home",true)->published()->latest()->orderBy('order','desc');
         }])
         ->whereNotNull('section_component') // Only fetch categories with a defined section_component
         ->orderBy('order')
