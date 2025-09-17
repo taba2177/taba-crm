@@ -86,6 +86,7 @@ class PostCategoryResource extends Resource
                                         Forms\Components\Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
+                                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
                                             ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
@@ -134,6 +135,7 @@ class PostCategoryResource extends Resource
                                         Forms\Components\Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
+                                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
                                             ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
@@ -176,6 +178,7 @@ class PostCategoryResource extends Resource
                                         Forms\Components\Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
+                                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
                                             ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {

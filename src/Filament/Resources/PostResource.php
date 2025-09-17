@@ -163,6 +163,7 @@ class PostResource extends Resource
                                         Forms\Components\Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
+                                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
                                             ->action(function (Post $record, Forms\Set $set, Get $get) {
                                                 try {
