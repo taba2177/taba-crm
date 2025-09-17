@@ -15,6 +15,7 @@ use Taba\Crm\Services\GeminiImageGenerationService;
 use Taba\Crm\Services\GeminiTranslationService;
 use Illuminate\Support\Str;
 use Taba\Crm\Models\Post;
+use Taba\Crm\Services\ImageSearchService;
 
 class EditPost extends EditRecord
 {
@@ -64,58 +65,54 @@ class EditPost extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
 
-            Actions\Action::make('generate_featured_image')
-                ->label(__('Generate Featured Image'))
-                ->icon('heroicon-o-sparkles')
-                ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                ->color('primary')
-                ->modalDescription(__('This will use the post title and content to generate a unique image. This may take a moment.'))
-                ->requiresConfirmation()
-                ->action(function (Get $get, \Filament\Forms\Set $set, Post $record) {
-                    try {
-                        // Notify the user that the process has started
-                        Notification::make()
-                            ->title(__('Generating Image...'))
-                            ->body(__('Please wait, the AI is creating your image.'))
-                            ->info()
-                            ->send();
+          Actions\Action::make('find_featured_image')
+            ->label(__('Find Featured Image')) // Changed label
+            ->icon('heroicon-o-photo') // Changed icon to be more appropriate
+            ->color('primary')
+            ->visible(fn () => auth()->user()->hasRole('super_admin'))
+            ->modalDescription(__('This will search for a free, high-quality image online using the post\'s title.')) // Updated description
+            ->requiresConfirmation()
+            ->action(function (\Filament\Forms\Set $set, Post $record) {
+                try {
+                    // Notify the user that the process has started
+                    Notification::make()
+                        ->title(__('Searching for Image...'))
+                        ->body(__('Please wait, searching for a suitable image.'))
+                        ->info()
+                        ->send();
 
-                        $title = $record->getTranslation('title', 'en'); // Use a specific language for the prompt
-                        $content = $record->getTranslation('content', 'en');
+                    // Use a specific language for the search term for better results
+                    $searchTerm = $record->getTranslation('title', 'en');
 
-                        // Create a descriptive prompt from the post's content
-                        $contentSummary = '';
-                        if (is_array($content)) {
-                            $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
-                            if ($firstMarkdown) {
-                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 150);
-                            }
-                        }
-
-                        $prompt = "A professional, high-quality photorealistic image representing the concept of '{$title}'. The image should visually capture the essence of the following idea: {$contentSummary}. Cinematic lighting, detailed, and visually striking.";
-
-                        // Call your new service
-                        $imageService = app(GeminiImageGenerationService::class);
-                        $media = $imageService->generateAndSaveImage($prompt, $title);
-
-                        // IMPORTANT: This updates the 'image_id' field in the form with the new image's ID
-                        $set('image_id', $media->id);
-
-                        Notification::make()
-                            ->title(__('Image Generated Successfully!'))
-                            ->body(__('The new image has been set as the featured image.'))
-                            ->success()
-                            ->send();
-
-                    } catch (\Exception $e) {
-                         Notification::make()
-                            ->title(__('Image Generation Failed'))
-                            ->body($e->getMessage())
-                            ->danger()
-                            ->send();
-                        report($e);
+                    if (empty($searchTerm)) {
+                        Notification::make()->title(__('Search Term Missing'))->body(__('Please add a title to the post before searching for an image.'))->warning()->send();
+                        return;
                     }
-                }),
+
+                    // 1. Call your new ImageSearchService
+                    $imageService = app(\Taba\Crm\Services\ImageSearchService::class);
+
+                    // 2. Use the findAndSaveImage method with the title as the search term
+                    $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
+
+                    // 3. Update the 'image_id' field in the form with the new image's ID
+                    $set('image_id', $media->id);
+
+                    Notification::make()
+                        ->title(__('Image Found Successfully!'))
+                        ->body(__('A new image has been found and set as the featured image.'))
+                        ->success()
+                        ->send();
+
+                } catch (\Exception $e) {
+                     Notification::make()
+                        ->title(__('Image Search Failed'))
+                        ->body($e->getMessage())
+                        ->danger()
+                        ->send();
+                    report($e);
+                }
+            }),
 
                 Actions\Action::make('auto_translate')
                 ->label(__('Auto-Translate All Fields'))
