@@ -16,7 +16,7 @@ class GeminiImageGenerationService
 
     public function __construct()
     {
-        $this->geminiApiKey = env('GEMINI_API_KEY');
+        $this->geminiApiKey = env('GEMINI_API_KEY_IMAGEN');
 
         if (empty($this->geminiApiKey)) {
             throw new \Exception('GEMINI_API_KEY environment variable is not set.');
