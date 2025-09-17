@@ -124,6 +124,7 @@ class CrmPlugin implements Plugin
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
             \Hasnayeen\Themes\ThemesPlugin::make()
+            ->canViewThemesPage(fn () => auth()->user()->hasRole('super_admin'))
             ->registerTheme(
                         [
                             \Hasnayeen\Themes\Themes\DefaultTheme::class,
