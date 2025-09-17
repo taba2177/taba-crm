@@ -5,9 +5,11 @@ namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
+use Taba\Crm\Services\GeminiTranslationService;
 
 class EditPost extends EditRecord
 {
@@ -56,7 +58,109 @@ class EditPost extends EditRecord
                 ->icon('heroicon-o-globe-alt')
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
+
+                  Actions\Action::make('auto_translate')
+                ->label(__('Auto-Translate All Fields'))
+                ->icon('heroicon-o-language')
+                ->color('gray')
+                ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                ->action(function () {
+                    try {
+                        $record = $this->getRecord();
+                        $translator = app(GeminiTranslationService::class);
+
+                        // Determine source and target languages based on the active tab
+                        $sourceLocale = $this->activeLocale;
+                        $targetLocale = $sourceLocale === 'en' ? 'ar' : 'en';
+
+                        // 1. Prepare all translatable texts in a single batch
+                        $textsToTranslate = [];
+                        $translatableAttributes = $record->getTranslatableAttributes();
+
+                        foreach ($translatableAttributes as $attribute) {
+                            $value = $record->getTranslation($attribute, $sourceLocale, false);
+
+                            if (empty($value)) continue;
+
+                            if ($attribute === 'content' && is_array($value)) {
+                                foreach ($value as $index => $block) {
+                                    if ($block['type'] === 'markdown' && !empty($block['data']['content'])) {
+                                        // Add each markdown block to the batch with a unique key
+                                        $textsToTranslate["content_{$index}"] = $block['data']['content'];
+                                    }
+                                }
+                            } elseif ($attribute === 'metadata' && is_array($value)) {
+                                foreach ($value as $key => $metaValue) {
+                                     // Add each metadata value to the batch with a unique key
+                                    if (!empty($metaValue)) {
+                                        $textsToTranslate["metadata_{$key}"] = $metaValue;
+                                    }
+                                }
+                            } else if (is_string($value)) {
+                                $textsToTranslate[$attribute] = $value;
+                            }
+                        }
+
+                        if (empty($textsToTranslate)) {
+                            Notification::make()->title(__('Nothing to translate'))->body(__('All source fields are empty.'))->warning()->send();
+                            return;
+                        }
+
+                        // 2. Call the AI service once with the entire batch
+                        $translatedTexts = $translator->translateMany($textsToTranslate, $sourceLocale, $targetLocale);
+
+                        if (empty($translatedTexts)) {
+                             throw new \Exception('The translation service returned an empty result.');
+                        }
+
+                        // 3. Update the record with the translated texts
+                        foreach ($translatableAttributes as $attribute) {
+                             if ($attribute === 'content' && is_array($record->content)) {
+                                $newContent = $record->getTranslation('content', $sourceLocale, false);
+                                foreach ($newContent as $index => &$block) {
+                                    if ($block['type'] === 'markdown' && isset($translatedTexts["content_{$index}"])) {
+                                        $block['data']['content'] = $translatedTexts["content_{$index}"];
+                                    }
+                                }
+                                $record->setTranslation('content', $targetLocale, $newContent);
+
+                            } elseif ($attribute === 'metadata' && is_array($record->metadata)) {
+                                $newMetadata = $record->getTranslation('metadata', $sourceLocale, false);
+                                foreach ($newMetadata as $key => &$metaValue) {
+                                     if (isset($translatedTexts["metadata_{$key}"])) {
+                                        $newMetadata[$key] = $translatedTexts["metadata_{$key}"];
+                                    }
+                                }
+                                $record->setTranslation('metadata', $targetLocale, $newMetadata);
+                            }
+                            else if (isset($translatedTexts[$attribute])) {
+                                $record->setTranslation($attribute, $targetLocale, $translatedTexts[$attribute]);
+                            }
+                        }
+
+                        $record->save();
+
+                        // Refresh the form data to show the new translations
+                        $this->refreshFormData($translatableAttributes);
+
+                        Notification::make()
+                            ->title(__('Translation Successful'))
+                            ->body(__('All fields have been translated to') . " " . strtoupper($targetLocale))
+                            ->success()
+                            ->send();
+
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->title(__('Translation Error'))
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                        report($e);
+                    }
+                }),
         ];
+
+
     }
 
 
