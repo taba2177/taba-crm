@@ -6,84 +6,89 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Awcodes\Curator\Models\Media; // Use the Curator Media model
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
 
-class GeminiImageGenerationService
+class ImageSearchService // Renamed for clarity
 {
-    protected ?string $geminiApiKey;
-    protected string $imagenApiUrl;
+    protected ?string $unsplashApiKey;
+    protected string $unsplashApiUrl;
 
     public function __construct()
     {
-        $this->geminiApiKey = env('GEMINI_API_KEY_IMAGEN');
+        // This service now only depends on the Unsplash API key
+        $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY');
+        $this->unsplashApiUrl = "https://api.unsplash.com/search/photos";
 
-        if (empty($this->geminiApiKey)) {
-            throw new \Exception('GEMINI_API_KEY environment variable is not set.');
+        if (empty($this->unsplashApiKey)) {
+            // Log a warning instead of throwing an error, allowing the placeholder to function
+            Log::warning('UNSPLASH_ACCESS_KEY is not set. The service will fall back to local placeholders.');
         }
-
-        // We will focus on the highest-quality model as the primary attempt.
-        $this->imagenApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key={$this->geminiApiKey}";
     }
 
     /**
-     * Generates an image using a robust two-step approach: Primary AI -> Local Placeholder Fallback.
+     * Finds a free image using a robust two-step approach: Unsplash Search -> Local Placeholder Fallback.
      *
-     * @param string $prompt The text prompt for image generation.
+     * @param string $searchTerm The text prompt to search for.
      * @param string $originalFilename A name to use for the saved file.
      * @return Media The newly created Curator Media model instance.
      */
-    public function generateAndSaveImage(string $prompt, string $originalFilename = 'ai-generated-image'): Media
+    public function findAndSaveImage(string $searchTerm, string $originalFilename = 'searched-image'): Media
     {
         $imageData = null;
         $source = 'unknown';
 
-        // --- Attempt 1: Primary AI Model (Imagen 3) ---
-        try {
-            Log::info('Image Generation: Attempting with primary model (Imagen 3)...');
-            $imageData = $this->generateWithImagen($prompt);
-            if ($imageData) {
-                $source = 'Imagen 3 AI';
+        // --- Attempt 1: Stock Photo Search (Unsplash) ---
+        if (!empty($this->unsplashApiKey)) {
+            try {
+                Log::info('Image Search: Attempting with stock photo search (Unsplash)...');
+                $imageData = $this->getImageFromUnsplash($searchTerm);
+                if ($imageData) {
+                    $source = 'Unsplash Search';
+                }
+            } catch (\Exception $e) {
+                Log::warning('Image Search: Unsplash search failed. Falling back to local placeholder.', ['error' => $e->getMessage()]);
             }
-        } catch (\Exception $e) {
-            Log::warning('Image Generation: Primary model failed. Falling back to local placeholder.', ['error' => $e->getMessage()]);
         }
 
         // --- Attempt 2: Local Placeholder Generation (Guaranteed Fallback) ---
         if (!$imageData) {
             try {
-                Log::info('Image Generation: Generating local placeholder as a fallback...');
+                Log::info('Image Search: Generating local placeholder as a fallback...');
                 $imageData = $this->generatePlaceholderImage($originalFilename);
                 if ($imageData) {
                     $source = 'Local Placeholder';
                 }
             } catch (\Exception $e) {
-                Log::error('Image Generation: All services, including local placeholder, failed.', ['error' => $e->getMessage()]);
-                // This will now only be thrown in a critical failure of the local generation.
-                throw new \Exception('All image generation services failed, including the local placeholder fallback.');
+                Log::error('Image Search: All services, including local placeholder, failed.', ['error' => $e->getMessage()]);
+                throw new \Exception('All image search and generation services failed.');
             }
         }
 
         if (empty($imageData)) {
-             throw new \Exception('Failed to generate or retrieve image data from any available service.');
+             throw new \Exception('Failed to retrieve image data from any available service.');
         }
 
         return $this->saveImageDataToCurator($imageData, $originalFilename, $source);
     }
 
     /**
-     * Calls the Imagen 3 API.
-     * @return string|null Base64 image data on success.
+     * Fetches an image from Unsplash.
+     * @return string|null Raw image binary data on success.
      */
-    private function generateWithImagen(string $prompt): ?string
+    private function getImageFromUnsplash(string $prompt): ?string
     {
-        $payload = ['instances' => [['prompt' => $prompt]], 'parameters' => ['sampleCount' => 1]];
-        $response = Http::timeout(120)->post($this->imagenApiUrl, $payload);
+        $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
+            ->get($this->unsplashApiUrl, ['query' => $prompt, 'per_page' => 1, 'orientation' => 'landscape']);
 
-        // This will throw an exception for 4xx or 5xx errors, triggering the catch block.
         $response->throw();
+        $imageUrl = data_get($response->json(), 'results.0.urls.regular');
 
-        return data_get($response->json(), 'predictions.0.bytesBase64Encoded');
+        if ($imageUrl) {
+            $imageResponse = Http::get($imageUrl);
+            $imageResponse->throw();
+            return $imageResponse->body();
+        }
+        return null;
     }
 
     /**
@@ -139,15 +144,10 @@ class GeminiImageGenerationService
     }
 
     /**
-     * Saves raw or base64 image data to storage and creates a Curator Media record.
+     * Saves raw image data to storage and creates a Curator Media record.
      */
     private function saveImageDataToCurator(string $imageData, string $filename, string $source): Media
     {
-        // Check if data is base64 and decode it if so
-        if (base64_encode(base64_decode($imageData, true)) === $imageData){
-            $imageData = base64_decode($imageData);
-        }
-
         $sanitizedFilename = Str::slug($filename);
         $newFilename = uniqid($sanitizedFilename . '_') . '.png';
         $disk = config('curator.disk');
@@ -168,10 +168,10 @@ class GeminiImageGenerationService
             'size' => $size,
             'width' => $width,
             'height' => $height,
-            'alt' => "{$filename} - Generated by {$source}" // Add source info to alt text
+            'alt' => "{$filename} - Found via {$source}" // Updated alt text
         ]);
 
-        Log::info('Image Generation: Successfully created and saved media.', [
+        Log::info('Image Search: Successfully saved media.', [
             'media_id' => $media->id,
             'source' => $source
         ]);
