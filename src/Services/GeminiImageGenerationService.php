@@ -12,31 +12,22 @@ use Illuminate\Support\Facades\Log;
 class GeminiImageGenerationService
 {
     protected ?string $geminiApiKey;
-    protected ?string $unsplashApiKey;
-
-    // Define API endpoints for different models
     protected string $imagenApiUrl;
-    protected string $geminiFlashApiUrl;
-    protected string $unsplashApiUrl;
-
 
     public function __construct()
     {
         $this->geminiApiKey = env('GEMINI_API_KEY');
-        $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY');
 
         if (empty($this->geminiApiKey)) {
             throw new \Exception('GEMINI_API_KEY environment variable is not set.');
         }
 
-        // Define endpoints for both primary and secondary AI models
+        // We will focus on the highest-quality model as the primary attempt.
         $this->imagenApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key={$this->geminiApiKey}";
-        $this->geminiFlashApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key={$this->geminiApiKey}";
-        $this->unsplashApiUrl = "https://api.unsplash.com/search/photos";
     }
 
     /**
-     * Generates an image using a waterfall approach: Imagen -> Gemini Flash -> Unsplash -> Local Placeholder.
+     * Generates an image using a robust two-step approach: Primary AI -> Local Placeholder Fallback.
      *
      * @param string $prompt The text prompt for image generation.
      * @param string $originalFilename A name to use for the saved file.
@@ -51,39 +42,21 @@ class GeminiImageGenerationService
         try {
             Log::info('Image Generation: Attempting with primary model (Imagen 3)...');
             $imageData = $this->generateWithImagen($prompt);
-            if ($imageData) $source = 'Imagen 3 AI';
+            if ($imageData) {
+                $source = 'Imagen 3 AI';
+            }
         } catch (\Exception $e) {
-            Log::warning('Image Generation: Primary model failed. Trying secondary...', ['error' => $e->getMessage()]);
+            Log::warning('Image Generation: Primary model failed. Falling back to local placeholder.', ['error' => $e->getMessage()]);
         }
 
-        // --- Attempt 2: Secondary AI Model (Gemini Flash) ---
+        // --- Attempt 2: Local Placeholder Generation (Guaranteed Fallback) ---
         if (!$imageData) {
             try {
-                Log::info('Image Generation: Attempting with secondary model (Gemini Flash)...');
-                $imageData = $this->generateWithGeminiFlash($prompt);
-                if ($imageData) $source = 'Gemini Flash AI';
-            } catch (\Exception $e) {
-                Log::warning('Image Generation: Secondary model failed. Trying stock photo fallback...', ['error' => $e->getMessage()]);
-            }
-        }
-
-        // --- Attempt 3: Stock Photo Fallback (Unsplash) ---
-        if (!$imageData && !empty($this->unsplashApiKey)) {
-            try {
-                Log::info('Image Generation: Attempting with stock photo fallback (Unsplash)...');
-                $imageData = $this->getImageFromUnsplash($prompt);
-                if ($imageData) $source = 'Unsplash Fallback';
-            } catch (\Exception $e) {
-                Log::warning('Image Generation: Unsplash fallback failed. Trying local placeholder generation...', ['error' => $e->getMessage()]);
-            }
-        }
-
-        // --- Attempt 4: Local Placeholder Generation (Guaranteed Fallback) ---
-        if (!$imageData) {
-            try {
-                Log::info('Image Generation: All external services failed. Generating local placeholder...');
+                Log::info('Image Generation: Generating local placeholder as a fallback...');
                 $imageData = $this->generatePlaceholderImage($originalFilename);
-                if ($imageData) $source = 'Local Placeholder';
+                if ($imageData) {
+                    $source = 'Local Placeholder';
+                }
             } catch (\Exception $e) {
                 Log::error('Image Generation: All services, including local placeholder, failed.', ['error' => $e->getMessage()]);
                 // This will now only be thrown in a critical failure of the local generation.
@@ -91,9 +64,8 @@ class GeminiImageGenerationService
             }
         }
 
-
         if (empty($imageData)) {
-             throw new \Exception('Failed to generate image from any available service.');
+             throw new \Exception('Failed to generate or retrieve image data from any available service.');
         }
 
         return $this->saveImageDataToCurator($imageData, $originalFilename, $source);
@@ -107,49 +79,15 @@ class GeminiImageGenerationService
     {
         $payload = ['instances' => [['prompt' => $prompt]], 'parameters' => ['sampleCount' => 1]];
         $response = Http::timeout(120)->post($this->imagenApiUrl, $payload);
-        $response->throw(); // Throw an exception for non-2xx responses
+
+        // This will throw an exception for 4xx or 5xx errors, triggering the catch block.
+        $response->throw();
+
         return data_get($response->json(), 'predictions.0.bytesBase64Encoded');
     }
 
     /**
-     * Calls the Gemini Flash Image Preview API.
-     * @return string|null Base64 image data on success.
-     */
-    private function generateWithGeminiFlash(string $prompt): ?string
-    {
-        $payload = [
-            'contents' => [['parts' => [['text' => $prompt]]]],
-            'generationConfig' => ['responseModalities' => ['TEXT', 'IMAGE']],
-        ];
-        $response = Http::timeout(120)->post($this->geminiFlashApiUrl, $payload);
-        $response->throw();
-        $part = collect(data_get($response->json(), 'candidates.0.content.parts', []))->firstWhere('inlineData');
-        return $part['inlineData']['data'] ?? null;
-    }
-
-    /**
-     * Fetches an image from Unsplash as a fallback.
-     * @return string|null Raw image binary data on success.
-     */
-    private function getImageFromUnsplash(string $prompt): ?string
-    {
-        $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
-            ->get($this->unsplashApiUrl, ['query' => $prompt, 'per_page' => 1, 'orientation' => 'landscape']);
-
-        $response->throw();
-        $imageUrl = data_get($response->json(), 'results.0.urls.regular');
-
-        if ($imageUrl) {
-            // Download the image data directly
-            $imageResponse = Http::get($imageUrl);
-            $imageResponse->throw();
-            return $imageResponse->body();
-        }
-        return null;
-    }
-
-    /**
-     * Generates a local placeholder image with text if all other services fail.
+     * Generates a local placeholder image with text. This is the ultimate fallback.
      * Requires the GD PHP extension.
      *
      * @param string $text The text to write on the image.
@@ -172,24 +110,23 @@ class GeminiImageGenerationService
 
         imagefill($image, 0, 0, $bgColor);
 
-        // Font settings (IMPORTANT: Ensure you have a font file)
-        $fontPath = public_path('fonts/cairo.ttf'); // Assumes a font file exists here
-        if (!file_exists($fontPath)) {
-             Log::error("Image Generation: Font file not found at {$fontPath}. Cannot create placeholder.");
-             // Fallback to basic built-in font if custom font is not found
-             $fontSize = 5;
-             $textWidth = imagefontwidth($fontSize) * strlen($text);
-             $x = ($width - $textWidth) / 2;
-             $y = ($height - imagefontheight($fontSize)) / 2;
-             imagestring($image, $fontSize, $x, $y, $text, $textColor);
-        } else {
-            $fontSize = 50;
-            $textBox = imagettfbbox($fontSize, 0, $fontPath, $text);
-            $textWidth = $textBox[2] - $textBox[0];
-            $textHeight = $textBox[1] - $textBox[7];
+        // Use the built-in GD font. This removes the need for an external .ttf file.
+        $fontSize = 5; // GD fonts are numbered 1-5
+
+        // Wrap text if it's too long
+        $wrappedText = wordwrap($text, 30, "\n");
+
+        // Calculate position to center the text block
+        $lines = explode("\n", $wrappedText);
+        $lineHeight = imagefontheight($fontSize) + 5;
+        $totalHeight = count($lines) * $lineHeight;
+        $startY = ($height - $totalHeight) / 2;
+
+        foreach ($lines as $index => $line) {
+            $textWidth = imagefontwidth($fontSize) * strlen($line);
             $x = ($width - $textWidth) / 2;
-            $y = ($height + $textHeight) / 2;
-            imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontPath, $text);
+            $y = $startY + ($index * $lineHeight);
+            imagestring($image, $fontSize, $x, $y, $line, $textColor);
         }
 
         // Capture the image output to a variable
