@@ -5,11 +5,16 @@ namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Arr;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
+use Taba\Crm\Services\GeminiImageGenerationService;
 use Taba\Crm\Services\GeminiTranslationService;
+use Illuminate\Support\Str;
+use Taba\Crm\Models\Post;
 
 class EditPost extends EditRecord
 {
@@ -58,6 +63,59 @@ class EditPost extends EditRecord
                 ->icon('heroicon-o-globe-alt')
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
+
+            Actions\Action::make('generate_featured_image')
+                ->label(__('Generate Featured Image'))
+                ->icon('heroicon-o-sparkles')
+                ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                ->color('primary')
+                ->modalDescription(__('This will use the post title and content to generate a unique image. This may take a moment.'))
+                ->requiresConfirmation()
+                ->action(function (Get $get, \Filament\Forms\Set $set, Post $record) {
+                    try {
+                        // Notify the user that the process has started
+                        Notification::make()
+                            ->title(__('Generating Image...'))
+                            ->body(__('Please wait, the AI is creating your image.'))
+                            ->info()
+                            ->send();
+
+                        $title = $record->getTranslation('title', 'en'); // Use a specific language for the prompt
+                        $content = $record->getTranslation('content', 'en');
+
+                        // Create a descriptive prompt from the post's content
+                        $contentSummary = '';
+                        if (is_array($content)) {
+                            $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
+                            if ($firstMarkdown) {
+                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 150);
+                            }
+                        }
+
+                        $prompt = "A professional, high-quality photorealistic image representing the concept of '{$title}'. The image should visually capture the essence of the following idea: {$contentSummary}. Cinematic lighting, detailed, and visually striking.";
+
+                        // Call your new service
+                        $imageService = app(GeminiImageGenerationService::class);
+                        $media = $imageService->generateAndSaveImage($prompt, $title);
+
+                        // IMPORTANT: This updates the 'image_id' field in the form with the new image's ID
+                        $set('image_id', $media->id);
+
+                        Notification::make()
+                            ->title(__('Image Generated Successfully!'))
+                            ->body(__('The new image has been set as the featured image.'))
+                            ->success()
+                            ->send();
+
+                    } catch (\Exception $e) {
+                         Notification::make()
+                            ->title(__('Image Generation Failed'))
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                        report($e);
+                    }
+                }),
 
                 Actions\Action::make('auto_translate')
                 ->label(__('Auto-Translate All Fields'))
