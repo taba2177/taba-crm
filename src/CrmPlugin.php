@@ -127,7 +127,7 @@ class CrmPlugin implements Plugin
             // ->canViewThemesPage(fn () => auth()->user()->hasRole('super_admin'))
             ->registerTheme(
                         [
-                            \Hasnayeen\Themes\Themes\DefaultTheme::class,
+                            \Hasnayeen\Themes\Themes\Nord::class,
                         ],
                         override: true,
                     ),
