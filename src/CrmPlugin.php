@@ -123,9 +123,10 @@ class CrmPlugin implements Plugin
         ->brandLogo(fn () => view('components.logo'))
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
-            \Hasnayeen\Themes\ThemesPlugin::make()->registerTheme(
+            \Hasnayeen\Themes\ThemesPlugin::make()
+            ->registerTheme(
                         [
-                            \Hasnayeen\Themes\Themes\Sunset::class,
+                            \Hasnayeen\Themes\Themes\DefaultTheme::class,
                         ],
                         override: true,
                     ),
