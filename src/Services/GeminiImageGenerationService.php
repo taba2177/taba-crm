@@ -11,24 +11,32 @@ use Illuminate\Support\Facades\Log;
 
 class GeminiImageGenerationService
 {
-    protected string $apiKey;
-    protected string $apiUrl;
+    protected ?string $geminiApiKey;
+    protected ?string $unsplashApiKey;
+
+    // Define API endpoints for different models
+    protected string $imagenApiUrl;
+    protected string $geminiFlashApiUrl;
+    protected string $unsplashApiUrl;
+
 
     public function __construct()
     {
-        $this->apiKey = env('GEMINI_API_KEY');
-        // --- UPDATED ---
-        // Switched to the gemini-2.5-flash-image-preview model which is more accessible.
-        // This model uses the 'generateContent' endpoint.
-        $this->apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key={$this->apiKey}";
+        $this->geminiApiKey = env('GEMINI_API_KEY');
+        $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY');
 
-        if (empty($this->apiKey)) {
+        if (empty($this->geminiApiKey)) {
             throw new \Exception('GEMINI_API_KEY environment variable is not set.');
         }
+
+        // Define endpoints for both primary and secondary AI models
+        $this->imagenApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key={$this->geminiApiKey}";
+        $this->geminiFlashApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key={$this->geminiApiKey}";
+        $this->unsplashApiUrl = "https://api.unsplash.com/search/photos";
     }
 
     /**
-     * Generates an image based on a prompt and saves it to the Curator media library.
+     * Generates an image using a waterfall approach: Imagen -> Gemini Flash -> Unsplash.
      *
      * @param string $prompt The text prompt for image generation.
      * @param string $originalFilename A name to use for the saved file.
@@ -36,62 +44,113 @@ class GeminiImageGenerationService
      */
     public function generateAndSaveImage(string $prompt, string $originalFilename = 'ai-generated-image'): Media
     {
-        Log::info('Gemini Image Generation: Starting...', ['prompt' => $prompt]);
+        $imageData = null;
+        $source = 'unknown';
 
-        // --- UPDATED ---
-        // The payload structure is different for the generateContent endpoint.
+        // --- Attempt 1: Primary AI Model (Imagen 3) ---
+        try {
+            Log::info('Image Generation: Attempting with primary model (Imagen 3)...');
+            $imageData = $this->generateWithImagen($prompt);
+            $source = 'Imagen 3 AI';
+        } catch (\Exception $e) {
+            Log::warning('Image Generation: Primary model failed. Trying secondary...', ['error' => $e->getMessage()]);
+        }
+
+        // --- Attempt 2: Secondary AI Model (Gemini Flash) ---
+        if (!$imageData) {
+            try {
+                Log::info('Image Generation: Attempting with secondary model (Gemini Flash)...');
+                $imageData = $this->generateWithGeminiFlash($prompt);
+                $source = 'Gemini Flash AI';
+            } catch (\Exception $e) {
+                Log::warning('Image Generation: Secondary model failed. Trying stock photo fallback...', ['error' => $e->getMessage()]);
+            }
+        }
+
+        // --- Attempt 3: Stock Photo Fallback (Unsplash) ---
+        if (!$imageData && !empty($this->unsplashApiKey)) {
+            try {
+                Log::info('Image Generation: Attempting with stock photo fallback (Unsplash)...');
+                $imageData = $this->getImageFromUnsplash($prompt);
+                $source = 'Unsplash Fallback';
+            } catch (\Exception $e) {
+                Log::error('Image Generation: All services failed.', ['error' => $e->getMessage()]);
+                throw new \Exception('All image generation services failed. Please check logs and API keys.');
+            }
+        }
+
+        if (empty($imageData)) {
+             throw new \Exception('Failed to generate image from any available service.');
+        }
+
+        return $this->saveImageDataToCurator($imageData, $originalFilename, $source);
+    }
+
+    /**
+     * Calls the Imagen 3 API.
+     * @return string|null Base64 image data on success.
+     */
+    private function generateWithImagen(string $prompt): ?string
+    {
+        $payload = ['instances' => [['prompt' => $prompt]], 'parameters' => ['sampleCount' => 1]];
+        $response = Http::timeout(120)->post($this->imagenApiUrl, $payload)->json();
+        return data_get($response, 'predictions.0.bytesBase64Encoded');
+    }
+
+    /**
+     * Calls the Gemini Flash Image Preview API.
+     * @return string|null Base64 image data on success.
+     */
+    private function generateWithGeminiFlash(string $prompt): ?string
+    {
         $payload = [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' => $prompt]
-                    ]
-                ]
-            ],
-            'generationConfig' => [
-                'responseModalities' => ['TEXT', 'IMAGE']
-            ],
+            'contents' => [['parts' => [['text' => $prompt]]]],
+            'generationConfig' => ['responseModalities' => ['TEXT', 'IMAGE']],
         ];
+        $response = Http::timeout(120)->post($this->geminiFlashApiUrl, $payload)->json();
+        $part = collect(data_get($response, 'candidates.0.content.parts', []))->firstWhere('inlineData');
+        return $part['inlineData']['data'] ?? null;
+    }
 
-        $response = Http::timeout(120)->post($this->apiUrl, $payload);
+    /**
+     * Fetches an image from Unsplash as a fallback.
+     * @return string|null Raw image binary data on success.
+     */
+    private function getImageFromUnsplash(string $prompt): ?string
+    {
+        $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
+            ->get($this->unsplashApiUrl, ['query' => $prompt, 'per_page' => 1, 'orientation' => 'landscape']);
 
-        if (!$response->successful()) {
-            Log::error('Gemini Image Generation: API request failed.', [
-                'status' => $response->status(),
-                'response' => $response->body()
-            ]);
-            throw new RequestException($response);
+        $imageUrl = data_get($response->json(), 'results.0.urls.regular');
+
+        if ($imageUrl) {
+            // Download the image data directly
+            return Http::get($imageUrl)->body();
+        }
+        return null;
+    }
+
+    /**
+     * Saves raw or base64 image data to storage and creates a Curator Media record.
+     */
+    private function saveImageDataToCurator(string $imageData, string $filename, string $source): Media
+    {
+        // Check if data is base64 and decode it if so
+        if (base64_encode(base64_decode($imageData, true)) === $imageData){
+            $imageData = base64_decode($imageData);
         }
 
-        // --- UPDATED ---
-        // The response structure is different. We need to find the part with inlineData.
-        $part = collect($response->json('candidates.0.content.parts', []))
-            ->firstWhere('inlineData');
-
-        $base64Data = $part['inlineData']['data'] ?? null;
-
-
-        if (empty($base64Data)) {
-            Log::error('Gemini Image Generation: No image data in API response.', ['response' => $response->json()]);
-            throw new \Exception('Failed to generate image: No data received from the API.');
-        }
-
-        // Decode the base64 string and create a unique filename
-        $imageData = base64_decode($base64Data);
-        $sanitizedFilename = Str::slug($originalFilename);
-        $filename = uniqid($sanitizedFilename . '_') . '.png';
+        $sanitizedFilename = Str::slug($filename);
+        $newFilename = uniqid($sanitizedFilename . '_') . '.png';
         $disk = config('curator.disk');
         $directory = config('curator.directory');
-        $path = "{$directory}/{$filename}";
+        $path = "{$directory}/{$newFilename}";
 
-        // Save the image to the designated storage disk
         Storage::disk($disk)->put($path, $imageData);
 
-        // Get file details
         $size = Storage::disk($disk)->size($path);
         list($width, $height) = getimagesize(Storage::disk($disk)->path($path));
 
-        // Create the Media record for Curator
         $media = Media::create([
             'name' => $sanitizedFilename,
             'path' => $path,
@@ -101,9 +160,13 @@ class GeminiImageGenerationService
             'size' => $size,
             'width' => $width,
             'height' => $height,
+            'alt' => "{$filename} - Generated by {$source}" // Add source info to alt text
         ]);
 
-        Log::info('Gemini Image Generation: Successfully created and saved media.', ['media_id' => $media->id]);
+        Log::info('Image Generation: Successfully created and saved media.', [
+            'media_id' => $media->id,
+            'source' => $source
+        ]);
 
         return $media;
     }
