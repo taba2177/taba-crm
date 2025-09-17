@@ -59,7 +59,7 @@ class EditPost extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
 
-                  Actions\Action::make('auto_translate')
+                Actions\Action::make('auto_translate')
                 ->label(__('Auto-Translate All Fields'))
                 ->icon('heroicon-o-language')
                 ->color('gray')
