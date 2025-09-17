@@ -21,7 +21,11 @@ use Illuminate\Database\Eloquent\Model;
 use JaOcero\RadioDeck\Forms\Components\RadioDeck;
 use Taba\Crm\Filament\Clusters\Posts;
 use Alkoumi\FilamentImageRadioButton\Forms\Components\ImageRadioGroup;
+use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconSize;
+use Taba\Crm\Models\Post;
+use Taba\Crm\Services\GeminiTranslationService;
 
 class PostCategoryResource extends Resource
 {
@@ -76,7 +80,46 @@ class PostCategoryResource extends Resource
                     ->required()
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')->translateLabel(),
+                Forms\Components\TextInput::make('name')
+                ->translateLabel()
+                ->suffixAction(
+                                        Forms\Components\Actions\Action::make('translateTitle')
+                                            ->icon('heroicon-o-language')
+                                            ->iconSize('sm')
+                                            ->tooltip('Auto-translate title')
+                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                                try {
+                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
+                                                    $currentTitle = trim($get('name') ?? '');
+
+                                                    if (empty($currentTitle)) {
+                                                        $currentTitle = $record->getTranslation('name', $currentLocale, false);
+                                                        $set('name', $currentTitle);
+                                                    }
+
+                                                    $translator = app(GeminiTranslationService::class);
+                                                    $translated = $translator->translate(
+                                                        $currentTitle,
+                                                        $currentLocale,
+                                                        $oppositeLocale
+                                                    );
+
+                                                    if ($translated) {
+                                                        $record->setTranslation('name', $oppositeLocale, $translated);
+                                                        $set('name', $translated);
+                                                        $record->save();
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    Notification::make()
+                                                        ->title('Error')
+                                                        ->body($e->getMessage())
+                                                        ->danger()
+                                                        ->send();
+                                                    report($e);
+                                                }
+                                            })
+                                    ),
                 Forms\Components\Toggle::make('register_in_header')
                     ->translateLabel()
                     ->required(),
@@ -87,10 +130,86 @@ class PostCategoryResource extends Resource
                 Forms\Components\TextInput::make('description')
                     //add more rows to the textinput
                     // ->rows(5)
+                      ->suffixAction(
+                                        Forms\Components\Actions\Action::make('translateTitle')
+                                            ->icon('heroicon-o-language')
+                                            ->iconSize('sm')
+                                            ->tooltip('Auto-translate title')
+                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                                try {
+                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
+                                                    $currentTitle = trim($get('description') ?? '');
+
+                                                    if (empty($currentTitle)) {
+                                                        $currentTitle = $record->getTranslation('description', $currentLocale, false);
+                                                        $set('description', $currentTitle);
+                                                    }
+
+                                                    $translator = app(GeminiTranslationService::class);
+                                                    $translated = $translator->translate(
+                                                        $currentTitle,
+                                                        $currentLocale,
+                                                        $oppositeLocale
+                                                    );
+
+                                                    if ($translated) {
+                                                        $record->setTranslation('description', $oppositeLocale, $translated);
+                                                        $set('description', $translated);
+                                                        $record->save();
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    Notification::make()
+                                                        ->title('Error')
+                                                        ->body($e->getMessage())
+                                                        ->danger()
+                                                        ->send();
+                                                    report($e);
+                                                }
+                                            })
+                                    )
                     ->translateLabel(),
                 // CuratorPicker::make('image_id')->label('Featured Image')->translateLabel(),
 
                 Forms\Components\TextInput::make('subtitle')
+                  ->suffixAction(
+                                        Forms\Components\Actions\Action::make('translateTitle')
+                                            ->icon('heroicon-o-language')
+                                            ->iconSize('sm')
+                                            ->tooltip('Auto-translate title')
+                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                                try {
+                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
+                                                    $currentTitle = trim($get('subtitle') ?? '');
+
+                                                    if (empty($currentTitle)) {
+                                                        $currentTitle = $record->getTranslation('subtitle', $currentLocale, false);
+                                                        $set('subtitle', $currentTitle);
+                                                    }
+
+                                                    $translator = app(GeminiTranslationService::class);
+                                                    $translated = $translator->translate(
+                                                        $currentTitle,
+                                                        $currentLocale,
+                                                        $oppositeLocale
+                                                    );
+
+                                                    if ($translated) {
+                                                        $record->setTranslation('subtitle', $oppositeLocale, $translated);
+                                                        $set('subtitle', $translated);
+                                                        $record->save();
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    Notification::make()
+                                                        ->title('Error')
+                                                        ->body($e->getMessage())
+                                                        ->danger()
+                                                        ->send();
+                                                    report($e);
+                                                }
+                                            })
+                                    )
                     ->translateLabel(),
 
                 Forms\Components\Section::make()
