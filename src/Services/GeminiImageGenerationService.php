@@ -36,7 +36,7 @@ class GeminiImageGenerationService
     }
 
     /**
-     * Generates an image using a waterfall approach: Imagen -> Gemini Flash -> Unsplash.
+     * Generates an image using a waterfall approach: Imagen -> Gemini Flash -> Unsplash -> Local Placeholder.
      *
      * @param string $prompt The text prompt for image generation.
      * @param string $originalFilename A name to use for the saved file.
@@ -51,7 +51,7 @@ class GeminiImageGenerationService
         try {
             Log::info('Image Generation: Attempting with primary model (Imagen 3)...');
             $imageData = $this->generateWithImagen($prompt);
-            $source = 'Imagen 3 AI';
+            if ($imageData) $source = 'Imagen 3 AI';
         } catch (\Exception $e) {
             Log::warning('Image Generation: Primary model failed. Trying secondary...', ['error' => $e->getMessage()]);
         }
@@ -61,7 +61,7 @@ class GeminiImageGenerationService
             try {
                 Log::info('Image Generation: Attempting with secondary model (Gemini Flash)...');
                 $imageData = $this->generateWithGeminiFlash($prompt);
-                $source = 'Gemini Flash AI';
+                if ($imageData) $source = 'Gemini Flash AI';
             } catch (\Exception $e) {
                 Log::warning('Image Generation: Secondary model failed. Trying stock photo fallback...', ['error' => $e->getMessage()]);
             }
@@ -72,12 +72,25 @@ class GeminiImageGenerationService
             try {
                 Log::info('Image Generation: Attempting with stock photo fallback (Unsplash)...');
                 $imageData = $this->getImageFromUnsplash($prompt);
-                $source = 'Unsplash Fallback';
+                if ($imageData) $source = 'Unsplash Fallback';
             } catch (\Exception $e) {
-                Log::error('Image Generation: All services failed.', ['error' => $e->getMessage()]);
-                throw new \Exception('All image generation services failed. Please check logs and API keys.');
+                Log::warning('Image Generation: Unsplash fallback failed. Trying local placeholder generation...', ['error' => $e->getMessage()]);
             }
         }
+
+        // --- Attempt 4: Local Placeholder Generation (Guaranteed Fallback) ---
+        if (!$imageData) {
+            try {
+                Log::info('Image Generation: All external services failed. Generating local placeholder...');
+                $imageData = $this->generatePlaceholderImage($originalFilename);
+                if ($imageData) $source = 'Local Placeholder';
+            } catch (\Exception $e) {
+                Log::error('Image Generation: All services, including local placeholder, failed.', ['error' => $e->getMessage()]);
+                // This will now only be thrown in a critical failure of the local generation.
+                throw new \Exception('All image generation services failed, including the local placeholder fallback.');
+            }
+        }
+
 
         if (empty($imageData)) {
              throw new \Exception('Failed to generate image from any available service.');
@@ -93,8 +106,9 @@ class GeminiImageGenerationService
     private function generateWithImagen(string $prompt): ?string
     {
         $payload = ['instances' => [['prompt' => $prompt]], 'parameters' => ['sampleCount' => 1]];
-        $response = Http::timeout(120)->post($this->imagenApiUrl, $payload)->json();
-        return data_get($response, 'predictions.0.bytesBase64Encoded');
+        $response = Http::timeout(120)->post($this->imagenApiUrl, $payload);
+        $response->throw(); // Throw an exception for non-2xx responses
+        return data_get($response->json(), 'predictions.0.bytesBase64Encoded');
     }
 
     /**
@@ -107,8 +121,9 @@ class GeminiImageGenerationService
             'contents' => [['parts' => [['text' => $prompt]]]],
             'generationConfig' => ['responseModalities' => ['TEXT', 'IMAGE']],
         ];
-        $response = Http::timeout(120)->post($this->geminiFlashApiUrl, $payload)->json();
-        $part = collect(data_get($response, 'candidates.0.content.parts', []))->firstWhere('inlineData');
+        $response = Http::timeout(120)->post($this->geminiFlashApiUrl, $payload);
+        $response->throw();
+        $part = collect(data_get($response->json(), 'candidates.0.content.parts', []))->firstWhere('inlineData');
         return $part['inlineData']['data'] ?? null;
     }
 
@@ -121,13 +136,69 @@ class GeminiImageGenerationService
         $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
             ->get($this->unsplashApiUrl, ['query' => $prompt, 'per_page' => 1, 'orientation' => 'landscape']);
 
+        $response->throw();
         $imageUrl = data_get($response->json(), 'results.0.urls.regular');
 
         if ($imageUrl) {
             // Download the image data directly
-            return Http::get($imageUrl)->body();
+            $imageResponse = Http::get($imageUrl);
+            $imageResponse->throw();
+            return $imageResponse->body();
         }
         return null;
+    }
+
+    /**
+     * Generates a local placeholder image with text if all other services fail.
+     * Requires the GD PHP extension.
+     *
+     * @param string $text The text to write on the image.
+     * @return string|null Raw PNG image data.
+     */
+    private function generatePlaceholderImage(string $text): ?string
+    {
+        if (!extension_loaded('gd')) {
+            Log::error('Image Generation: GD extension is not loaded, cannot generate placeholder.');
+            return null;
+        }
+
+        $width = 1200;
+        $height = 675; // 16:9 aspect ratio
+        $image = imagecreatetruecolor($width, $height);
+
+        // Colors
+        $bgColor = imagecolorallocate($image, 30, 41, 59); // Slate 800
+        $textColor = imagecolorallocate($image, 226, 232, 240); // Slate 200
+
+        imagefill($image, 0, 0, $bgColor);
+
+        // Font settings (IMPORTANT: Ensure you have a font file)
+        $fontPath = public_path('fonts/cairo.ttf'); // Assumes a font file exists here
+        if (!file_exists($fontPath)) {
+             Log::error("Image Generation: Font file not found at {$fontPath}. Cannot create placeholder.");
+             // Fallback to basic built-in font if custom font is not found
+             $fontSize = 5;
+             $textWidth = imagefontwidth($fontSize) * strlen($text);
+             $x = ($width - $textWidth) / 2;
+             $y = ($height - imagefontheight($fontSize)) / 2;
+             imagestring($image, $fontSize, $x, $y, $text, $textColor);
+        } else {
+            $fontSize = 50;
+            $textBox = imagettfbbox($fontSize, 0, $fontPath, $text);
+            $textWidth = $textBox[2] - $textBox[0];
+            $textHeight = $textBox[1] - $textBox[7];
+            $x = ($width - $textWidth) / 2;
+            $y = ($height + $textHeight) / 2;
+            imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontPath, $text);
+        }
+
+        // Capture the image output to a variable
+        ob_start();
+        imagepng($image);
+        $imageData = ob_get_clean();
+        imagedestroy($image);
+
+        return $imageData;
     }
 
     /**
