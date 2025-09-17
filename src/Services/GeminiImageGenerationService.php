@@ -17,8 +17,10 @@ class GeminiImageGenerationService
     public function __construct()
     {
         $this->apiKey = env('GEMINI_API_KEY');
-        // We use the Imagen model for high-quality image generation
-        $this->apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key={$this->apiKey}";
+        // --- UPDATED ---
+        // Switched to the gemini-2.5-flash-image-preview model which is more accessible.
+        // This model uses the 'generateContent' endpoint.
+        $this->apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key={$this->apiKey}";
 
         if (empty($this->apiKey)) {
             throw new \Exception('GEMINI_API_KEY environment variable is not set.');
@@ -36,13 +38,19 @@ class GeminiImageGenerationService
     {
         Log::info('Gemini Image Generation: Starting...', ['prompt' => $prompt]);
 
+        // --- UPDATED ---
+        // The payload structure is different for the generateContent endpoint.
         $payload = [
-            'instances' => [
-                ['prompt' => $prompt]
+            'contents' => [
+                [
+                    'parts' => [
+                        ['text' => $prompt]
+                    ]
+                ]
             ],
-            'parameters' => [
-                'sampleCount' => 1
-            ]
+            'generationConfig' => [
+                'responseModalities' => ['TEXT', 'IMAGE']
+            ],
         ];
 
         $response = Http::timeout(120)->post($this->apiUrl, $payload);
@@ -55,10 +63,16 @@ class GeminiImageGenerationService
             throw new RequestException($response);
         }
 
-        $base64Data = $response->json('predictions.0.bytesBase64Encoded');
+        // --- UPDATED ---
+        // The response structure is different. We need to find the part with inlineData.
+        $part = collect($response->json('candidates.0.content.parts', []))
+            ->firstWhere('inlineData');
+
+        $base64Data = $part['inlineData']['data'] ?? null;
+
 
         if (empty($base64Data)) {
-            Log::error('Gemini Image Generation: No image data in API response.');
+            Log::error('Gemini Image Generation: No image data in API response.', ['response' => $response->json()]);
             throw new \Exception('Failed to generate image: No data received from the API.');
         }
 
