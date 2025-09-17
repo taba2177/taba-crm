@@ -87,7 +87,7 @@ class PostCategoryResource extends Resource
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -135,7 +135,7 @@ class PostCategoryResource extends Resource
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -177,7 +177,7 @@ class PostCategoryResource extends Resource
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
