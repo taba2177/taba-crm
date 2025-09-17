@@ -114,7 +114,6 @@ class PostCategoryResource extends Resource
                             // ->default(CategoryLayout::Default), // Set default for new records
                  RadioDeck::make('section_component')
                     ->label('Select a Layout Style')
-                    ->required()
                     ->options(self::getHomepageComponentOptions())
                     ->iconSize(IconSize::Large)
                     ->direction('column')
