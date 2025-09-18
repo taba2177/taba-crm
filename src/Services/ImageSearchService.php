@@ -5,87 +5,98 @@ namespace Taba\Crm\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Awcodes\Curator\Models\Media;
+use Awcodes\Curator\Models\Media; // Use the Curator Media model
 use Illuminate\Support\Facades\Log;
 
-class ImageSearchService
+class ImageSearchService // Renamed for clarity
 {
     protected ?string $unsplashApiKey;
     protected string $unsplashApiUrl;
 
     public function __construct()
     {
+        // This service now only depends on the Unsplash API key
         $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY');
         $this->unsplashApiUrl = "https://api.unsplash.com/search/photos";
 
         if (empty($this->unsplashApiKey)) {
-            Log::warning('UNSPLASH_ACCESS_KEY is not set. Image search will be disabled.');
-        }
-    }
-    /**
-     * Searches Unsplash for a collection of images.
-     *
-     * @param string $searchTerm The text to search for.
-     * @param int    $count      The number of images to return.
-     * @return array An array of image data ([id, thumb, regular, alt]).
-     */
-    public function searchUnsplash(string $searchTerm, int $count = 9): array
-    {
-        if (empty($this->unsplashApiKey)) {
-            return [];
-        }
-
-        try {
-            $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
-                ->get($this->unsplashApiUrl, [
-                    'query' => $searchTerm,
-                    'per_page' => $count,
-                    'orientation' => 'landscape'
-                ]);
-
-            $response->throw();
-
-            $results = data_get($response->json(), 'results', []);
-
-            return collect($results)->map(fn ($result) => [
-                'id' => $result['id'],
-                'thumb' => $result['urls']['thumb'],
-                'regular' => $result['urls']['regular'],
-                'alt' => $result['alt_description'],
-            ])->all();
-
-        } catch (\Exception $e) {
-            Log::error('Unsplash API search failed.', ['error' => $e->getMessage()]);
-            return []; // Return empty array on failure
+            // Log a warning instead of throwing an error, allowing the placeholder to function
+            Log::warning('UNSPLASH_ACCESS_KEY is not set. The service will fall back to local placeholders.');
         }
     }
 
     /**
-     * Downloads an image from a URL and saves it to the Curator media library.
+     * Finds a free image using a robust two-step approach: Unsplash Search -> Local Placeholder Fallback.
      *
-     * @param string $imageUrl The URL of the image to download.
-     * @param string $filename The base filename for the saved media.
+     * @param string $searchTerm The text prompt to search for.
+     * @param string $originalFilename A name to use for the saved file.
      * @return Media The newly created Curator Media model instance.
      */
-    public function saveImageFromUrl(string $imageUrl, string $filename): Media
+    public function findAndSaveImage(string $searchTerm, string $originalFilename = 'searched-image'): Media
     {
-        try {
-            $imageData = Http::get($imageUrl)->body();
-            if (empty($imageData)) {
-                throw new \Exception("Failed to download image from URL: {$imageUrl}");
+        $imageData = null;
+        $source = 'unknown';
+
+        // --- Attempt 1: Stock Photo Search (Unsplash) ---
+        if (!empty($this->unsplashApiKey)) {
+            try {
+                Log::info('Image Search: Attempting with stock photo search (Unsplash)...');
+                $imageData = $this->getImageFromUnsplash($searchTerm);
+                if ($imageData) {
+                    $source = 'Unsplash Search';
+                }
+            } catch (\Exception $e) {
+                Log::warning('Image Search: Unsplash search failed. Falling back to local placeholder.', ['error' => $e->getMessage()]);
             }
-            return $this->saveImageDataToCurator($imageData, $filename, 'Unsplash Search');
-        } catch (\Exception $e) {
-            Log::error('Failed to download or save image from URL.', ['error' => $e->getMessage()]);
-            // As a final fallback, generate a placeholder
-            $imageData = $this->generatePlaceholderImage($filename);
-            return $this->saveImageDataToCurator($imageData, $filename, 'Local Placeholder');
         }
+
+        // --- Attempt 2: Local Placeholder Generation (Guaranteed Fallback) ---
+        if (!$imageData) {
+            try {
+                Log::info('Image Search: Generating local placeholder as a fallback...');
+                $imageData = $this->generatePlaceholderImage($originalFilename);
+                if ($imageData) {
+                    $source = 'Local Placeholder';
+                }
+            } catch (\Exception $e) {
+                Log::error('Image Search: All services, including local placeholder, failed.', ['error' => $e->getMessage()]);
+                throw new \Exception('All image search and generation services failed.');
+            }
+        }
+
+        if (empty($imageData)) {
+             throw new \Exception('Failed to retrieve image data from any available service.');
+        }
+
+        return $this->saveImageDataToCurator($imageData, $originalFilename, $source);
+    }
+
+    /**
+     * Fetches an image from Unsplash.
+     * @return string|null Raw image binary data on success.
+     */
+    private function getImageFromUnsplash(string $prompt): ?string
+    {
+        $response = Http::withHeaders(['Authorization' => "Client-ID {$this->unsplashApiKey}"])
+            ->get($this->unsplashApiUrl, ['query' => $prompt, 'per_page' => 1, 'orientation' => 'landscape']);
+
+        $response->throw();
+        $imageUrl = data_get($response->json(), 'results.0.urls.regular');
+        dd($response->json());
+        if ($imageUrl) {
+            $imageResponse = Http::get($imageUrl);
+            $imageResponse->throw();
+            return $imageResponse->body();
+        }
+        return null;
     }
 
     /**
      * Generates a local placeholder image with text. This is the ultimate fallback.
      * Requires the GD PHP extension.
+     *
+     * @param string $text The text to write on the image.
+     * @return string|null Raw PNG image data.
      */
     private function generatePlaceholderImage(string $text): ?string
     {
@@ -95,13 +106,22 @@ class ImageSearchService
         }
 
         $width = 1200;
-        $height = 675;
+        $height = 675; // 16:9 aspect ratio
         $image = imagecreatetruecolor($width, $height);
-        $bgColor = imagecolorallocate($image, 30, 41, 59);
-        $textColor = imagecolorallocate($image, 226, 232, 240);
+
+        // Colors
+        $bgColor = imagecolorallocate($image, 30, 41, 59); // Slate 800
+        $textColor = imagecolorallocate($image, 226, 232, 240); // Slate 200
+
         imagefill($image, 0, 0, $bgColor);
-        $fontSize = 5;
+
+        // Use the built-in GD font. This removes the need for an external .ttf file.
+        $fontSize = 5; // GD fonts are numbered 1-5
+
+        // Wrap text if it's too long
         $wrappedText = wordwrap($text, 30, "\n");
+
+        // Calculate position to center the text block
         $lines = explode("\n", $wrappedText);
         $lineHeight = imagefontheight($fontSize) + 5;
         $totalHeight = count($lines) * $lineHeight;
@@ -114,6 +134,7 @@ class ImageSearchService
             imagestring($image, $fontSize, $x, $y, $line, $textColor);
         }
 
+        // Capture the image output to a variable
         ob_start();
         imagepng($image);
         $imageData = ob_get_clean();
@@ -147,7 +168,7 @@ class ImageSearchService
             'size' => $size,
             'width' => $width,
             'height' => $height,
-            'alt' => "{$filename} - Found via {$source}"
+            'alt' => "{$filename} - Found via {$source}" // Updated alt text
         ]);
 
         Log::info('Image Search: Successfully saved media.', [
