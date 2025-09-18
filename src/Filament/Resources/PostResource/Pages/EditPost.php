@@ -6,6 +6,8 @@ use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
 use Filament\Forms\Get;
+use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
@@ -107,6 +109,76 @@ class EditPost extends EditRecord
                     } catch (\Exception $e) {
                          Notification::make()
                             ->title(__('Image Search Failed'))
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                        report($e);
+                    }
+                }),
+                 Action::make('suggest_seo_keywords')
+                ->label(__('Suggest SEO Keywords'))
+                ->icon('heroicon-o-key')
+                ->color('gray')
+                ->action(function (Post $record) {
+                    try {
+                        $title = $record->getTranslation('title', 'en');
+                        $content = $record->getTranslation('content', 'en');
+
+                        if (empty($title)) {
+                            Notification::make()->title(__('Content Missing'))->body(__('Please add a title before suggesting keywords.'))->warning()->send();
+                            return;
+                        }
+
+                        // Create a concise summary of the content for a better prompt
+                        $contentSummary = '';
+                        if (is_array($content)) {
+                            $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
+                            if ($firstMarkdown) {
+                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 250);
+                            }
+                        }
+
+                        $textToAnalyze = "Title: {$title}\n\nContent: {$contentSummary}";
+
+                        // Use the existing translation service to send a custom prompt
+                        $translator = app(GeminiTranslationService::class);
+
+                        // We are not really "translating", but using the AI's text generation capability.
+                        // The service's `translate` method works perfectly for this.
+                        $prompt = "Based on the following text, suggest 8 to 10 relevant, comma-separated SEO keywords. Provide ONLY the comma-separated list and nothing else.\n\n---\n\n{$textToAnalyze}";
+
+                        // We trick the service by asking it to "translate" the prompt to English.
+                        $keywords = $translator->translate($prompt, 'en', 'en');
+
+                        if (!$keywords) {
+                            throw new \Exception('The AI service did not return any keywords.');
+                        }
+
+                        // Open a modal to display the keywords to the user
+                        Action::make('view_keywords')
+                            ->infolist([
+                                TextEntry::make('keywords')
+                                    ->label('Suggested Keywords')
+                                    ->default($keywords)
+                                    ->helperText('Click the button below to copy these keywords.')
+                                    ->columnSpanFull(),
+                            ])
+                            ->modalSubmitAction(false) // Hide the default 'Submit' button
+                            ->modalCancelActionLabel('Close')
+                            ->modalActions([
+                                Action::make('copy')
+                                    ->label('Copy to Clipboard')
+                                    ->icon('heroicon-o-clipboard-document')
+                                    ->color('success')
+                                    ->copyable()
+                                    ->copyableState(fn() => $keywords)
+                                    ->close() // Close the modal after copying
+                            ])
+                            ->mount(); // This is a trick to immediately open the action's modal
+
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->title(__('Failed to Suggest Keywords'))
                             ->body($e->getMessage())
                             ->danger()
                             ->send();
