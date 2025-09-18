@@ -90,7 +90,7 @@ class EditPost extends EditRecord
                     }
 
                     // 1. Call your new ImageSearchService
-                    $imageService = app(\Taba\Crm\Services\ImageSearchService::class);
+                    $imageService = app(ImageSearchService::class);
 
                     // 2. Use the findAndSaveImage method with the title as the search term
                     $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
