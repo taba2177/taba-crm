@@ -6,6 +6,7 @@ use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -16,6 +17,7 @@ use Taba\Crm\Services\GeminiImageGenerationService;
 use Taba\Crm\Services\GeminiTranslationService;
 use Illuminate\Support\Str;
 use Taba\Crm\Models\Post;
+use Taba\Crm\Models\Tag;
 use Taba\Crm\Services\ImageSearchService;
 
 class EditPost extends EditRecord
@@ -114,70 +116,70 @@ class EditPost extends EditRecord
                         report($e);
                     }
                 }),
-            Actions\Action::make('suggest_seo_keywords')
-                ->label(__('Suggest SEO Keywords'))
+            Actions\Action::make('suggest_seo_content')
+                ->label(__('Suggest SEO Content'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
-                ->action(function (Post $record) {
+                ->action(function (Post $record, Set $set, Get $get) {
                     try {
+                        Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
+
                         $title = $record->getTranslation('title', 'en');
                         $content = $record->getTranslation('content', 'en');
 
                         if (empty($title)) {
-                            Notification::make()->title(__('Content Missing'))->body(__('Please add a title before suggesting keywords.'))->warning()->send();
+                            Notification::make()->title(__('Content Missing'))->body(__('Please add a title before suggesting content.'))->warning()->send();
                             return;
                         }
 
-                        // Create a concise summary of the content for a better prompt
                         $contentSummary = '';
                         if (is_array($content)) {
                             $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
                             if ($firstMarkdown) {
-                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 250);
+                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 300);
                             }
                         }
 
                         $textToAnalyze = "Title: {$title}\n\nContent: {$contentSummary}";
 
-                        // Use the existing translation service to send a custom prompt
                         $translator = app(GeminiTranslationService::class);
 
-                        // We are not really "translating", but using the AI's text generation capability.
-                        // The service's `translate` method works perfectly for this.
-                        $prompt = "Based on the following text, suggest 8 to 10 relevant, comma-separated SEO keywords. Provide ONLY the comma-separated list and nothing else.\n\n---\n\n{$textToAnalyze}";
+                        $prompt = "Based on the following text, generate an SEO-optimized meta title, meta description, and a list of relevant keywords. Return the result as a single, valid JSON object with the keys: \"meta_title\", \"meta_description\", and \"keywords\". \"meta_title\" should be under 60 characters. \"meta_description\" should be under 160 characters. \"keywords\" should be an array of 5-7 relevant string keywords. Provide ONLY the JSON object.\n\n---\n\n{$textToAnalyze}";
 
-                        // We trick the service by asking it to "translate" the prompt to English.
-                        $keywords = $translator->translate($prompt, 'en', 'en');
+                        $responseJson = $translator->translate($prompt, 'en', 'en');
+                        $seoData = json_decode($responseJson, true);
 
-                        if (!$keywords) {
-                            throw new \Exception('The AI service did not return any keywords.');
+                        if (!$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
+                            throw new \Exception('The AI service returned an invalid or incomplete JSON format.');
                         }
 
-                        // Open a modal to display the keywords to the user
-                        Actions\Action::make('view_keywords')
-                            ->infolist([
-                                TextEntry::make('keywords')
-                                    ->label('Suggested Keywords')
-                                    ->default($keywords)
-                                    ->helperText('Click the button below to copy these keywords.')
-                                    ->columnSpanFull(),
-                            ])
-                            ->modalSubmitAction(false) // Hide the default 'Submit' button
-                            ->modalCancelActionLabel('Close')
-                            ->modalActions([
-                                Actions\Action::make('copy')
-                                    ->label('Copy to Clipboard')
-                                    ->icon('heroicon-o-clipboard-document')
-                                    ->color('success')
-                                    ->copyable()
-                                    ->copyableState(fn() => $keywords)
-                                    ->close() // Close the modal after copying
-                            ])
-                            ->mount(); // This is a trick to immediately open the action's modal
+                        // Set the meta title and description fields
+                        $set('meta_title', $seoData['meta_title']);
+                        $set('meta_description', $seoData['meta_description']);
+
+                        // Handle the keywords/tags
+                        $tagIds = [];
+                        if (is_array($seoData['keywords'])) {
+                            foreach ($seoData['keywords'] as $tagName) {
+                                $tag = Tag::firstOrCreate(['name' => trim($tagName)]);
+                                $tagIds[] = $tag->id;
+                            }
+                        }
+
+                        // Merge new tags with any existing tags to prevent overwriting
+                        $existingTagIds = $get('tags') ?? [];
+                        $allTagIds = array_unique(array_merge($existingTagIds, $tagIds));
+                        $set('tags', $allTagIds);
+
+                        Notification::make()
+                            ->title(__('SEO Content Generated'))
+                            ->body(__('The Meta Title, Meta Description, and Tags fields have been populated.'))
+                            ->success()
+                            ->send();
 
                     } catch (\Exception $e) {
                         Notification::make()
-                            ->title(__('Failed to Suggest Keywords'))
+                            ->title(__('Failed to Generate SEO Content'))
                             ->body($e->getMessage())
                             ->danger()
                             ->send();
