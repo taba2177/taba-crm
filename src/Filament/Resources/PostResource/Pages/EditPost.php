@@ -11,6 +11,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal;
 use Taba\Crm\Services\GeminiImageGenerationService;
@@ -147,10 +148,23 @@ class EditPost extends EditRecord
                         $prompt = "Based on the following text, generate an SEO-optimized meta title, meta description, and a list of relevant keywords. Return the result as a single, valid JSON object with the keys: \"meta_title\", \"meta_description\", and \"keywords\". \"meta_title\" should be under 60 characters. \"meta_description\" should be under 160 characters. \"keywords\" should be an array of 5-7 relevant string keywords. Provide ONLY the JSON object.\n\n---\n\n{$textToAnalyze}";
 
                         $responseJson = $translator->translate($prompt, 'en', 'en');
+
+                        // --- THE FIX: More robust JSON cleaning ---
+                        // The AI might wrap the JSON in markdown code fences. We need to extract just the JSON.
+                        if (Str::contains($responseJson, '```')) {
+                            $responseJson = Str::between($responseJson, '```', '```');
+                            // The part between might be prefixed with 'json', so remove that too
+                            $responseJson = ltrim($responseJson, 'json');
+                        }
+                        // Also trim any whitespace just in case
+                        $responseJson = trim($responseJson);
+
                         $seoData = json_decode($responseJson, true);
 
-                        if (!$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
-                            throw new \Exception('The AI service returned an invalid or incomplete JSON format.');
+                        // Improved error checking
+                        if (json_last_error() !== JSON_ERROR_NONE || !$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
+                            Log::error('Failed to decode AI SEO response.', ['raw_response' => $responseJson]);
+                            throw new \Exception('The AI service returned an invalid or incomplete JSON format. Check the logs for details.');
                         }
 
                         // Set the meta title and description fields
