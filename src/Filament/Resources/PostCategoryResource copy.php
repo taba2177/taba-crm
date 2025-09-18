@@ -177,7 +177,7 @@ class PostCategoryResource extends Resource
                             ->schema([
                                 FormSection::make(__('Featured Image'))
                                     ->schema([
-                                        CuratorPicker::make('image')
+                                        CuratorPicker::make('image')->maxSize(20000)
                                             // ->label('')
                                             // ->multiple(false)
                                             // ->reorderable(false)

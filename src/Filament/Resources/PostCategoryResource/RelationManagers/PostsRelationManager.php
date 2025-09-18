@@ -145,7 +145,7 @@ use Translatable;
                                         ]),
                                     Builder\Block::make('figure')
                                         ->schema([
-                                            CuratorPicker::make('image')->required()->translateLabel(),
+                                            CuratorPicker::make('image')->maxSize(20000)->translateLabel(),
                                             Forms\Components\Fieldset::make('Details')
                                                 ->schema([
                                                     Forms\Components\TextInput::make('alt')->label('Alt Text')->placeholder('Enter alt text')->required()->maxLength(255)->translateLabel(),
@@ -160,11 +160,11 @@ use Translatable;
                         ->schema([
                             Forms\Components\Section::make(__('Featured Image'))
                                 ->schema([
-                                    CuratorPicker::make('image_id')->label('Featured Image')->translateLabel(),
+                                    CuratorPicker::make('image_id')->maxSize(20000)->label('Featured Image')->translateLabel(),
                                 ]),
                             Forms\Components\Section::make(__('Additional Images'))
                                 ->schema([
-                                    CuratorPicker::make('images')->multiple()->translateLabel(),
+                                    CuratorPicker::make('images')->maxSize(20000)->multiple()->translateLabel(),
                                 ]),
                             Forms\Components\Section::make(__('Metadata'))
                                 ->schema([
