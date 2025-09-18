@@ -93,7 +93,7 @@ class EditPost extends EditRecord
 
                         // 1. Call your ImageSearchService
                         $imageService = app(ImageSearchService::class);
-                        $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
+                        $media = $imageService->saveImageFromUrl($searchTerm, $searchTerm);
 
                         // --- THE FIX ---
                         // 2. Explicitly update the record in the database first.
