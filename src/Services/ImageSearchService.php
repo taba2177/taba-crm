@@ -22,7 +22,6 @@ class ImageSearchService
             Log::warning('UNSPLASH_ACCESS_KEY is not set. Image search will be disabled.');
         }
     }
-
     /**
      * Searches Unsplash for a collection of images.
      *
