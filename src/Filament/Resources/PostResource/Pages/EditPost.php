@@ -73,6 +73,7 @@ class EditPost extends EditRecord
                 ->label(__('Find Featured Image'))
                 ->icon('heroicon-o-photo')
                 ->color('primary')
+                ->visible(fn () => auth()->user()->hasRole('super_admin'))
                 ->modalDescription(__('This will search for a free, high-quality image online using the post\'s title.'))
                 ->requiresConfirmation()
                 ->action(function (Post $record) { // Removed $set as we will use refreshFormData
@@ -121,6 +122,7 @@ class EditPost extends EditRecord
                 ->label(__('Suggest SEO Content'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
+                ->visible(fn () => auth()->user()->hasRole('super_admin'))
                 ->action(function (Post $record) { // Removed Set and Get to prevent lifecycle issues
                     try {
                         Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
