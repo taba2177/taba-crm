@@ -65,56 +65,56 @@ class EditPost extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
 
-          Actions\Action::make('find_featured_image')
-            ->label(__('Find Featured Image')) // Changed label
-            ->icon('heroicon-o-photo') // Changed icon to be more appropriate
-            ->color('primary')
-            ->visible(fn () => auth()->user()->hasRole('super_admin'))
-            ->modalDescription(__('This will search for a free, high-quality image online using the post\'s title.')) // Updated description
-            ->requiresConfirmation()
-            ->action(function (\Filament\Forms\Set $set, Post $record) {
-                try {
-                    // Notify the user that the process has started
-                    Notification::make()
-                        ->title(__('Searching for Image...'))
-                        ->body(__('Please wait, searching for a suitable image.'))
-                        ->info()
-                        ->send();
+           Actions\Action::make('find_featured_image')
+                ->label(__('Find Featured Image'))
+                ->icon('heroicon-o-photo')
+                ->color('primary')
+                ->modalDescription(__('This will search for a free, high-quality image online using the post\'s title.'))
+                ->requiresConfirmation()
+                ->action(function (Post $record) { // Removed $set as we will use refreshFormData
+                    try {
+                        Notification::make()
+                            ->title(__('Searching for Image...'))
+                            ->body(__('Please wait, searching for a suitable image.'))
+                            ->info()
+                            ->send();
 
-                    // Use a specific language for the search term for better results
-                    $searchTerm = $record->getTranslation('title', 'en');
+                        $searchTerm = $record->getTranslation('title', 'en');
 
-                    if (empty($searchTerm)) {
-                        Notification::make()->title(__('Search Term Missing'))->body(__('Please add a title to the post before searching for an image.'))->warning()->send();
-                        return;
+                        if (empty($searchTerm)) {
+                            Notification::make()->title(__('Search Term Missing'))->body(__('Please add a title to the post before searching for an image.'))->warning()->send();
+                            return;
+                        }
+
+                        // 1. Call your ImageSearchService
+                        $imageService = app(ImageSearchService::class);
+                        $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
+
+                        // --- THE FIX ---
+                        // 2. Explicitly update the record in the database first.
+                        $record->update(['image_id' => $media->id]);
+
+                        // 3. Refresh the entire form's data from the now-updated record.
+                        // This safely reloads all components and avoids the initialization error.
+                        $this->refreshFormData(['image_id']);
+
+                        Notification::make()
+                            ->title(__('Image Found Successfully!'))
+                            ->body(__('The new image has been found and set as the featured image.'))
+                            ->success()
+                            ->send();
+
+                    } catch (\Exception $e) {
+                         Notification::make()
+                            ->title(__('Image Search Failed'))
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                        report($e);
                     }
+                }),
 
-                    // 1. Call your new ImageSearchService
-                    $imageService = app(ImageSearchService::class);
-
-                    // 2. Use the findAndSaveImage method with the title as the search term
-                    $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
-
-                    // 3. Update the 'image_id' field in the form with the new image's ID
-                    $set('image_id', $media->id);
-
-                    Notification::make()
-                        ->title(__('Image Found Successfully!'))
-                        ->body(__('A new image has been found and set as the featured image.'))
-                        ->success()
-                        ->send();
-
-                } catch (\Exception $e) {
-                     Notification::make()
-                        ->title(__('Image Search Failed'))
-                        ->body($e->getMessage())
-                        ->danger()
-                        ->send();
-                    report($e);
-                }
-            }),
-
-                Actions\Action::make('auto_translate')
+            Actions\Action::make('auto_translate')
                 ->label(__('Auto-Translate All Fields'))
                 ->icon('heroicon-o-language')
                 ->color('gray')
