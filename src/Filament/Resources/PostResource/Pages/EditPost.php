@@ -173,7 +173,7 @@ class EditPost extends EditRecord
                         $tagIds = [];
                         if (is_array($seoData['keywords'])) {
                             foreach ($seoData['keywords'] as $tagName) {
-                                $tag = Tag::firstOrCreate(['name' => trim($tagName)]);
+                                $tag = Tag::firstOrCreate(['name' => trim($tagName),'slug' => trim($tagName)]);
                                 $tagIds[] = $tag->id;
                             }
                         }
