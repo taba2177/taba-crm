@@ -121,7 +121,7 @@ class EditPost extends EditRecord
                 ->label(__('Suggest SEO Content'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
-                ->action(function (Post $record, Set $set, Get $get) {
+                ->action(function (Post $record) { // Removed Set and Get to prevent lifecycle issues
                     try {
                         Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
 
@@ -149,29 +149,27 @@ class EditPost extends EditRecord
 
                         $responseJson = $translator->translate($prompt, 'en', 'en');
 
-                        // --- THE FIX: More robust JSON cleaning ---
-                        // The AI might wrap the JSON in markdown code fences. We need to extract just the JSON.
+                        // Robust JSON cleaning
                         if (Str::contains($responseJson, '```')) {
                             $responseJson = Str::between($responseJson, '```', '```');
-                            // The part between might be prefixed with 'json', so remove that too
                             $responseJson = ltrim($responseJson, 'json');
                         }
-                        // Also trim any whitespace just in case
                         $responseJson = trim($responseJson);
 
                         $seoData = json_decode($responseJson, true);
 
-                        // Improved error checking
                         if (json_last_error() !== JSON_ERROR_NONE || !$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
                             Log::error('Failed to decode AI SEO response.', ['raw_response' => $responseJson]);
                             throw new \Exception('The AI service returned an invalid or incomplete JSON format. Check the logs for details.');
                         }
 
-                        // Set the meta title and description fields
-                        $set('meta_title', $seoData['meta_title']);
-                        $set('meta_description', $seoData['meta_description']);
+                        // --- THE FIX ---
+                        // 1. Directly update the model's translations for the current locale
+                        $activeLocale = $this->activeLocale;
+                        $record->setTranslation('meta_title', $activeLocale, $seoData['meta_title']);
+                        $record->setTranslation('meta_description', $activeLocale, $seoData['meta_description']);
 
-                        // Handle the keywords/tags
+                        // 2. Handle the keywords/tags relationship
                         $tagIds = [];
                         if (is_array($seoData['keywords'])) {
                             foreach ($seoData['keywords'] as $tagName) {
@@ -180,10 +178,20 @@ class EditPost extends EditRecord
                             }
                         }
 
-                        // Merge new tags with any existing tags to prevent overwriting
-                        $existingTagIds = $get('tags') ?? [];
+                        // Merge new tags with existing ones
+                        $existingTagIds = $record->tags->pluck('id')->toArray() ?? [];
                         $allTagIds = array_unique(array_merge($existingTagIds, $tagIds));
-                        $set('tags', $allTagIds);
+                        $record->tags()->sync($allTagIds);
+
+                        // 3. Save the record to the database
+                        $record->save();
+
+                        // 4. Safely refresh the form data from the updated record
+                        $this->refreshFormData([
+                            'meta_title',
+                            'meta_description',
+                            'tags',
+                        ]);
 
                         Notification::make()
                             ->title(__('SEO Content Generated'))
