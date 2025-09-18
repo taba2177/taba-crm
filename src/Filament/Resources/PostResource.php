@@ -233,7 +233,14 @@ class PostResource extends Resource
                                         ]),
                                     Builder\Block::make('figure')
                                         ->schema([
-                                            CuratorPicker::make('image')->maxSize(20000)->translateLabel(),
+                                            CuratorPicker::make('image')
+                                            ->acceptedFileTypes([
+                                                'image/jpeg',
+                                                'image/png',
+                                                'image/webp',
+                                                'application/pdf', // <-- Add this for PDF files
+                                                'video/mp4',       // <-- Add this for MP4 video files
+                                            ])->maxSize(20000)->translateLabel(),
                                             Forms\Components\Fieldset::make('Details')
                                                 ->schema([
                                                     Forms\Components\TextInput::make('alt')->label('Alt Text')->placeholder('Enter alt text')->required()->maxLength(255)->translateLabel(),
@@ -248,11 +255,23 @@ class PostResource extends Resource
                         ->schema([
                             Forms\Components\Section::make(__('Featured Image'))
                                 ->schema([
-                                    CuratorPicker::make('image_id')->label('Featured Image')->maxSize(20000)->translateLabel(),
+                                    CuratorPicker::make('image_id')->label('Featured Image')->acceptedFileTypes([
+                                                'image/jpeg',
+                                                'image/png',
+                                                'image/webp',
+                                                'application/pdf', // <-- Add this for PDF files
+                                                'video/mp4',       // <-- Add this for MP4 video files
+                                            ])->maxSize(20000)->translateLabel(),
                                 ]),
                             Forms\Components\Section::make(__('Additional Images'))
                                 ->schema([
-                                    CuratorPicker::make('images')->maxSize(20000)->multiple()->translateLabel(),
+                                    CuratorPicker::make('images')->maxSize(20000)->acceptedFileTypes([
+                                                'image/jpeg',
+                                                'image/png',
+                                                'image/webp',
+                                                'application/pdf', // <-- Add this for PDF files
+                                                'video/mp4',       // <-- Add this for MP4 video files
+                                            ])->multiple()->translateLabel(),
                                 ]),
 
                             IconPicker::make('icon')->columns(3)->translateLabel()
