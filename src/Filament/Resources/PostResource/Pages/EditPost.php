@@ -6,7 +6,6 @@ use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
 use Filament\Forms\Get;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -115,7 +114,7 @@ class EditPost extends EditRecord
                         report($e);
                     }
                 }),
-                 Action::make('suggest_seo_keywords')
+            Actions\Action::make('suggest_seo_keywords')
                 ->label(__('Suggest SEO Keywords'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
@@ -155,7 +154,7 @@ class EditPost extends EditRecord
                         }
 
                         // Open a modal to display the keywords to the user
-                        Action::make('view_keywords')
+                        Actions\Action::make('view_keywords')
                             ->infolist([
                                 TextEntry::make('keywords')
                                     ->label('Suggested Keywords')
@@ -166,7 +165,7 @@ class EditPost extends EditRecord
                             ->modalSubmitAction(false) // Hide the default 'Submit' button
                             ->modalCancelActionLabel('Close')
                             ->modalActions([
-                                Action::make('copy')
+                                Actions\Action::make('copy')
                                     ->label('Copy to Clipboard')
                                     ->icon('heroicon-o-clipboard-document')
                                     ->color('success')
