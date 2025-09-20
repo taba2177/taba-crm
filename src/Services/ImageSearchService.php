@@ -159,7 +159,7 @@ class ImageSearchService
             'alt' => $altText ?: "{$filename} - Found via {$source}"
         ]);
 
-            Log::info('Image Search: Successfully saved media.', ['media_id' => $media->id, 'source' => $source]);
+        Log::info('Image Search: Successfully saved media.', ['media_id' => $media->id, 'source' => $source]);
         return $media;
     }
 }
