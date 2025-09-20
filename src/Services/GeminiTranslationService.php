@@ -27,7 +27,7 @@ class GeminiTranslationService
 
         // Define the model to use. You can make this configurable if needed.
         // Using 'gemini-2.0-flash' directly as per previous conversations.
-        $this->model = 'gemini-2.0-flash';
+        $this->model = 'gemini-2.0-flash-lite';
     }
 
     /**
