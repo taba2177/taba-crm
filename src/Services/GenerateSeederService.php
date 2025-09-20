@@ -71,9 +71,7 @@ Use the following patterns to model data for the `\$metadata` parameter of the `
 7.  **OUTPUT FORMAT:** The final output must be **ONLY the raw PHP code** for the seeder class. Do **NOT** include the opening `<?php` tag or any markdown formatting like `\`\`\`php`.
 
 **### GOLDEN EXAMPLE (Full Version - Your Source of Truth) ###**
-```php
-namespace Database\Seeders;
-
+```
 use Illuminate\Database\Seeder;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
