@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Taba\Crm\Services;
 
 use Gemini;
 use Illuminate\Support\Facades\Log;
