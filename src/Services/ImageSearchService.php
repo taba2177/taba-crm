@@ -82,7 +82,9 @@ class ImageSearchService // Renamed for clarity
 
         $response->throw();
         $imageUrl = data_get($response->json(), 'results.0.urls.regular');
-        dd($response->json());
+        // $response->json()
+                Log::error('Image Search: All services, including local placeholder, failed.', ['error' =>  $response->json()]);
+
         if ($imageUrl) {
             $imageResponse = Http::get($imageUrl);
             $imageResponse->throw();

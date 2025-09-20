@@ -5,6 +5,8 @@ namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Infolists\Components\TextEntry;
@@ -69,55 +71,83 @@ class EditPost extends EditRecord
                 ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
                 ->size('sm'),
 
-           Actions\Action::make('find_featured_image')
-                ->label(__('Find Featured Image'))
-                ->icon('heroicon-o-photo')
-                ->color('primary')
-                ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                ->modalDescription(__('This will search for a free, high-quality image online using the post\'s title.'))
-                ->requiresConfirmation()
-                ->action(function (Post $record) { // Removed $set as we will use refreshFormData
-                    try {
-                        Notification::make()
-                            ->title(__('Searching for Image...'))
-                            ->body(__('Please wait, searching for a suitable image.'))
-                            ->info()
-                            ->send();
+         Actions\Action::make('find_featured_image')
+    ->label(__('Find Featured Image'))
+    ->icon('heroicon-o-photo')
+    ->color('gray')
+    ->visible(fn () => auth()->user()->hasRole('super_admin'))
+    ->modalDescription(__('This will search for free images online using AI based on the post\'s title. You can then pick the best one.'))
+    ->modalWidth('4xl')
+    ->modalSubmitActionLabel(__('Set Selected Image'))
+    ->form(function (Post $record) {
+        $imageService = app(ImageSearchService::class);
+        $searchTerm = $record->getTranslation('title', 'en');
+        $images = !empty($searchTerm) ? $imageService->findImages($searchTerm) : collect();
 
-                        $searchTerm = $record->getTranslation('title', 'en');
+        // Convert the collection to the format needed by the Radio options
+        $options = $images->mapWithKeys(fn($image) => [$image['id'] => $image])->toArray();
 
-                        if (empty($searchTerm)) {
-                            Notification::make()->title(__('Search Term Missing'))->body(__('Please add a title to the post before searching for an image.'))->warning()->send();
-                            return;
-                        }
+        return [
+            // Store the full image data in a hidden field to access it in the action
+            Hidden::make('all_images')->default($images),
 
-                        // 1. Call your ImageSearchService
-                        $imageService = app(ImageSearchService::class);
-                        $media = $imageService->findAndSaveImage($searchTerm, $searchTerm);
+            Radio::make('selected_image_id')
+                ->label(__('Select an Image'))
+                ->required()
+                ->options($options)
+                ->view('filament.forms.components.image-radio'), // Use our custom view
+        ];
+    })
+    ->action(function (Post $record, array $data) {
+        if (empty($data['selected_image_id'])) {
+            Notification::make()->title(__('No Image Selected'))->warning()->send();
+            return;
+        }
 
-                        // --- THE FIX ---
-                        // 2. Explicitly update the record in the database first.
-                        $record->update(['image_id' => $media->id]);
+        try {
+            $imageService = app(ImageSearchService::class);
+            $allImages = collect($data['all_images']);
+            $selectedImage = $allImages->firstWhere('id', $data['selected_image_id']);
 
-                        // 3. Refresh the entire form's data from the now-updated record.
-                        // This safely reloads all components and avoids the initialization error.
-                        $this->refreshFormData(['image_id']);
+            if (!$selectedImage) {
+                throw new \Exception('Selected image data could not be found.');
+            }
 
-                        Notification::make()
-                            ->title(__('Image Found Successfully!'))
-                            ->body(__('The new image has been found and set as the featured image.'))
-                            ->success()
-                            ->send();
+            Notification::make()->title(__('Saving Image...'))->body(__('Please wait...'))->info()->send();
 
-                    } catch (\Exception $e) {
-                         Notification::make()
-                            ->title(__('Image Search Failed'))
-                            ->body($e->getMessage())
-                            ->danger()
-                            ->send();
-                        report($e);
-                    }
-                }),
+            // 1. Save the selected image
+            $media = $imageService->saveImageFromUrl(
+                imageUrl: $selectedImage['url'],
+                filename: $record->getTranslation('title', 'en'),
+                altText: $selectedImage['alt'],
+                source: "Unsplash (via AI)"
+            );
+
+            // 2. Update the record and refresh the form
+            $record->update(['image_id' => $media->id]);
+            $this->refreshFormData(['image_id']);
+
+            // 3. Queue the remaining images to be saved in the background
+            $remainingImages = $allImages->where('id', '!=', $data['selected_image_id']);
+            if ($remainingImages->isNotEmpty()) {
+                $imageService->saveRemainingImagesInBackground($remainingImages, $record->getTranslation('title', 'en'));
+            }
+
+            Notification::make()
+                ->title(__('Image Set Successfully!'))
+                ->body(__('The selected image is now the featured image. Other suggestions are being saved to your media library.'))
+                ->success()
+                ->send();
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title(__('Image Search Failed'))
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+            report($e);
+        }
+    }),
             Actions\Action::make('suggest_seo_content')
                 ->label(__('Suggest SEO Content'))
                 ->icon('heroicon-o-key')
