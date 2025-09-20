@@ -80,7 +80,7 @@ use Taba\Crm\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Taba\Crm\Models\Tag;
 
-class NewSiteSeeder extends Seeder
+class AISiteSeeder extends Seeder
 {
     public function run(): void
     {
