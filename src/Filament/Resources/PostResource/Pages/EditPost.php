@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\Tag;
 use Taba\Crm\Services\ImageSearchService;
+use Taba\Crm\Services\SeoSuggestionService as ServicesSeoSuggestionService;
 
 class EditPost extends EditRecord
 {
@@ -149,7 +150,7 @@ class EditPost extends EditRecord
                     ->icon('heroicon-o-key')
                     ->color('gray')
                     ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                    ->action(function (Post $record, SeoSuggestionService $seoService) { // <-- Inject the service
+                    ->action(function (Post $record, ServicesSeoSuggestionService $seoService) { // <-- Inject the service
                         try {
                             Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
 
