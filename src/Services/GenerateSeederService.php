@@ -48,34 +48,6 @@ You are a senior Laravel developer specializing in data architecture and content
 
 Use the following patterns to model data for the `\$metadata` parameter of the `createPost` helper method.
 
-* **For Statistics / Fun Facts (Numbers + Text):**
-    ```php
-    ['fun_facts' => [
-        ['number' => 100, 'text' => ['en' => '', 'ar' => 'سنوات من <br />الخبرة']],
-        ['number' => '100+', 'text' => ['en' => '', 'ar' => 'مشروع <br />مكتمل']],
-    ]]
-    ```
-* **For Social Media Links (Icon + URL):**
-    ```php
-    ['social_links' => [
-        ['icon' => 'fa-brands fa-twitter', 'url' => '#'],
-        ['icon' => 'fa-brands fa-linkedin-in', 'url' => '#'],
-    ]]
-    ```
-* **For A List of Features/Items (Simple List):**
-    ```php
-    ['features' => [
-        ['feature' => ['en' => '', 'ar' => 'القيادة والاحتراف']],
-        ['feature' => ['en' => '', 'ar' => 'بيئة تنظيمية شديدة']],
-    ]]
-    ```
-* **For Buttons (Text + URL):**
-    ```php
-    ['buttons' => [
-        ['text' => ['en' => '', 'ar' => 'اكتشف المزيد'], 'url' => '/about-us'],
-        ['text' => ['en' => '', 'ar' => 'تواصل معنا'], 'url' => '/contact-us', 'style' => 'primary'],
-    ]]
-    ```
 * **For Key-Value Information (e.g., Contact Details):**
     ```php
     ['contact_details' => [
@@ -116,19 +88,19 @@ class NewSiteSeeder extends Seeder
         // 1. Create Categories with Descriptions
         \$categories = [
             [
-                'name' => ['en' => 'Homepage', 'ar' => 'الصفحة الرئيسية'],
+                'name' => ['en' => '', 'ar' => 'الصفحة الرئيسية'],
                 'slug' => 'homepage',
-                'subtitle' => ['en' => 'Global Digital Marketing', 'ar' => 'التسويق الالكتروني العالمي'],
-                'description' => ['en' => 'The main landing page of our website, featuring the latest updates and highlights.', 'ar' => 'الصفحة الرئيسية لموقعنا، تعرض آخر التحديثات وأبرز النقاط.'],
+                'subtitle' => ['en' => '', 'ar' => 'التسويق الالكتروني العالمي'],
+                'description' => ['en' => '', 'ar' => 'الصفحة الرئيسية لموقعنا، تعرض آخر التحديثات وأبرز النقاط.'],
                 'order' => 1,
                 'register_in_header' => true,
                 'section_component' => 'hero'
             ],
             [
-                'name' => ['en' => 'About Us', 'ar' => 'من نحن'],
+                'name' => ['en' => '', 'ar' => 'من نحن'],
                 'slug' => 'about-us',
-                'subtitle' => ['en' => 'Learn More About Us', 'ar' => 'تعرف على المزيد عنا'],
-                'description' => ['en' => 'Learn about our story, our team, and the values that drive us.', 'ar' => 'تعرف على قصتنا وفريقنا والقيم التي تحركنا.'],
+                'subtitle' => ['en' => '', 'ar' => 'تعرف على المزيد عنا'],
+                'description' => ['en' => '', 'ar' => 'تعرف على قصتنا وفريقنا والقيم التي تحركنا.'],
                 'order' => 2,
                 'register_in_header' => true,
                 'section_component' => 'about-us'
@@ -137,7 +109,7 @@ class NewSiteSeeder extends Seeder
                 'name' => ['en' => 'Our Services', 'ar' => 'خدماتنا'],
                 'slug' => 'our-services',
                 'subtitle' => ['en' => 'What We Do', 'ar' => 'ماذا نقدم'],
-                'description' => ['en' => 'A comprehensive overview of the professional services we offer.', 'ar' => 'نظرة شاملة على الخدمات الاحترافية التي نقدمها.'],
+                'description' => ['en' => '', 'ar' => 'نظرة شاملة على الخدمات الاحترافية التي نقدمها.'],
                 'order' => 5,
                 'register_in_header' => true,
                 'section_component' => 'services-list'
