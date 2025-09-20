@@ -15,13 +15,28 @@ return [
     ],
 
     'tenant_model' => null,
+    'default_role_name' => 'admin', // اكتب اسم الدور الذي أنشأته
 
-    'auth_provider_model' => 'Taba\\Crm\\Models\\User',
+    'User' => [
+        'register' => true, // تأكد من أن هذه القيمة true
+        'register_role' => true, // غيّر هذه القيمة إلى true
+    ],
 
+    'auth_provider_model' => [
+        'fqcn' => 'Taba\\Crm\\Models\\User',
+    ],
 
     'super_admin' => [
         'enabled' => true,
         'name' => 'super_admin',
+        'define_via_gate' => false,
+        'intercept_gate' => 'before', // after
+    ],
+
+        'admin' => [
+        'enabled' => true,
+        'name' => 'admin',
+        'name' => 'panel_admin',
         'define_via_gate' => false,
         'intercept_gate' => 'before', // after
     ],

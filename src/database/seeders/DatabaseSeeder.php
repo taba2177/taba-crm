@@ -2,14 +2,8 @@
 
 namespace Database\Seeders;
 
-use Taba\Crm\Models\Post;
-use Taba\Crm\Models\PostCategory;
-use Taba\Crm\Models\User;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-
+use Spatie\SchemaOrg\Airline;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,31 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('admin'),
-        ]);
 
-        // DB::table('post_categories')->insert([
-        //     ['name' => 'الخدمات', 'slug' => 'services'],
-        //     ['name' => 'اعمالنا', 'slug' => 'our_works'],
-        //     ['name' => 'المدونة', 'slug' => 'blogs'],
-        //     ['name' => 'الأسئلة الشائعة', 'slug' => 'faqs'],
-        // ]);
+        $this->call(ShieldSeeder::class);
 
-        // Post::factory()
-        //     ->count(10)
-        //     ->create();
+        $this->call(UserSeeder::class);
 
-        $this->call(NewSiteSeeder::class);
+        $this->call(AISiteSeeder::class);
 
-        $this->call(HomepageSectionSeeder::class);
-
-        Notification::make()
-            ->title('Welcome to Filament')
-            ->body('You are ready to start building your application.')
-            ->success()
-            ->sendToDatabase(User::first());
     }
 }
