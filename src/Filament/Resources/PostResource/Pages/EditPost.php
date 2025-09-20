@@ -2,6 +2,7 @@
 
 namespace Taba\Crm\Filament\Resources\PostResource\Pages;
 
+use App\Services\SeoSuggestionService;
 use Taba\Crm\Concerns\HasPreview;
 use Taba\Crm\Filament\Resources\PostResource;
 use Filament\Actions;
@@ -72,162 +73,136 @@ class EditPost extends EditRecord
                 ->size('sm'),
 
          Actions\Action::make('find_featured_image')
-    ->label(__('Find Featured Image'))
-    ->icon('heroicon-o-photo')
-    ->color('gray')
-    ->visible(fn () => auth()->user()->hasRole('super_admin'))
-    ->modalDescription(__('This will search for free images online using AI based on the post\'s title. You can then pick the best one.'))
-    ->modalWidth('4xl')
-    ->modalSubmitActionLabel(__('Set Selected Image'))
-    ->form(function (Post $record) {
-        $imageService = app(ImageSearchService::class);
-        $searchTerm = $record->getTranslation('title', 'en');
-        $images = !empty($searchTerm) ? $imageService->findImages($searchTerm) : collect();
+            ->label(__('Find Featured Image'))
+            ->icon('heroicon-o-photo')
+            ->color('gray')
+            ->visible(fn () => auth()->user()->hasRole('super_admin'))
+            ->modalDescription(__('This will search for free images online using AI based on the post\'s title. You can then pick the best one.'))
+            ->modalWidth('4xl')
+            ->modalSubmitActionLabel(__('Set Selected Image'))
+            ->form(function (Post $record) {
+                $imageService = app(ImageSearchService::class);
+                $searchTerm = $record->getTranslation('title', 'en');
+                $images = !empty($searchTerm) ? $imageService->findImages($searchTerm) : collect();
 
-        // Convert the collection to the format needed by the Radio options
-        $options = $images->mapWithKeys(fn($image) => [$image['id'] => $image])->toArray();
+                // Convert the collection to the format needed by the Radio options
+                $options = $images->mapWithKeys(fn($image) => [$image['id'] => $image])->toArray();
 
-        return [
-            // Store the full image data in a hidden field to access it in the action
-            Hidden::make('all_images')->default($images),
+                return [
+                    // Store the full image data in a hidden field to access it in the action
+                    Hidden::make('all_images')->default($images),
 
-            Radio::make('selected_image_id')
-                ->label(__('Select an Image'))
-                ->required()
-                ->options($options)
-                ->view('filament.forms.components.image-radio'), // Use our custom view
-        ];
-    })
-    ->action(function (Post $record, array $data) {
-        if (empty($data['selected_image_id'])) {
-            Notification::make()->title(__('No Image Selected'))->warning()->send();
-            return;
-        }
+                    Radio::make('selected_image_id')
+                        ->label(__('Select an Image'))
+                        ->required()
+                        ->options($options)
+                        ->view('filament.forms.components.image-radio'), // Use our custom view
+                ];
+            })
+            ->action(function (Post $record, array $data) {
+                if (empty($data['selected_image_id'])) {
+                    Notification::make()->title(__('No Image Selected'))->warning()->send();
+                    return;
+                }
 
-        try {
-            $imageService = app(ImageSearchService::class);
-            $allImages = collect($data['all_images']);
-            $selectedImage = $allImages->firstWhere('id', $data['selected_image_id']);
+                try {
+                    $imageService = app(ImageSearchService::class);
+                    $allImages = collect($data['all_images']);
+                    $selectedImage = $allImages->firstWhere('id', $data['selected_image_id']);
 
-            if (!$selectedImage) {
-                throw new \Exception('Selected image data could not be found.');
-            }
+                    if (!$selectedImage) {
+                        throw new \Exception('Selected image data could not be found.');
+                    }
 
-            Notification::make()->title(__('Saving Image...'))->body(__('Please wait...'))->info()->send();
+                    Notification::make()->title(__('Saving Image...'))->body(__('Please wait...'))->info()->send();
 
-            // 1. Save the selected image
-            $media = $imageService->saveImageFromUrl(
-                imageUrl: $selectedImage['url'],
-                filename: $record->getTranslation('title', 'en'),
-                altText: $selectedImage['alt'],
-                source: "Unsplash (via AI)"
-            );
+                    // 1. Save the selected image
+                    $media = $imageService->saveImageFromUrl(
+                        imageUrl: $selectedImage['url'],
+                        filename: $record->getTranslation('title', 'en'),
+                        altText: $selectedImage['alt'],
+                        source: "Unsplash (via AI)"
+                    );
 
-            // 2. Update the record and refresh the form
-            $record->update(['image_id' => $media->id]);
-            $this->refreshFormData(['image_id']);
+                    // 2. Update the record and refresh the form
+                    $record->update(['image_id' => $media->id]);
+                    $this->refreshFormData(['image_id']);
 
-            // 3. Queue the remaining images to be saved in the background
-            $remainingImages = $allImages->where('id', '!=', $data['selected_image_id']);
-            if ($remainingImages->isNotEmpty()) {
-                $imageService->saveRemainingImagesInBackground($remainingImages, $record->getTranslation('title', 'en'));
-            }
+                    // 3. Queue the remaining images to be saved in the background
+                    $remainingImages = $allImages->where('id', '!=', $data['selected_image_id']);
+                    if ($remainingImages->isNotEmpty()) {
+                        $imageService->saveRemainingImagesInBackground($remainingImages, $record->getTranslation('title', 'en'));
+                    }
 
-            Notification::make()
-                ->title(__('Image Set Successfully!'))
-                ->body(__('The selected image is now the featured image. Other suggestions are being saved to your media library.'))
-                ->success()
-                ->send();
+                    Notification::make()
+                        ->title(__('Image Set Successfully!'))
+                        ->body(__('The selected image is now the featured image. Other suggestions are being saved to your media library.'))
+                        ->success()
+                        ->send();
 
-        } catch (\Exception $e) {
-            Notification::make()
-                ->title(__('Image Search Failed'))
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
-            report($e);
-        }
-    }),
+                } catch (\Exception $e) {
+                    Notification::make()
+                        ->title(__('Image Search Failed'))
+                        ->body($e->getMessage())
+                        ->danger()
+                        ->send();
+                    report($e);
+                }
+            }),
             Actions\Action::make('suggest_seo_content')
                 ->label(__('Suggest SEO Content'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
                 ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                ->action(function (Post $record) { // Removed Set and Get to prevent lifecycle issues
+                ->action(function (Post $record, SeoSuggestionService $seoService) { // <-- Inject the service
                     try {
                         Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
 
                         $title = $record->getTranslation('title', 'en');
-                        $content = $record->getTranslation('content', 'en');
+                        $contentBlocks = $record->getTranslation('content', 'en');
+                        $contentSummary = '';
+
+                        if (is_array($contentBlocks)) {
+                            $firstMarkdown = Arr::first($contentBlocks, fn ($block) => $block['type'] === 'markdown');
+                            if ($firstMarkdown) {
+                                $contentSummary = $firstMarkdown['data']['content'];
+                            }
+                        }
 
                         if (empty($title)) {
                             Notification::make()->title(__('Content Missing'))->body(__('Please add a title before suggesting content.'))->warning()->send();
                             return;
                         }
 
-                        $contentSummary = '';
-                        if (is_array($content)) {
-                            $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
-                            if ($firstMarkdown) {
-                                $contentSummary = Str::limit($firstMarkdown['data']['content'], 300);
-                            }
+                        // --- USE THE NEW SERVICE ---
+                        $seoData = $seoService->suggest($title, $contentSummary);
+
+                        if (!$seoData) {
+                            throw new \Exception('The AI service returned an invalid response. Check the logs for details.');
                         }
+                        // --- END OF SERVICE CALL ---
 
-                        $textToAnalyze = "Title: {$title}\n\nContent: {$contentSummary}";
-
-                        $translator = app(GeminiTranslationService::class);
-
-                        $prompt = "Based on the following text, generate an SEO-optimized meta title, meta description, and a list of relevant keywords. Return the result as a single, valid JSON object with the keys: \"meta_title\", \"meta_description\", and \"keywords\". \"meta_title\" should be under 60 characters. \"meta_description\" should be under 160 characters. \"keywords\" should be an array of 5-7 relevant string keywords. Provide ONLY the JSON object.\n\n---\n\n{$textToAnalyze}";
-
-                        $responseJson = $translator->translate($prompt, 'en', 'en');
-
-                        // Robust JSON cleaning
-                        if (Str::contains($responseJson, '```')) {
-                            $responseJson = Str::between($responseJson, '```', '```');
-                            $responseJson = ltrim($responseJson, 'json');
-                        }
-                        $responseJson = trim($responseJson);
-
-                        $seoData = json_decode($responseJson, true);
-
-                        if (json_last_error() !== JSON_ERROR_NONE || !$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
-                            Log::error('Failed to decode AI SEO response.', ['raw_response' => $responseJson]);
-                            throw new \Exception('The AI service returned an invalid or incomplete JSON format. Check the logs for details.');
-                        }
-
-                        // --- THE FIX ---
-                        // 1. Directly update the model's translations for the current locale
                         $activeLocale = $this->activeLocale;
                         $record->setTranslation('meta_title', $activeLocale, $seoData['meta_title']);
                         $record->setTranslation('meta_description', $activeLocale, $seoData['meta_description']);
 
-                        // 2. Handle the keywords/tags relationship
                         $tagIds = [];
-                        if (is_array($seoData['keywords'])) {
-                            foreach ($seoData['keywords'] as $tagName) {
-                                $tag = Tag::firstOrCreate(['name' => trim($tagName),'slug' => trim($tagName)]);
-                                $tagIds[] = $tag->id;
-                            }
+                        foreach ($seoData['keywords'] as $tagName) {
+                            if (empty($tagName)) continue;
+                            $tag = Tag::firstOrCreate(['name' => trim($tagName)], ['slug' => Str::slug(trim($tagName))]);
+                            $tagIds[] = $tag->id;
                         }
 
-                        // Merge new tags with existing ones
-                        $existingTagIds = $record->tags->pluck('id')->toArray() ?? [];
+                        $existingTagIds = $record->tags->pluck('id')->toArray();
                         $allTagIds = array_unique(array_merge($existingTagIds, $tagIds));
                         $record->tags()->sync($allTagIds);
-
-                        // 3. Save the record to the database
                         $record->save();
 
-                        // 4. Safely refresh the form data from the updated record
-                        $this->refreshFormData([
-                            'meta_title',
-                            'meta_description',
-                            'tags',
-                        ]);
+                        $this->refreshFormData(['meta_title', 'meta_description', 'tags']);
 
                         Notification::make()
                             ->title(__('SEO Content Generated'))
-                            ->body(__('The Meta Title, Meta Description, and Tags fields have been populated.'))
+                            ->body(__('The SEO fields have been populated successfully.'))
                             ->success()
                             ->send();
 
@@ -240,6 +215,98 @@ class EditPost extends EditRecord
                         report($e);
                     }
                 }),
+            // Actions\Action::make('suggest_seo_content')
+            //     ->label(__('Suggest SEO Content'))
+            //     ->icon('heroicon-o-key')
+            //     ->color('gray')
+            //     ->visible(fn () => auth()->user()->hasRole('super_admin'))
+            //     ->action(function (Post $record) { // Removed Set and Get to prevent lifecycle issues
+            //         try {
+            //             Notification::make()->title(__('Generating SEO Content...'))->body(__('The AI is analyzing your post.'))->info()->send();
+
+            //             $title = $record->getTranslation('title', 'en');
+            //             $content = $record->getTranslation('content', 'en');
+
+            //             if (empty($title)) {
+            //                 Notification::make()->title(__('Content Missing'))->body(__('Please add a title before suggesting content.'))->warning()->send();
+            //                 return;
+            //             }
+
+            //             $contentSummary = '';
+            //             if (is_array($content)) {
+            //                 $firstMarkdown = Arr::first($content, fn ($block) => $block['type'] === 'markdown');
+            //                 if ($firstMarkdown) {
+            //                     $contentSummary = Str::limit($firstMarkdown['data']['content'], 300);
+            //                 }
+            //             }
+
+            //             $textToAnalyze = "Title: {$title}\n\nContent: {$contentSummary}";
+
+            //             $translator = app(GeminiTranslationService::class);
+
+            //             $prompt = "Based on the following text, generate an SEO-optimized meta title, meta description, and a list of relevant keywords. Return the result as a single, valid JSON object with the keys: \"meta_title\", \"meta_description\", and \"keywords\". \"meta_title\" should be under 60 characters. \"meta_description\" should be under 160 characters. \"keywords\" should be an array of 5-7 relevant string keywords. Provide ONLY the JSON object.\n\n---\n\n{$textToAnalyze}";
+
+            //             $responseJson = $translator->translate($prompt, 'en', 'en');
+
+            //             // Robust JSON cleaning
+            //             if (Str::contains($responseJson, '```')) {
+            //                 $responseJson = Str::between($responseJson, '```', '```');
+            //                 $responseJson = ltrim($responseJson, 'json');
+            //             }
+            //             $responseJson = trim($responseJson);
+
+            //             $seoData = json_decode($responseJson, true);
+
+            //             if (json_last_error() !== JSON_ERROR_NONE || !$seoData || !isset($seoData['meta_title']) || !isset($seoData['meta_description']) || !isset($seoData['keywords'])) {
+            //                 Log::error('Failed to decode AI SEO response.', ['raw_response' => $responseJson]);
+            //                 throw new \Exception('The AI service returned an invalid or incomplete JSON format. Check the logs for details.');
+            //             }
+
+            //             // --- THE FIX ---
+            //             // 1. Directly update the model's translations for the current locale
+            //             $activeLocale = $this->activeLocale;
+            //             $record->setTranslation('meta_title', $activeLocale, $seoData['meta_title']);
+            //             $record->setTranslation('meta_description', $activeLocale, $seoData['meta_description']);
+
+            //             // 2. Handle the keywords/tags relationship
+            //             $tagIds = [];
+            //             if (is_array($seoData['keywords'])) {
+            //                 foreach ($seoData['keywords'] as $tagName) {
+            //                     $tag = Tag::firstOrCreate(['name' => trim($tagName),'slug' => trim($tagName)]);
+            //                     $tagIds[] = $tag->id;
+            //                 }
+            //             }
+
+            //             // Merge new tags with existing ones
+            //             $existingTagIds = $record->tags->pluck('id')->toArray() ?? [];
+            //             $allTagIds = array_unique(array_merge($existingTagIds, $tagIds));
+            //             $record->tags()->sync($allTagIds);
+
+            //             // 3. Save the record to the database
+            //             $record->save();
+
+            //             // 4. Safely refresh the form data from the updated record
+            //             $this->refreshFormData([
+            //                 'meta_title',
+            //                 'meta_description',
+            //                 'tags',
+            //             ]);
+
+            //             Notification::make()
+            //                 ->title(__('SEO Content Generated'))
+            //                 ->body(__('The Meta Title, Meta Description, and Tags fields have been populated.'))
+            //                 ->success()
+            //                 ->send();
+
+            //         } catch (\Exception $e) {
+            //             Notification::make()
+            //                 ->title(__('Failed to Generate SEO Content'))
+            //                 ->body($e->getMessage())
+            //                 ->danger()
+            //                 ->send();
+            //             report($e);
+            //         }
+            //     }),
 
             Actions\Action::make('auto_translate')
                 ->label(__('Auto-Translate All Fields'))
@@ -341,9 +408,5 @@ class EditPost extends EditRecord
                     }
                 }),
         ];
-
-
     }
-
-
 }
