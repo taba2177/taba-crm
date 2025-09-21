@@ -319,9 +319,11 @@ class PostResource extends Resource
                                             return $tag->id;
                                         }),
                                 ]),
-                            Forms\Components\Section::make(__('Metadata'))
+                            Forms\Components\Section::make('metadata')
+                                ->icon('heroicon-o-adjustments-horizontal')
+                                ->lable(__('Custom Fields'))
                                 ->schema([
-                                    Forms\Components\KeyValue::make(__('Metadata'))
+                                    Forms\Components\KeyValue::make('metadata')
                                         ->keyLabel(__('Field Name'))
                                         ->valueLabel(__('Field Value'))
                                         ->translateLabel()
