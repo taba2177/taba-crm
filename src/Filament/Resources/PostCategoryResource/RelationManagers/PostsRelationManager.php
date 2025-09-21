@@ -179,6 +179,7 @@ use Translatable;
                                     CuratorPicker::make('images')->maxSize(20000)->acceptedFileTypes([
                                                 'image/jpeg',
                                                 'image/png',
+                                                'image/SVG',
                                                 'image/webp',
                                                 'application/pdf', // <-- Add this for PDF files
                                                 'video/mp4',       // <-- Add this for MP4 video files
