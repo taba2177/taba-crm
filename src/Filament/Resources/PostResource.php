@@ -321,7 +321,6 @@ class PostResource extends Resource
                                 ]),
                             Forms\Components\Section::make('metadata')
                                 ->icon('heroicon-o-adjustments-horizontal')
-                                ->lable(__('Custom Fields'))
                                 ->schema([
                                     Forms\Components\KeyValue::make('metadata')
                                         ->keyLabel(__('Field Name'))
