@@ -170,6 +170,7 @@ use Translatable;
                                                 'image/jpeg',
                                                 'image/png',
                                                 'image/webp',
+                                                'image/SVG',
                                                 'application/pdf', // <-- Add this for PDF files
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->label('Featured Image')->translateLabel(),
