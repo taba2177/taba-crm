@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Filament\Pages;
 
-use Taba\Crm\Services\GenerateSeederService;
+use Taba\Crm\Services\GenerateSeederService2;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -72,7 +72,7 @@ class GenerateSiteFromAI extends Page implements HasForms
     public function generate(): void
     {
         $data = $this->form->getState();
-        $service = app(GenerateSeederService::class);
+        $service = app(GenerateSeederService2::class);
         $this->seederOutput = null; // Clear previous output on new generation
 
         $seederCode = $service->generate($data['content']);
