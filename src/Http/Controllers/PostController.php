@@ -13,7 +13,7 @@ class PostController extends Controller
         // get all categories from cache
         $categories = PostCategory::RegisterInHeader();
         $category = PostCategory::where('slug', $categorySlug)->firstOrFail();
-        $posts = Post::published()->with('postCategory')->where('post_category_id', $category->id)->latest()->get();
+        $posts = Post::published()->with('postCategory')->where('post_category_id', $category->id)->orderBy('order')->get();
 
         return view('posts.index', [
             'category' => $category,
@@ -25,7 +25,7 @@ class PostController extends Controller
 
     public function category(PostCategory $category)
     {
-        $posts = $category->posts()->published()->latest()->get();
+        $posts = $category->posts()->published()->orderBy('order')->get();
 
         return view('posts.category', [
             'category' => $category,
@@ -78,7 +78,7 @@ class PostController extends Controller
             ->forCategory($post->postCategory->slug)
             ->where('id', '!=', $post->id)
             ->latest()
-            ->take(3)
+            ->take(5)
             ->get();
     }
 }
