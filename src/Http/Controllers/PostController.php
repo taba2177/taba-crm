@@ -50,7 +50,6 @@ class PostController extends Controller
         $post = Post::where('slug', $post)->firstOrFail();
 
         abort_unless($post->post_category_id === $category->id, 404);
-        abort_unless($post ?? null, 404);
         abort_unless($post->is_published || auth()->check(), 404);
 
         // $view = "livewire.post.{$category->order}.show";
@@ -96,7 +95,7 @@ class PostController extends Controller
                         ->name($this->category->name) // Use post title for WebPage name
                         ->description($this->category->description)
                         ->url($this->categorySlug) // Use the post's direct URL
-                        ->author(Schema::organization()->name(__(config('app.name'))))
+                        ->author(Schema::organization()->name(config('app.name')))
                     );
                     return;
         }
@@ -158,7 +157,7 @@ class PostController extends Controller
         public function title(): string
         {
             $baseTitle = $this->post->title;
-            $fullSuffix = ' | '.$this->post->postCategory->name. ' ' .config('app.name');
+            $fullSuffix = ' | '.$this->post->postCategory->name;
             $baseLength = mb_strlen($baseTitle, 'UTF-8');
             $fullSuffixLength = mb_strlen($fullSuffix, 'UTF-8');
 
