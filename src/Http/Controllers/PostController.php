@@ -50,6 +50,7 @@ class PostController extends Controller
         $post = Post::where('slug', $post)->firstOrFail();
 
         abort_unless($post->post_category_id === $category->id, 404);
+        abort_unless($post ?? null, 404);
         abort_unless($post->is_published || auth()->check(), 404);
 
         // $view = "livewire.post.{$category->order}.show";
