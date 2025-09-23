@@ -17,10 +17,6 @@ use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 
 
-
-
-
-
 Route::middleware('web')->group(function () {
 
 Route::get('/preview/post/{post}', [PreviewController::class, 'post'])->name('preview.post');
@@ -37,24 +33,25 @@ Route::get('/lang/change/{lang}', function ($lang) {
     return redirect()->back();
 })->name('lang.switch');
 
-Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
-
 Route::get('/{slug}', function ($slug) {
-    // Check if the slug matches a Page
-    if (Page::where('slug', $slug)->exists()) {
-        return app(PageController::class)->show($slug);
-    }
-    // Check if the slug matches a Post Category
-    elseif (PostCategory::where('slug', $slug)->exists()) {
+
+    if (PostCategory::where('slug', $slug)->exists()) {
         return app(PostController::class)->index($slug);
+    }else{
+         return abort(404);
     }
-    // If neither, return 404
-    // abort(404);
 })->name('dynamic.route');
 
 // Route for individual posts (e.g., /category-slug/post-slug)
-Route::get('/{category}/{post:slug}', [PostController::class, 'show'])
-    ->name('posts.show');
+Route::get('/{category}/{post:slug}',function ($category,$post) {
+    // dd($post);
+    if (Post::where('slug', $post)->firstOrFail()->homepage_section_component) {
+        return app(PostController::class)->show($category,$post);
+    }else{
+         return abort(404);
+    } // [PostController::class, 'show'])
+
+})->name('posts.show');
 
 });
 

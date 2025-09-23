@@ -341,6 +341,19 @@ class PostResource extends Resource
                         Forms\Components\Select::make('homepage_section_component')
                             ->label('Select Homepage Section')
                             ->options(self::getHomepageComponentOptions())
+                            ->default(function (?Post $record): ?string {
+                                if (!$record || !$record->post_category_id) {
+                                    return null;
+                                }
+                                $firstPostInCategory = Post::where('post_category_id', $record->post_category_id)
+                                                        ->orderBy('order', 'asc') // or 'published_at' or 'id'
+                                                        ->first();
+                                if ($firstPostInCategory && $firstPostInCategory->id !== $record->id) {
+                                    return $firstPostInCategory->homepage_section_component;
+                                }
+
+                                return null;
+                            })
                             ->reactive(),
 
                 ]),

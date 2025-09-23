@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Filament\Notifications\Notification;
 use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
+use Illuminate\Support\Facades\File;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Resources\RelationManagers\Concerns\Translatable;
@@ -236,7 +237,50 @@ use Translatable;
                 ])
                 ->skippable()
                 ->columnSpanFull(),
+
+                Forms\Components\Section::make()
+                    ->columnSpan(1)
+                    ->schema([
+                        Forms\Components\Select::make('homepage_section_component')
+                            ->label('Select Homepage Section')
+                            ->options(self::getHomepageComponentOptions())
+                            ->default(function (?Post $record): ?string {
+                                if (!$record || !$record->post_category_id) {
+                                    return null;
+                                }
+                                $firstPostInCategory = Post::where('post_category_id', $record->post_category_id)
+                                                        ->orderBy('order', 'asc') // or 'published_at' or 'id'
+                                                        ->first();
+                                if ($firstPostInCategory && $firstPostInCategory->id !== $record->id) {
+                                    return $firstPostInCategory->homepage_section_component;
+                                }
+
+                                return null;
+                            })
+                            ->reactive(),
+
+                ]),
             ]);
+    }
+
+    protected static function getHomepageComponentOptions(): array
+    {
+                // // Get the base path for the 'crm' view namespace
+        // $crmViewPath = \Illuminate\Support\Facades\View::getFinder()->getHints()['crm'][0];        // // Now, construct the correct full paths by appending your sbdirectories
+        // $componentPath = $crmViewPath . '/livewire/post/templates';
+        // $componentSection = $crmViewPath . '/components/homepage';
+        $componentPath = resource_path('views/livewire/post/templates');
+        $componentSection = resource_path('views/components/homepage');
+        $files = File::files($componentPath, $componentSection);
+        $files = array_merge($files, File::files($componentSection));
+        $options = [];
+
+        foreach ($files as $file) {
+            $name = Str::before($file->getFilename(), '.blade.php');
+            $options[$name] = Str::title(str_replace('-', ' ', $name));
+        }
+
+        return $options;
     }
 
     public function table(Table $table): Table
