@@ -8,6 +8,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
 use Taba\Crm\Models\Product;
 use Spatie\SchemaOrg\Schema;
+use Illuminate\Support\Str;
 
 class Show extends Component
 {
@@ -106,22 +107,48 @@ class Show extends Component
     //         ]
     //     );
     // }
+  protected function setSeoMetadata()
+    {
 
-    public function render()
+        if(request()->routeIs('*service*'))
+        $Schema = Schema::webPage()
+                    ->name(config('app.name'))
+                    ->description($this->post->meta_description ?: Str::limit(strip_tags($this->post->content), 155))
+                    ->url(route('services'))
+                    ->author(Schema::organization()->name(config('app.name')));
+
+            elseif(request()->routeIs('*blog*') || request()->routeIs('*article*'))
+                    $Schema = Schema::article()
+                    ->headline($this->post->title)
+                    ->articleBody($this->post->excerpt)
+                    ->image($this->post->image?->url)
+                    ->datePublished($this->post->published_at)
+                    ->dateModified($this->post->updated_at)
+                    ->author(Schema::person()->name($this->post->user->name));
+            else
+            $Schema = Schema::service()
+                            ->name($this->post->title)
+                            ->description($this->post->meta_description ?: Str::limit(strip_tags($this->post->content), 250))
+                            ->url($this->post->url)
+                            ->image($this->post->image?->url)
+                            ->provider(
+                                Schema::organization()->name(config('app.name'))
+                            )
+                            ->areaServed(
+                                Schema::place()->name('جدة')
+                            )
+                            ->category($this->post->postCategory->name);
+
+                seo()
+                    ->title($this->title())
+                    ->description($this->desc())
+                    ->canonical($this->post->url)
+                    ->addSchema($Schema);
+            }
+public function render()
 {
-    seo()
-        ->title($this->title())
-        ->description($this->desc())
-        ->canonical($this->post->url)
-        ->addSchema(
-            Schema::article()
-                ->headline($this->post->title)
-                ->articleBody($this->post->excerpt)
-                ->image($this->post->image?->url)
-                ->datePublished($this->post->published_at)
-                ->dateModified($this->post->updated_at)
-                ->author(Schema::person()->name($this->post->user->name))
-        );
+        $this->setSeoMetadata();
+
 
     if ($this->post->image) {
         seo()->image($this->post->image->url);
@@ -146,8 +173,7 @@ class Show extends Component
 public function title(): string
 {
     $baseTitle = $this->post->title;
-    $fullSuffix = ' | احدث الستائر والكنب والمجالس العربية';
-
+    $fullSuffix = ' | ';
     $baseLength = mb_strlen($baseTitle, 'UTF-8');
     $fullSuffixLength = mb_strlen($fullSuffix, 'UTF-8');
 
