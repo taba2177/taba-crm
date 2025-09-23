@@ -340,6 +340,7 @@ class PostResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('homepage_section_component')
                             ->label('Select Homepage Section')
+                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
                             ->options(self::getHomepageComponentOptions())
                             ->default(function (?Post $record): ?string {
                                 if (!$record || !$record->post_category_id) {
