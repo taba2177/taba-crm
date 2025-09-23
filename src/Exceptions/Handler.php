@@ -1,5 +1,5 @@
 <?php
-namespace App\Exceptions;
+namespace Taba\Crm\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
