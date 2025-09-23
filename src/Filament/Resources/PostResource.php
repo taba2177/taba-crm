@@ -349,6 +349,7 @@ class PostResource extends Resource
                                 $firstPostInCategory = Post::where('post_category_id', $record->post_category_id)
                                                         ->orderBy('order', 'asc') // or 'published_at' or 'id'
                                                         ->first();
+                                                        dd($firstPostInCategory);
                                 if ($firstPostInCategory && $firstPostInCategory->id !== $record->id) {
                                     return $firstPostInCategory->homepage_section_component;
                                 }
