@@ -207,6 +207,19 @@ class PostResource extends Resource
                             ]),
                             Forms\Components\Select::make('post_category_id')
                                 ->label(trans('category'))
+                                    ->reactive() // 1. This is the key
+                                    ->afterStateUpdated(function (callable $set, $state) { // 2. This runs after a category is chosen
+
+                                        // 3. We find the first post in the chosen category ($state is the category ID)
+                                        $firstPostInCategory = Post::where('post_category_id', $state)
+                                                                ->orderBy('order', 'asc')
+                                                                ->first();
+
+                                        // 4. If a post exists, we use $set to update the other field's value
+                                        if ($firstPostInCategory) {
+                                            $set('homepage_section_component', $firstPostInCategory->homepage_section_component);
+                                        }
+                                    })
                                 ->relationship('postCategory', 'name')
                                 ->createOptionForm([
                                     Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
