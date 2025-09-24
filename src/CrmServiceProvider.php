@@ -12,6 +12,8 @@ use Jeffgreco13\FilamentBreezy\FilamentBreezyServiceProvider;
 use Awcodes\Curator\CuratorServiceProvider;
 use Pboivin\FilamentPeek\FilamentPeekServiceProvider;
 use Taba\Crm\Commands\demoCommand;
+use Livewire\Livewire;
+use Taba\Crm\Livewire\Home;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,8 @@ class CrmServiceProvider extends ServiceProvider
         \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
             $switch->locales(['ar', 'en']); // also accepts a closure
         });
+        Livewire::component('home', Home::class);
+
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang',null);

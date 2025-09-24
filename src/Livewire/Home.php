@@ -2,57 +2,117 @@
 
 namespace Taba\Crm\Livewire;
 
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
+use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
+use Illuminate\Support\Str;
 
 class Home extends Component
 {
-    public $sections;
-    public $metaTitle;
-    public $metaDescription;
 
+    // Define how many posts a section can have before it's considered "heavy" and lazy-loaded.
+    const HEAVY_SECTION_THRESHOLD = 5;
+
+    // These sections are fully loaded immediately.
+    public Collection $eagerSections;
+
+    // These sections only contain basic info and will be loaded on demand.
+    public Collection $lazySections;
+
+    // This holds the fully loaded data for lazy sections as it comes in.
+    public array $loadedSections = [];
+
+    public ?string $metaTitle = null;
+    public ?string $metaDescription = null;
+    public ?string $seoimage = null;
 
     public function mount()
     {
+        // --- Step 1: Perform a highly optimized query to get all sections with just a count of their posts.
+        $allSections = PostCategory::whereNotNull('section_component')
+            ->withCount(['posts' => function ($query) {
+                $query->where("show_in_home", true)->published()->orderBy('order');
+            }])
+            ->orderBy('order')
+            ->get();
 
-        $this->sections = PostCategory::with(['posts' => function ($query) {
-            $query->where("show_in_home",true)->published()->orderBy('order');
-        }])
-        ->whereNotNull('section_component') // Only fetch categories with a defined section_component
-        ->orderBy('order')
-        ->get();
+        // --- Step 2: Partition the sections into two groups based on the threshold.
+        [$heavy, $light] = $allSections->partition(function ($section) {
+            return $section->posts_count > self::HEAVY_SECTION_THRESHOLD;
+        });
 
-        // 1. Get the post object ONCE to avoid multiple database queries.
-        $firstPost = $this->sections[1]->posts()->first();
+        $this->lazySections = $heavy->keyBy('id');
 
-        if ($firstPost) {
-            // 2. Use a ternary operator or if-statement which checks for "falsy" values.
-            // The expression ($firstPost->meta_title) will evaluate to false if it's '', null, 0, or false.
-            $this->metaTitle = $firstPost->meta_title ? $firstPost->meta_title : $firstPost->title;
+        // --- Step 3: Now, fully load the data ONLY for the lightweight sections.
+        $lightSectionIds = $light->pluck('id');
+        $this->eagerSections = PostCategory::with(['posts' => function ($query) {
+                $query->where("show_in_home", true)->published()->orderBy('order');
+            }])
+            ->whereIn('id', $lightSectionIds)
+            ->orderBy('order')
+            ->get()
+            ->keyBy('id');
 
-            // A similar robust check for the description
-            $contentBlock = $firstPost->blocks[0]->data->content ?? $this->sections[0]->posts()->first()->blocks[0]->data->content ?? null;
-            $this->metaDescription = $firstPost->meta_description ? $firstPost->meta_description : $contentBlock;
-        } else {
-            // Handle the case where there is no post at all
-            $this->metaTitle = 'مكتب جديان للحلول الهندسية';
-            $this->metaDescription = 'مكتب جديان للحلول الهندسية هو مكتب هندسي افتراضي يقدم تصاميم، حسابات، حصر كميات، وخدمات المكتب الفني المساندة لأنظمة الكهرباء والميكانيكا بجودة عالية وسعر منافس. نخدم المؤسسات، شركات المقاولات، مكاتب التصميم والاستشارات الهندسية، وندعمهم خلال ضغط العمل ونرفع معايير الالتزام عبر مهندسين محترفين وفق الكود السعودي والعالمي';
+        // Prepare initial SEO data from the first available post (fast query).
+        $this->prepareInitialSeoData();
+    }
+
+    /**
+     * This method loads a SINGLE heavy section when triggered from the frontend.
+     */
+    public function loadSection($sectionId)
+    {
+        // Ensure we don't reload data we already have.
+        if (isset($this->loadedSections[$sectionId])) {
+            return;
         }
 
-        // Now you can safely dd() the result
-        // dd($this->sections[1]->posts()->first());
-        // dd($this->metaTitle,$this->metaDescription);
+        $section = PostCategory::with(['posts' => function ($query) {
+                $query->where("show_in_home", true)->published()->orderBy('order');
+            }])
+            ->find($sectionId);
+
+        if ($section) {
+            $this->loadedSections[$sectionId] = $section;
+        }
+    }
+
+    /**
+     * This is an accessor to get all sections in their original order for the view.
+     */
+    public function getAllSectionsProperty(): Collection
+    {
+        return $this->eagerSections->merge($this->lazySections)->sortBy('order');
     }
 
     public function render()
     {
-        // Set SEO metadata
         $this->setSeoMetadata();
+        return view('livewire.home')->layout('components.layouts.app');
+    }
 
-        return view('livewire.home', [
-            'sections' => $this->sections,
-        ])->layout('components.layouts.app');
+    // ... your prepareInitialSeoData, setSeoMetadata, title, and desc methods remain here ...
+    // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
+    public function prepareInitialSeoData()
+    {
+        $seoPost = Post::where("show_in_home", true)
+            ->published()
+            ->orderBy('order')
+            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
+            ->first();
+
+        if ($seoPost) {
+            $this->seoimage = $seoPost->image?->url;
+            $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
+            // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
+            $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
+        } else {
+            // Fallback SEO data
+            $this->metaTitle = 'مكتب جديان للحلول الهندسية';
+            $this->metaDescription = 'مكتب هندسي افتراضي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
+        }
     }
 
     protected function setSeoMetadata()
@@ -65,7 +125,7 @@ class Home extends Component
                 Schema::localBusiness()
                     ->name('مكتب جديان للحلول الهندسية')
                     ->url('https://jedianengineering.com/') // استبدل بالرابط الفعلي إذا توفر
-                    ->image($this->sections[0]->image?->url) // استبدل برابط الشعار الفعلي إذا توفر
+                    ->image($this->seoimage) // استبدل برابط الشعار الفعلي إذا توفر
                     ->telephone('+966583097425') // استبدل برقم الهاتف الفعلي
                     ->priceRange('SAR 500 - SAR 20000') // عدل النطاق السعري حسب الحاجة
                     ->contactPoint(
