@@ -90,12 +90,12 @@ class PostController extends Controller
             seo()
                 ->title($this->category->name .' '. $this->category->subtitle)
                 ->description($this->category->description .' '. $this->category->subtitle)
-                ->canonical($this->categorySlug)
+                ->canonical(route('dynamic.route', [$this->categorySlug]))
                 ->addSchema(
                     Schema::webPage()
                         ->name($this->category->name) // Use post title for WebPage name
                         ->description($this->category->description)
-                        ->url($this->categorySlug) // Use the post's direct URL
+                        ->url(route('dynamic.route', [$this->categorySlug])) // Use the post's direct URL
                         ->author(Schema::organization()->name(config('app.name')))
                     );
                     return;
