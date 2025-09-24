@@ -52,6 +52,7 @@ class PostController extends Controller
         abort_unless($post->post_category_id === $category->id, 404);
         abort_unless($post ?? null, 404);
         abort_unless($post->is_published || auth()->check(), 404);
+        $this->post = $post;
 
         // $view = "livewire.post.{$category->order}.show";
         $view = "livewire.post.templates.{$post->homepage_section_component}";
