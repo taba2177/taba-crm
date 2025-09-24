@@ -238,6 +238,7 @@ class PostCategoryResource extends Resource
                     ->label('Select a Layout Style')
                     ->options(self::getHomepageComponentOptions())
                     ->iconSize(IconSize::Large)
+                    ->visible(fn () => auth()->user()->hasRole('super_admin'))
                     ->direction('column')
                     ->color('primary')
                     ->iconSizes([ // Customize the values for each icon size

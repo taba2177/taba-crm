@@ -335,7 +335,7 @@ class PostResource extends Resource
                 ->skippable()
                 ->columnSpanFull(),
 
-                  Forms\Components\Section::make()
+                Forms\Components\Section::make()
                     ->columnSpan(1)
                     ->schema([
                         Forms\Components\Select::make('homepage_section_component')
