@@ -250,7 +250,7 @@ class PostCategoryResource extends Resource
                     ->extraCardsAttributes([
                         'class' => 'mb-5'
                     ])
-                    ->live(debounce: '2000ms')
+                    ->live(debounce: '500ms')
                     ->icons(function (): array {
                         // Get the option keys ('hero-section', 'testimonials', etc.)
                         $optionKeys = array_keys(self::getHomepageComponentOptions());
