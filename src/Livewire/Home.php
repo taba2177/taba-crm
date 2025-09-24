@@ -33,9 +33,9 @@ class Home extends Component
         // --- Step 1: Perform a highly optimized query to get all sections with just a count of their posts.
         $allSections = PostCategory::whereNotNull('section_component')
             ->withCount(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order');
+                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
             }])
-            ->orderBy('order')
+            ->orderBy('order','asc')
             ->get();
 
         // --- Step 2: Partition the sections into two groups based on the threshold.
@@ -48,10 +48,10 @@ class Home extends Component
         // --- Step 3: Now, fully load the data ONLY for the lightweight sections.
         $lightSectionIds = $light->pluck('id');
         $this->eagerSections = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order');
+                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
             }])
             ->whereIn('id', $lightSectionIds)
-            ->orderBy('order')
+            ->orderBy('order','asc')
             ->get()
             ->keyBy('id');
 
@@ -70,7 +70,7 @@ class Home extends Component
         }
 
         $section = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order');
+                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
             }])
             ->find($sectionId);
 
@@ -99,7 +99,7 @@ class Home extends Component
     {
         $seoPost = Post::where("show_in_home", true)
             ->published()
-            ->orderBy('order')
+            ->orderBy('order','asc')
             ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
             ->latest()
             ->first();
