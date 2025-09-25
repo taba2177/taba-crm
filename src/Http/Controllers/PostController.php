@@ -159,7 +159,7 @@ class PostController extends Controller
         public function title(): string
         {
             $baseTitle = $this->post->title;
-            $fullSuffix = $this->post->postCategory->name;
+            $fullSuffix = ' '.$this->post->postCategory->name.' ';
             $baseLength = mb_strlen($baseTitle, 'UTF-8');
             $fullSuffixLength = mb_strlen($fullSuffix, 'UTF-8');
 
