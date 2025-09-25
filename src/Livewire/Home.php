@@ -97,12 +97,12 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        $seoPost = PostCategory::whereNotNull('section_component')
-            ->with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
-            }])
+        $seoPost = Post::where("show_in_home", true)
+            ->published()
+            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
+            ->latest()
             ->orderBy('order','asc')
-            ->posts?->first();
+            ->first();
 
         if ($seoPost) {
             $this->seoimage = $seoPost->image?->url;
