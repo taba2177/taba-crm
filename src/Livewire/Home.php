@@ -97,23 +97,24 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        $seoPost = Post::where("show_in_home", true)
-            ->published()
-            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
-            ->latest()
-            ->orderBy('order','asc')
-            ->first();
+        // $seoPost = Post::where("show_in_home", true)
+        //     ->published()
+        //     ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
+        //     ->latest()
+        //     ->orderBy('order','asc')
+        //     ->first();
 
-        if ($seoPost) {
-            $this->seoimage = $seoPost->image?->url;
-            $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
-            // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
-            $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
-        } else {
+        // if ($seoPost) {
+        //     $this->seoimage = $seoPost->image?->url;
+        //     $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
+        //     // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
+        //     $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
+        // } else {
             // Fallback SEO data
+            
             $this->metaTitle = 'مكتب جديان للحلول الهندسية';
             $this->metaDescription = 'مكتب هندسي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
-        }
+        // }
     }
 
     protected function setSeoMetadata()
