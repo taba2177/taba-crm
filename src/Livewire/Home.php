@@ -99,9 +99,9 @@ class Home extends Component
     {
         $seoPost = Post::where("show_in_home", true)
             ->published()
-            ->orderBy('order','asc')
             ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
             ->latest()
+            ->orderBy('order','asc')
             ->first();
 
         if ($seoPost) {
@@ -112,7 +112,7 @@ class Home extends Component
         } else {
             // Fallback SEO data
             $this->metaTitle = 'مكتب جديان للحلول الهندسية';
-            $this->metaDescription = 'مكتب هندسي افتراضي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
+            $this->metaDescription = 'مكتب هندسي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
         }
     }
 
