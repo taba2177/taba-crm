@@ -113,7 +113,7 @@ class PostController extends Controller
             $Schema = Schema::service()
                 ->name($this->post->title)
                 // Safely get description: check meta_description, then excerpt, then content
-                ->description($this->post->meta_description ?: $this->post->blocks[0]->data->content ?? $this->post->title)
+                ->description($this->post->meta_description ?: $this->post->blocks[0]?->data->content ?? $this->post->title)
                 ->url($this->post->url)
                 ->image($this->post->image?->url)
                 ->provider(
@@ -129,7 +129,7 @@ class PostController extends Controller
 
             $Schema = Schema::article()
                 ->headline($this->post->title)
-                ->articleBody($this->post->meta_description ?: $this->post->blocks[0]->data->content)
+                ->articleBody($this->post->meta_description ?: $this->post->blocks[0]?->data->content ?? $this->post->title)
                 ->image($this->post->image?->url)
                 ->datePublished($this->post->published_at)
                 ->dateModified($this->post->updated_at)
