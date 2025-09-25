@@ -97,23 +97,23 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        // $seoPost = Post::where("show_in_home", true)
-        //     ->published()
-        //     ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
-        //     ->latest()
-        //     ->orderBy('order','asc')
-        //     ->first();
+        $seoPost = Post::where("show_in_home", true)
+            ->published()
+            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
+            ->latest()
+            ->orderBy('order','asc')
+            ->first();
 
-        // if ($seoPost) {
-        //     $this->seoimage = $seoPost->image?->url;
-        //     $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
-        //     // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
-        //     $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
-        // } else {
-        // Fallback SEO data
+        if ($seoPost) {
+            $this->seoimage = $seoPost->image?->url;
+            $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
+            // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
+            $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
+        } else {
+            // Fallback SEO data
             $this->metaTitle = 'مكتب جديان للحلول الهندسية';
             $this->metaDescription = 'مكتب هندسي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
-        // }
+        }
     }
 
     protected function setSeoMetadata()
@@ -177,7 +177,7 @@ class Home extends Component
     public function title(): string
     {
         $baseTitle = $this->metaTitle;
-        $fullSuffix = ' خدمات هندسية احترافية ومرنة';
+        $fullSuffix = ' مكتب جديان للحلول الهندسية | خدمات هندسية احترافية ومرنة';
         $baseLength = mb_strlen($baseTitle, 'UTF-8');
         $fullSuffixLength = mb_strlen($fullSuffix, 'UTF-8');
 
@@ -216,7 +216,7 @@ class Home extends Component
 
     public function desc(): string
     {
-        $excerpt = $this->metaDescription . 'مكتب جديان للحلول الهندسية هو مكتب هندسي يقدم تصاميم، حسابات، حصر كميات، وخدمات المكتب الفني المساندة لأنظمة الكهرباء والميكانيكا بجودة عالية وسعر منافس. نخدم المؤسسات، شركات المقاولات، مكاتب التصميم والاستشارات الهندسية، وندعمهم خلال ضغط العمل ونرفع معايير الالتزام عبر مهندسين محترفين وفق الكود السعودي والعالمي ';
+        $excerpt = $this->metaDescription . '  مكتب جديان للحلول الهندسية هو مكتب هندسي يقدم تصاميم، حسابات، حصر كميات، وخدمات المكتب الفني المساندة لأنظمة الكهرباء والميكانيكا بجودة عالية وسعر منافس. نخدم المؤسسات، شركات المقاولات، مكاتب التصميم والاستشارات الهندسية، وندعمهم خلال ضغط العمل ونرفع معايير الالتزام عبر مهندسين محترفين وفق الكود السعودي والعالمي ';
         $idealLength = 150; // Optimal for meta descriptions
         $tolerance = 5; // ±5 characters flexibility
         $minLength = $idealLength - $tolerance;

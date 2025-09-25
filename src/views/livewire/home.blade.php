@@ -22,7 +22,7 @@
                         @this.call('loadSection', {{ $section->id }});
                         loaded = true;
                     }
-                }, 5000);
+                }, 15000);
                 " x-intersect:enter.once="
                 if (!loaded) {
                     @this.call('loadSection', {{ $section->id }});
