@@ -49,6 +49,7 @@ Route::get('/sitemap', function () {
     // 3. Add individual Post pages (using your 'posts.show' route)
     Post::with('postCategory') // Use the correct relationship name
         ->published()
+        ->whereNotNull('homepage_section_component')
         ->each(function (Post $post) use ($sitemap) {
             // Ensure the post has a category to prevent errors
             if ($post->postCategory) {
