@@ -99,7 +99,7 @@ class Home extends Component
     {
         $seoPost = PostCategory::whereNotNull('section_component')
             ->with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc')->first();
+                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
             }])
             ->orderBy('order','asc')
             ->posts?->first();
