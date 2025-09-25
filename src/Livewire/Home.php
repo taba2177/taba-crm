@@ -110,8 +110,7 @@ class Home extends Component
         //     // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
         //     $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
         // } else {
-            // Fallback SEO data
-            
+        // Fallback SEO data
             $this->metaTitle = 'مكتب جديان للحلول الهندسية';
             $this->metaDescription = 'مكتب هندسي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
         // }
