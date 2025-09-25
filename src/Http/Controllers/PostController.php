@@ -140,7 +140,7 @@ class PostController extends Controller
 
             $Schema = Schema::webPage()
                 ->name($this->post->title) // Use post title for WebPage name
-                ->description($this->post->meta_description ?? $this->post->blocks[0]->data->content ?? $this->post->title)
+                ->description($this->post->meta_description ?? $this->post->blocks[0]?->data->content ?? $this->post->title)
                 ->url($this->post->url) // Use the post's direct URL
                 ->author(Schema::organization()->name(config('app.name')));
         }
