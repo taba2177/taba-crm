@@ -42,7 +42,6 @@ Route::get('/{slug}', function ($slug) {
     }
 })->name('dynamic.route');
 
-// Route for individual posts (e.g., /category-slug/post-slug)
 Route::get('/{category}/{post:slug}',function ($category,$post) {
     // dd($post);
     if (Post::where('slug', $post)->firstOrFail()->homepage_section_component) {
@@ -56,69 +55,61 @@ Route::get('/{category}/{post:slug}',function ($category,$post) {
 });
 
 Route::get('/sitemap', function () {
-    // Create sitemap instance
     $sitemap = Sitemap::create();
 
-    // Add homepage
-    $sitemap->add(Url::create('/')
-        ->setLastModificationDate(now())
-        ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
-        ->setPriority(1.0));
+    // 1. Add the homepage
+    $sitemap->add(
+        Url::create(route('home'))
+            ->setLastModificationDate(now())
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+            ->setPriority(1.0)
+    );
 
-    // Add static pages (from your page.show route)
-    Page::where('is_published', true)->each(function ($page) use ($sitemap) {
-        $sitemap->add(Url::create(route('page.show', ['slug' => $page->slug]))
-            ->setLastModificationDate($page->updated_at)
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-            ->setPriority(0.7));
-    });
-
-    // Add post categories (from your dynamic route)
-    PostCategory::where('is_active', true)->each(function ($category) use ($sitemap) {
-        $sitemap->add(Url::create("/{$category->slug}")
-            ->setLastModificationDate($category->updated_at)
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-            ->setPriority(0.6));
-    });
-
-    // Add individual posts (from posts.show route)
-    Post::with('category')
-        ->where('is_published', true)
-        ->each(function ($post) use ($sitemap) {
-            $sitemap->add(Url::create(route('posts.show', [
-                'category' => $post->category->slug,
-                'post' => $post->slug
-            ]))
-                ->setLastModificationDate($post->updated_at)
+    // 2. Add PostCategory pages (using your 'dynamic.route')
+    // Fetches only categories that should be public (e.g., shown in the header)
+    PostCategory::where('register_in_header', true)->each(function (PostCategory $category) use ($sitemap) {
+        $sitemap->add(
+            Url::create(route('dynamic.route', ['slug' => $category->slug]))
+                ->setLastModificationDate($category->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                ->setPriority(0.9));
+                ->setPriority(0.8)
+        );
+    });
+
+    // 3. Add individual Post pages (using your 'posts.show' route)
+    Post::with('postCategory') // Use the correct relationship name
+        ->published()
+        ->each(function (Post $post) use ($sitemap) {
+            // Ensure the post has a category to prevent errors
+            if ($post->postCategory) {
+                $sitemap->add(
+                    Url::create(route('posts.show', [
+                        'category' => $post->postCategory->slug,
+                        'post' => $post->slug
+                    ]))
+                    ->setLastModificationDate($post->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setPriority(0.7)
+                );
+            }
         });
 
-    // Add other static routes if needed
-    $staticRoutes = ['about', 'contact', 'services', 'blog'];
-    foreach ($staticRoutes as $route) {
-        $sitemap->add(Url::create("/$route")
-            ->setLastModificationDate(now())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-            ->setPriority(0.8));
-    }
-
-    // Write to file
+    // Write the sitemap to a file
     $sitemap->writeToFile(public_path('sitemap.xml'));
 
     return response()->file(public_path('sitemap.xml'));
 })->name('sitemap');
 
-Route::get('/homepage-section-preview', function () {
-    $component = request('component');
-    $postCategoryId = request('post_category_id');
+// Route::get('/homepage-section-preview', function () {
+//     $component = request('component');
+//     $postCategoryId = request('post_category_id');
 
-    $postCategory = null;
-    if ($postCategoryId) {
-        $postCategory = \Taba\Crm\Models\PostCategory::find($postCategoryId);
-    }
+//     $postCategory = null;
+//     if ($postCategoryId) {
+//         $postCategory = \Taba\Crm\Models\PostCategory::find($postCategoryId);
+//     }
 
-    return view($component, [
-        'posts' => $postCategory ? $postCategory->posts : collect(),
-    ]);
-})->name('homepage-section-preview');
+//     return view($component, [
+//         'posts' => $postCategory ? $postCategory->posts : collect(),
+//     ]);
+// })->name('homepage-section-preview');
