@@ -98,7 +98,7 @@ class Home extends Component
     public function prepareInitialSeoData()
     {
         $seoPost = PostCategory::whereNotNull('section_component')
-            ->withCount(['posts' => function ($query) {
+            ->with(['posts' => function ($query) {
                 $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc')->first();
             }])
             ->orderBy('order','asc')
