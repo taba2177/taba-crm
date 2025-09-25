@@ -33,7 +33,7 @@ class Home extends Component
         // --- Step 1: Perform a highly optimized query to get all sections with just a count of their posts.
         $allSections = PostCategory::whereNotNull('section_component')
             ->withCount(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
+                $query->where("show_in_home", true)->published()->orderBy('order','asc');
             }])
             ->orderBy('order','asc')
             ->get();
@@ -48,7 +48,7 @@ class Home extends Component
         // --- Step 3: Now, fully load the data ONLY for the lightweight sections.
         $lightSectionIds = $light->pluck('id');
         $this->eagerSections = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
+                $query->where("show_in_home", true)->published()->orderBy('order','asc');
             }])
             ->whereIn('id', $lightSectionIds)
             ->orderBy('order','asc')
@@ -70,7 +70,7 @@ class Home extends Component
         }
 
         $section = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->latest()->orderBy('order','asc');
+                $query->where("show_in_home", true)->published()->orderBy('order','asc');
             }])
             ->find($sectionId);
 
