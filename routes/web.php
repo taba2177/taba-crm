@@ -24,36 +24,6 @@ Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'c
 
 Route::get('/', Home::class)->name('home');
 
-// Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
-
-// lang.switch'
-Route::get('/lang/change/{lang}', function ($lang) {
-    app()->setLocale($lang);
-    Session(['locale' => $lang]);
-    return redirect()->back();
-})->name('lang.switch');
-
-Route::get('/{slug}', function ($slug) {
-
-    if (PostCategory::where('slug', $slug)->exists()) {
-        return app(PostController::class)->index($slug);
-    }else{
-         return abort(404);
-    }
-})->name('dynamic.route');
-
-Route::get('/{category}/{post:slug}',function ($category,$post) {
-    // dd($post);
-    if (Post::where('slug', $post)->firstOrFail()->homepage_section_component) {
-        return app(PostController::class)->show($category,$post);
-    }else{
-         return abort(404);
-    } // [PostController::class, 'show'])
-
-})->name('posts.show');
-
-});
-
 Route::get('/sitemap', function () {
     $sitemap = Sitemap::create();
 
@@ -99,6 +69,35 @@ Route::get('/sitemap', function () {
 
     return response()->file(public_path('sitemap.xml'));
 })->name('sitemap');
+
+// lang.switch'
+Route::get('/lang/change/{lang}', function ($lang) {
+    app()->setLocale($lang);
+    Session(['locale' => $lang]);
+    return redirect()->back();
+})->name('lang.switch');
+
+Route::get('/{slug}', function ($slug) {
+
+    if (PostCategory::where('slug', $slug)->exists()) {
+        return app(PostController::class)->index($slug);
+    }else{
+         return abort(404);
+    }
+})->name('dynamic.route');
+
+Route::get('/{category}/{post:slug}',function ($category,$post) {
+    // dd($post);
+    if (Post::where('slug', $post)->firstOrFail()->homepage_section_component) {
+        return app(PostController::class)->show($category,$post);
+    }else{
+         return abort(404);
+    } // [PostController::class, 'show'])
+
+    })->name('posts.show');
+
+});
+
 
 // Route::get('/homepage-section-preview', function () {
 //     $component = request('component');
