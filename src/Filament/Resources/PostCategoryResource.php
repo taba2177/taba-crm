@@ -79,14 +79,14 @@ class PostCategoryResource extends Resource
                 Forms\Components\Checkbox::make('HEAVY_SECTION')
                 ->label('HEAVY_SECTION')
                 ->translateLabel()
-                    ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                    ->afterStateHydrated(function (Forms\Set $set, ?PostCategory $record) {
-                        if (!$record) {
-                            return;
-                        }
-                        $isHeavy = $record->posts()->count() > 4;
-                        $set('HEAVY_SECTION', $isHeavy);
-                    }),
+                ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                ->afterStateHydrated(function (Forms\Set $set, ?PostCategory $record) {
+                    if (!$record) {
+                        return;
+                    }
+                    $isHeavy = $record->posts()->count() > 4;
+                    $set('HEAVY_SECTION', $isHeavy);
+                }),
 
                 Forms\Components\TextInput::make('slug')
                     ->required()
@@ -304,9 +304,14 @@ class PostCategoryResource extends Resource
                     ->sortable()->translateLabel()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
+
+                Tables\Columns\ToggleColumn::make('HEAVY_SECTION')
+                    ->label('HEAVY_SECTION')
+                    ->translateLabel()
+                    ->visible(fn () => auth()->user()->hasRole('super_admin')),
+
                 //section_component
-                Tables\Columns\TextColumn::make('section_component')
-                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('section_component')->translateLabel(),
                 // ->formatStateUsing(fn(string $state): string => Str::limit(json_encode($state), 50))
                 // ->tooltip(fn(string $state): string => json_encode($state)),
                 // ->toggleable(isToggledHiddenByDefault: true),
