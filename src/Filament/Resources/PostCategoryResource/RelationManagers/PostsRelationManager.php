@@ -289,6 +289,7 @@ use Translatable;
         return $table
             ->recordTitleAttribute('title')
             ->columns([
+
                 Tables\Columns\TextColumn::make('title')
                     ->sortable()
                     ->searchable()
@@ -309,7 +310,7 @@ use Translatable;
                     ->translateLabel()
                     ->limit(50)
                     ->formatStateUsing(function (?string $state): string {
-        // Limit the raw markdown string first, then convert
+                        // Limit the raw markdown string first, then convert
                     return Str::of($state ?? '')
                             ->limit(50)
                             ->markdown();
