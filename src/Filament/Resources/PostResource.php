@@ -411,6 +411,11 @@ class PostResource extends Resource
                     ->size(32)
                     ->translateLabel(),
 
+                Tables\Columns\ToggleColumn::make('show_in_home')
+                    ->label('show_in_home')
+                    ->translateLabel()
+                    ->visible(fn () => auth()->user()->hasRole('super_admin')),
+
                 Tables\Columns\TextColumn::make('content.0.data.content')
                     ->label(__('Content'))
                     ->translateLabel()
