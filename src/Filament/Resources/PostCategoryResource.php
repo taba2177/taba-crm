@@ -76,6 +76,18 @@ class PostCategoryResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Checkbox::make('HEAVY_SECTION')
+                ->label('HEAVY_SECTION')
+                ->translateLabel()
+                    ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                    ->afterStateHydrated(function (Forms\Set $set, ?PostCategory $record) {
+                        if (!$record) {
+                            return;
+                        }
+                        $isHeavy = $record->posts()->count() > 4;
+                        $set('HEAVY_SECTION', $isHeavy);
+                    }),
+
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->translateLabel()
@@ -132,44 +144,44 @@ class PostCategoryResource extends Resource
                     //add more rows to the textinput
                     // ->rows(5)
                       ->suffixAction(
-                                        Forms\Components\Actions\Action::make('translateTitle')
-                                            ->icon('heroicon-o-language')
-                                            ->iconSize('sm')
-                                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                                            ->tooltip('Auto-translate title')
-                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
-                                                try {
-                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
-                                                    $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
-                                                    $currentTitle = trim($get('description') ?? '');
+                                Forms\Components\Actions\Action::make('translateTitle')
+                                    ->icon('heroicon-o-language')
+                                    ->iconSize('sm')
+                                    ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                                    ->tooltip('Auto-translate title')
+                                    ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
+                                        try {
+                                            $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                            $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
+                                            $currentTitle = trim($get('description') ?? '');
 
-                                                    if (empty($currentTitle)) {
-                                                        $currentTitle = $record->getTranslation('description', $currentLocale, false);
-                                                        $set('description', $currentTitle);
-                                                    }
+                                            if (empty($currentTitle)) {
+                                                $currentTitle = $record->getTranslation('description', $currentLocale, false);
+                                                $set('description', $currentTitle);
+                                            }
 
-                                                    $translator = app(GeminiTranslationService::class);
-                                                    $translated = $translator->translate(
-                                                        $currentTitle,
-                                                        $currentLocale,
-                                                        $oppositeLocale
-                                                    );
+                                            $translator = app(GeminiTranslationService::class);
+                                            $translated = $translator->translate(
+                                                $currentTitle,
+                                                $currentLocale,
+                                                $oppositeLocale
+                                            );
 
-                                                    if ($translated) {
-                                                        $record->setTranslation('description', $oppositeLocale, $translated);
-                                                        $set('description', $translated);
-                                                        $record->save();
-                                                    }
-                                                } catch (\Exception $e) {
-                                                    Notification::make()
-                                                        ->title('Error')
-                                                        ->body($e->getMessage())
-                                                        ->danger()
-                                                        ->send();
-                                                    report($e);
-                                                }
-                                            })
-                                    )
+                                            if ($translated) {
+                                                $record->setTranslation('description', $oppositeLocale, $translated);
+                                                $set('description', $translated);
+                                                $record->save();
+                                            }
+                                        } catch (\Exception $e) {
+                                            Notification::make()
+                                                ->title('Error')
+                                                ->body($e->getMessage())
+                                                ->danger()
+                                                ->send();
+                                            report($e);
+                                        }
+                                    })
+                                )
                     ->translateLabel(),
                 // CuratorPicker::make('image_id')->label('Featured Image')->translateLabel(),
 

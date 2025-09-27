@@ -20,6 +20,7 @@ class PostCategory extends Model
         'register_in_header',
         'description',
         'subtitle',
+        "HEAVY_SECTION",
         'section_component',
         'image',
         'is_active',

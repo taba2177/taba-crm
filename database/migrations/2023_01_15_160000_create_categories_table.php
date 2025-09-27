@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->json('name')->nullable();
             $table->boolean('register_in_header')->default(true);
+            $table->boolean('HEAVY_SECTION')->default(true);
             $table->string('section_component')->nullable();
             $table->integer('order')->default(0);
             $table->json('description')->nullable();
