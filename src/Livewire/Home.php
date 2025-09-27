@@ -40,7 +40,7 @@ class Home extends Component
 
         // --- Step 2: Partition the sections into two groups based on the threshold.
         [$heavy, $light] = $allSections->partition(function ($section) {
-            return $section->posts_count > self::HEAVY_SECTION_THRESHOLD;
+            return $section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
         });
 
         $this->lazySections = $heavy->keyBy('id');
