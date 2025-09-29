@@ -90,7 +90,7 @@ class Home extends Component
     public function render()
     {
         $this->setSeoMetadata();
-        return view('crm::livewire.home')->layout('components.layouts.app');
+        return view('livewire.home')->layout('components.layouts.app');
     }
 
     // ... your prepareInitialSeoData, setSeoMetadata, title, and desc methods remain here ...
