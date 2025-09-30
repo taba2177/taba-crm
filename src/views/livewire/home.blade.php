@@ -6,7 +6,7 @@
             this.isLoaded = true;
             @this.call('loadRemainingHeavyPosts');
         }
-    }" x-init="setTimeout(() => loadData(), 50000)">
+    }" x-init="setTimeout(() => loadData(), 500)">
 
     @foreach ($sections as $section)
     @php
