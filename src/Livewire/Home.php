@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class Home extends Component
 {
     // Define how many posts a section can have before it's considered "heavy" and lazy-loaded.
-    const HEAVY_SECTION_THRESHOLD = 5;
+    const HEAVY_SECTION_THRESHOLD = 6;
 
     // This holds the fully loaded data for lazy sections as it comes in.
     public array $loadedSections = [];
@@ -67,6 +67,7 @@ class Home extends Component
                     $cloned->id = "fake-$i";
                     $cloned->title = ['en' => 'loading...', 'ar' => 'تحميل...'];
                     $cloned->slug = "#";
+                    $cloned->image_id = 9;
                     $cloned->excerpt = "Loading content...";
                     $cloned->content = [
                     'en' => [
