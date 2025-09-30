@@ -1,88 +1,45 @@
-<div>
-    {{-- We loop through all sections to maintain the correct order --}}
-    @foreach ($this->allSections as $section)
+<div x-data="{
+        heavyData: @entangle('heavySectionsData'),
+        isLoaded: false,
+        loadData() {
+            if (this.isLoaded) return;
+            this.isLoaded = true;
+            @this.call('loadRemainingHeavyPosts');
+        }
+    }" x-init="setTimeout(() => loadData(), 50000)">
 
-    {{-- Add a wire:key to help Livewire track each section correctly --}}
+    @foreach ($sections as $section)
+    @php
+    $isHeavy = $section->posts_count > \Taba\Crm\Livewire\Home::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
+    $componentName = 'homepage.' . $section->section_component;
+    @endphp
+
     <div class="p-0 m-0" wire:key="section-{{ $section->id }}">
-        @if($section->section_component && view()->exists('components.homepage.' . $section->section_component))
+        @if ($section->section_component && view()->exists('components.' . str_replace('.', '/', $componentName)))
 
-        {{-- CASE 1: Eager-loaded section. Render it directly and wrap it with wire:ignore. --}}
-        {{-- This tells Livewire to "not touch" this HTML during subsequent updates, preserving its JS. --}}
-        @if ($eagerSections->has($section->id))
-        <div class="p-0 m-0" wire:ignore>
-            <x-dynamic-component :component="'homepage.' . $section->section_component"
-                :posts="$eagerSections[$section->id]->posts" />
+        {{-- CASE 1: LIGHT SECTION --}}
+        @if (!$isHeavy)
+        <div wire:ignore>
+            <x-dynamic-component :component="$componentName" :posts="$section->posts" />
         </div>
-
-        {{-- CASE 2: Lazy-loaded section. Render a placeholder that triggers loading. --}}
         @else
-        <div class="p-0 m-0" x-data="{ loaded: {{ isset($loadedSections[$section->id]) ? 'true' : 'false' }} }" x-init="
-                setTimeout(() => {
-                    if (!loaded) {
-                        @this.call('loadSection', {{ $section->id }});
-                        loaded = true;
-                    }
-                }, 15000);
-                " x-intersect:enter.once="
-                if (!loaded) {
-                    @this.call('loadSection', {{ $section->id }});
-                    loaded = true;
-                }
-             " class="min-h-[300px] flex items-center justify-center" {{-- Placeholder with minimum height --}}>
-            <div x-show="loaded" x-transition.opacity.scale.duration.500ms class="w-full">
-                {{-- Check if this specific lazy section's data has arrived --}}
-                @if (isset($loadedSections[$section->id]))
-                {{-- If loaded, render the actual component --}}
-                <x-dynamic-component :component="'homepage.' . $section->section_component"
-                    :posts="$loadedSections[$section->id]->posts" />
-                @endif
+        {{-- CASE 2: HEAVY SECTION --}}
+        <div x-data="{ sectionId: {{ $section->id }}, fullData: heavyData[{{ $section->id }}] }"
+            x-init="$watch('heavyData', value => fullData = value[sectionId])">
+
+            {{-- Show fake posts (already injected in mount) --}}
+            <div x-show="!fullData">
+                <x-dynamic-component :component="$componentName" :posts="$section->posts" />
             </div>
 
-            <div x-show="!loaded" x-transition.opacity.duration.500ms
-                class="w-screen h-screen flex justify-center items-center">
-                <div class="skeleton w-16 h-16 border-4 border-dashed rounded-full animate-spin border-primary"></div>
+            {{-- Replace with real posts when they arrive --}}
+            <div x-show="fullData" x-cloak>
+                <x-dynamic-component :component="$componentName" :posts="collect()"
+                    x-bind:posts-data="fullData ? fullData.posts : []" />
             </div>
-
         </div>
         @endif
-
         @endif
     </div>
     @endforeach
-
-    {{--
-        IMPORTANT: Ensure the AlpineJS Intersection Observer plugin is loaded in your main layout file (e.g., app.blade.php).
-        You only need to add this script once per project.
-    --}}
-    <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.directive('intersect', (el, {
-            value,
-            expression,
-            modifiers
-        }, {
-            evaluateLater,
-            cleanup
-        }) => {
-            let options = {
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        evaluateLater(expression)();
-                        if (modifiers.includes('once')) {
-                            observer.unobserve(el);
-                        }
-                    }
-                })
-            }, options);
-            observer.observe(el);
-            cleanup(() => {
-                observer.disconnect();
-            })
-        })
-    })
-    </script>
 </div>

@@ -11,15 +11,8 @@ use Illuminate\Support\Str;
 
 class Home extends Component
 {
-
     // Define how many posts a section can have before it's considered "heavy" and lazy-loaded.
     const HEAVY_SECTION_THRESHOLD = 5;
-
-    // These sections are fully loaded immediately.
-    public Collection $eagerSections;
-
-    // These sections only contain basic info and will be loaded on demand.
-    public Collection $lazySections;
 
     // This holds the fully loaded data for lazy sections as it comes in.
     public array $loadedSections = [];
@@ -28,69 +21,105 @@ class Home extends Component
     public ?string $metaDescription = null;
     public ?string $seoimage = null;
 
-    public function mount()
-    {
-        // --- Step 1: Perform a highly optimized query to get all sections with just a count of their posts.
-        $allSections = PostCategory::whereNotNull('section_component')
-            ->withCount(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->orderBy('order','asc');
+
+    public Collection $sections;
+    public array $heavySectionsData = [];
+
+ public function mount()
+{
+    $allSections = PostCategory::whereNotNull('section_component')
+        ->with('firstPost') // نحتاجو عشان ننسخ منو
+        ->withCount(['posts' => function ($query) {
+            $query->where("show_in_home", true)->published();
+        }])
+        ->orderBy('order', 'asc')
+        ->get();
+
+    $lightSectionIds = $allSections->filter(function ($section) {
+        $isHeavy = $section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
+        return !$isHeavy;
+    })->pluck('id');
+
+    if ($lightSectionIds->isNotEmpty()) {
+        $sectionsWithPosts = PostCategory::whereIn('id', $lightSectionIds)
+            ->with(['posts' => function ($query) {
+                $query->where("show_in_home", true)->published()->orderBy('order', 'asc');
             }])
-            ->orderBy('order','asc')
-            ->get();
-
-        // --- Step 2: Partition the sections into two groups based on the threshold.
-        [$heavy, $light] = $allSections->partition(function ($section) {
-            return $section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
-        });
-
-        $this->lazySections = $heavy->keyBy('id');
-
-        // --- Step 3: Now, fully load the data ONLY for the lightweight sections.
-        $lightSectionIds = $light->pluck('id');
-        $this->eagerSections = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->orderBy('order','asc');
-            }])
-            ->whereIn('id', $lightSectionIds)
-            ->orderBy('order','asc')
             ->get()
             ->keyBy('id');
 
-        // Prepare initial SEO data from the first available post (fast query).
-        $this->prepareInitialSeoData();
+        $allSections->each(function ($section) use ($sectionsWithPosts) {
+            if (isset($sectionsWithPosts[$section->id])) {
+                $section->setRelation('posts', $sectionsWithPosts[$section->id]->posts);
+            }
+        });
     }
 
-    /**
-     * This method loads a SINGLE heavy section when triggered from the frontend.
-     */
-    public function loadSection($sectionId)
+    // نعمل fake posts للسكشنات الثقيلة
+    $allSections->each(function ($section) {
+        if ($section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION) {
+            $fakePosts = collect();
+
+            // لو عندنا firstPost نستعملو كـ shape
+            if ($section->firstPost) {
+                for ($i = 0; $i < $section->posts_count; $i++) {
+                    $cloned = $section->firstPost->replicate();
+                    $cloned->id = "fake-$i";
+                    $cloned->title = ['en' => 'loading...', 'ar' => 'تحميل...'];
+                    $cloned->slug = "#";
+                    $cloned->excerpt = "Loading content...";
+                    $cloned->content = [
+                    'en' => [
+                        ['type' => 'markdown', 'data' => ['content' => 'loading...']],
+                        ['type' => 'markdown', 'data' => ['content' => 'loading...']]
+                    ],
+                    'ar' => [
+                        ['type' => 'markdown', 'data' => ['content' => 'جاري التحميل...']],
+                        ['type' => 'markdown', 'data' => ['content' => 'جاري التحميل...']]
+                    ]
+                ];
+                    // $cloned->image->url  = "/images/placeholder.png";
+                    $fakePosts->push($cloned);
+                }
+            }
+            $section->setRelation('posts', $fakePosts);
+        }
+    });
+
+    $this->sections = $allSections;
+    }
+
+    public function loadRemainingHeavyPosts()
     {
-        // Ensure we don't reload data we already have.
-        if (isset($this->loadedSections[$sectionId])) {
+        // Step 5: Load actual posts for heavy sections asynchronously.
+        $heavySectionIds = $this->sections->filter(function ($section) {
+            return $section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
+        })->pluck('id');
+
+        if ($heavySectionIds->isEmpty()) {
             return;
         }
 
-        $section = PostCategory::with(['posts' => function ($query) {
-                $query->where("show_in_home", true)->published()->orderBy('order','asc');
-            }])
-            ->find($sectionId);
+        $heavySections = PostCategory::with(['posts' => function ($query) {
+            $query->where("show_in_home", true)->published()->orderBy('order', 'asc');
+        }])
+            ->whereIn('id', $heavySectionIds)
+            ->get()
+            ->keyBy('id');
 
-        if ($section) {
-            $this->loadedSections[$sectionId] = $section;
-        }
-    }
-
-    /**
-     * This is an accessor to get all sections in their original order for the view.
-     */
-    public function getAllSectionsProperty(): Collection
-    {
-        return $this->eagerSections->merge($this->lazySections)->sortBy('order');
+            $this->sections = $this->sections->map(function ($section) use ($heavySections) {
+                if (isset($heavySections[$section->id])) {
+                    $section->setRelation('posts', $heavySections[$section->id]->posts);
+                }
+                return $section;
+            });
+        // $this->heavySectionsData = $heavySections->toArray();
     }
 
     public function render()
     {
         $this->setSeoMetadata();
-        return view('livewire.home')->layout('components.layouts.app');
+        return view('crm::livewire.home')->layout('components.layouts.app');
     }
 
     // ... your prepareInitialSeoData, setSeoMetadata, title, and desc methods remain here ...

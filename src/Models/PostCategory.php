@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
 use Taba\Crm\Filament\Resources\PostCategoryResource;
 use Taba\Crm\Models\Post;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class PostCategory extends Model
 {
@@ -77,5 +79,16 @@ class PostCategory extends Model
         public function scopeRegisterInHeader($query)
         {
         return $query->where('register_in_header', true)->get();
+    }
+
+    /**
+     * Get the first post in the defined order shown on the homepage.
+     */
+    public function firstPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'post_category_id')
+                    ->where("show_in_home", true)
+                    ->published()
+                    ->orderBy('order', 'asc');
     }
 }
