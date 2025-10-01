@@ -119,15 +119,15 @@ class GlobalStatsOverview extends BaseWidget
                 ->chart($this->getChartData(ContactEntry::class, $startDateCurrent))
                 ->icon('heroicon-o-inbox-stack'),
 
-            Stat::make(__('Total Revenue'), __('SAR') . Number::format($totalRevenue, 2))
-                ->description(__('Total from all payments'))
-                ->color('primary')
-                ->icon('heroicon-o-banknotes'),
+            // Stat::make(__('Total Revenue'), __('SAR') . Number::format($totalRevenue, 2))
+            //     ->description(__('Total from all payments'))
+            //     ->color('primary')
+            //     ->icon('heroicon-o-banknotes'),
 
-            Stat::make(__('Total Payments'), Number::format(ServicePayment::count()))
-                ->description(__('Number of transactions'))
-                ->color('info')
-                ->icon('heroicon-o-receipt-percent'),
+            // Stat::make(__('Total Payments'), Number::format(ServicePayment::count()))
+            //     ->description(__('Number of transactions'))
+            //     ->color('info')
+            //     ->icon('heroicon-o-receipt-percent'),
 
             // Stat::make(__('Media Library'), Number::format(Media::count()) . ' ' . __('items'))
             //     ->description(__('Total Files: ') . Number::fileSize($totalMediaSize))
