@@ -22,7 +22,7 @@ Route::middleware('web')->group(function () {
 Route::get('/preview/post/{post}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
 
-Route::get('/', Home::class)->name('home');
+Route::get('/home', Home::class)->name('home');
 
 Route::get('/sitemap', function () {
     $sitemap = Sitemap::create();
