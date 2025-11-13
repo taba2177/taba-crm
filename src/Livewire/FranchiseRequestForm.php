@@ -147,7 +147,7 @@ class FranchiseRequestForm extends Component
     {
         $this->setSeoMetadata();
 
-        return view('livewire.franchise-request-form');
+        return view('crm::livewire.franchise-request-form');
 
    }
 

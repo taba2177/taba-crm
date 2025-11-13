@@ -26,7 +26,8 @@ class Posts extends Component
             //     return view('livewire.page', compact('post', 'relatedPosts'));
             // }
 
-        return view('livewire.post.show', compact('post', 'relatedPosts'));
+        -        return view('livewire.post.show', compact('post', 'relatedPosts'));
+        +        return view('crm::livewire.post.show', compact('post', 'relatedPosts'));
     }
 
     public function render()
@@ -55,7 +56,8 @@ class Posts extends Component
             ->take(3)->get();
         }
 
-        return view('livewire.posts' , compact('posts'));
+        -        return view('livewire.posts' , compact('posts'));
+        +        return view('crm::livewire.posts' , compact('posts'));
     }
 
     protected function setSeoMetadata()

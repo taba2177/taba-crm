@@ -12,7 +12,8 @@ class PageController extends Controller
     {
         $featured = Post::featured()->orderBy('published_at', 'desc')->get();
 
-        return view('livewire.home', ['featured' => $featured]);
+        -        return view('livewire.home', ['featured' => $featured]);
+        +        return view('crm::livewire.home', ['featured' => $featured]);
     }
 
     public function contact()

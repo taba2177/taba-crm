@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire;
+namespace Taba\Crm\Livewire;
 
-use App\Models\ContactEntry;
+use Taba\Crm\Models\ContactEntry;
 use Livewire\Component;
 
 class ContactForm extends Component
@@ -11,6 +11,7 @@ class ContactForm extends Component
     public $email;
     public $message;
     public $quiz;
+    public $isSent = false;
 
     protected $rules = [
         'name' => 'required|max:250',
@@ -30,7 +31,8 @@ class ContactForm extends Component
     }
     public function render()
     {
-        return view('livewire.contact-form');
+        -        return view('livewire.contact-form');
+        +        return view('crm::livewire.contact-form');
     }
 
     public function submit()

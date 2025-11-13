@@ -217,7 +217,8 @@ use Translatable;
                                             Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
                                         ])
                                         ->createOptionUsing(function (array $data) {
-                                            $tag = Tag::firstorcreate($data);
+                                            -                                            $tag = Tag::firstorcreate($data);
+                                            +                                            $tag = Tag::firstOrCreate($data);
                                             return $tag->id;
                                         }),
 
@@ -272,9 +273,16 @@ use Translatable;
         // $componentSection = $crmViewPath . '/components/homepage';
         $componentPath = resource_path('views/livewire/post/templates');
         $componentSection = resource_path('views/components/homepage');
-        $files = File::files($componentPath, $componentSection);
-        $files = array_merge($files, File::files($componentSection));
-        $options = [];
+-        $files = File::files($componentPath, $componentSection);
+-        $files = array_merge($files, File::files($componentSection));
++        $files = [];
++        if (is_dir($componentPath)) {
++            $files = array_merge($files, File::files($componentPath));
++        }
++        if (is_dir($componentSection)) {
++            $files = array_merge($files, File::files($componentSection));
++        }
+         $options = [];
 
         foreach ($files as $file) {
             $name = Str::before($file->getFilename(), '.blade.php');

@@ -330,7 +330,7 @@ class PostResource extends Resource
                                             Forms\Components\TextInput::make('name')->required()->maxLength(255)->translateLabel(),
                                         ])
                                         ->createOptionUsing(function (array $data) {
-                                            $tag = Tag::firstorcreate($data);
+                                            $tag = Tag::firstOrCreate($data);
                                             return $tag->id;
                                         }),
                                 ]),
@@ -376,13 +376,9 @@ class PostResource extends Resource
 
     protected static function getHomepageComponentOptions(): array
     {
-                // // Get the base path for the 'crm' view namespace
-        // $crmViewPath = \Illuminate\Support\Facades\View::getFinder()->getHints()['crm'][0];        // // Now, construct the correct full paths by appending your sbdirectories
-        // $componentPath = $crmViewPath . '/livewire/post/templates';
-        // $componentSection = $crmViewPath . '/components/homepage';
         $componentPath = resource_path('views/livewire/post/templates');
         $componentSection = resource_path('views/components/homepage');
-        $files = File::files($componentPath, $componentSection);
+        $files = File::files($componentPath);
         $files = array_merge($files, File::files($componentSection));
         $options = [];
 

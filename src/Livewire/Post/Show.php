@@ -31,7 +31,7 @@ class Show extends Component
     public function mount($category = null, $post)
     {
         if ($post === 'terms') {
-            return view('livewire.terms');
+            return view('crm::livewire.terms');
         }
 
         $searchTerm = request('search');

@@ -138,6 +138,6 @@ class RequestQuoteForm extends Component
     // Render the Livewire component view
     public function render()
     {
-        return view('livewire.request-quote-form');
+        return view('crm::livewire.request-quote-form');
     }
 }

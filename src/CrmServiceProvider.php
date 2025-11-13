@@ -76,19 +76,19 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/views/filament/pages' => resource_path('views/filament/pages'),
             ], 'views');
 
-            $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/crm'),
-            ], 'crm-public');
+            // Publish public assets only if the directory exists to avoid errors
+            $publicDir = __DIR__.'/../public';
+            if (is_dir($publicDir)) {
+                $this->publishes([
+                    $publicDir => public_path('vendor/crm'),
+                ], 'crm-public');
+            }
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
                 __DIR__.'/../database/seeders' => database_path('seeders'),
                 __DIR__.'/../database/factories' => database_path('factories'),
             ], 'crm-database');
-
-            // $this->publishes([
-            //     __DIR__.'/database/migrations' => database_path('migrations'),
-            // ], 'crm-migration');
 
             $this->publishes([
                 __DIR__.'/resources/js' => resource_path('js/'),

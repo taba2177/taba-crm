@@ -94,15 +94,15 @@ class GlobalStatsOverview extends BaseWidget
                 ->color($userChange >= 0 ? 'success' : 'danger')
                 ->chart($this->getChartData(User::class, $startDateCurrent))
                 ->icon('heroicon-o-users'),
-
-            Stat::make(__('Published Posts'), Number::format(Post::where('status', 'published')->count()))
+                
+            Stat::make(__('Published Posts'), Number::format(Post::where('is_published', true)->count()))
                 ->description(__('Total live posts'))
                 ->color('success')
                             ->descriptionIcon('heroicon-m-arrow-trending-up')
 
                 ->icon('heroicon-o-newspaper'),
 
-            Stat::make(__('Draft Posts'), Number::format(Post::where('status', 'draft')->count()))
+            Stat::make(__('Draft Posts'), Number::format(Post::where('is_published', false)->count()))
                 ->description(__('Posts pending publication'))
                 ->color('warning')
                 ->icon('heroicon-o-pencil-square'),
