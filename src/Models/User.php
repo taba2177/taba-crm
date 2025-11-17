@@ -66,8 +66,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('super_admin') || $this->hasRole('admin') || $this->hasRole('client');
-        return true;
+        return $this->hasRole('super_admin');
     }
 
     /**
@@ -89,4 +88,5 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         return UserFactory::new(); // <-- Point to the correct factory
     }
+
 }
