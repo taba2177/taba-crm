@@ -39,18 +39,23 @@ class RequestQuoteForm extends Component
 
     // Custom Validation Messages
     protected $messages = [
-        'name.required' => 'الاسم مطلوب.',
-        'name.regex' => 'الرجاء إدخال اسم صالح يحتوي فقط على حروف.',
-        'phone.required' => 'رقم الجوال مطلوب.',
-        'phone.regex' => 'رقم الهاتف يجب أن يكون مكونًا من 10 أرقام.',
-        'quoteRecaptchaToken.required' => 'التحقق من reCAPTCHA مطلوب.',
-
-        // 'district.required' => 'الحي مطلوب.',
-        // 'width.required' => 'العرض مطلوب.',
-        // 'height.required' => 'الارتفاع مطلوب.',
-        // 'curtain_type.required' => 'نوع الستارة مطلوب.',
-        // 'room_name.required' => 'اسم الغرفة مطلوب.',
+        'name.required' => 'crm::forms.validation.name_required',
+        'name.regex' => 'crm::forms.validation.name_regex',
+        'phone.required' => 'crm::forms.validation.phone_required',
+        'phone.regex' => 'crm::forms.validation.phone_regex',
+        'quoteRecaptchaToken.required' => 'crm::forms.validation.recaptcha_required',
     ];
+
+    protected function messages()
+    {
+        return [
+            'name.required' => __('crm::forms.validation.name_required'),
+            'name.regex' => __('crm::forms.validation.name_regex'),
+            'phone.required' => __('crm::forms.validation.phone_required'),
+            'phone.regex' => __('crm::forms.validation.phone_regex'),
+            'quoteRecaptchaToken.required' => __('crm::forms.validation.recaptcha_required'),
+        ];
+    }
     public function triggerRecaptcha()
     {
         $this->dispatch('triggerQuoteRecaptcha', [
@@ -69,7 +74,7 @@ class RequestQuoteForm extends Component
     {
         if (!$this->quoteRecaptchaToken) {
             $this->triggerRecaptcha();
-            session()->flash('error', 'يرجى الانتظار حتى يتم التحقق من reCAPTCHA.');
+            session()->flash('error', __('crm::forms.quote.recaptcha_wait'));
             return;
         }
         // Validate the form data
@@ -108,9 +113,9 @@ class RequestQuoteForm extends Component
         $response = Http::get($googleFormUrl . '?' . $queryString);
 
         if ($response->successful()) {
-            session()->flash('message', 'تم إرسال البيانات بنجاح!');
+            session()->flash('message', __('crm::forms.quote.success'));
         } else {
-            session()->flash('error', 'حدث خطأ أثناء إرسال البيانات. يرجى المحاولة مرة أخرى.');
+            session()->flash('error', __('crm::forms.quote.error'));
             // Log the error for debugging
             \Log::error('Google Form submission failed: ' . $response->body());
         }

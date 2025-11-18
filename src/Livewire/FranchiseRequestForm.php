@@ -46,21 +46,14 @@ class FranchiseRequestForm extends Component
     ];
 
     // Validation Messages
-    protected $messages = [
-        'full_name.required' => 'الاسم الثلاثي مطلوب',
-        // 'age.required' => 'العمر مطلوب',
-        // 'gender.required' => 'الجنس مطلوب',
-        // 'education.required' => 'المؤهل الدراسي مطلوب',
-        // 'city.required' => 'المدينة مطلوبة',
-        // 'branches.required' => 'عدد الوحدات المطلوبة مطلوب',
-        'phone2.required' => 'رقم الهاتف مطلوب',
-        // 'email.required' => 'البريد الإلكتروني مطلوب',
-        // 'country.required' => 'البلد مطلوب',
-        // 'province.required' => 'المحافظة مطلوبة',
-        // 'investment_amount.required' => 'مبلغ الاستثمار مطلوب',
-        // 'has_loans.required' => 'حالة القروض مطلوبة',
-        'franchiseRecaptchaToken.required' => 'التحقق من reCAPTCHA مطلوب',
-    ];
+    protected function messages()
+    {
+        return [
+            'full_name.required' => __('crm::forms.validation.name_required'),
+            'phone2.required' => __('crm::forms.validation.phone_required'),
+            'franchiseRecaptchaToken.required' => __('crm::forms.validation.recaptcha_required'),
+        ];
+    }
 
     public function triggerRecaptcha()
     {
@@ -81,7 +74,7 @@ class FranchiseRequestForm extends Component
 
         if (!$this->franchiseRecaptchaToken) {
             $this->triggerRecaptcha();
-            session()->flash('franchise.error', 'يرجى الانتظار حتى يتم التحقق من reCAPTCHA.');
+            session()->flash('franchise.error', __('crm::forms.quote.recaptcha_wait'));
             return;
         }
 
@@ -118,9 +111,9 @@ class FranchiseRequestForm extends Component
         $response = Http::asForm()->post($googleFormUrl, $formData);
 
         if ($response->successful()) {
-            session()->flash('franchise.message', 'تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
+            session()->flash('franchise.message', __('crm::forms.franchise.success'));
         } else {
-            session()->flash('franchise.error', 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.');
+            session()->flash('franchise.error', __('crm::forms.franchise.error'));
         }
 
         $this->resetForm();
@@ -154,13 +147,13 @@ class FranchiseRequestForm extends Component
     protected function setSeoMetadata()
     {
         seo()
-            ->title('صن رول للستائر والكنب | امتياز تجاري من شركة صن رول للستائر')
-            ->description('انضم إلى عائلة صن رول للستائر واحصل على امتياز تجاري مميز. فرص استثمارية رائدة في مجال الستائر ')
+            ->title(__('crm::forms.seo.franchise_title'))
+            ->description(__('crm::forms.seo.franchise_description'))
             ->canonical(route('franchise-request'))
             ->addSchema(
             Schema::webPage()
-                ->name('الامتياز التجاري صن رول للستائر والكنب')
-                ->description('فرص امتياز تجاري مميزة مع صن رول للستائر - استثمر في مجال الستائر مع علامة تجارية رائدة في المملكة العربية السعودية')
+                ->name(__('crm::forms.seo.franchise_name'))
+                ->description(__('crm::forms.seo.franchise_schema_description'))
                 ->url(route('franchise-request'))
                 ->author(Schema::organization()->name(config('app.name')))
             );

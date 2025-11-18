@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Taba\Crm\Database\Seeders\CrmSettingsSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,13 +14,16 @@ class DatabaseSeeder extends Seeder
     {
         // Create roles and permissions first
         $this->call(RolesAndPermissionsSeeder::class);
-        
+
         // Then create the user
         $this->call(UserSeeder::class);
 
         // Seed sample categories and posts
         $this->call(PostCategorySeeder::class);
         $this->call(PostSeeder::class);
+
+        // Seed CRM settings (must be after posts/categories for defaults)
+        $this->call(CrmSettingsSeeder::class);
 
 
         // Notification::make()

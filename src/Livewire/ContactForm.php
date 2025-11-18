@@ -39,7 +39,7 @@ class ContactForm extends Component
         $this->validate();
 
         if ((string) $this->quiz !== '7') {
-            $this->addError('quiz', 'The answer is not correct');
+            $this->addError('quiz', __('crm::forms.contact.quiz_error'));
             return;
         }
 

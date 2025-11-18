@@ -28,7 +28,7 @@ class Home extends Component
  public function mount()
 {
     $allSections = PostCategory::whereNotNull('section_component')
-        ->with('firstPost') // نحتاجو عشان ننسخ منو
+        ->with('firstPost')
         ->withCount(['posts' => function ($query) {
             $query->where("show_in_home", true)->published();
         }])
@@ -55,12 +55,11 @@ class Home extends Component
         });
     }
 
-    // نعمل fake posts للسكشنات الثقيلة
+    // Create fake posts for heavy sections
     $allSections->each(function ($section) {
         if ($section->posts_count > self::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION) {
             $fakePosts = collect();
 
-            // لو عندنا firstPost نستعملو كـ shape
             if ($section->firstPost) {
                 for ($i = 0; $i < $section->posts_count; $i++) {
                     $cloned = $section->firstPost->replicate();
@@ -79,7 +78,6 @@ class Home extends Component
                         ['type' => 'markdown', 'data' => ['content' => 'جاري التحميل...']]
                     ]
                 ];
-                    // $cloned->image->url  = "/images/placeholder.png";
                     $fakePosts->push($cloned);
                 }
             }
@@ -88,6 +86,9 @@ class Home extends Component
     });
 
     $this->sections = $allSections;
+    
+    // Prepare SEO data from actual content
+    $this->prepareInitialSeoData();
     }
 
     public function loadRemainingHeavyPosts()
@@ -127,56 +128,79 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        // $seoPost = Post::where("show_in_home", true)
-        //     ->published()
-        //     ->select('title', 'meta_title', 'meta_description', 'content', 'image_id') // Use `content` as fallback
-        //     ->latest()
-        //     ->orderBy('order','asc')
-        //     ->first();
+        // Get the first published post for SEO data
+        $seoPost = Post::where("show_in_home", true)
+            ->published()
+            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id')
+            ->orderBy('order', 'asc')
+            ->first();
 
-        // if ($seoPost) {
-        //     $this->seoimage = $seoPost->image?->url;
-        //     $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
-        //     // $contentBlock = $seoPost->blocks[0]->data->content ?? null;
-        //     $this->metaDescription = $seoPost->meta_description ?: $seoPost->meta_description;
-        // } else {
-            // Fallback SEO data
-            $this->metaTitle = 'مكتب جديان للحلول الهندسية';
-            $this->metaDescription = 'مكتب هندسي يقدم تصاميم، حسابات، وخدمات فنية مساندة.';
-        // }
+        if ($seoPost) {
+            $this->seoimage = $seoPost->image?->url;
+            $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
+            $this->metaDescription = $seoPost->meta_description ?: Str::limit(strip_tags($seoPost->content), 155);
+        } else {
+            // Fallback: use first category if no posts available
+            $firstCategory = $this->sections->first();
+            if ($firstCategory) {
+                $this->metaTitle = $firstCategory->name;
+                $this->metaDescription = $firstCategory->description;
+            } else {
+                // Final fallback
+                $this->metaTitle = config('app.name');
+                $this->metaDescription = __('crm::forms.seo.default_description', ['name' => config('app.name')]);
+            }
+        }
     }
 
     protected function setSeoMetadata()
     {
+        // Get business info from database settings with config fallback
+        $businessName = crm_business('name');
+        
+        // Use dynamic contact info from database
+        $phone = crm_contact('phone');
+        $address = crm_contact('address');
+        $city = crm_contact('city');
+        $postalCode = crm_contact('postal_code');
+        $latitude = crm_contact('latitude');
+        $longitude = crm_contact('longitude');
+        $socialLinks = crm_social_links();
+        
+        // Business settings
+        $priceRange = crm_business('price_range');
+        $opens = crm_business('opens');
+        $closes = crm_business('closes');
+
         seo()
             ->title($this->title())
             ->description($this->desc())
             ->canonical(route('home'))
             ->addSchema(
                 Schema::localBusiness()
-                    ->name('مكتب جديان للحلول الهندسية')
-                    ->url('https://jedianengineering.com/') // استبدل بالرابط الفعلي إذا توفر
-                    ->image($this->seoimage) // استبدل برابط الشعار الفعلي إذا توفر
-                    ->telephone('+966583097425') // استبدل برقم الهاتف الفعلي
-                    ->priceRange('SAR 500 - SAR 20000') // عدل النطاق السعري حسب الحاجة
+                    ->name($businessName)
+                    ->url(config('app.url'))
+                    ->image($this->seoimage)
+                    ->telephone($phone)
+                    ->priceRange($priceRange)
                     ->contactPoint(
                         Schema::contactPoint()
-                            ->telephone('+966583097425') // استبدل برقم الهاتف الفعلي
+                            ->telephone($phone)
                             ->contactType('customer service')
                             ->areaServed('SA')
-                            ->availableLanguage(['ar','en'])
+                            ->availableLanguage(['ar', 'en'])
                     )
                     ->geo(
                         Schema::geoCoordinates()
-                            ->latitude('24.774265') // استبدل بالإحداثيات الفعلية إذا توفر
-                            ->longitude('46.738586')
+                            ->latitude($latitude)
+                            ->longitude($longitude)
                     )
                     ->address(
                         Schema::postalAddress()
-                            ->streetAddress('شارع مثال، حي مثال') // استبدل بالعنوان الفعلي إذا توفر
-                            ->addressLocality('الرياض')
-                            ->addressRegion('الرياض')
-                            ->postalCode('12345') // استبدل بالرمز البريدي الفعلي إذا توفر
+                            ->streetAddress($address)
+                            ->addressLocality($city)
+                            ->addressRegion($city)
+                            ->postalCode($postalCode)
                             ->addressCountry('SA')
                     )
                     ->openingHoursSpecification(
@@ -190,16 +214,10 @@ class Home extends Component
                                 'Saturday',
                                 'Sunday'
                             ])
-                            ->opens('09:00')
-                            ->closes('18:00')
+                            ->opens($opens)
+                            ->closes($closes)
                     )
-                    ->sameAs([
-                        // أضف روابط وسائل التواصل الاجتماعي الفعلية إذا توفرت
-                        // 'https://www.facebook.com/jadyaan',
-                        // 'https://twitter.com/jadyaan',
-                        // 'https://www.instagram.com/jadyaan',
-                        // 'https://www.linkedin.com/company/jadyaan',
-                    ])
+                    ->sameAs($socialLinks)
             );
 
     }
