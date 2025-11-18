@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         $existingUser = User::where('email', 'taba@admin.com')->first();
         if ($existingUser) {
             $this->command->info('Super admin user already exists: taba@admin.com');
-            
+
             // Assign role if not already assigned
             if (Role::where('name', 'super-admin')->exists() && !$existingUser->hasRole('super-admin')) {
                 $existingUser->assignRole('super-admin');
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             }
             return;
         }
-        
+
         // Create super admin user
         $user = User::factory()->create([
             'name' => 'Taba Admin',
