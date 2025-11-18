@@ -13,6 +13,9 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
+        // Clear the cache to avoid conflicts
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+
         // Define all permissions
         $permissions = [
             'edit articles',
