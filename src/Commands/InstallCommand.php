@@ -26,6 +26,7 @@ class InstallCommand extends Command
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
+        if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
@@ -177,12 +178,66 @@ class InstallCommand extends Command
 
         $packageJson = json_decode(File::get(base_path('package.json')), true);
 
+        // Remove Tailwind v4 plugin if it exists (not compatible with v3)
+        if (isset($packageJson['devDependencies']['@tailwindcss/vite'])) {
+            unset($packageJson['devDependencies']['@tailwindcss/vite']);
+            $this->info('Removed @tailwindcss/vite (Tailwind v4 plugin) - using Tailwind v3 instead.');
+        }
+
         // Add or update devDependencies
         foreach ($packages as $package => $version) {
             $packageJson['devDependencies'][$package] = $version;
         }
 
         File::put(base_path('package.json'), json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return true;
+    }
+
+    protected function ensureAppCssCompatible(): bool
+    {
+        $appCssPath = resource_path('css/app.css');
+        
+        if (!File::exists($appCssPath)) {
+            // If app.css doesn't exist, create one with Tailwind v3 syntax
+            $cssContent = <<<'EOT'
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+EOT;
+            File::ensureDirectoryExists(resource_path('css'));
+            File::put($appCssPath, $cssContent);
+            $this->info('Created resources/css/app.css with Tailwind v3 syntax.');
+            return true;
+        }
+
+        $content = File::get($appCssPath);
+        
+        // Check if using Tailwind v4 syntax and convert to v3
+        if (str_contains($content, "@import 'tailwindcss'") || str_contains($content, '@import "tailwindcss"')) {
+            // Replace Tailwind v4 syntax with v3 syntax
+            $newContent = preg_replace(
+                "/@import\s+['\"]tailwindcss['\"];?/",
+                "@tailwind base;\n@tailwind components;\n@tailwind utilities;",
+                $content
+            );
+            
+            // Remove v4-specific directives
+            $newContent = preg_replace("/@source\s+.+;/", '', $newContent);
+            $newContent = preg_replace("/@theme\s*\{[^}]+\}/s", '', $newContent);
+            
+            // Add Cairo font if not present
+            if (!str_contains($newContent, 'Cairo')) {
+                $newContent = '@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap");' . "\n" . $newContent;
+            }
+            
+            // Clean up extra whitespace
+            $newContent = preg_replace("/\n{3,}/", "\n\n", trim($newContent));
+            
+            File::put($appCssPath, $newContent);
+            $this->info('Converted app.css from Tailwind v4 to v3 syntax.');
+        }
+
         return true;
     }
 
@@ -274,7 +329,18 @@ EOT;
             File::put($configPath, $stub);
         }
 
-        // Now that we know the file exists, inject our theme path if it's missing.
+        // Now that we know the file exists, remove Tailwind v4 plugin if present
+        $content = File::get($configPath);
+
+        // Remove @tailwindcss/vite import and usage
+        if (str_contains($content, '@tailwindcss/vite')) {
+            $content = preg_replace("/import\s+tailwindcss\s+from\s+['\"]@tailwindcss\/vite['\"];\s*/", '', $content);
+            $content = preg_replace("/,?\s*tailwindcss\(\)\s*,?/", '', $content);
+            File::put($configPath, $content);
+            $this->info('Removed @tailwindcss/vite from vite.config.js');
+        }
+
+        // Reload content after potential modifications
         $content = File::get($configPath);
 
         if (! str_contains($content, $viteThemePath)) {

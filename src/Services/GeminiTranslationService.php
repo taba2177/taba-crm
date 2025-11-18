@@ -15,11 +15,11 @@ class GeminiTranslationService
 
     public function __construct()
     {
-        // Ensure GEMINI_API_KEY is set in your .env file
-        $apiKey = env('GEMINI_API_KEY');
+        // Get API key from config file
+        $apiKey = config('crm.gemini_api_key');
 
         if (empty($apiKey)) {
-            throw new \Exception('GEMINI_API_KEY environment variable is not set.');
+            throw new \Exception('GEMINI_API_KEY is not configured. Please set it in config/crm.php or .env file.');
         }
 
         // Initialize the Gemini client using the Laravel facade

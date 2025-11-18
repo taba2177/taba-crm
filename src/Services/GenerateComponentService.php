@@ -20,9 +20,9 @@ class GenerateComponentService
 
     public function __construct()
     {
-        $apiKey = env('GEMINI_API_KEY');
+        $apiKey = config('crm.gemini_api_key');
         if (empty($apiKey)) {
-            throw new \Exception('GEMINI_API_KEY environment variable is not set.');
+            throw new \Exception('GEMINI_API_KEY is not configured. Please set it in config/crm.php or .env file.');
         }
         $this->geminiClient = Gemini::client($apiKey);
         $this->model = 'gemini-2.0-flash';

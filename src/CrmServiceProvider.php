@@ -28,15 +28,21 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        App::setLocale('ar');
+        // Set locale from config instead of hardcoding
+        if (config('crm.locale')) {
+            App::setLocale(config('crm.locale'));
+        }
+
+        // Configure language switch from config
         \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
-            $switch->locales(['ar', 'en']); // also accepts a closure
+            $switch->locales(config('crm.available_locales', ['ar', 'en']));
         });
+
         Livewire::component('home', Home::class);
 
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadTranslationsFrom(__DIR__.'/../lang',null);
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
         $this->loadViewsFrom(__DIR__.'/../views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 

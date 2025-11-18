@@ -45,7 +45,7 @@ class SeoSuggestionService
         {$textToAnalyze}";
 
         try {
-            $client = Gemini::client(env('GEMINI_API_KEY'));
+            $client = Gemini::client(config('crm.gemini_api_key'));
             $result = $client->geminiPro()->generateContent($prompt);
             $rawResponse = $result->text();
 
