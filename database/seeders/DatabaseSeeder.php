@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
         // Then create the user
         $this->call(UserSeeder::class);
 
-        // $this->call(NewSiteSeeder::class);
+        // Seed sample categories and posts
+        $this->call(PostCategorySeeder::class);
+        $this->call(PostSeeder::class);
 
 
         // Notification::make()

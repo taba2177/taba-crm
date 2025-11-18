@@ -154,9 +154,8 @@ class InstallCommand extends Command
 
     protected function runSeeder(): bool
     {
-        // Run the package's UserSeeder directly to create super admin
-        $this->call('db:seed', ['--class' => 'Database\\Seeders\\RolesAndPermissionsSeeder']);
-        return $this->call('db:seed', ['--class' => 'Database\\Seeders\\UserSeeder']) === 0;
+        // Run the full DatabaseSeeder which includes roles, user, categories, and posts
+        return $this->call('db:seed', ['--class' => 'Database\\Seeders\\DatabaseSeeder']) === 0;
     }
 
     protected function runNpmInstall(): bool
