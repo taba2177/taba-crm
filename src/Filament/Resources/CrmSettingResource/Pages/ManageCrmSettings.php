@@ -80,11 +80,11 @@ class ManageCrmSettings extends Page implements HasForms
                 $setting->save();
             } else {
                 $isTranslatable = is_array($value) && isset($value['en']) && isset($value['ar']);
-                
+
                 $group = 'general';
                 if (str_starts_with($key, 'crm_contact_')) {
-                    $group = in_array($key, ['crm_contact_facebook', 'crm_contact_twitter', 'crm_contact_instagram', 'crm_contact_linkedin', 'crm_contact_youtube']) 
-                        ? 'social' 
+                    $group = in_array($key, ['crm_contact_facebook', 'crm_contact_twitter', 'crm_contact_instagram', 'crm_contact_linkedin', 'crm_contact_youtube'])
+                        ? 'social'
                         : 'contact';
                 } elseif (str_starts_with($key, 'crm_business_')) {
                     $group = 'business';

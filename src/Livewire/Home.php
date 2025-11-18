@@ -86,7 +86,7 @@ class Home extends Component
     });
 
     $this->sections = $allSections;
-    
+
     // Prepare SEO data from actual content
     $this->prepareInitialSeoData();
     }
@@ -157,7 +157,7 @@ class Home extends Component
     {
         // Get business info from database settings with config fallback
         $businessName = crm_business('name');
-        
+
         // Use dynamic contact info from database
         $phone = crm_contact('phone');
         $address = crm_contact('address');
@@ -166,7 +166,7 @@ class Home extends Component
         $latitude = crm_contact('latitude');
         $longitude = crm_contact('longitude');
         $socialLinks = crm_social_links();
-        
+
         // Business settings
         $priceRange = crm_business('price_range');
         $opens = crm_business('opens');
