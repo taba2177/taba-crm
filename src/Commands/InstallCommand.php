@@ -25,6 +25,7 @@ class InstallCommand extends Command
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
+        if (!$this->task('Updating User model for Shield', fn() => $this->updateUserModel())) return self::FAILURE;
         if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         if (!$this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield())) return self::FAILURE;
         // Always publish essential views (logo component needed for Filament)
@@ -186,6 +187,51 @@ class InstallCommand extends Command
     {
         // Run the full DatabaseSeeder which includes roles, user, categories, and posts
         return $this->call('db:seed', ['--class' => 'Database\\Seeders\\DatabaseSeeder']) === 0;
+    }
+
+    protected function updateUserModel(): bool
+    {
+        $userModelPath = app_path('Models/User.php');
+        
+        if (!File::exists($userModelPath)) {
+            $this->warn('User model not found at: ' . $userModelPath);
+            return false;
+        }
+
+        $content = File::get($userModelPath);
+
+        // Check if already extending Taba\Crm\Models\User
+        if (str_contains($content, 'extends \Taba\Crm\Models\User')) {
+            return true; // Already updated
+        }
+
+        // Add import for Taba\Crm\Models\User
+        if (!str_contains($content, 'use Taba\Crm\Models\User as CrmUser')) {
+            $content = preg_replace(
+                '/(namespace App\\\\Models;)/',
+                "$1\n\nuse Taba\Crm\Models\User as CrmUser;",
+                $content
+            );
+        }
+
+        // Replace "extends Authenticatable" with "extends CrmUser"
+        $content = preg_replace(
+            '/(class User extends) Authenticatable/',
+            '$1 CrmUser',
+            $content
+        );
+
+        // Remove Authenticatable import since we're now extending CrmUser
+        $content = preg_replace(
+            '/use Illuminate\\\\Foundation\\\\Auth\\\\User as Authenticatable;\n/',
+            '',
+            $content
+        );
+
+        File::put($userModelPath, $content);
+        
+        $this->info('   User model updated to extend Taba\Crm\Models\User');
+        return true;
     }
 
     protected function setupFilamentShield(): bool
