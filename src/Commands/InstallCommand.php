@@ -9,7 +9,7 @@ use Throwable;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'crm:install {--publish-views : Publish the package views to the application}';
+    protected $signature = 'crm:install {--publish-views : Publish the package views to the application} {--skip-frontend : Skip npm install/build and frontend configuration}';
     protected $description = 'Install all assets and configurations for the Taba CRM package.';
 
     public function handle(): int
@@ -29,9 +29,16 @@ class InstallCommand extends Command
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
-        if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
-        if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
-        if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
+
+        if (! $this->option('skip-frontend')) {
+            if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
+            if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
+            if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
+        } else {
+            // When skipping frontend steps, still publish server-side assets.
+            if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
+            $this->info('Skipped frontend tasks (--skip-frontend).');
+        }
 
         if ($this->option('publish-views')) {
             if (!$this->task('Publishing package views', fn() => $this->publishViews())) return self::FAILURE;
