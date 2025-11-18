@@ -43,13 +43,21 @@ composer require taba/crm
 
 ### Step 2: Run the Install Command
 
-Next, run our custom installation command. This smart command handles all the necessary setup for the package and its dependencies, including publishing assets and running migrations.
+Next, run our custom installation command. This smart command handles all the necessary setup for the package and its dependencies, including:
+- Detecting and removing Tailwind CSS v4 if present (converting to v3)
+- Automatically converting your `app.css` from Tailwind v4 to v3 syntax
+- Removing `@tailwindcss/vite` plugin if present
+- Configuring Tailwind, Vite, and PostCSS
+- Publishing assets and running migrations
 
 ```bash
 php artisan crm:install
 ```
 
-> **Note:** This command will ask for your confirmation before running. It's a safe and transparent way to set up the required components.
+> **Note:** The install command is smart and non-destructive. It will:
+> - Detect if you're using Tailwind CSS v4 and automatically convert your files to v3
+> - Skip modifications if files are already properly configured
+> - Only add what's needed without breaking existing configurations
 
 ### Step 3: Register the Plugin
 

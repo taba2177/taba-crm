@@ -196,7 +196,7 @@ class InstallCommand extends Command
     protected function ensureAppCssCompatible(): bool
     {
         $appCssPath = resource_path('css/app.css');
-        
+
         if (!File::exists($appCssPath)) {
             // If app.css doesn't exist, create one with Tailwind v3 syntax
             $cssContent = <<<'EOT'
@@ -212,7 +212,7 @@ EOT;
         }
 
         $content = File::get($appCssPath);
-        
+
         // Check if using Tailwind v4 syntax and convert to v3
         if (str_contains($content, "@import 'tailwindcss'") || str_contains($content, '@import "tailwindcss"')) {
             // Replace Tailwind v4 syntax with v3 syntax
@@ -221,19 +221,19 @@ EOT;
                 "@tailwind base;\n@tailwind components;\n@tailwind utilities;",
                 $content
             );
-            
+
             // Remove v4-specific directives
             $newContent = preg_replace("/@source\s+.+;/", '', $newContent);
             $newContent = preg_replace("/@theme\s*\{[^}]+\}/s", '', $newContent);
-            
+
             // Add Cairo font if not present
             if (!str_contains($newContent, 'Cairo')) {
                 $newContent = '@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap");' . "\n" . $newContent;
             }
-            
+
             // Clean up extra whitespace
             $newContent = preg_replace("/\n{3,}/", "\n\n", trim($newContent));
-            
+
             File::put($appCssPath, $newContent);
             $this->info('Converted app.css from Tailwind v4 to v3 syntax.');
         }
