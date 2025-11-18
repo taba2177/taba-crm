@@ -93,7 +93,21 @@ class InstallCommand extends Command
 
     protected function installDependencies(): bool
     {
-        $this->call('filament:install', ['--panels' => true, '--no-interaction' => true]);
+        // If the application already has a Filament AdminPanelProvider, do not
+        // run the panel creation step to avoid overwriting or duplicating
+        // the provider. We prefer to keep the developer's existing panels
+        // intact. If no provider exists, create one.
+        $providerPath = app_path('Providers/Filament/AdminPanelProvider.php');
+        $providerClass = '\\App\\Providers\\Filament\\AdminPanelProvider';
+
+        if (! File::exists($providerPath) && ! class_exists($providerClass)) {
+            $this->info('No existing Filament admin panel detected — creating one.');
+            $this->call('filament:install', ['--panels' => true, '--no-interaction' => true]);
+        } else {
+            $this->info('Detected existing Filament admin panel — skipping panel creation.');
+        }
+
+        // Install curator regardless (it is safe to run multiple times).
         $this->call('curator:install', ['--no-interaction' => true]);
 
         if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
@@ -101,6 +115,7 @@ class InstallCommand extends Command
         }
 
         $this->call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
+
         return true;
     }
 
