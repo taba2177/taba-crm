@@ -1,10 +1,37 @@
-@import './theme.css';
-@import './curator-plugin.css';
-@import './peek-plugin.css';
+@import '../../../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+@import '../../../../../../vendor/pboivin/filament-peek/resources/css/plugin.css';
+
+
 
 @import 'cropperjs/dist/cropper.css';
 
-@config '../../tailwind.admin.js';
+@config '../../../tailwind.admin.js';
+
+/*
+ * =================================================================================================
+ * UNIQUE ADMIN THEME
+ * =================================================================================================
+ * Description: A modern, dark theme with a vibrant purple accent.
+ * Author: Gemini
+ * Date: 2025-08-05
+ * =================================================================================================
+ */
+
+/* :root {
+    --color-primary-50: #faf5ff;
+    --color-primary-100: #f3e8ff;
+    --color-primary-200: #e9d5ff;
+    --color-primary-300: #d8b4fe;
+    --color-primary-400: #c084fc;
+    --color-primary-500: #a855f7;
+    --color-primary-600: #9333ea;
+    --color-primary-700: #7e22ce;
+    --color-primary-800: #6b21a8;
+    --color-primary-900: #581c87;
+    --color-primary-950: #3b0764;
+} */
+
 
 /* === Base Layout & Chrome === */
 .dark .fi-sidebar,
