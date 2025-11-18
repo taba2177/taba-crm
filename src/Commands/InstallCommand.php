@@ -130,6 +130,19 @@ class InstallCommand extends Command
     protected function publishDatabaseAssets(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'crm-database', '--force' => true]);
+        
+        // Fix namespace in CrmSettingsSeeder after publishing
+        $seederPath = database_path('seeders/CrmSettingsSeeder.php');
+        if (File::exists($seederPath)) {
+            $content = File::get($seederPath);
+            $content = str_replace(
+                'namespace Taba\Crm\Database\Seeders;',
+                'namespace Database\Seeders;',
+                $content
+            );
+            File::put($seederPath, $content);
+        }
+        
         return true;
     }
 

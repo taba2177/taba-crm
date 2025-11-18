@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PostSeeder::class);
 
         // Seed CRM settings (must be after posts/categories for defaults)
-        $this->call(\Taba\Crm\Database\Seeders\CrmSettingsSeeder::class);
+        $this->call(CrmSettingsSeeder::class);
 
 
         // Notification::make()
