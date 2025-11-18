@@ -5,23 +5,26 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Taba\Crm\Models\User;
+
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Taba\Crm\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = User::class;
-
-    /**
      * The current password being used by the factory.
      */
     protected static ?string $password;
+    
+    /**
+     * Create a new factory instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        // Use the configured auth model
+        $this->model = config('auth.providers.users.model', \App\Models\User::class);
+    }
 
     /**
      * Define the model's default state.

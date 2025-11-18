@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         // Use the configured auth model (works for both host app and package)
         $userModel = config('auth.providers.users.model', \App\Models\User::class);
-        
+
         // Create super admin user
         $user = $userModel::factory()->create([
             'name' => 'Taba Admin',
