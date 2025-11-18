@@ -6,6 +6,8 @@ namespace Taba\Crm;
 
 use Illuminate\Support\ServiceProvider;
 use Taba\Crm\Commands\InstallCommand;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
 
 // Import the service providers from your package's dependencies
 use Jeffgreco13\FilamentBreezy\FilamentBreezyServiceProvider;
@@ -36,7 +38,7 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \App::setLocale('ar');
+        App::setLocale('ar');
         \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
             $switch->locales(['ar', 'en']); // also accepts a closure
         });
@@ -55,6 +57,7 @@ class CrmServiceProvider extends ServiceProvider
 
         // Only register commands and publishable assets when running in the console.
         if ($this->app->runningInConsole()) {
+            Log::info('Registering CRM commands...'); // Debugging log
             // Register the custom 'crm:install' command.
             $this->commands([
                 InstallCommand::class,
@@ -87,7 +90,7 @@ class CrmServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
                 __DIR__.'/../database/seeders' => database_path('seeders'),
-                __DIR__.'/../database/factories' => database_path('factories'),
+                __DIR__.'/../database/faqctories' => database_path('factories'),
             ], 'crm-database');
 
             $this->publishes([
