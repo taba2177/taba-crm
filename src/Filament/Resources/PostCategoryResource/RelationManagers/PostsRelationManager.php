@@ -230,7 +230,7 @@ use Translatable;
                             Forms\Components\Section::make(__('Author & Tags'))
                                 ->schema([
                                     Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
-                                    Forms\Components\Select::make('user_id')->columns(2)->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
+                                    Forms\Components\Select::make('user_id')->columns(2)->label('Author')->relationship('user', 'name')->default(fn () => \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::id() : null)->searchable()->required()->translateLabel(),
                                     Forms\Components\Toggle::make('is_published')->columns(2)->label('Published')->required()->translateLabel(),
                                     Forms\Components\Checkbox::make('show_in_home')->label('show_in_home')->translateLabel(),
                              ]),
@@ -244,7 +244,7 @@ use Translatable;
                     ->schema([
                         Forms\Components\Select::make('homepage_section_component')
                             ->label('Select Homepage Section')
-                            ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                            ->visible(fn () => \Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->hasRole('super_admin'))
                             ->options(self::getHomepageComponentOptions())
                             ->default(function (?Post $record): ?string {
                                 if (!$record || !$record->post_category_id) {

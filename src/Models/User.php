@@ -43,6 +43,22 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'remember_token',
     ];
 
+      protected static function booted()
+    {
+        static::created(function ($user) {
+            try {
+                if (! $user->roles()->exists()) {
+                    // Only assign if the role exists
+                    if (\Spatie\Permission\Models\Role::where('name', 'client')->exists()) {
+                        $user->assignRole('client');
+                    }
+                }
+            } catch (\Throwable $e) {
+                // swallow exceptions to avoid breaking user creation if roles table not ready
+            }
+        });
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar_url ? Storage::url($this->avatar_url) : null;

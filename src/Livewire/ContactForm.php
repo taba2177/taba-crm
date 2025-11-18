@@ -31,8 +31,7 @@ class ContactForm extends Component
     }
     public function render()
     {
-        -        return view('livewire.contact-form');
-        +        return view('crm::livewire.contact-form');
+                return view('crm::livewire.contact-form');
     }
 
     public function submit()

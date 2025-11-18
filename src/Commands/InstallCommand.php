@@ -9,13 +9,19 @@ use Throwable;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'crm:install';
+    protected $signature = 'crm:install {--publish-views : Publish the package views to the application}';
     protected $description = 'Install all assets and configurations for the Taba CRM package.';
 
     public function handle(): int
     {
         $this->info('🚀 Starting Taba CRM installation...');
 
+        // Check for required dependencies
+        if (!$this->checkDependencies()) {
+            return self::FAILURE;
+        }
+
+        // Run installation tasks
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
@@ -24,13 +30,15 @@ class InstallCommand extends Command
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
-        if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
-        if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
         if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
+
+        if ($this->option('publish-views')) {
+            if (!$this->task('Publishing package views', fn() => $this->publishViews())) return self::FAILURE;
+        }
 
         $this->info('✅ Taba CRM installed successfully!');
         $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
-        $this->warn('And Run npm run build again');
+        $this->warn('And run `npm run build` again.');
 
         return self::SUCCESS;
     }
@@ -48,11 +56,31 @@ class InstallCommand extends Command
                 return true;
             }
         } catch (Throwable $e) {
-             $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         $this->output->writeln(' <error>✘</error>');
         return false;
+    }
+
+    /**
+     * Check for required dependencies before installation.
+     */
+    protected function checkDependencies(): bool
+    {
+        $this->info('🔍 Checking for required dependencies...');
+
+        if (!class_exists('Filament\Panel')) {
+            $this->error('Filament is not installed. Please install Filament before proceeding.');
+            return false;
+        }
+
+        if (!class_exists('Awcodes\Curator\CuratorPlugin')) {
+            $this->error('Curator plugin is not installed. Please install the Curator plugin before proceeding.');
+            return false;
+        }
+
+        return true;
     }
 
     protected function installDependencies(): bool
@@ -71,9 +99,14 @@ class InstallCommand extends Command
     protected function publishAssets(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'crm-config']);
-        // , '--force' => true]);
         $this->call('vendor:publish', ['--tag' => 'crm-database']);
-        // , '--force' => true]);
+        return true;
+    }
+
+    protected function publishViews(): bool
+    {
+        $this->call('vendor:publish', ['--tag' => 'crm-views', '--force' => true]);
+        $this->info('Views have been published successfully.');
         return true;
     }
 
@@ -93,12 +126,10 @@ class InstallCommand extends Command
 
     protected function runNpmBuild(): bool
     {
-        $result = Process::run('npm install tailwindcss @tailwindcss/vite');
+        $result = Process::run('npm run build');
         if (!$result->successful()) {
             $this->error($result->errorOutput());
         }
-        $result = Process::run('npm install');
-
         return $result->successful();
     }
 
@@ -131,15 +162,16 @@ class InstallCommand extends Command
         File::put(base_path('package.json'), json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         return true;
     }
+
     protected function updatePostCssConfig(): bool
-{
-    $configPath = base_path('postcss.config.cjs');
+    {
+        $configPath = base_path('postcss.config.cjs');
 
-    if (File::exists($configPath)) {
-        return true; // Assume user has their own config if it already exists.
-    }
+        if (File::exists($configPath)) {
+            return true; // Assume user has their own config if it already exists.
+        }
 
-    $stub = <<<'EOT'
+        $stub = <<<'EOT'
 module.exports = {
     plugins: {
         "tailwindcss/nesting": {},
@@ -149,20 +181,19 @@ module.exports = {
 };
 EOT;
 
-    File::put($configPath, $stub);
+        File::put($configPath, $stub);
 
-    return true;
-}
+        return true;
+    }
 
-   protected function updateTailwindConfig(): void
+    protected function updateTailwindConfig(): void
     {
         $configPath = base_path('tailwind.config.js');
         $presetPath = './vendor/taba/crm/tailwind-preset.js'; // Correct path to preset
 
         if (!File::exists($configPath)) {
             // If tailwind.config.js doesn't exist, create a new one using the preset.
-            $content = "import defaultTheme from 'tailwindcss/defaultTheme';
-\n module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n   './resources/views/**/*.blade.php', \n     './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
+            $content = "import defaultTheme from 'tailwindcss/defaultTheme';\n\n module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n   './resources/views/**/*.blade.php', \n     './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
             File::put($configPath, $content);
             $this->info('Created tailwind.config.js with CRM preset.');
             return;
@@ -192,8 +223,6 @@ EOT;
             $this->info('Updated tailwind.config.js with CRM preset.');
         }
     }
-
-// packages/taba/crm/src/Commands/InstallCommand.php
 
     protected function updateViteConfig(): void
     {
