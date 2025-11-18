@@ -2,8 +2,7 @@
 
 namespace Taba\Crm\Policies;
 
-use Taba\Crm\Models\User;
-
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -13,10 +12,10 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Authenticatable $user): bool
     {
         return $user->can('view_any_user');
     }
@@ -24,10 +23,10 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function view(User $user): bool
+    public function view(Authenticatable $user): bool
     {
         return $user->can('view_user');
     }
@@ -35,10 +34,10 @@ class UserPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function create(User $user): bool
+    public function create(Authenticatable $user): bool
     {
         return $user->can('create_user');
     }
@@ -46,10 +45,10 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function update(User $user): bool
+    public function update(Authenticatable $user): bool
     {
         return $user->can('update_user');
     }
@@ -57,10 +56,10 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function delete(User $user): bool
+    public function delete(Authenticatable $user): bool
     {
         return $user->can('delete_user');
     }
@@ -68,10 +67,10 @@ class UserPolicy
     /**
      * Determine whether the user can bulk delete.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(Authenticatable $user): bool
     {
         return $user->can('delete_any_user');
     }
@@ -79,10 +78,10 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function forceDelete(User $user): bool
+    public function forceDelete(Authenticatable $user): bool
     {
         return $user->can('force_delete_user');
     }
@@ -90,10 +89,10 @@ class UserPolicy
     /**
      * Determine whether the user can permanently bulk delete.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(Authenticatable $user): bool
     {
         return $user->can('force_delete_any_user');
     }
@@ -101,10 +100,10 @@ class UserPolicy
     /**
      * Determine whether the user can restore.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function restore(User $user): bool
+    public function restore(Authenticatable $user): bool
     {
         return $user->can('restore_user');
     }
@@ -112,10 +111,10 @@ class UserPolicy
     /**
      * Determine whether the user can bulk restore.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function restoreAny(User $user): bool
+    public function restoreAny(Authenticatable $user): bool
     {
         return $user->can('restore_any_user');
     }
@@ -123,10 +122,10 @@ class UserPolicy
     /**
      * Determine whether the user can bulk restore.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function replicate(User $user): bool
+    public function replicate(Authenticatable $user): bool
     {
         return $user->can('replicate_user');
     }
@@ -134,10 +133,10 @@ class UserPolicy
     /**
      * Determine whether the user can reorder.
      *
-     * @param  \Taba\Crm\Models\User  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function reorder(User $user): bool
+    public function reorder(Authenticatable $user): bool
     {
         return $user->can('reorder_user');
     }
