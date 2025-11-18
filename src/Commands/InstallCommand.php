@@ -33,6 +33,7 @@ class InstallCommand extends Command
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
+        if (!$this->task('Publishing CSS resources', fn() => $this->publishCssResources())) return self::FAILURE;
         if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
         if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
         if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
@@ -175,6 +176,12 @@ class InstallCommand extends Command
         }
 
         File::copy($logoSource, $logoDestination);
+        return true;
+    }
+
+    protected function publishCssResources(): bool
+    {
+        $this->call('vendor:publish', ['--tag' => 'resources', '--force' => true]);
         return true;
     }
 
@@ -424,7 +431,7 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
+        $adminCssPath = 'resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {

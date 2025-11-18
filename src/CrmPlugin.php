@@ -147,8 +147,7 @@ class CrmPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        $panel->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
-        // $panel->viteTheme('packages/taba/crm/src/resources/css/admin.css');
+        $panel->viteTheme('resources/css/admin.css');
     }
 
     public static function make(): static
