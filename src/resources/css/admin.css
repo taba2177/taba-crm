@@ -1,6 +1,6 @@
-@import '../../../vendor/filament/filament/resources/css/theme.css';
-@import '../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
-@import '../../../vendor/pboivin/filament-peek/resources/css/plugin.css';
+@import './theme.css';
+@import './curator-plugin.css';
+@import './peek-plugin.css';
 
 @import 'cropperjs/dist/cropper.css';
 

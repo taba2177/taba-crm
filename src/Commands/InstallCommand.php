@@ -182,6 +182,24 @@ class InstallCommand extends Command
     protected function publishCssResources(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'resources', '--force' => true]);
+        
+        // Copy vendor CSS files that are imported by admin.css
+        $cssDir = resource_path('css');
+        $vendorCssFiles = [
+            'vendor/filament/filament/resources/css/theme.css' => 'theme.css',
+            'vendor/awcodes/filament-curator/resources/css/plugin.css' => 'curator-plugin.css',
+            'vendor/pboivin/filament-peek/resources/css/plugin.css' => 'peek-plugin.css',
+        ];
+        
+        foreach ($vendorCssFiles as $source => $dest) {
+            $sourcePath = base_path($source);
+            $destPath = $cssDir . '/' . $dest;
+            
+            if (File::exists($sourcePath)) {
+                File::copy($sourcePath, $destPath);
+            }
+        }
+        
         return true;
     }
 
