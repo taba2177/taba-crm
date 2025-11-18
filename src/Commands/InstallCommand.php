@@ -186,6 +186,8 @@ class InstallCommand extends Command
         // Copy vendor CSS files that are imported by admin.css
         $cssDir = resource_path('css');
         $vendorCssFiles = [
+            'vendor/filament/filament/resources/css/index.css' => 'index.css',
+            'vendor/filament/filament/resources/css/base.css' => 'base.css',
             'vendor/filament/filament/resources/css/theme.css' => 'theme.css',
             'vendor/awcodes/filament-curator/resources/css/plugin.css' => 'curator-plugin.css',
             'vendor/pboivin/filament-peek/resources/css/plugin.css' => 'peek-plugin.css',
