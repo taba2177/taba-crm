@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Taba\Crm\Models\User;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
@@ -16,8 +15,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Use the configured auth model (works for both host app and package)
+        $userModel = config('auth.providers.users.model', \App\Models\User::class);
+        
         // Create super admin user
-        $user = User::factory()->create([
+        $user = $userModel::factory()->create([
             'name' => 'Taba Admin',
             'email' => 'taba@admin.com',
             'password' => Hash::make('admin'),
