@@ -24,6 +24,7 @@ class InstallCommand extends Command
         // Run installation tasks
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
+        if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
         if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
@@ -126,10 +127,16 @@ class InstallCommand extends Command
         return true;
     }
 
+    protected function publishDatabaseAssets(): bool
+    {
+        $this->call('vendor:publish', ['--tag' => 'crm-database', '--force' => true]);
+        return true;
+    }
+
     protected function publishAssets(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'crm-config']);
-        $this->call('vendor:publish', ['--tag' => 'crm-database']);
+        // Database assets already published before seeding, so skip here
         return true;
     }
 
