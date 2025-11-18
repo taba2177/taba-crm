@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 
 module.exports = {
     presets: [
-        require("../../../vendor/filament/filament/tailwind.config.preset"),
+        require("./vendor/filament/filament/tailwind.config.preset"),
     ],
     content: [
         "./app/Filament/**/*.php",
