@@ -300,7 +300,7 @@ class InstallCommand extends Command
             '@tailwindcss/typography' => '^0.5.10',
             'postcss-nesting' => '^12.1.5',
             'cropperjs' => '^1.6.2',
-            'preline' => '^2.7.1',
+            'preline' => '^3.2.3',
             'flowbite' => '^2.5.2',
         ];
 
