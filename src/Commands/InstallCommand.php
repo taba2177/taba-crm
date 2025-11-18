@@ -192,7 +192,7 @@ class InstallCommand extends Command
     protected function updateUserModel(): bool
     {
         $userModelPath = app_path('Models/User.php');
-        
+
         if (!File::exists($userModelPath)) {
             $this->warn('User model not found at: ' . $userModelPath);
             return false;
@@ -229,7 +229,7 @@ class InstallCommand extends Command
         );
 
         File::put($userModelPath, $content);
-        
+
         $this->info('   User model updated to extend Taba\Crm\Models\User');
         return true;
     }
@@ -390,7 +390,7 @@ EOT;
 
         if (!File::exists($configPath)) {
             // If tailwind.config.js doesn't exist, create a new one using the preset.
-            $content = "import defaultTheme from 'tailwindcss/defaultTheme';\n\n module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n   './resources/views/**/*.blade.php', \n     './vendor/filament/**/*.blade.php',\n        './packages/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
+            $content = "import defaultTheme from 'tailwindcss/defaultTheme';\n\n module.exports = {\n    presets: [require('{$presetPath}')],\n    content: [\n        './app/Filament/**/*.php',\n        './resources/views/filament/**/*.blade.php',\n   './resources/views/**/*.blade.php', \n     './vendor/filament/**/*.blade.php',\n        './vendor/taba/crm/resources/views/**/*.blade.php', // Add crm views\n    ],\n};\n";
             File::put($configPath, $content);
             $this->info('Created tailwind.config.js with CRM preset.');
             return;
