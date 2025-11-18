@@ -472,6 +472,14 @@ EOT;
         // Reload content after potential modifications
         $content = File::get($configPath);
 
+        // Replace old vendor path with new resources path if it exists
+        $oldPath = 'vendor/taba/crm/src/resources/css/admin.css';
+        if (str_contains($content, $oldPath)) {
+            $content = str_replace($oldPath, $adminCssPath, $content);
+            File::put($configPath, $content);
+            $this->info('Updated admin.css path in vite.config.js from vendor to resources.');
+        }
+
         // Add admin.css if not present - using multiple patterns to match different formatting styles
         if (! str_contains($content, $adminCssPath)) {
             // Try to match different input array patterns
