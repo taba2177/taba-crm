@@ -26,6 +26,8 @@ class InstallCommand extends Command
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
         if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
+        // Always publish essential views (logo component needed for Filament)
+        if (!$this->task('Publishing essential views', fn() => $this->publishEssentialViews())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
@@ -130,7 +132,7 @@ class InstallCommand extends Command
     protected function publishDatabaseAssets(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'crm-database', '--force' => true]);
-        
+
         // Fix namespace in CrmSettingsSeeder after publishing
         $seederPath = database_path('seeders/CrmSettingsSeeder.php');
         if (File::exists($seederPath)) {
@@ -142,7 +144,7 @@ class InstallCommand extends Command
             );
             File::put($seederPath, $content);
         }
-        
+
         return true;
     }
 
@@ -157,6 +159,20 @@ class InstallCommand extends Command
     {
         $this->call('vendor:publish', ['--tag' => 'crm-views', '--force' => true]);
         $this->info('Views have been published successfully.');
+        return true;
+    }
+
+    protected function publishEssentialViews(): bool
+    {
+        // Publish the logo component which is required for Filament
+        $logoSource = __DIR__ . '/../views/components/logo.blade.php';
+        $logoDestination = resource_path('views/components/logo.blade.php');
+
+        if (!File::exists(dirname($logoDestination))) {
+            File::makeDirectory(dirname($logoDestination), 0755, true);
+        }
+
+        File::copy($logoSource, $logoDestination);
         return true;
     }
 

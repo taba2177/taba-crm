@@ -48,7 +48,7 @@ class UserModelTest extends TestCase
     public function it_can_create_super_admin_user()
     {
         $role = Role::create(['name' => 'super-admin']);
-        
+
         $user = User::factory()->create([
             'email' => 'admin@example.com',
         ]);

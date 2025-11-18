@@ -118,7 +118,7 @@ class CrmSettingsSeederTest extends TestCase
         $contactSettings = CrmSetting::where('group', 'contact')->orderBy('order')->get();
 
         $this->assertGreaterThan(0, $contactSettings->count());
-        
+
         // Verify order is sequential
         $previousOrder = 0;
         foreach ($contactSettings as $setting) {

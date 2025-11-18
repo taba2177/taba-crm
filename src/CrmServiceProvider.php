@@ -43,7 +43,7 @@ class CrmServiceProvider extends ServiceProvider
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
-        $this->loadViewsFrom(__DIR__.'/../views', 'crm');
+        $this->loadViewsFrom(__DIR__.'/views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Register middleware from the package's config file.
@@ -65,6 +65,7 @@ class CrmServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/views' => resource_path('views/vendor/crm'),
+                __DIR__.'/views/components/logo.blade.php' => resource_path('views/components/logo.blade.php'),
                 __DIR__.'/views/components/homepage/four-cards.blade.php' => resource_path('views/components/homepage/four-cards.blade.php'),
                 __DIR__.'/views/components/layouts' => resource_path('views/components/layouts'),
                 __DIR__.'/views/components/templates' => resource_path('views/components/templates'),
@@ -72,7 +73,7 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/views/posts' => resource_path('views/posts'),
                 __DIR__.'/views/previews' => resource_path('views/previews'),
                 __DIR__.'/views/filament/pages' => resource_path('views/filament/pages'),
-            ], 'views');
+            ], 'crm-views');
 
             // Publish public assets only if the directory exists to avoid errors
             $publicDir = __DIR__.'/../public';

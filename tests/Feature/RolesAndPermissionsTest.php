@@ -44,7 +44,7 @@ class RolesAndPermissionsTest extends TestCase
     public function super_admin_user_has_all_permissions()
     {
         $role = Role::create(['name' => 'super-admin']);
-        
+
         $permissions = [
             'view posts',
             'create posts',
