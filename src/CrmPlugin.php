@@ -44,8 +44,6 @@ class CrmPlugin implements Plugin
                 \Taba\Crm\Filament\Resources\ContactEntryResource::class,
                 \Taba\Crm\Filament\Resources\UserResource::class,
                 \Taba\Crm\Filament\Resources\ServicePaymentResource::class,
-                // \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
-                // \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
             ]);
 
         $panel
