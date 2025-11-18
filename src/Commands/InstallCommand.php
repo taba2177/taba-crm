@@ -26,6 +26,7 @@ class InstallCommand extends Command
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
         if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
+        if (!$this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield())) return self::FAILURE;
         // Always publish essential views (logo component needed for Filament)
         if (!$this->task('Publishing essential views', fn() => $this->publishEssentialViews())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
@@ -185,6 +186,30 @@ class InstallCommand extends Command
     {
         // Run the full DatabaseSeeder which includes roles, user, categories, and posts
         return $this->call('db:seed', ['--class' => 'Database\\Seeders\\DatabaseSeeder']) === 0;
+    }
+
+    protected function setupFilamentShield(): bool
+    {
+        // Install Filament Shield for admin panel
+        $installResult = $this->call('shield:install', ['panel' => 'admin']);
+
+        if ($installResult !== 0) {
+            $this->error('Failed to install Filament Shield');
+            return false;
+        }
+
+        // Generate policies and permissions for all resources
+        $generateResult = $this->call('shield:generate', [
+            '--all' => true,
+            '--panel' => 'admin',
+        ]);
+
+        if ($generateResult !== 0) {
+            $this->error('Failed to generate Shield permissions');
+            return false;
+        }
+
+        return true;
     }
 
     protected function runNpmInstall(): bool
