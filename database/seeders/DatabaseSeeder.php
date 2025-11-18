@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Taba\Crm\Database\Seeders\CrmSettingsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PostSeeder::class);
 
         // Seed CRM settings (must be after posts/categories for defaults)
-        $this->call(CrmSettingsSeeder::class);
+        $this->call(\Taba\Crm\Database\Seeders\CrmSettingsSeeder::class);
 
 
         // Notification::make()
