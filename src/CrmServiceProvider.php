@@ -6,14 +6,7 @@ namespace Taba\Crm;
 
 use Illuminate\Support\ServiceProvider;
 use Taba\Crm\Commands\InstallCommand;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\App;
-
-// Import the service providers from your package's dependencies
-use Jeffgreco13\FilamentBreezy\FilamentBreezyServiceProvider;
-use Awcodes\Curator\CuratorServiceProvider;
-use Pboivin\FilamentPeek\FilamentPeekServiceProvider;
-use Taba\Crm\Commands\demoCommand;
 use Livewire\Livewire;
 use Taba\Crm\Livewire\Home;
 
@@ -24,11 +17,8 @@ class CrmServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Programmatically register the service providers of third-party packages.
-        // This makes their commands (like 'filament-breezy:install') available.
-        $this->app->register(FilamentBreezyServiceProvider::class);
-        $this->app->register(CuratorServiceProvider::class);
-        $this->app->register(FilamentPeekServiceProvider::class);
+        // Keep registration minimal. Do not programmatically register third-party
+        // service providers here — allow those packages to register themselves.
         // Merge the package's config file with the application's.
         $this->mergeConfigFrom(__DIR__.'/../config/crm.php', 'crm');
     }
@@ -57,7 +47,6 @@ class CrmServiceProvider extends ServiceProvider
 
         // Only register commands and publishable assets when running in the console.
         if ($this->app->runningInConsole()) {
-            Log::info('Registering CRM commands...'); // Debugging log
             // Register the custom 'crm:install' command.
             $this->commands([
                 InstallCommand::class,
@@ -90,7 +79,7 @@ class CrmServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
                 __DIR__.'/../database/seeders' => database_path('seeders'),
-                __DIR__.'/../database/faqctories' => database_path('factories'),
+                __DIR__.'/../database/factories' => database_path('factories'),
             ], 'crm-database');
 
             $this->publishes([
