@@ -24,6 +24,7 @@ class InstallCommand extends Command
         // Run installation tasks
         if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
+        if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
@@ -46,6 +47,11 @@ class InstallCommand extends Command
         }
 
         $this->info('✅ Taba CRM installed successfully!');
+        $this->newLine();
+        $this->info('📧 Super Admin Credentials:');
+        $this->info('   Email: taba@admin.com');
+        $this->info('   Password: admin');
+        $this->newLine();
         $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
         $this->warn('And run `npm run build` again.');
 
@@ -137,6 +143,11 @@ class InstallCommand extends Command
     protected function runMigrations(): bool
     {
         return $this->call('migrate') === 0;
+    }
+
+    protected function runSeeder(): bool
+    {
+        return $this->call('db:seed', ['--class' => 'Database\\Seeders\\DatabaseSeeder']) === 0;
     }
 
     protected function runNpmInstall(): bool
