@@ -305,12 +305,12 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $viteThemePath = "'vendor/taba/crm/src/resources/css/admin.css'";
+        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {
             $this->info('vite.config.js not found. Creating a new one for you...');
-            $stub = <<<'EOT'
+            $stub = <<<EOT
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
@@ -320,6 +320,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                '{$adminCssPath}',
             ],
             refresh: true,
         }),
@@ -327,6 +328,8 @@ export default defineConfig({
 });
 EOT;
             File::put($configPath, $stub);
+            $this->info('Created vite.config.js with CRM admin.css.');
+            return;
         }
 
         // Now that we know the file exists, remove Tailwind v4 plugin if present
@@ -343,14 +346,30 @@ EOT;
         // Reload content after potential modifications
         $content = File::get($configPath);
 
-        if (! str_contains($content, $viteThemePath)) {
-            $newContent = str_replace(
-                "'resources/js/app.js',",
-                "'resources/js/app.js',\n                {$viteThemePath},",
-                $content
-            );
-            File::put($configPath, $newContent);
-            $this->info('CRM theme path added to vite.config.js.');
+        // Add admin.css if not present - using multiple patterns to match different formatting styles
+        if (! str_contains($content, $adminCssPath)) {
+            // Try to match different input array patterns
+            $patterns = [
+                // Pattern 1: ['resources/css/app.css', 'resources/js/app.js']
+                "/input:\s*\[(.*?'resources\/js\/app\.js')\s*\]/s" => "input: [$1, '{$adminCssPath}']",
+                // Pattern 2: input: ['resources/css/app.css', 'resources/js/app.js'],
+                "/(input:\s*\[.*?'resources\/js\/app\.js')/s" => "$1, '{$adminCssPath}'",
+            ];
+
+            $replaced = false;
+            foreach ($patterns as $pattern => $replacement) {
+                $newContent = preg_replace($pattern, $replacement, $content, 1, $count);
+                if ($count > 0) {
+                    File::put($configPath, $newContent);
+                    $this->info('CRM admin.css added to vite.config.js.');
+                    $replaced = true;
+                    break;
+                }
+            }
+
+            if (!$replaced) {
+                $this->warn('Could not automatically add admin.css to vite.config.js. Please add it manually: ' . $adminCssPath);
+            }
         }
     }
 }
