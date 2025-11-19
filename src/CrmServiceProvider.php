@@ -29,9 +29,7 @@ class CrmServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Set locale from config instead of hardcoding
-        if (config('crm.locale')) {
-            App::setLocale(config('crm.locale'));
-        }
+        \App::setLocale(config('crm.locale', 'ar'));
 
         // Configure language switch from config
         \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
@@ -43,7 +41,8 @@ class CrmServiceProvider extends ServiceProvider
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
-        $this->loadViewsFrom(__DIR__.'/views', 'crm');
+        // $this->loadViewsFrom(__DIR__.'/views', 'crm');
+        $this->loadViewsFrom(__DIR__.'/../views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Register middleware from the package's config file.
