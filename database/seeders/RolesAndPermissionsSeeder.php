@@ -13,6 +13,13 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
+        // Check if roles already exist
+        $existingRolesCount = Role::count();
+        if ($existingRolesCount > 0) {
+            $this->command->info("⏭️  Skipped: Roles table already has {$existingRolesCount} records. Keeping existing roles and permissions.");
+            return;
+        }
+
         // Clear the cache to avoid conflicts
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
 

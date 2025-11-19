@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('🌱 Starting CRM database seeding...');
+        $this->command->newLine();
+
         // Create roles and permissions first
         $this->call(RolesAndPermissionsSeeder::class);
 
@@ -23,6 +26,9 @@ class DatabaseSeeder extends Seeder
 
         // Seed CRM settings (must be after posts/categories for defaults)
         $this->call(CrmSettingsSeeder::class);
+
+        $this->command->newLine();
+        $this->command->info('✅ CRM database seeding completed!');
 
 
         // Notification::make()

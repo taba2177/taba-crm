@@ -11,6 +11,13 @@ class CrmSettingsSeeder extends Seeder
 {
     public function run(): void
     {
+        // Check if CRM settings already exist
+        $existingCount = CrmSetting::count();
+        if ($existingCount > 0) {
+            $this->command->info("⏭️  Skipped: CRM settings already exist ({$existingCount} records). Keeping existing settings.");
+            return;
+        }
+
         // Get first post and category for defaults
         $firstPost = Post::where('show_in_home', true)
             ->published()

@@ -10,6 +10,13 @@ class PostSeeder extends Seeder
 {
     public function run(): void
     {
+        // Check if posts already exist
+        $existingCount = DB::table('posts')->count();
+        if ($existingCount > 0) {
+            $this->command->info("⏭️  Skipped: Posts table already has {$existingCount} records. Keeping existing data.");
+            return;
+        }
+
         $posts = require database_path('seeders/data/posts.php');
 
         $driver = DB::connection()->getDriverName();
@@ -21,13 +28,10 @@ class PostSeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         }
 
-        // 2. Truncate the posts table (This is where the trigger fails)
-        DB::table('posts')->truncate();
-
-        // 3. Insert the data
+        // 2. Insert the data (no truncate to preserve existing data)
         DB::table('posts')->insert($posts);
 
-        // 4. Re-enable Foreign Key Checks
+        // 3. Re-enable Foreign Key Checks
         if ($driver === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = ON;');
         } elseif ($driver === 'mysql' || $driver === 'mariadb') {
