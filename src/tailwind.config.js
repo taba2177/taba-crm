@@ -67,8 +67,8 @@ const bgColor5 = "#2e1f3e";
 const bgColor6 = "rgba(51, 57, 73, 0.5)"; // Using primary
 const bgColor7 = "#3baac533"; // Using secondary
 const bgColor8 = "#a8c4cc"; // Lighter secondary
-const green1 = "#00ff2f";
-const green2 = "#00f721";
+const green1 = "#ffae00ff";
+const green2 = "#f78c00ff";
 
 module.exports = {
     content: [

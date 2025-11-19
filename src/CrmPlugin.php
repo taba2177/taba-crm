@@ -25,6 +25,7 @@ use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\ThemeMode;
 use Taba\Crm\Filament\Widgets\OthersAnalytics;
 use Taba\Crm\Filament\Widgets\PaymentAnalytics;
+use Taba\Crm\Models\Post;
 
 class CrmPlugin implements Plugin
 {
@@ -136,8 +137,11 @@ class CrmPlugin implements Plugin
                 ->formPanelPosition('left')
                 ->formPanelWidth('40%')
                 ->mobileFormPanelPosition('bottom')
-                ->emptyPanelBackgroundImageOpacity('70%')
-                ->emptyPanelBackgroundImageUrl('https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')
+                ->emptyPanelBackgroundImageOpacity('65%')
+                ->emptyPanelBackgroundImageUrl(
+                    Post::inRandomOrder()->first()?->image?->url ??
+                    'https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+                )
 
         ])->defaultThemeMode(ThemeMode::Dark)
         ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
@@ -146,6 +150,7 @@ class CrmPlugin implements Plugin
     public function boot(Panel $panel): void
     {
         $panel->viteTheme('vendor/taba/crm/src/resources/css/admin.css');
+        // $panel->viteTheme('package/taba/crm/src/resources/css/admin.css');
     }
 
     public static function make(): static
