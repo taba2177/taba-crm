@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Taba\Crm\Models\User;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
             return;
         }
 
-        // Create super admin user
-        $user = User::factory()->create([
+        // Create super admin user using App\Models\User
+        $user = User::create([
             'name' => 'Taba Admin',
             'email' => 'taba@admin.com',
             'password' => Hash::make('admin'),
