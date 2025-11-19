@@ -26,8 +26,8 @@ class InstallCommand extends Command
         if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
         if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
         if (!$this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield())) return self::FAILURE;
-        if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         if (!$this->task('Updating User model for Shield', fn() => $this->updateUserModel())) return self::FAILURE;
+        if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         // Always publish essential views (logo component needed for Filament)
         if (!$this->task('Publishing essential views', fn() => $this->publishEssentialViews())) return self::FAILURE;
         // Publish all package views
