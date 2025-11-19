@@ -233,7 +233,30 @@ class InstallCommand extends Command
 
     protected function publishDatabaseAssets(): bool
     {
+        // Check if data folder already exists and backup if needed
+        $dataPath = database_path('seeders/data');
+        $backupPath = null;
+        
+        if (File::exists($dataPath)) {
+            // Create a temporary backup of existing data
+            $backupPath = database_path('seeders/data_backup_' . time());
+            File::copyDirectory($dataPath, $backupPath);
+            $this->info('   📦 Backing up existing seed data...');
+        }
+
+        // Publish all database assets
         $this->call('vendor:publish', ['--tag' => 'crm-database', '--force' => true]);
+
+        // If we had a backup, restore the original data folder
+        if ($backupPath && File::exists($backupPath)) {
+            // Remove the newly published data folder
+            if (File::exists($dataPath)) {
+                File::deleteDirectory($dataPath);
+            }
+            // Restore the backup
+            File::moveDirectory($backupPath, $dataPath);
+            $this->info('   ✓ Seeder classes updated, your existing seed data preserved');
+        }
 
         // Fix namespace in CrmSettingsSeeder after publishing
         $seederPath = database_path('seeders/CrmSettingsSeeder.php');
