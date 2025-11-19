@@ -28,6 +28,8 @@ class InstallCommand extends Command
         // Update User model BEFORE Shield setup so it has the HasRoles trait
         if (!$this->task('Updating User model for Shield', fn() => $this->updateUserModel())) return self::FAILURE;
         if (!$this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield())) return self::FAILURE;
+        // Clean up AdminPanelProvider after Shield is done (remove redundant ->default())
+        if (!$this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider())) return self::FAILURE;
         // Seed AFTER Shield creates roles
         if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
         // Always publish essential views (logo component needed for Filament)
@@ -128,10 +130,27 @@ class InstallCommand extends Command
             // Clear config cache so the updated provider is loaded
             $this->call('config:clear');
             $this->call('route:clear');
+            $this->call('view:clear');
 
-            // Force reload the provider
-            if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
-                \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+            // Force reload the provider and register the panel with plugin
+            try {
+                // Clear the service container's resolved instances
+                app()->forgetInstance('filament');
+                
+                // Re-register the provider to load the plugin
+                if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
+                    $provider = new \App\Providers\Filament\AdminPanelProvider(app());
+                    app()->register($provider);
+                }
+                
+                // Set the default panel so Shield can find it
+                if (\Filament\Facades\Filament::hasPanel('admin')) {
+                    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+                    // Mark admin as default
+                    \Filament\Facades\Filament::getPanel('admin')->default();
+                }
+            } catch (\Exception $e) {
+                $this->warn('Could not reload AdminPanelProvider: ' . $e->getMessage());
             }
         }
 
@@ -151,9 +170,7 @@ class InstallCommand extends Command
     {
         $content = File::get($providerPath);
 
-        // Remove ->default() as it's already in the plugin
-        $content = preg_replace('/\s*->default\(\)\s*\n/', "\n", $content);
-
+        // KEEP ->default() until after Shield setup (we'll remove it later)
         // Remove ->login() as it's already in the plugin
         $content = preg_replace('/\s*->login\(\)\s*\n/', "\n", $content);
 
@@ -183,6 +200,24 @@ class InstallCommand extends Command
 
         File::put($providerPath, $content);
         $this->info('Updated AdminPanelProvider with CRM plugin.');
+    }
+
+    protected function finalizeAdminPanelProvider(): bool
+    {
+        $providerPath = app_path('Providers/Filament/AdminPanelProvider.php');
+        
+        if (!File::exists($providerPath)) {
+            return true; // Nothing to finalize
+        }
+
+        $content = File::get($providerPath);
+
+        // Now remove ->default() since it's in the plugin
+        $content = preg_replace('/\s*->default\(\)\s*\n/', "\n", $content);
+
+        File::put($providerPath, $content);
+        
+        return true;
     }
 
     protected function publishDatabaseAssets(): bool
