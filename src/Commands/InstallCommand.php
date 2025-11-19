@@ -125,6 +125,14 @@ class InstallCommand extends Command
         // Update AdminPanelProvider to add CRM plugin and remove redundant methods
         if ($isNewPanel && File::exists($providerPath)) {
             $this->updateAdminPanelProvider($providerPath);
+            // Clear config cache so the updated provider is loaded
+            $this->call('config:clear');
+            $this->call('route:clear');
+
+            // Force reload the provider
+            if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
+                \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+            }
         }
 
         // Install curator regardless (it is safe to run multiple times).
