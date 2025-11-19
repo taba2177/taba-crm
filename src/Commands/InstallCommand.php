@@ -182,7 +182,7 @@ class InstallCommand extends Command
     protected function publishCssResources(): bool
     {
         $this->call('vendor:publish', ['--tag' => 'resources', '--force' => true]);
-        
+
         // Copy vendor CSS files that are imported by admin.css
         $cssDir = resource_path('css');
         $vendorCssFiles = [
@@ -192,16 +192,16 @@ class InstallCommand extends Command
             'vendor/awcodes/filament-curator/resources/css/plugin.css' => 'curator-plugin.css',
             'vendor/pboivin/filament-peek/resources/css/plugin.css' => 'peek-plugin.css',
         ];
-        
+
         foreach ($vendorCssFiles as $source => $dest) {
             $sourcePath = base_path($source);
             $destPath = $cssDir . '/' . $dest;
-            
+
             if (File::exists($sourcePath)) {
                 File::copy($sourcePath, $destPath);
             }
         }
-        
+
         return true;
     }
 
@@ -348,7 +348,6 @@ class InstallCommand extends Command
         if (!File::exists($appCssPath)) {
             // If app.css doesn't exist, create one with Tailwind v3 syntax
             $cssContent = <<<'EOT'
-@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -453,7 +452,7 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $adminCssPath = 'resources/css/admin.css';
+        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {
