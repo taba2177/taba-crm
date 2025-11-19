@@ -136,13 +136,13 @@ class InstallCommand extends Command
             try {
                 // Clear the service container's resolved instances
                 app()->forgetInstance('filament');
-                
+
                 // Re-register the provider to load the plugin
                 if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
                     $provider = new \App\Providers\Filament\AdminPanelProvider(app());
                     app()->register($provider);
                 }
-                
+
                 // Set the default panel so Shield can find it
                 if (\Filament\Facades\Filament::hasPanel('admin')) {
                     \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
@@ -205,7 +205,7 @@ class InstallCommand extends Command
     protected function finalizeAdminPanelProvider(): bool
     {
         $providerPath = app_path('Providers/Filament/AdminPanelProvider.php');
-        
+
         if (!File::exists($providerPath)) {
             return true; // Nothing to finalize
         }
@@ -216,7 +216,7 @@ class InstallCommand extends Command
         $content = preg_replace('/\s*->default\(\)\s*\n/', "\n", $content);
 
         File::put($providerPath, $content);
-        
+
         return true;
     }
 
