@@ -339,6 +339,28 @@ class InstallCommand extends Command
 
     protected function setupFilamentShield(): bool
     {
+        // Ensure the admin panel provider is loaded and registered before Shield runs
+        try {
+            // Force reload the AdminPanelProvider
+            if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
+                $provider = app()->resolveProvider(\App\Providers\Filament\AdminPanelProvider::class);
+                if (!$provider) {
+                    $provider = new \App\Providers\Filament\AdminPanelProvider(app());
+                    app()->register($provider);
+                }
+            }
+            
+            // Verify the admin panel exists and is set as default
+            if (!\Filament\Facades\Filament::getDefaultPanel()) {
+                $panels = \Filament\Facades\Filament::getPanels();
+                if (isset($panels['admin'])) {
+                    \Filament\Facades\Filament::setCurrentPanel($panels['admin']);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->warn('Note: Could not pre-register panel: ' . $e->getMessage());
+        }
+
         // Install Filament Shield for admin panel
         $installResult = $this->call('shield:install', ['panel' => 'admin']);
 
