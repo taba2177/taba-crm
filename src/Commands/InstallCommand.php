@@ -127,39 +127,14 @@ class InstallCommand extends Command
         // Update AdminPanelProvider to add CRM plugin and remove redundant methods
         if ($isNewPanel && File::exists($providerPath)) {
             $this->updateAdminPanelProvider($providerPath);
-            // Clear config cache so the updated provider is loaded
+            // Clear all caches so the updated provider is loaded
             $this->call('config:clear');
             $this->call('route:clear');
             $this->call('view:clear');
-
-            // Force reload the provider and register the panel with plugin
-            try {
-                // Clear the service container's resolved instances
-                app()->forgetInstance('filament');
-
-                // Re-register the provider to load the plugin
-                if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
-                    $provider = new \App\Providers\Filament\AdminPanelProvider(app());
-                    app()->register($provider);
-                }
-
-                // Set the default panel so Shield can find it
-                if (\Filament\Facades\Filament::hasPanel('admin')) {
-                    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
-                    // Mark admin as default
-                    \Filament\Facades\Filament::getPanel('admin')->default();
-                }
-            } catch (\Exception $e) {
-                $this->warn('Could not reload AdminPanelProvider: ' . $e->getMessage());
-            }
         }
 
         // Install curator regardless (it is safe to run multiple times).
         $this->call('curator:install', ['--no-interaction' => true]);
-
-        if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
-            \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
-        }
 
         $this->call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
 
