@@ -65,8 +65,5 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit categories',
             'delete categories',
         ]);
-
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
-        $superAdminRole->syncPermissions(Permission::all());
     }
 }
