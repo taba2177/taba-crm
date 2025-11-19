@@ -41,8 +41,7 @@ class CrmServiceProvider extends ServiceProvider
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
-        // $this->loadViewsFrom(__DIR__.'/views', 'crm');
-        $this->loadViewsFrom(__DIR__.'/../views', 'crm');
+        $this->loadViewsFrom(__DIR__.'/views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Register middleware from the package's config file.
@@ -62,8 +61,9 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/../config/crm.php' => config_path('crm.php'),
             ], 'crm-config');
 
+            // Publish views from src/views
             $this->publishes([
-                __DIR__.'/../views' => resource_path('views/vendor/crm'),
+                __DIR__.'/views' => resource_path('views/vendor/crm'),
             ], 'crm-views');
 
             // Publish public assets only if the directory exists to avoid errors
