@@ -30,6 +30,8 @@ class InstallCommand extends Command
         if (!$this->task('Updating User model for Shield', fn() => $this->updateUserModel())) return self::FAILURE;
         // Always publish essential views (logo component needed for Filament)
         if (!$this->task('Publishing essential views', fn() => $this->publishEssentialViews())) return self::FAILURE;
+        // Publish all package views
+        if (!$this->task('Publishing package views', fn() => $this->publishViews())) return self::FAILURE;
         // Update package.json before running npm so new devDependencies are installed.
         if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
         if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
@@ -46,10 +48,6 @@ class InstallCommand extends Command
             // When skipping frontend steps, still publish server-side assets.
             if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
             $this->info('Skipped frontend tasks (--skip-frontend).');
-        }
-
-        if ($this->option('publish-views')) {
-            if (!$this->task('Publishing package views', fn() => $this->publishViews())) return self::FAILURE;
         }
 
         $this->info('✅ Taba CRM installed successfully!');
