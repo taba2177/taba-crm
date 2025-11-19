@@ -227,19 +227,19 @@ class InstallCommand extends Command
         }
 
         File::copy($logoSource, $logoDestination);
-        
+
         // Publish Arabic translation file
         $langSource = __DIR__ . '/../../lang/ar.json';
         $langDestination = lang_path('ar.json');
-        
+
         if (!File::exists(dirname($langDestination))) {
             File::makeDirectory(dirname($langDestination), 0755, true);
         }
-        
+
         if (File::exists($langSource)) {
             File::copy($langSource, $langDestination);
         }
-        
+
         return true;
     }
 
