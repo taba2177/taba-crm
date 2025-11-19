@@ -113,11 +113,18 @@ class InstallCommand extends Command
         $providerPath = app_path('Providers/Filament/AdminPanelProvider.php');
         $providerClass = '\\App\\Providers\\Filament\\AdminPanelProvider';
 
+        $isNewPanel = false;
         if (! File::exists($providerPath) && ! class_exists($providerClass)) {
             $this->info('No existing Filament admin panel detected — creating one.');
             $this->call('filament:install', ['--panels' => true, '--no-interaction' => true]);
+            $isNewPanel = true;
         } else {
             $this->info('Detected existing Filament admin panel — skipping panel creation.');
+        }
+
+        // Update AdminPanelProvider to add CRM plugin and remove redundant methods
+        if ($isNewPanel && File::exists($providerPath)) {
+            $this->updateAdminPanelProvider($providerPath);
         }
 
         // Install curator regardless (it is safe to run multiple times).
@@ -130,6 +137,44 @@ class InstallCommand extends Command
         $this->call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
 
         return true;
+    }
+
+    protected function updateAdminPanelProvider(string $providerPath): void
+    {
+        $content = File::get($providerPath);
+
+        // Remove ->default() as it's already in the plugin
+        $content = preg_replace('/\s*->default\(\)\s*\n/', "\n", $content);
+
+        // Remove ->login() as it's already in the plugin
+        $content = preg_replace('/\s*->login\(\)\s*\n/', "\n", $content);
+
+        // Add CRM plugin before ->colors() or ->discoverResources()
+        if (!str_contains($content, 'CrmPlugin::make()')) {
+            // Add use statement if not present
+            if (!str_contains($content, 'use Taba\Crm\CrmPlugin;')) {
+                $content = preg_replace(
+                    '/(namespace\s+App\\\\Providers\\\\Filament;)\s*\n/',
+                    "$1\n\nuse Taba\\Crm\\CrmPlugin;\n",
+                    $content
+                );
+            }
+
+            // Add plugin before ->colors() or other configuration methods
+            $patterns = [
+                '/(\n\s+return \$panel\n\s+->id\([^)]+\)\n\s+->path\([^)]+\))/' => "$1\n            ->plugin(CrmPlugin::make())",
+            ];
+
+            foreach ($patterns as $pattern => $replacement) {
+                if (preg_match($pattern, $content)) {
+                    $content = preg_replace($pattern, $replacement, $content);
+                    break;
+                }
+            }
+        }
+
+        File::put($providerPath, $content);
+        $this->info('Updated AdminPanelProvider with CRM plugin.');
     }
 
     protected function publishDatabaseAssets(): bool
