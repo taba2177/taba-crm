@@ -12,6 +12,9 @@ class InstallCommand extends Command
     protected $signature = 'crm:install {--publish-views : Publish the package views to the application} {--skip-frontend : Skip npm install/build and frontend configuration}';
     protected $description = 'Install all assets and configurations for the Taba CRM package.';
 
+    protected array $errors = [];
+    protected array $warnings = [];
+
     public function handle(): int
     {
         $this->info('🚀 Starting Taba CRM installation...');
@@ -21,69 +24,102 @@ class InstallCommand extends Command
             return self::FAILURE;
         }
 
-        // Run installation tasks
-        if (!$this->task('Running dependency installers', fn() => $this->installDependencies())) return self::FAILURE;
-        if (!$this->task('Running database migrations', fn() => $this->runMigrations())) return self::FAILURE;
-        if (!$this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets())) return self::FAILURE;
+        // Run installation tasks - collect errors but continue
+        $this->task('Running dependency installers', fn() => $this->installDependencies());
+        $this->task('Running database migrations', fn() => $this->runMigrations());
+        $this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets());
         // Update User model BEFORE Shield setup so it has the HasRoles trait
-        if (!$this->task('Updating User model for Shield', fn() => $this->updateUserModel())) return self::FAILURE;
-        if (!$this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield())) return self::FAILURE;
+        $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
+        $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
         // Clean up AdminPanelProvider after Shield is done (remove redundant ->default())
-        if (!$this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider())) return self::FAILURE;
+        $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
         // Seed AFTER Shield creates roles
-        if (!$this->task('Seeding database with super admin', fn() => $this->runSeeder())) return self::FAILURE;
+        $this->task('Seeding database with super admin', fn() => $this->runSeeder());
         // Always publish essential views (logo component needed for Filament)
-        if (!$this->task('Publishing essential views', fn() => $this->publishEssentialViews())) return self::FAILURE;
+        $this->task('Publishing essential views', fn() => $this->publishEssentialViews());
         // Publish all package views
-        if (!$this->task('Publishing package views', fn() => $this->publishViews())) return self::FAILURE;
+        $this->task('Publishing package views', fn() => $this->publishViews());
         // Update package.json before running npm so new devDependencies are installed.
-        if (!$this->task('Updating package.json', fn() => $this->updateNodeDependencies())) return self::FAILURE;
-        if (!$this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible())) return self::FAILURE;
-        if (!$this->task('Publishing CSS resources', fn() => $this->publishCssResources())) return self::FAILURE;
-        if (!$this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig())) return self::FAILURE;
-        if (!$this->task('Configuring Vite', fn() => $this->updateViteConfig())) return self::FAILURE;
-        if (!$this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig())) return self::FAILURE;
+        $this->task('Updating package.json', fn() => $this->updateNodeDependencies());
+        $this->task('Ensuring app.css is compatible', fn() => $this->ensureAppCssCompatible());
+        $this->task('Publishing CSS resources', fn() => $this->publishCssResources());
+        $this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig());
+        $this->task('Configuring Vite', fn() => $this->updateViteConfig());
+        $this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig());
 
         if (! $this->option('skip-frontend')) {
-            if (!$this->task('Installing NPM packages', fn() => $this->runNpmInstall())) return self::FAILURE;
-            if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
-            if (!$this->task('Building frontend assets', fn() => $this->runNpmBuild())) return self::FAILURE;
+            $this->task('Installing NPM packages', fn() => $this->runNpmInstall());
+            $this->task('Publishing package assets', fn() => $this->publishAssets());
+            $this->task('Building frontend assets', fn() => $this->runNpmBuild());
         } else {
             // When skipping frontend steps, still publish server-side assets.
-            if (!$this->task('Publishing package assets', fn() => $this->publishAssets())) return self::FAILURE;
+            $this->task('Publishing package assets', fn() => $this->publishAssets());
             $this->info('Skipped frontend tasks (--skip-frontend).');
         }
 
-        $this->info('✅ Taba CRM installed successfully!');
+        $this->displayResults();
+
+        return empty($this->errors) ? self::SUCCESS : self::FAILURE;
+    }
+
+    protected function displayResults(): void
+    {
+        $this->newLine();
+
+        if (!empty($this->warnings)) {
+            $this->warn('⚠️  Installation completed with warnings:');
+            foreach ($this->warnings as $warning) {
+                $this->warn('   • ' . $warning);
+            }
+            $this->newLine();
+        }
+
+        if (!empty($this->errors)) {
+            $this->error('❌ Installation completed with errors:');
+            foreach ($this->errors as $error) {
+                $this->error('   • ' . $error);
+            }
+            $this->newLine();
+            $this->warn('Please resolve the above errors and run the installation again or manually complete the failed steps.');
+        } else {
+            $this->info('✅ Taba CRM installed successfully!');
+        }
+
         $this->newLine();
         $this->info('📧 Super Admin Credentials:');
         $this->info('   Email: taba@admin.com');
         $this->info('   Password: admin');
         $this->newLine();
-        $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
-        $this->warn('And run `npm run build` again.');
-
-        return self::SUCCESS;
+        
+        if (empty($this->errors)) {
+            $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
+            $this->warn('And run `npm run build` again if you skipped frontend tasks.');
+        }
     }
 
     /**
      * Executes a task and reports its success or failure.
+     * Now continues on failure and collects errors.
      */
     protected function task(string $description, callable $task): bool
     {
         $this->output->write($description . '...');
 
         try {
-            if ($task() !== false) {
+            $result = $task();
+            if ($result !== false) {
                 $this->output->writeln(' <info>✔</info>');
                 return true;
+            } else {
+                $this->output->writeln(' <comment>⚠</comment>');
+                $this->warnings[] = $description . ' returned false';
+                return false;
             }
         } catch (Throwable $e) {
-            $this->error($e->getMessage());
+            $this->output->writeln(' <error>✘</error>');
+            $this->errors[] = $description . ': ' . $e->getMessage();
+            return false;
         }
-
-        $this->output->writeln(' <error>✘</error>');
-        return false;
     }
 
     /**
@@ -385,20 +421,36 @@ class InstallCommand extends Command
 
     protected function runNpmInstall(): bool
     {
+        // Check if npm is available
+        $npmCheck = Process::run('npm --version');
+        if (!$npmCheck->successful()) {
+            $this->warnings[] = 'npm command not found - Please install Node.js and npm, then run: npm install';
+            return false;
+        }
+
         $result = Process::run('npm install');
         if (!$result->successful()) {
-            $this->error($result->errorOutput());
+            $this->errors[] = 'npm install failed: ' . $result->errorOutput();
+            return false;
         }
-        return $result->successful();
+        return true;
     }
 
     protected function runNpmBuild(): bool
     {
+        // Check if npm is available
+        $npmCheck = Process::run('npm --version');
+        if (!$npmCheck->successful()) {
+            $this->warnings[] = 'npm command not found - Please install Node.js and npm, then run: npm run build';
+            return false;
+        }
+
         $result = Process::run('npm run build');
         if (!$result->successful()) {
-            $this->error($result->errorOutput());
+            $this->errors[] = 'npm run build failed: ' . $result->errorOutput();
+            return false;
         }
-        return $result->successful();
+        return true;
     }
 
     protected function updateNodeDependencies(): bool
