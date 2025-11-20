@@ -289,7 +289,7 @@ class InstallCommand extends Command
 
     protected function publishEssentialViews(): bool
     {
-        // Publish the logo component which is required for Filament
+        // Publish the logo component which is required for Filament (only if it doesn't exist)
         $logoSource = __DIR__ . '/../views/components/logo.blade.php';
         $logoDestination = resource_path('views/components/logo.blade.php');
 
@@ -297,9 +297,15 @@ class InstallCommand extends Command
             File::makeDirectory(dirname($logoDestination), 0755, true);
         }
 
-        File::copy($logoSource, $logoDestination);
+        // Only copy logo if it doesn't exist to preserve user customizations
+        if (!File::exists($logoDestination)) {
+            File::copy($logoSource, $logoDestination);
+            $this->info('   ✓ Logo component published');
+        } else {
+            $this->info('   ⏭️  Logo component already exists, keeping your version');
+        }
 
-        // Publish Arabic translation file
+        // Merge Arabic translation file instead of overwriting
         $langSource = __DIR__ . '/../../lang/ar.json';
         $langDestination = lang_path('ar.json');
 
@@ -308,7 +314,21 @@ class InstallCommand extends Command
         }
 
         if (File::exists($langSource)) {
-            File::copy($langSource, $langDestination);
+            if (File::exists($langDestination)) {
+                // Merge existing translations with new ones
+                $existingTranslations = json_decode(File::get($langDestination), true) ?? [];
+                $newTranslations = json_decode(File::get($langSource), true) ?? [];
+                
+                // Merge: existing translations take precedence, new ones are added
+                $mergedTranslations = array_merge($newTranslations, $existingTranslations);
+                
+                File::put($langDestination, json_encode($mergedTranslations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                $this->info('   ✓ Arabic translations merged with existing translations');
+            } else {
+                // No existing file, just copy
+                File::copy($langSource, $langDestination);
+                $this->info('   ✓ Arabic translations published');
+            }
         }
 
         return true;
@@ -318,7 +338,7 @@ class InstallCommand extends Command
     {
         $this->call('vendor:publish', ['--tag' => 'resources', '--force' => true]);
 
-        // Copy vendor CSS files that are imported by admin.css
+        // Copy vendor CSS files that are imported by admin.css (only if they don't exist)
         $cssDir = resource_path('css');
         $vendorCssFiles = [
             'vendor/filament/filament/resources/css/index.css' => 'index.css',
@@ -333,7 +353,13 @@ class InstallCommand extends Command
             $destPath = $cssDir . '/' . $dest;
 
             if (File::exists($sourcePath)) {
-                File::copy($sourcePath, $destPath);
+                // Only copy if destination doesn't exist to preserve user modifications
+                if (!File::exists($destPath)) {
+                    File::copy($sourcePath, $destPath);
+                } else {
+                    // File exists, check if it's outdated (optional - just skip for safety)
+                    $this->info('   ⏭️  ' . $dest . ' already exists, keeping your version');
+                }
             }
         }
 
@@ -535,6 +561,11 @@ EOT;
 
         // Check if using Tailwind v4 syntax and convert to v3
         if (str_contains($content, "@import 'tailwindcss'") || str_contains($content, '@import "tailwindcss"')) {
+            // Create a backup before modifying
+            $backupPath = resource_path('css/app.css.backup.' . time());
+            File::copy($appCssPath, $backupPath);
+            $this->info('   📦 Created backup of app.css at: css/app.css.backup.' . time());
+
             // Replace Tailwind v4 syntax with v3 syntax
             $newContent = preg_replace(
                 "/@import\s+['\"]tailwindcss['\"];?/",
@@ -556,6 +587,7 @@ EOT;
 
             File::put($appCssPath, $newContent);
             $this->info('Converted app.css from Tailwind v4 to v3 syntax.');
+            $this->warn('   Original app.css backed up. You can restore it if needed.');
         }
 
         return true;
@@ -566,7 +598,8 @@ EOT;
         $configPath = base_path('postcss.config.cjs');
 
         if (File::exists($configPath)) {
-            return true; // Assume user has their own config if it already exists.
+            $this->info('   ⏭️  postcss.config.cjs already exists, keeping your configuration');
+            return true; // User has their own config, don't override
         }
 
         $stub = <<<'EOT'
@@ -580,6 +613,7 @@ module.exports = {
 EOT;
 
         File::put($configPath, $stub);
+        $this->info('   ✓ Created postcss.config.cjs');
 
         return true;
     }
