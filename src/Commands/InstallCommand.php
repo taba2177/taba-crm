@@ -29,8 +29,8 @@ class InstallCommand extends Command
         $this->task('Running database migrations', fn() => $this->runMigrations());
         $this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets());
         // Update User model BEFORE Shield setup so it has the HasRoles trait
-        $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
         $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
+        $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
         // Clean up AdminPanelProvider after Shield is done (remove redundant ->default())
         $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
         // Seed AFTER Shield creates roles
@@ -181,9 +181,19 @@ class InstallCommand extends Command
     {
         $content = File::get($providerPath);
 
-        // KEEP ->default() until after Shield setup (we'll remove it later)
         // Remove ->login() as it's already in the plugin
         $content = preg_replace('/\s*->login\(\)\s*\n/', "\n", $content);
+
+        // Ensure ->default() is present for Shield (will be removed later in finalizeAdminPanelProvider)
+        if (!str_contains($content, '->default()')) {
+            // Add ->default() after ->id() or ->path()
+            $content = preg_replace(
+                '/(->(?:id|path)\([^)]+\))/',
+                "$1\n            ->default()",
+                $content,
+                1 // Only replace first occurrence
+            );
+        }
 
         // Add CRM plugin before ->colors() or ->discoverResources()
         if (!str_contains($content, 'CrmPlugin::make()')) {
@@ -198,6 +208,7 @@ class InstallCommand extends Command
 
             // Add plugin before ->colors() or other configuration methods
             $patterns = [
+                '/(\n\s+return \$panel\n\s+->id\([^)]+\)\n\s+->default\(\)\n\s+->path\([^)]+\))/' => "$1\n            ->plugin(CrmPlugin::make())",
                 '/(\n\s+return \$panel\n\s+->id\([^)]+\)\n\s+->path\([^)]+\))/' => "$1\n            ->plugin(CrmPlugin::make())",
             ];
 
@@ -223,7 +234,7 @@ class InstallCommand extends Command
 
         $content = File::get($providerPath);
 
-        // Now remove ->default() since it's in the plugin
+        // Remove ->default() since it's in the plugin (after Shield setup is complete)
         $content = preg_replace('/\s*->default\(\)\s*\n/', "\n", $content);
 
         File::put($providerPath, $content);
