@@ -30,10 +30,7 @@ class InstallCommand extends Command
         $this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets());
         // Update User model BEFORE Shield setup so it has the HasRoles trait
         $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
-        $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
-        // Clean up AdminPanelProvider after Shield is done (remove redundant ->default())
-        $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
-        // Seed AFTER Shield creates roles
+        // Seed AFTER migrations and model updates but BEFORE Shield
         $this->task('Seeding database with super admin', fn() => $this->runSeeder());
         // Always publish essential views (logo component needed for Filament)
         $this->task('Publishing essential views', fn() => $this->publishEssentialViews());
@@ -56,6 +53,10 @@ class InstallCommand extends Command
             $this->task('Publishing package assets', fn() => $this->publishAssets());
             $this->info('Skipped frontend tasks (--skip-frontend).');
         }
+
+        // Run Shield setup AFTER AdminPanelProvider is fully configured with ->default()
+        $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
+        $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
 
         $this->displayResults();
 
@@ -329,10 +330,10 @@ class InstallCommand extends Command
                 // Merge existing translations with new ones
                 $existingTranslations = json_decode(File::get($langDestination), true) ?? [];
                 $newTranslations = json_decode(File::get($langSource), true) ?? [];
-                
+
                 // Merge: existing translations take precedence, new ones are added
                 $mergedTranslations = array_merge($newTranslations, $existingTranslations);
-                
+
                 File::put($langDestination, json_encode($mergedTranslations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                 $this->info('   ✓ Arabic translations merged with existing translations');
             } else {
