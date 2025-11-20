@@ -29,8 +29,8 @@ class InstallCommand extends Command
         $this->task('Running database migrations', fn() => $this->runMigrations());
         $this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets());
         // Update User model BEFORE Shield setup so it has the HasRoles trait
-        $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
         $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
+        $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
         // Clean up AdminPanelProvider after Shield is done (remove redundant ->default())
         $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
         // Seed AFTER Shield creates roles
@@ -90,7 +90,7 @@ class InstallCommand extends Command
         $this->info('   Email: taba@admin.com');
         $this->info('   Password: admin');
         $this->newLine();
-        
+
         if (empty($this->errors)) {
             $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
             $this->warn('And run `npm run build` again if you skipped frontend tasks.');
@@ -236,7 +236,7 @@ class InstallCommand extends Command
         // Check if data folder already exists and backup if needed
         $dataPath = database_path('seeders/data');
         $backupPath = null;
-        
+
         if (File::exists($dataPath)) {
             // Create a temporary backup of existing data
             $backupPath = database_path('seeders/data_backup_' . time());
@@ -408,7 +408,7 @@ class InstallCommand extends Command
                     app()->register($provider);
                 }
             }
-            
+
             // Verify the admin panel exists and is set as default
             if (!\Filament\Facades\Filament::getDefaultPanel()) {
                 $panels = \Filament\Facades\Filament::getPanels();
