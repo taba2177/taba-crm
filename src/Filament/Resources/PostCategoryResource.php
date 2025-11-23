@@ -253,27 +253,44 @@ class PostCategoryResource extends Resource
                     ->visible(fn () => auth()->user()->hasRole('super_admin'))
                     ->direction('column')
                     ->color('primary')
+                    ->default(null)
+                    ->nullable()
                     ->iconSizes([ // Customize the values for each icon size
                         'sm' => 'h-full w-full',
                         'md' => 'h-full w-full',
                         'lg' => 'h-full w-full',
                     ])->gap('gap-5')
-                    // ->padding('px-4 px-6')
+                    ->descriptions([
+                        'none' => 'No specific layout - use default rendering',
+                    ])
                     ->extraCardsAttributes([
                         'class' => 'mb-5'
                     ])
                     ->live(debounce: '500ms')
                     ->icons(function (): array {
-                        // Get the option keys ('hero-section', 'testimonials', etc.)
                         $optionKeys = array_keys(self::getHomepageComponentOptions());
-                        // Map each key to its corresponding image path
-                        return collect($optionKeys)
-                            ->mapWithKeys(fn ($key) => [
-                                $key => asset("images/homepage/{$key}.png")
-                            ])
-                            ->all();
+                        $icons = [];
+                        foreach ($optionKeys as $key) {
+                            if ($key === 'none') {
+                                $icons[$key] = 'heroicon-o-x-circle';
+                            } else {
+                                $imagePath = public_path("images/homepage/{$key}.png");
+                                if (file_exists($imagePath)) {
+                                    $icons[$key] = asset("images/homepage/{$key}.png");
+                                } else {
+                                    $icons[$key] = 'heroicon-o-document-text';
+                                }
+                            }
+                        }
+                        return $icons;
                     })
-                    ->columns(4),
+                    ->columns(4)
+                    ->dehydrateStateUsing(fn ($state) => $state === 'none' ? null : $state)
+                    ->afterStateHydrated(function ($component, $state) {
+                        if ($state === null || $state === '') {
+                            $component->state('none');
+                        }
+                    }),
                     ]),
 
             ]);
@@ -283,7 +300,9 @@ class PostCategoryResource extends Resource
     {
         $componentPath = resource_path('views/components/homepage');
         $files = File::files($componentPath);
-        $options = [];
+        $options = [
+            'none' => 'None (No Layout)', // Add None option
+        ];
         foreach ($files as $file) {
             $name = Str::before($file->getFilename(), '.blade.php');
             $options[$name] = Str::title(str_replace('-', ' ', $name));
