@@ -278,6 +278,19 @@ class Post extends Model
     }
 
     /**
+     * Exclude posts from child categories (only show posts from parent categories).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeExcludeChildCategories($query)
+    {
+        return $query->whereHas('postCategory', function ($q) {
+            $q->whereNull('parent_id');
+        });
+    }
+
+    /**
      * Retrieve the draft posts.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

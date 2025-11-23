@@ -27,7 +27,9 @@ class Home extends Component
 
  public function mount()
 {
+    // Only load parent categories (exclude child categories from standalone sections)
     $allSections = PostCategory::whereNotNull('section_component')
+        ->parentOnly()
         ->with('firstPost')
         ->withCount(['posts' => function ($query) {
             $query->where("show_in_home", true)->published();
@@ -128,9 +130,10 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        // Get the first published post for SEO data
+        // Get the first published post from parent categories only for SEO data
         $seoPost = Post::where("show_in_home", true)
             ->published()
+            ->excludeChildCategories()
             ->select('title', 'meta_title', 'meta_description', 'content', 'image_id')
             ->orderBy('order', 'asc')
             ->first();

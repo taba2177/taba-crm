@@ -83,6 +83,17 @@ class PostCategory extends Model
     }
 
     /**
+     * Retrieve only parent categories (no children).
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeParentOnly($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    /**
      * Get the first post in the defined order shown on the homepage.
      */
     public function firstPost(): HasOne
