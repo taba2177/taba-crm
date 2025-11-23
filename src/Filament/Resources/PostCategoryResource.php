@@ -92,6 +92,16 @@ class PostCategoryResource extends Resource
                     ->required()
                     ->translateLabel()
                     ->maxLength(255),
+                
+                Forms\Components\Select::make('parent_id')
+                    ->label('Parent Category')
+                    ->translateLabel()
+                    ->relationship('parent', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
+                    ->helperText('Select a parent category to create a subcategory'),
+                
                 Forms\Components\TextInput::make('name')
                 ->translateLabel()
                 ->suffixAction(
@@ -323,6 +333,13 @@ class PostCategoryResource extends Resource
                     ->sortable()->translateLabel()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')->translateLabel(),
+                
+                Tables\Columns\TextColumn::make('parent.name')
+                    ->label('Parent Category')
+                    ->translateLabel()
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
 
                 Tables\Columns\ToggleColumn::make('HEAVY_SECTION')
                     ->label('HEAVY_SECTION')

@@ -18,6 +18,7 @@ class PostCategory extends Model
     protected $fillable = [
         'name',
         'slug',
+        'parent_id',
         'order',
         'register_in_header',
         'description',
