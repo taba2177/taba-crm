@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             $this->command->info('Super admin user already exists: taba@admin.com');
 
             // Assign role if not already assigned (Shield uses super_admin with underscore)
-            $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super-admin';
+            $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super_admin';
             if (!$existingUser->hasRole($roleName)) {
                 $existingUser->assignRole($roleName);
                 $this->command->info("Assigned {$roleName} role to existing user");
@@ -39,8 +39,8 @@ class UserSeeder extends Seeder
 
         $this->command->info('Created super admin user: taba@admin.com');
 
-        // Assign super-admin role (Shield uses super_admin with underscore)
-        $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super-admin';
+        // Assign super_admin role (Shield uses super_admin with underscore)
+        $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super_admin';
         if (Role::where('name', $roleName)->exists()) {
             $user->assignRole($roleName);
             $this->command->info("Assigned {$roleName} role to user");

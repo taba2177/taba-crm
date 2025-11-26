@@ -12,11 +12,11 @@ class RolesAndPermissionsTest extends TestCase
     /** @test */
     public function it_can_create_roles()
     {
-        $superAdminRole = Role::create(['name' => 'super-admin']);
+        $superAdminRole = Role::create(['name' => 'super_admin']);
         $adminRole = Role::create(['name' => 'admin']);
         $clientRole = Role::create(['name' => 'client']);
 
-        $this->assertDatabaseHas('roles', ['name' => 'super-admin']);
+        $this->assertDatabaseHas('roles', ['name' => 'super_admin']);
         $this->assertDatabaseHas('roles', ['name' => 'admin']);
         $this->assertDatabaseHas('roles', ['name' => 'client']);
     }
@@ -43,7 +43,7 @@ class RolesAndPermissionsTest extends TestCase
     /** @test */
     public function super_admin_user_has_all_permissions()
     {
-        $role = Role::create(['name' => 'super-admin']);
+        $role = Role::create(['name' => 'super_admin']);
 
         $permissions = [
             'view posts',
@@ -58,7 +58,7 @@ class RolesAndPermissionsTest extends TestCase
         }
 
         $user = User::factory()->create();
-        $user->assignRole('super-admin');
+        $user->assignRole('super_admin');
 
         foreach ($permissions as $permissionName) {
             $this->assertTrue($user->hasPermissionTo($permissionName));
@@ -87,14 +87,14 @@ class RolesAndPermissionsTest extends TestCase
     /** @test */
     public function it_can_check_multiple_roles()
     {
-        Role::create(['name' => 'super-admin']);
+        Role::create(['name' => 'super_admin']);
         Role::create(['name' => 'admin']);
 
         $user = User::factory()->create();
         $user->assignRole('admin');
 
         $this->assertTrue($user->hasRole('admin'));
-        $this->assertFalse($user->hasRole('super-admin'));
+        $this->assertFalse($user->hasRole('super_admin'));
     }
 
     /** @test */

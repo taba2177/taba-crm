@@ -142,7 +142,7 @@ vendor/bin/phpunit --filter=it_can_create_a_crm_setting
 - ✅ Handles translatable content (EN/AR)
 
 #### RolesAndPermissionsTest.php (8 tests)
-- ✅ Create roles (super-admin, admin, client)
+- ✅ Create roles (super_admin, admin, client)
 - ✅ Create permissions
 - ✅ Assign permissions to roles
 - ✅ Super admin has all permissions
