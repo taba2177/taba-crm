@@ -228,7 +228,7 @@ class Home extends Component
     public function title(): string
     {
         $baseTitle = $this->metaTitle;
-        $fullSuffix = ' خدمات هندسية احترافية ومرنة ';
+        $fullSuffix = '';
         $baseLength = mb_strlen($baseTitle, 'UTF-8');
         $fullSuffixLength = mb_strlen($fullSuffix, 'UTF-8');
 
