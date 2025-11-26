@@ -35,7 +35,7 @@ class CrmSetting extends Model
     public static function get(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
-        
+
         if (!$setting) {
             // Fallback to config
             return config(str_replace('_', '.', $key), $default);

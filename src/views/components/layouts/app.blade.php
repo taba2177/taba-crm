@@ -7,7 +7,7 @@
 
     <!-- Place favicon.ico in the root directory -->
     <link rel="shortcut icon"
-        href={{ Taba\Crm\Models\CrmSettings::get('crm_business_favicon') ?? asset("/assets/img/favicon.png") }}
+        href={{ Taba\Crm\Models\CrmSetting::get('crm_business_favicon') ?? asset("/assets/img/favicon.png") }}
         type="image/x-icon" />
 
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap"
