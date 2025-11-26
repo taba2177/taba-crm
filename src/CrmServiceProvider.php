@@ -75,7 +75,7 @@ class CrmServiceProvider extends ServiceProvider
                 __DIR__.'/views/livewire' => resource_path('views/livewire'),
                 __DIR__.'/views/posts' => resource_path('views/posts'),
                 __DIR__.'/views/previews' => resource_path('views/previews'),
-                __DIR__.'/views/filament/pages' => resource_path('views/filament/pages'),
+                __DIR__.'/views/filament' => resource_path('views/filament'),
             ], 'crm-views');
 
             // Publish public assets only if the directory exists to avoid errors

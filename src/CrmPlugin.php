@@ -133,7 +133,7 @@ class CrmPlugin implements Plugin
                         override: true,
                     ),
             SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
-            FilamentPeekPlugin::make()->disablePluginStyles(),
+            FilamentPeekPlugin::make(),
             AuthUIEnhancerPlugin::make()
                 ->showEmptyPanelOnMobile(true)
                 ->formPanelPosition('left')

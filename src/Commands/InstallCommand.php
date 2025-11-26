@@ -41,6 +41,8 @@ class InstallCommand extends Command
         $this->task('Configuring Tailwind CSS', fn() => $this->updateTailwindConfig());
         $this->task('Configuring Vite', fn() => $this->updateViteConfig());
         $this->task('Ensuring PostCSS is configured', fn() => $this->updatePostCssConfig());
+        $this->task('Publishing Filament assets', fn() => $this->runFilamentAssets());
+
 
         if (! $this->option('skip-frontend')) {
             $this->task('Installing NPM packages', fn() => $this->runNpmInstall());
@@ -62,6 +64,12 @@ class InstallCommand extends Command
         $this->displayResults();
 
         return empty($this->errors) ? self::SUCCESS : self::FAILURE;
+    }
+
+    // php artisan filament:assets
+    protected function runFilamentAssets(): bool
+    {
+        return $this->call('filament:assets') === 0;
     }
 
     protected function displayResults(): void
