@@ -81,7 +81,10 @@ class InstallCommand extends Command
                 $this->error('   • ' . $error);
             }
             $this->newLine();
-            $this->warn('Please resolve the above errors and run the installation again or manually complete the failed steps.');
+
+            // Retry failed tasks after system is fully initialized
+            $this->info('🔄 Retrying failed tasks after system initialization...');
+            $this->retryFailedTasks();
         } else {
             $this->info('✅ Taba CRM installed successfully!');
         }
@@ -95,6 +98,47 @@ class InstallCommand extends Command
         if (empty($this->errors)) {
             $this->warn('Final step: Please add `->plugin(\Taba\Crm\CrmPlugin::make())` to your AdminPanelProvider to activate the plugin.');
             $this->warn('And run `npm run build` again if you skipped frontend tasks.');
+        } else {
+            $this->warn('Please resolve the above errors manually or run the installation command again.');
+        }
+    }
+
+    protected function retryFailedTasks(): void
+    {
+        $retryableErrors = [];
+
+        foreach ($this->errors as $error) {
+            if (str_contains($error, 'Setting up Filament Shield')) {
+                $retryableErrors[] = 'Shield setup';
+            }
+        }
+
+        if (empty($retryableErrors)) {
+            return;
+        }
+
+        // Clear caches to ensure updated providers are loaded
+        $this->call('config:clear');
+        $this->call('route:clear');
+        $this->call('cache:clear');
+
+        $this->newLine();
+        $originalErrors = $this->errors;
+        $this->errors = [];
+
+        // Retry Shield setup if it failed
+        if (in_array('Shield setup', $retryableErrors)) {
+            $this->task('Retrying Filament Shield setup', fn() => $this->setupFilamentShield());
+        }
+
+        // If retry succeeded, remove the original error
+        if (empty($this->errors)) {
+            $this->newLine();
+            $this->info('✅ All failed tasks completed successfully after retry!');
+            $this->errors = [];
+        } else {
+            // Restore original errors if retry also failed
+            $this->errors = array_merge($originalErrors, $this->errors);
         }
     }
 
