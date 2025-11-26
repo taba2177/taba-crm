@@ -30,8 +30,6 @@ class InstallCommand extends Command
         $this->task('Publishing database assets (seeders, factories)', fn() => $this->publishDatabaseAssets());
         // Update User model BEFORE Shield setup so it has the HasRoles trait
         $this->task('Updating User model for Shield', fn() => $this->updateUserModel());
-        // Seed AFTER migrations and model updates but BEFORE Shield
-        $this->task('Seeding database with super admin', fn() => $this->runSeeder());
         // Always publish essential views (logo component needed for Filament)
         $this->task('Publishing essential views', fn() => $this->publishEssentialViews());
         // Publish all package views
@@ -57,6 +55,9 @@ class InstallCommand extends Command
         // Run Shield setup AFTER AdminPanelProvider is fully configured with ->default()
         $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
         $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
+        
+        // Seed AFTER Shield creates roles and permissions
+        $this->task('Seeding database with super admin', fn() => $this->runSeeder());
 
         $this->displayResults();
 

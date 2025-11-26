@@ -64,6 +64,18 @@ class CrmServiceProvider extends ServiceProvider
             // Publish views from src/views
             $this->publishes([
                 __DIR__.'/views' => resource_path('views/vendor/crm'),
+                __DIR__.'/views/components/homepage/four-cards.blade.php' => resource_path('views/components/homepage/four-cards.blade.php'),
+                __DIR__.'/views/components/breadcrumbs.blade.php' => resource_path('views/components/breadcrumbs.blade.php'),
+                __DIR__.'/views/components/breadcrumbs2.blade.php' => resource_path('views/components/breadcrumbs2.blade.php'),
+                __DIR__.'/views/components/figure.blade.php' => resource_path('views/components/figure.blade.php'),
+                __DIR__.'/views/components/header.blade.php' => resource_path('views/components/header.blade.php'),
+                __DIR__.'/views/components/footer.blade.php' => resource_path('views/components/footer.blade.php'),
+                __DIR__.'/views/components/layouts' => resource_path('views/components/layouts'),
+                __DIR__.'/views/components/templates' => resource_path('views/components/templates'),
+                __DIR__.'/views/livewire' => resource_path('views/livewire'),
+                __DIR__.'/views/posts' => resource_path('views/posts'),
+                __DIR__.'/views/previews' => resource_path('views/previews'),
+                __DIR__.'/views/filament/pages' => resource_path('views/filament/pages'),
             ], 'crm-views');
 
             // Publish public assets only if the directory exists to avoid errors
