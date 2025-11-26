@@ -11,9 +11,10 @@ class PostCategorySeeder extends Seeder
 {
     public function run(): void
     {
+        $truncate = false; // Set to true to truncate, false to keep existing data
         // Check if post categories already exist
         $existingCount = DB::table('post_categories')->count();
-        if ($existingCount > 0) {
+        if ($existingCount > 0 && ! $truncate) {
             $this->command->info("⏭️  Skipped: Post categories table already has {$existingCount} records. Keeping existing data.");
             return;
         }
@@ -31,6 +32,10 @@ class PostCategorySeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         }
         // PostgreSQL does not require disabling for truncate/insert.
+
+        if ($truncate) {
+            DB::table('post_categories')->truncate();
+        }
 
         // 2. Insert the data (no truncate to preserve existing data)
         DB::table('post_categories')->insert($categories);

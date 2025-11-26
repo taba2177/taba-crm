@@ -10,9 +10,10 @@ class PostSeeder extends Seeder
 {
     public function run(): void
     {
+        $truncate = false; // Set to true to truncate, false to keep existing data
         // Check if posts already exist
         $existingCount = DB::table('posts')->count();
-        if ($existingCount > 0) {
+        if ($existingCount > 0 && ! $truncate) {
             $this->command->info("⏭️  Skipped: Posts table already has {$existingCount} records. Keeping existing data.");
             return;
         }
@@ -28,6 +29,9 @@ class PostSeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         }
 
+        if ($truncate) {
+            DB::table('posts')->truncate();
+        }
         // 2. Insert the data (no truncate to preserve existing data)
         DB::table('posts')->insert($posts);
 
