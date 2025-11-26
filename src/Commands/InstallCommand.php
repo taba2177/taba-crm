@@ -231,37 +231,42 @@ class InstallCommand extends Command
 
         // Ensure ->default() is present for Shield (will be removed later in finalizeAdminPanelProvider)
         if (!str_contains($content, '->default()')) {
-            // Add ->default() after ->id() or ->path()
+            // Add ->default() after ->path()
             $content = preg_replace(
-                '/(->(?:id|path)\([^)]+\))/',
+                '/(->path\([^)]+\))/',
                 "$1\n            ->default()",
                 $content,
-                1 // Only replace first occurrence
+                1
             );
         }
 
-        // Add CRM plugin before ->colors() or ->discoverResources()
+        // Add CRM plugin
         if (!str_contains($content, 'CrmPlugin::make()')) {
             // Add use statement if not present
             if (!str_contains($content, 'use Taba\Crm\CrmPlugin;')) {
                 $content = preg_replace(
-                    '/(namespace\s+App\\\\Providers\\\\Filament;)\s*\n/',
-                    "$1\n\nuse Taba\\Crm\\CrmPlugin;\n",
+                    '/(namespace\s+App\\\\Providers\\\\Filament;)/',
+                    "$1\n\nuse Taba\\Crm\\CrmPlugin;",
                     $content
                 );
             }
 
-            // Add plugin before ->colors() or other configuration methods
-            $patterns = [
-                '/(\n\s+return \$panel\n\s+->id\([^)]+\)\n\s+->default\(\)\n\s+->path\([^)]+\))/' => "$1\n            ->plugin(CrmPlugin::make())",
-                '/(\n\s+return \$panel\n\s+->id\([^)]+\)\n\s+->path\([^)]+\))/' => "$1\n            ->plugin(CrmPlugin::make())",
-            ];
-
-            foreach ($patterns as $pattern => $replacement) {
-                if (preg_match($pattern, $content)) {
-                    $content = preg_replace($pattern, $replacement, $content);
-                    break;
-                }
+            // Add plugin after ->path() or ->default()
+            // This is more flexible and works with different formatting styles
+            if (str_contains($content, '->default()')) {
+                $content = preg_replace(
+                    '/(->default\(\))/',
+                    "$1\n            ->plugin(CrmPlugin::make())",
+                    $content,
+                    1
+                );
+            } else {
+                $content = preg_replace(
+                    '/(->path\([^)]+\))/',
+                    "$1\n            ->plugin(CrmPlugin::make())",
+                    $content,
+                    1
+                );
             }
         }
 
