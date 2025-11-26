@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Taba\Crm\Jobs\SaveUnsplashImageJob; // We will create this job next
+use Taba\Crm\Models\CrmSetting;
 
 class ImageSearchService
 {
@@ -21,7 +22,7 @@ class ImageSearchService
      */
     public function __construct(GeminiTranslationService $geminiService)
     {
-        $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY');
+        $this->unsplashApiKey = env('UNSPLASH_ACCESS_KEY',CrmSetting::get('crm_unsplash_access_key'));
         $this->unsplashApiUrl = "https://api.unsplash.com/search/photos";
         $this->geminiService = $geminiService;
 

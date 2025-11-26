@@ -55,7 +55,7 @@ class InstallCommand extends Command
         // Run Shield setup AFTER AdminPanelProvider is fully configured with ->default()
         $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
         $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
-        
+
         // Seed AFTER Shield creates roles and permissions
         $this->task('Seeding database with super admin', fn() => $this->runSeeder());
 

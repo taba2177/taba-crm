@@ -5,6 +5,7 @@ namespace Taba\Crm\Services;
 use Gemini;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Taba\Crm\Models\CrmSetting;
 
 class SeoSuggestionService
 {
@@ -45,7 +46,7 @@ class SeoSuggestionService
         {$textToAnalyze}";
 
         try {
-            $client = Gemini::client(config('crm.gemini_api_key'));
+            $client = Gemini::client(CrmSetting::get('crm_gemini_api_key'));
             $result = $client->geminiPro()->generateContent($prompt);
             $rawResponse = $result->text();
 

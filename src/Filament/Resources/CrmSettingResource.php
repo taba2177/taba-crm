@@ -161,7 +161,38 @@ class CrmSettingResource extends Resource
                                                     ->label(__('Business Name (Arabic)'))
                                                     ->placeholder('اسم شركتك')
                                                     ->required(),
+                                            ]),
 
+                                        Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\FileUpload::make('crm_business_logo')
+                                                    ->label(__('Business Logo'))
+                                                    ->image()
+                                                    ->disk('public')
+                                                    ->directory('logos')
+                                                    ->imageEditor()
+                                                    ->imageEditorAspectRatios([
+                                                        null,
+                                                        '16:9',
+                                                        '4:3',
+                                                        '1:1',
+                                                    ])
+                                                    ->helperText(__('Company logo image')),
+
+                                                Forms\Components\FileUpload::make('crm_business_favicon')
+                                                    ->label(__('Favicon'))
+                                                    ->image()
+                                                    ->disk('public')
+                                                    ->directory('logos')
+                                                    ->imageEditor()
+                                                    ->imageEditorAspectRatios([
+                                                        '1:1',
+                                                    ])
+                                                    ->helperText(__('Website favicon (recommended 32x32 or 64x64 pixels)')),
+                                            ]),
+
+                                        Grid::make(2)
+                                            ->schema([
                                                 Forms\Components\TextInput::make('crm_business_price_range')
                                                     ->label(__('Price Range'))
                                                     ->placeholder('SAR 500 - SAR 20000')
@@ -235,7 +266,14 @@ class CrmSettingResource extends Resource
                                             ->helperText(__('Google Gemini AI API key for AI-powered features'))
                                             ->columnSpanFull(),
                                     ]),
-                            ]),
+                                    Forms\Components\TextInput::make('crm_unsplash_access_key')
+                                            ->label(__('Unsplash Access Key'))
+                                            ->placeholder('your_unsplash_access_key')
+                                            ->password()
+                                            ->revealable()
+                                            ->helperText(__('Unsplash API access key for image services'))
+                                            ->columnSpanFull(),
+                                    ]),
                     ])
                     ->columnSpanFull(),
             ]);

@@ -5,6 +5,7 @@ namespace Taba\Crm\Services;
 use Gemini;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Taba\Crm\Models\CrmSetting;
 
 class GenerateSeederService2
 {
@@ -13,7 +14,7 @@ class GenerateSeederService2
 
     public function __construct()
     {
-        $apiKey = config('crm.gemini_api_key');
+        $apiKey = CrmSetting::get('crm_gemini_api_key'); //config('crm.gemini_api_key');
         if (empty($apiKey)) {
             throw new \Exception('GEMINI_API_KEY is not configured. Please set it in config/crm.php or .env file.');
         }

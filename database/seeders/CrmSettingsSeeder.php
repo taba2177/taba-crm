@@ -164,6 +164,26 @@ class CrmSettingsSeeder extends Seeder
                 'order' => 1,
             ],
             [
+                'key' => 'crm_business_logo',
+                'value' => '',
+                'type' => 'image',
+                'group' => 'business',
+                'label' => ['en' => 'Business Logo', 'ar' => 'شعار العمل'],
+                'description' => ['en' => 'Company logo image', 'ar' => 'صورة شعار الشركة'],
+                'is_translatable' => false,
+                'order' => 2,
+            ],
+            [
+                'key' => 'crm_business_favicon',
+                'value' => '',
+                'type' => 'image',
+                'group' => 'business',
+                'label' => ['en' => 'Favicon', 'ar' => 'أيقونة المفضلة'],
+                'description' => ['en' => 'Website favicon (small icon)', 'ar' => 'أيقونة الموقع الصغيرة'],
+                'is_translatable' => false,
+                'order' => 3,
+            ],
+            [
                 'key' => 'crm_business_price_range',
                 'value' => '',
                 'type' => 'text',
@@ -171,7 +191,7 @@ class CrmSettingsSeeder extends Seeder
                 'label' => ['en' => 'Price Range', 'ar' => 'النطاق السعري'],
                 'description' => ['en' => 'Business price range (e.g., SAR 500 - SAR 20000)', 'ar' => 'النطاق السعري للخدمات (مثال: 500 - 20000 ريال)'],
                 'is_translatable' => false,
-                'order' => 2,
+                'order' => 4,
             ],
             [
                 'key' => 'crm_business_opens',
@@ -181,7 +201,7 @@ class CrmSettingsSeeder extends Seeder
                 'label' => ['en' => 'Opening Time', 'ar' => 'وقت الفتح'],
                 'description' => ['en' => 'Business opening time (24-hour format)', 'ar' => 'وقت فتح العمل (صيغة 24 ساعة)'],
                 'is_translatable' => false,
-                'order' => 3,
+                'order' => 5,
             ],
             [
                 'key' => 'crm_business_closes',
@@ -191,7 +211,7 @@ class CrmSettingsSeeder extends Seeder
                 'label' => ['en' => 'Closing Time', 'ar' => 'وقت الإغلاق'],
                 'description' => ['en' => 'Business closing time (24-hour format)', 'ar' => 'وقت إغلاق العمل (صيغة 24 ساعة)'],
                 'is_translatable' => false,
-                'order' => 4,
+                'order' => 6,
             ],
 
             // SEO Defaults (from first post/category)
