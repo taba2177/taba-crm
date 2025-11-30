@@ -267,7 +267,7 @@ class Home extends Component
 
     public function desc(): string
     {
-        $excerpt = $this->metaDescription . ' مكتب جديان للحلول الهندسية هو مكتب هندسي يقدم تصاميم، حسابات، حصر كميات، وخدمات المكتب الفني المساندة لأنظمة الكهرباء والميكانيكا بجودة عالية وسعر منافس. نخدم المؤسسات، شركات المقاولات، مكاتب التصميم والاستشارات الهندسية، وندعمهم خلال ضغط العمل ونرفع معايير الالتزام عبر مهندسين محترفين وفق الكود السعودي والعالمي ';
+        $excerpt = $this->metaDescriptionك;
         $idealLength = 150; // Optimal for meta descriptions
         $tolerance = 5; // ±5 characters flexibility
         $minLength = $idealLength - $tolerance;
