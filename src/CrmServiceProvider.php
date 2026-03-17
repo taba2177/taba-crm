@@ -7,6 +7,8 @@ namespace Taba\Crm;
 use Illuminate\Support\ServiceProvider;
 use Taba\Crm\Commands\InstallCommand;
 use Illuminate\Support\Facades\App;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
 use Taba\Crm\Livewire\Home;
 
@@ -40,6 +42,13 @@ class CrmServiceProvider extends ServiceProvider
 
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        // Load API routes if enabled
+        if (config('crm.api.enabled', true)) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+            $this->configureApiRateLimiting();
+        }
+
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
         $this->loadViewsFrom(__DIR__.'/views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -98,5 +107,19 @@ class CrmServiceProvider extends ServiceProvider
             ], ['crm','resources']);
 
         }
+    }
+
+    /**
+     * Configure rate limiting for the CRM API.
+     */
+    protected function configureApiRateLimiting(): void
+    {
+        RateLimiter::for('crm-api', function (\Illuminate\Http\Request $request) {
+            $limit = config('crm.api.rate_limit', 60);
+
+            return $request->user()
+                ? Limit::perMinute($limit)->by($request->user()->id)
+                : Limit::perMinute($limit)->by($request->ip());
+        });
     }
 }

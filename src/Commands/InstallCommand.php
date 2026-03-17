@@ -729,7 +729,7 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
+        $adminCssPath = 'packages/taba/crm/src/resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {
@@ -771,7 +771,7 @@ EOT;
         $content = File::get($configPath);
 
         // Replace old vendor path with new resources path if it exists
-        $oldPath = 'vendor/taba/crm/src/resources/css/admin.css';
+        $oldPath = 'vendor/taba/crm/src/resources/css/admin.css'; // keep this to migrate old installs
         if (str_contains($content, $oldPath)) {
             $content = str_replace($oldPath, $adminCssPath, $content);
             File::put($configPath, $content);

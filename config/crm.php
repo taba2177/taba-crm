@@ -44,4 +44,39 @@ return [
         'google.translate' => \Taba\Crm\Http\Middleware\GoogleTranslate::class,
         'force.https' => \Taba\Crm\Http\Middleware\ForceHttps::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Settings for the RESTful API used by headless frontends (Angular, etc.)
+    |
+    */
+    'api' => [
+        // Enable or disable the API
+        'enabled' => env('CRM_API_ENABLED', true),
+
+        // Cache TTL in seconds for API responses (default: 5 minutes)
+        'cache_ttl' => env('CRM_API_CACHE_TTL', 300),
+
+        // Sanctum token expiration in days
+        'token_expiration_days' => env('CRM_API_TOKEN_DAYS', 30),
+
+        // If true, only one active token per user (new login revokes old tokens)
+        'single_session' => env('CRM_API_SINGLE_SESSION', false),
+
+        // API rate limiting (requests per minute)
+        'rate_limit' => env('CRM_API_RATE_LIMIT', 60),
+
+        // Allowed CORS origins for the Angular app
+        // Use '*' for all origins or specify your Angular app URL
+        'cors_origins' => env('CRM_API_CORS_ORIGINS', '*'),
+
+        // Default pagination size
+        'per_page' => env('CRM_API_PER_PAGE', 15),
+
+        // Maximum pagination size
+        'max_per_page' => env('CRM_API_MAX_PER_PAGE', 100),
+    ],
 ];
