@@ -72,5 +72,21 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit categories',
             'delete categories',
         ]);
+
+        // FilamentShield permissions for client panel access
+        $shieldClientPermissions = [
+            'view_any_post',
+            'view_post',
+            'create_post',
+            'update_post',
+            'view_any_service::payment',
+            'view_service::payment',
+        ];
+
+        foreach ($shieldClientPermissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
+        }
+
+        $clientRole->givePermissionTo($shieldClientPermissions);
     }
 }
