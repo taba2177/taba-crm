@@ -88,11 +88,10 @@ class CrmPlugin implements Plugin
         ->widgets([
                 GlobalStatsOverview::class,
                 PaymentAnalytics::class,
-                OthersAnalytics::class,
                 VisitorAnalytics::class,
+                LatestPosts::class,
+                RecentActivities::class,
                 // PostStatsOverview::class,
-                // LatestPosts::class,
-                // RecentActivities::class,
                 // GlobalStatsOverview::class,
                 // VisitorAnalytics::class,
                 // PaymentAnalytics::class,
