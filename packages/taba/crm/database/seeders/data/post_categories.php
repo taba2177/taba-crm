@@ -1,0 +1,43 @@
+<?php
+
+return [
+    [
+        'id' => 1,
+        'created_at' => '2025-01-01 00:00:00',
+        'updated_at' => '2025-01-01 00:00:00',
+        'slug' => 'homepage',
+        'name' => '{"en":"Home","ar":"الرئيسية"}',
+        'register_in_header' => 0,
+        'HEAVY_SECTION' => 1,
+        'section_component' => 'hero-section',
+        'order' => 1,
+        'description' => '{"en":"Welcome to our website","ar":"مرحبا بكم في موقعنا"}',
+        'subtitle' => '{"en":"Sample Homepage","ar":"الصفحة الرئيسية"}',
+    ],
+    [
+        'id' => 2,
+        'created_at' => '2025-01-01 00:00:00',
+        'updated_at' => '2025-01-01 00:00:00',
+        'slug' => 'about',
+        'name' => '{"en":"About Us","ar":"من نحن"}',
+        'register_in_header' => 1,
+        'HEAVY_SECTION' => 0,
+        'section_component' => 'about-section',
+        'order' => 2,
+        'description' => '{"en":"Learn more about us","ar":"تعرف علينا أكثر"}',
+        'subtitle' => '{"en":"Who We Are","ar":"من نحن"}',
+    ],
+    [
+        'id' => 3,
+        'created_at' => '2025-01-01 00:00:00',
+        'updated_at' => '2025-01-01 00:00:00',
+        'slug' => 'services',
+        'name' => '{"en":"Services","ar":"الخدمات"}',
+        'register_in_header' => 1,
+        'HEAVY_SECTION' => 1,
+        'section_component' => 'services-section',
+        'order' => 3,
+        'description' => '{"en":"Our services","ar":"خدماتنا"}',
+        'subtitle' => '{"en":"What We Offer","ar":"ما نقدمه"}',
+    ],
+];

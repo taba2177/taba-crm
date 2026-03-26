@@ -1,0 +1,89 @@
+@import '../../../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+@import '../../../../../../vendor/pboivin/filament-peek/resources/css/plugin.css';
+
+
+
+@import 'cropperjs/dist/cropper.css';
+
+@config '../../../tailwind.admin.js';
+
+/*
+ * =================================================================================================
+ * UNIQUE ADMIN THEME
+ * =================================================================================================
+ * Description: A modern, dark theme with a vibrant purple accent.
+ * Author: Gemini
+ * Date: 2025-08-05
+ * =================================================================================================
+ */
+
+/* :root {
+    --color-primary-50: #faf5ff;
+    --color-primary-100: #f3e8ff;
+    --color-primary-200: #e9d5ff;
+    --color-primary-300: #d8b4fe;
+    --color-primary-400: #c084fc;
+    --color-primary-500: #a855f7;
+    --color-primary-600: #9333ea;
+    --color-primary-700: #7e22ce;
+    --color-primary-800: #6b21a8;
+    --color-primary-900: #581c87;
+    --color-primary-950: #3b0764;
+} */
+
+
+/* === Base Layout & Chrome === */
+.dark .fi-sidebar,
+.dark .fi-sidebar-header {
+    @apply !bg-gray-900/50 backdrop-blur-xl !ring-0 border-r border-gray-800;
+}
+
+.dark .fi-topbar nav {
+    @apply !bg-gray-900/50 backdrop-blur-xl !border-b !border-gray-800;
+}
+
+/* === Typography & Links === */
+.dark .fi-sidebar-item-label,
+.dark .fi-dropdown-list-item-label {
+    @apply !font-semibold tracking-wide;
+}
+
+.dark .fi-sidebar-item-active .fi-sidebar-item-label {
+    @apply !text-primary-400;
+}
+
+/* === Buttons & Actions === */
+.dark .fi-btn-primary {
+    @apply !bg-primary-600 hover:!bg-primary-500;
+}
+
+/* === Sections & Cards === */
+.dark .fi-section,
+.dark .fi-wi {
+    @apply !bg-gray-900/50 !ring-1 !ring-gray-800 rounded-xl;
+}
+
+/* === Tables === */
+.dark .fi-ta-header-cell,
+.dark .fi-ta-cell {
+    @apply !border-t !border-gray-800;
+}
+
+.dark .fi-ta-row:hover {
+    @apply !bg-gray-800/50;
+}
+
+/* === Headers & Icons === */
+.fi-header-heading,
+.fi-wi-stats-overview-stat-icon,
+.fi-section-header-icon,
+.fi-ta-text-item-icon {
+    @apply !text-primary-500;
+}
+
+/* === Peek Modal Customization === */
+.filament-peek-modal-title {
+    @apply text-primary-500 uppercase tracking-wider before:content-['Previewing_'] before:text-white;
+}
+

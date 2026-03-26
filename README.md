@@ -1,108 +1,59 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/taba-center/taba-logo/main/TABA-LOGO-2022-horizontal.png" alt="Taba CRM Logo" width="400">
-  <h1>Taba CRM Package for Laravel</h1>
-  <p>
-    A complete, "plug-and-play" CRM panel for Laravel, powered by Filament.
-  </p>
-  <p>
-    <a href="https://packagist.org/packages/taba/crm"><img src="https://img.shields.io/packagist/v/taba/crm.svg?style=flat-square" alt="Latest Version on Packagist"></a>
-    <a href="https://github.com/taba-center/crm/blob/main/LICENSE.md"><img src="https://img.shields.io/packagist/l/taba/crm.svg?style=flat-square" alt="License"></a>
-    <a href="https://packagist.org/packages/taba/crm"><img src="https://img.shields.io/packagist/dt/taba/crm.svg?style=flat-square" alt="Total Downloads"></a>
-  </p>
-</div>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
----
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-**Taba CRM** is a complete, reusable package that provides a full-featured CRM panel. It includes resources for managing posts, categories, and users, and comes pre-configured with essential plugins for a rich user experience.
+## About Laravel
 
-## ✨ Features
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- **Resource Management:** Pre-built Filament resources for Posts, Categories, and Users.
-- **Plugin Ecosystem:** Integrated with popular plugins like Breezy (Profiles), Curator (Media), and Peek (Previews).
-- **Simple Installation:** Get up and running with a single custom Artisan command.
-- **Customizable:** Publishable assets (config, views, etc.) allow for easy customization.
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## 📋 Prerequisites
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-Before you begin, ensure you have a fresh Laravel project with the following configured:
-- Laravel 10+
-- Filament 3+ installed (`php artisan filament:install --panels`)
-- Database connection set up in your `.env` file.
+## Learning Laravel
 
-## 🚀 Installation
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-Getting started is simple. Follow these steps to integrate Taba CRM into your project.
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-### Step 1: Require with Composer
+## Laravel Sponsors
 
-First, pull the package into your project.
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-```bash
-composer require taba/crm
-```
+### Premium Partners
 
-### Step 2: Run the Install Command
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
-Next, run our custom installation command. This smart command handles all the necessary setup for the package and its dependencies, including:
-- Detecting and removing Tailwind CSS v4 if present (converting to v3)
-- Automatically converting your `app.css` from Tailwind v4 to v3 syntax
-- Removing `@tailwindcss/vite` plugin if present
-- Configuring Tailwind, Vite, and PostCSS
-- Publishing assets and running migrations
+## Contributing
 
-```bash
-php artisan crm:install
-```
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-> **Note:** The install command is smart and non-destructive. It will:
-> - Detect if you're using Tailwind CSS v4 and automatically convert your files to v3
-> - Skip modifications if files are already properly configured
-> - Only add what's needed without breaking existing configurations
+## Code of Conduct
 
-### Step 3: Register the Plugin
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-To activate the CRM panel, you need to register the `CrmPlugin` in your project's `AdminPanelProvider`.
+## Security Vulnerabilities
 
-Open `app/Providers/Filament/AdminPanelProvider.php` and add the plugin to the `plugins()` array:
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-```php
-// app/Providers/Filament/AdminPanelProvider.php
+## License
 
-use Taba\Crm\CrmPlugin; // 👈 Import the plugin at the top
-
-public function panel(Panel $panel): Panel
-{
-    return $panel
-        // ... other panel settings
-        ->plugins([
-            new CrmPlugin(), // 👈 Add this line
-        ]);
-}
-```
-
-### Step 4: Compile Frontend Assets
-
-Finally, compile your project's frontend assets to ensure the admin panel's styles and scripts are loaded correctly.
-
-```bash
-npm install
-npm run dev
-```
-
-And you're done! 🎉 You can now visit `/admin` and log in to access your new CRM panel.
-
----
-
-## 🔧 Customization (Optional)
-
-If you need to modify the package's default behavior, you can publish its assets.
-
-```bash
-php artisan vendor:publish --tag=crm-config
-php artisan vendor:publish --tag=crm-views
-php artisan vendor:publish --tag=crm-database
-```
-
-## 📄 License
-
-The Taba CRM is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
