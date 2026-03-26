@@ -26,7 +26,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 1,
-        'icon'             => 'heroicon-o-home',
+        'icon'             => 'fa-solid fa-house',
     ],
 
     // ── 2. Commercial Cleaning ─────────────────────────────────────────
@@ -50,7 +50,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 2,
-        'icon'             => 'heroicon-o-building-office',
+        'icon'             => 'fa-solid fa-building',
     ],
 
     // ── 3. Marble & Ceramic Polishing ──────────────────────────────────
@@ -74,7 +74,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 3,
-        'icon'             => 'heroicon-o-sparkles',
+        'icon'             => 'fa-solid fa-wand-magic-sparkles',
     ],
 
     // ── 4. Glass & Facade Cleaning ─────────────────────────────────────
@@ -98,7 +98,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 4,
-        'icon'             => 'heroicon-o-window',
+        'icon'             => 'fa-solid fa-table-cells-large',
     ],
 
     // ── 5. Kitchen & Bathroom Deep Cleaning ────────────────────────────
@@ -122,7 +122,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 5,
-        'icon'             => 'heroicon-o-beaker',
+        'icon'             => 'fa-solid fa-pump-soap',
     ],
 
     // ── 6. Tank Cleaning ───────────────────────────────────────────────
@@ -146,7 +146,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 6,
-        'icon'             => 'heroicon-o-cube-transparent',
+        'icon'             => 'fa-solid fa-droplet',
     ],
 
     // ── 7. Roof & Staircase Cleaning ───────────────────────────────────
@@ -170,7 +170,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 7,
-        'icon'             => 'heroicon-o-arrow-up-on-square-stack',
+        'icon'             => 'fa-solid fa-stairs',
     ],
 
     // ════════════════════════════════════════════════════════════════════
@@ -198,7 +198,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 1,
-        'icon'             => 'heroicon-o-academic-cap',
+        'icon'             => 'fa-solid fa-users-gear',
     ],
 
     // ── 9. Professional Equipment ──────────────────────────────────────
@@ -222,7 +222,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 2,
-        'icon'             => 'heroicon-o-wrench-screwdriver',
+        'icon'             => 'fa-solid fa-toolbox',
     ],
 
     // ── 10. Safe Cleaning Products ─────────────────────────────────────
@@ -246,7 +246,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 3,
-        'icon'             => 'heroicon-o-shield-check',
+        'icon'             => 'fa-solid fa-shield-virus',
     ],
 
     // ── 11. Free Technical Inspection ──────────────────────────────────
@@ -270,7 +270,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 4,
-        'icon'             => 'heroicon-o-clipboard-document-check',
+        'icon'             => 'fa-solid fa-clipboard-check',
     ],
 
     // ── 12. Quality Guarantee ──────────────────────────────────────────
@@ -294,7 +294,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 5,
-        'icon'             => 'heroicon-o-check-badge',
+        'icon'             => 'fa-solid fa-award',
     ],
 
     // ── 13. Flexible Scheduling ────────────────────────────────────────
@@ -318,7 +318,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 6,
-        'icon'             => 'heroicon-o-clock',
+        'icon'             => 'fa-solid fa-calendar-check',
     ],
 
     // ════════════════════════════════════════════════════════════════════
@@ -345,7 +345,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 1,
-        'icon'             => 'heroicon-o-building-office-2',
+        'icon'             => 'fa-solid fa-oil-well',
     ],
     [
         'id'    => 15,
@@ -367,7 +367,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 2,
-        'icon'             => 'heroicon-o-building-office-2',
+        'icon'             => 'fa-solid fa-industry',
     ],
     [
         'id'    => 16,
@@ -389,7 +389,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 3,
-        'icon'             => 'heroicon-o-building-library',
+        'icon'             => 'fa-solid fa-landmark',
     ],
     [
         'id'    => 17,
@@ -411,7 +411,7 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 4,
-        'icon'             => 'heroicon-o-heart',
+        'icon'             => 'fa-solid fa-heart-pulse',
     ],
     [
         'id'    => 18,
@@ -433,6 +433,106 @@ return [
         'image_id'         => NULL,
         'show_in_home'     => 1,
         'order'            => 5,
-        'icon'             => 'heroicon-o-signal',
+        'icon'             => 'fa-solid fa-signal',
+    ],
+
+    // ════════════════════════════════════════════════════════════════════
+    //  LINE OF WORK (post_category_id = 7)  —  Scope of services
+    // ════════════════════════════════════════════════════════════════════
+
+    // ── 19. Post-Construction Cleaning ───────────────────────────────────
+    [
+        'id'    => 19,
+        'title' => '{"en":"Post-Construction Cleaning","ar":"تنظيف ما بعد البناء"}',
+        'slug'  => 'post-construction-cleaning',
+        'meta_title'       => '{"en":"Post-Construction Cleaning – SBC Clean","ar":"تنظيف ما بعد البناء – SBC كلين"}',
+        'meta_description' => '{"en":"Professional post-construction cleanup ready for move-in","ar":"تجهيز منزلك للسكن بعد الإنشاء بسرعة واحترافية"}',
+        'metadata' => '[]',
+        'images'   => NULL,
+        'content'  => '{"en":[{"type":"markdown","data":{"content":"## Post-Construction Cleaning\\n\\nWe prepare your newly built or renovated space for move-in. Our teams remove construction dust, cement residues, paint splashes and debris — leaving every surface spotless and ready for occupancy."}}],"ar":[{"type":"markdown","data":{"content":"## تنظيف ما بعد البناء\\n\\nنجهّز منزلك الجديد للسكن. فرقنا تزيل غبار البناء وبقايا الإسمنت ورشاش الدهان ومخلفات البناء — ترك كل سطح نظيفًا جاهزًا للإشغال."}}]}',
+        'homepage_section_component' => 'line-of-work',
+        'homepage_section_content'   => NULL,
+        'user_id'          => 1,
+        'is_published'     => 1,
+        'published_at'     => '2025-01-01 00:00:00',
+        'post_category_id' => 7,
+        'created_at'       => '2025-01-01 00:00:00',
+        'updated_at'       => '2025-01-01 00:00:00',
+        'image_id'         => NULL,
+        'show_in_home'     => 1,
+        'order'            => 1,
+        'icon'             => 'fa-solid fa-hard-hat',
+    ],
+
+    // ── 20. Furniture & Carpet Cleaning ──────────────────────────────
+    [
+        'id'    => 20,
+        'title' => '{"en":"Furniture & Carpet Cleaning","ar":"تنظيف الأثاث والسجاد"}',
+        'slug'  => 'furniture-carpet-cleaning',
+        'meta_title'       => '{"en":"Furniture & Carpet Cleaning – SBC Clean","ar":"تنظيف أثاث وسجاد – SBC كلين"}',
+        'meta_description' => '{"en":"Professional deep cleaning for upholstery, carpets and curtains","ar":"تنظيف عميق احترافي للمفروشات والسجاد والستائر"}',
+        'metadata' => '[]',
+        'images'   => NULL,
+        'content'  => '{"en":[{"type":"markdown","data":{"content":"## Furniture & Carpet Cleaning\\n\\nRestore freshness to your furniture, sofas, carpets and curtains with our professional deep-cleaning service using specialised extraction machines and safe foam treatments."}}],"ar":[{"type":"markdown","data":{"content":"## تنظيف الأثاث والسجاد\\n\\nأعد النضارة لأثاثك وأريكتك وسجادك وستائرك بخدمة التنظيف العميق باستخدام معدات سحب متخصصة ومعالجات رغوية آمنة."}}]}',
+        'homepage_section_component' => 'line-of-work',
+        'homepage_section_content'   => NULL,
+        'user_id'          => 1,
+        'is_published'     => 1,
+        'published_at'     => '2025-01-01 00:00:00',
+        'post_category_id' => 7,
+        'created_at'       => '2025-01-01 00:00:00',
+        'updated_at'       => '2025-01-01 00:00:00',
+        'image_id'         => NULL,
+        'show_in_home'     => 1,
+        'order'            => 2,
+        'icon'             => 'fa-solid fa-couch',
+    ],
+
+    // ── 21. Pest Control ─────────────────────────────────────────────────
+    [
+        'id'    => 21,
+        'title' => '{"en":"Pest & Rodent Control","ar":"مكافحة الحشرات والقوارض"}',
+        'slug'  => 'pest-control',
+        'meta_title'       => '{"en":"Pest & Rodent Control – SBC Clean","ar":"مكافحة حشرات وقوارض – SBC كلين"}',
+        'meta_description' => '{"en":"Safe and effective pest and rodent control for homes and businesses","ar":"مكافحة آمنة وفعالة للحشرات والقوارض للمنازل والشركات"}',
+        'metadata' => '[]',
+        'images'   => NULL,
+        'content'  => '{"en":[{"type":"markdown","data":{"content":"## Pest & Rodent Control\\n\\nProtect your home and business from insects, cockroaches, rodents and other pests. We use certified, safe pesticides and targeted treatment plans for comprehensive and lasting pest elimination."}}],"ar":[{"type":"markdown","data":{"content":"## مكافحة الحشرات والقوارض\\n\\nاحمِ منزلك وشركتك من الحشرات والصراصير والقوارض. نستخدم مبيدات معتمدة وآمنة وخطط علاج مدروسة للقضاء الشامل على الآفات."}}]}',
+        'homepage_section_component' => 'line-of-work',
+        'homepage_section_content'   => NULL,
+        'user_id'          => 1,
+        'is_published'     => 1,
+        'published_at'     => '2025-01-01 00:00:00',
+        'post_category_id' => 7,
+        'created_at'       => '2025-01-01 00:00:00',
+        'updated_at'       => '2025-01-01 00:00:00',
+        'image_id'         => NULL,
+        'show_in_home'     => 1,
+        'order'            => 3,
+        'icon'             => 'fa-solid fa-bug',
+    ],
+
+    // ── 22. Exterior Surface Cleaning ────────────────────────────────
+    [
+        'id'    => 22,
+        'title' => '{"en":"Exterior & Facade Cleaning","ar":"تنظيف الواجهات الخارجية"}',
+        'slug'  => 'exterior-facade-cleaning',
+        'meta_title'       => '{"en":"Exterior & Facade Cleaning – SBC Clean","ar":"تنظيف واجهات خارجية – SBC كلين"}',
+        'meta_description' => '{"en":"High-quality exterior and building facade cleaning services","ar":"خدمات تنظيف واجهات المباني بجودة عالية"}',
+        'metadata' => '[]',
+        'images'   => NULL,
+        'content'  => '{"en":[{"type":"markdown","data":{"content":"## Exterior & Facade Cleaning\\n\\nMaintain the visual appeal and longevity of your building exterior. We clean glass facades, cladding panels and external surfaces using pressure washing and specialised cleaning agents suited for different materials."}}],"ar":[{"type":"markdown","data":{"content":"## تنظيف الواجهات الخارجية\\n\\nحافظ على جمال واجهة مبناك وطول عمره. ننظّف واجهات الزجاج وألواح التكسية والأسطح الخارجية باستخدام غسيل ضغط ومواد تنظيف متخصصة لكل مواد."}}]}',
+        'homepage_section_component' => 'line-of-work',
+        'homepage_section_content'   => NULL,
+        'user_id'          => 1,
+        'is_published'     => 1,
+        'published_at'     => '2025-01-01 00:00:00',
+        'post_category_id' => 7,
+        'created_at'       => '2025-01-01 00:00:00',
+        'updated_at'       => '2025-01-01 00:00:00',
+        'image_id'         => NULL,
+        'show_in_home'     => 1,
+        'order'            => 4,
+        'icon'             => 'fa-regular fa-building',
     ],
 ];

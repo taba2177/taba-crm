@@ -18,7 +18,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('CRM_API_CORS_ORIGINS', '*')],
+    'allowed_origins' => array_map('trim', explode(',', env('CRM_API_CORS_ORIGINS', 'http://localhost:4200'))),
 
     'allowed_origins_patterns' => [],
 
@@ -40,5 +40,5 @@ return [
 
     'max_age' => 86400, // 24 hours — Angular will cache preflight
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 ];

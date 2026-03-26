@@ -2,6 +2,7 @@
 
 namespace Taba\Crm\Http\Resources\Api;
 
+use Awcodes\Curator\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,8 +19,9 @@ class PostResource extends JsonResource
             'id'          => $this->id,
             'title'       => $this->getTranslation('title', $locale, false),
             'slug'        => $this->slug,
-            'content'     => $this->getTranslation('content', $locale, false),
+            'content'     => $this->resolveContentBlocks($this->getTranslation('content', $locale, false)),
             'excerpt'     => $this->excerpt,
+            'image_url'   => $this->image?->url ?? null,
             'meta_title'  => $this->getTranslation('meta_title', $locale, false),
             'meta_description' => $this->getTranslation('meta_description', $locale, false),
             'metadata'    => $this->getTranslation('metadata', $locale, false),
@@ -50,5 +52,28 @@ class PostResource extends JsonResource
             'created_at'  => $this->created_at?->toIso8601String(),
             'updated_at'  => $this->updated_at?->toIso8601String(),
         ];
+    }
+
+    /**
+     * Resolve image URLs inside content blocks of type 'figure'.
+     */
+    private function resolveContentBlocks(mixed $blocks): mixed
+    {
+        if (!is_array($blocks)) {
+            return $blocks;
+        }
+
+        return array_map(function (array $block): array {
+            if (
+                ($block['type'] ?? null) === 'figure' &&
+                isset($block['data']['image_id']) &&
+                !isset($block['data']['image_url'])
+            ) {
+                $media = Media::find($block['data']['image_id']);
+                $block['data']['image_url'] = $media?->url ?? null;
+            }
+
+            return $block;
+        }, $blocks);
     }
 }

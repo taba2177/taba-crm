@@ -4,6 +4,8 @@
 .env.backup
 .env.production
 .phpactor.json
+.specify
+.github
 .phpunit.result.cache
 /.fleet
 /.idea
@@ -22,3 +24,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+specs
+storage/framework/*
+
+
+

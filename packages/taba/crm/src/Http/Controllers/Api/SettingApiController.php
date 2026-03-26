@@ -39,7 +39,7 @@ class SettingApiController extends ApiController
     {
         $cacheTtl = config('crm.api.cache_ttl', 300);
 
-        $data = Cache::remember('api_settings_grouped', $cacheTtl, function () {
+        $data = Cache::remember('api_settings_grouped_v2', $cacheTtl, function () {
             return CrmSetting::getAllGrouped();
         });
 
@@ -78,7 +78,7 @@ class SettingApiController extends ApiController
             $request->boolean('is_translatable')
         );
 
-        Cache::forget('api_settings_grouped');
+        Cache::forget('api_settings_grouped_v2');
 
         return $this->success(new CrmSettingResource($setting));
     }

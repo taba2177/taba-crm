@@ -81,4 +81,15 @@ class CrmSetting extends Model
             })
             ->toArray();
     }
+
+    /**
+     * Get all settings as a flat key→value map (used by Angular ContentService)
+     */
+    public static function getAllFlat(): array
+    {
+        return static::orderBy('order')
+            ->get()
+            ->mapWithKeys(fn ($s) => [$s->key => $s->value])
+            ->toArray();
+    }
 }
