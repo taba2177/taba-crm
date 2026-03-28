@@ -38,51 +38,53 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
     |----------------------------------------------------------------------
     */
 
-    // Bootstrap / Init (single request for Angular app startup)
-    Route::get('init', [HomeApiController::class, 'init']);
-    Route::get('home', [HomeApiController::class, 'home']);
+    // Bootstrap / Init — throttled at 100 req/min
+    Route::middleware('throttle:100,1')->group(function () {
+        Route::get('init', [HomeApiController::class, 'init']);
+        Route::get('home', [HomeApiController::class, 'home']);
 
-    // Authentication
+        // Posts (public read)
+        Route::get('posts',                [PostApiController::class, 'index']);
+        Route::get('posts/{slug}',         [PostApiController::class, 'show']);
+        Route::get('posts/{slug}/related', [PostApiController::class, 'related']);
+
+        // Categories (public read)
+        Route::get('categories',              [CategoryApiController::class, 'index']);
+        Route::get('categories/{slug}',       [CategoryApiController::class, 'show']);
+        Route::get('categories/{slug}/posts', [CategoryApiController::class, 'posts']);
+
+        // Pages (public read)
+        Route::get('pages',        [PageApiController::class, 'index']);
+        Route::get('pages/{slug}', [PageApiController::class, 'show']);
+
+        // Tags (public read)
+        Route::get('tags',              [TagApiController::class, 'index']);
+        Route::get('tags/{slug}',       [TagApiController::class, 'show']);
+        Route::get('tags/{slug}/posts', [TagApiController::class, 'posts']);
+
+        // Menus (public read)
+        Route::get('menus',        [MenuApiController::class, 'index']);
+        Route::get('menus/{menu}', [MenuApiController::class, 'show']);
+
+        // Reviews (public read)
+        Route::get('reviews',          [ReviewApiController::class, 'index']);
+        Route::get('reviews/{review}', [ReviewApiController::class, 'show']);
+
+        // Settings (public read)
+        Route::get('settings',         [SettingApiController::class, 'index']);
+        Route::get('settings/grouped', [SettingApiController::class, 'grouped']);
+        Route::get('settings/{key}',   [SettingApiController::class, 'show']);
+    });
+
+    // Authentication (separate group — no read throttle)
     Route::prefix('auth')->group(function () {
         Route::post('register', [AuthApiController::class, 'register']);
         Route::post('login',    [AuthApiController::class, 'login']);
     });
 
-    // Posts (public read)
-    Route::get('posts',                [PostApiController::class, 'index']);
-    Route::get('posts/{slug}',         [PostApiController::class, 'show']);
-    Route::get('posts/{slug}/related', [PostApiController::class, 'related']);
-
-    // Categories (public read)
-    Route::get('categories',              [CategoryApiController::class, 'index']);
-    Route::get('categories/{slug}',       [CategoryApiController::class, 'show']);
-    Route::get('categories/{slug}/posts', [CategoryApiController::class, 'posts']);
-
-    // Pages (public read)
-    Route::get('pages',        [PageApiController::class, 'index']);
-    Route::get('pages/{slug}', [PageApiController::class, 'show']);
-
-    // Tags (public read)
-    Route::get('tags',              [TagApiController::class, 'index']);
-    Route::get('tags/{slug}',       [TagApiController::class, 'show']);
-    Route::get('tags/{slug}/posts', [TagApiController::class, 'posts']);
-
-    // Menus (public read)
-    Route::get('menus',       [MenuApiController::class, 'index']);
-    Route::get('menus/{menu}', [MenuApiController::class, 'show']);
-
-    // Reviews (public read)
-    Route::get('reviews',          [ReviewApiController::class, 'index']);
-    Route::get('reviews/{review}', [ReviewApiController::class, 'show']);
-
-    // Settings (public read)
-    Route::get('settings',          [SettingApiController::class, 'index']);
-    Route::get('settings/grouped',  [SettingApiController::class, 'grouped']);
-    Route::get('settings/{key}',    [SettingApiController::class, 'show']);
-
-    // Contact (public submit)
+    // Contact (write — stricter limit: 30 req/min)
     Route::post('contact', [ContactEntryApiController::class, 'store'])
-        ->middleware('throttle:5,1'); // 5 requests per minute
+        ->middleware('throttle:30,1');
 
     /*
     |----------------------------------------------------------------------

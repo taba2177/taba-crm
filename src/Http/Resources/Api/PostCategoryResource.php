@@ -4,6 +4,7 @@ namespace Taba\Crm\Http\Resources\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PostCategoryResource extends JsonResource
 {
@@ -21,6 +22,9 @@ class PostCategoryResource extends JsonResource
             'description'  => $this->getTranslation('description', $locale, false),
             'subtitle'     => $this->getTranslation('subtitle', $locale, false),
             'image'        => $this->image,
+            'image_url'    => $this->image
+                ? (str_starts_with((string) $this->image, 'http') ? $this->image : Storage::url($this->image))
+                : null,
             'order'        => $this->order,
             'is_active'    => $this->is_active,
             'parent_id'    => $this->parent_id,

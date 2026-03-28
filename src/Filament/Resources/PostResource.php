@@ -118,6 +118,18 @@ class PostResource extends Resource
     {
         return __('Posts');
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()->hasRole('client')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        return $query;
+    }
+
     /**
      * The resource navigation sort order.
      */

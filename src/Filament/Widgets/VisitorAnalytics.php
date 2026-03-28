@@ -2,28 +2,46 @@
 
 namespace Taba\Crm\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
+use Taba\Crm\Models\User;
 
 class VisitorAnalytics extends ChartWidget
 {
-    protected static ?string $heading = 'تحليل الزوار';
+    use HasWidgetShield;
+
+    protected static ?string $heading = null;
 
     protected int | string | array $columnSpan = 'full/2';
 
+    public function getHeading(): ?string
+    {
+        return __('New User Registrations');
+    }
+
     protected function getData(): array
     {
-        // This is sample data.
-        // TODO: Replace this with your actual analytics data source.
+        $startDate = Carbon::now()->subDays(7);
+
+        $data = User::query()
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->pluck('count', 'date');
+
         return [
             'datasets' => [
                 [
-                    'label' => 'Visitors',
-                    'data' => [210, 350, 420, 380, 550, 780, 990],
+                    'label' => __('New Users'),
+                    'data' => $data->values()->toArray(),
                     'backgroundColor' => 'rgba(129, 223, 67, 0.5)',
-                    'borderColor' => 'rgba(219, 198, 103, 1)',
+                    'borderColor' => 'rgba(129, 223, 67, 1)',
                 ],
             ],
-            'labels' => ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+            'labels' => $data->keys()->map(fn ($date) => Carbon::parse($date)->format('M d'))->toArray(),
         ];
     }
 

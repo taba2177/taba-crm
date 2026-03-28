@@ -65,27 +65,45 @@ class GlobalStatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        // Define the time periods for trend comparison
+        $user = auth()->user();
+        $isClient = $user->hasRole('client');
+
         $endDate = Carbon::now();
         $startDateCurrent = $endDate->copy()->subDays(7);
         $startDatePrevious = $startDateCurrent->copy()->subDays(7);
 
-        // --- User Stats ---
+        if ($isClient) {
+            // Client sees only their own stats
+            $myPublished = Post::where('user_id', $user->id)->where('is_published', true)->count();
+            $myDrafts = Post::where('user_id', $user->id)->where('is_published', false)->count();
+            $myPayments = ServicePayment::where('user_id', $user->id)->sum('amount');
+
+            return [
+                Stat::make(__('My Published Posts'), Number::format($myPublished))
+                    ->description(__('Your live posts'))
+                    ->color('success')
+                    ->icon('heroicon-o-newspaper'),
+
+                Stat::make(__('My Drafts'), Number::format($myDrafts))
+                    ->description(__('Posts pending publication'))
+                    ->color('warning')
+                    ->icon('heroicon-o-pencil-square'),
+
+                Stat::make(__('My Payments'), __('SAR') . ' ' . Number::format($myPayments, 2))
+                    ->description(__('Total from your payments'))
+                    ->color('primary')
+                    ->icon('heroicon-o-banknotes'),
+            ];
+        }
+
+        // Admin/super_admin sees everything
         $currentUserCount = User::whereBetween('created_at', [$startDateCurrent, $endDate])->count();
         $previousUserCount = User::whereBetween('created_at', [$startDatePrevious, $startDateCurrent])->count();
         $userChange = $this->calculatePercentageChange($currentUserCount, $previousUserCount);
 
-        // --- Contact Entry Stats ---
         $currentEntries = ContactEntry::whereBetween('created_at', [$startDateCurrent, $endDate])->count();
         $previousEntries = ContactEntry::whereBetween('created_at', [$startDatePrevious, $startDateCurrent])->count();
         $entryChange = $this->calculatePercentageChange($currentEntries, $previousEntries);
-
-        // --- Service Payment & Revenue Stats ---
-        // Assuming your ServicePayment model has an 'amount' column
-        $totalRevenue = ServicePayment::sum('amount');
-
-        // --- Media Stats ---
-        // $totalMediaSize = Media::sum('size'); // Sums size in bytes
 
         return [
             Stat::make(__('Total Users'), Number::format(User::count()))
@@ -94,12 +112,11 @@ class GlobalStatsOverview extends BaseWidget
                 ->color($userChange >= 0 ? 'success' : 'danger')
                 ->chart($this->getChartData(User::class, $startDateCurrent))
                 ->icon('heroicon-o-users'),
-                
+
             Stat::make(__('Published Posts'), Number::format(Post::where('is_published', true)->count()))
                 ->description(__('Total live posts'))
                 ->color('success')
-                            ->descriptionIcon('heroicon-m-arrow-trending-up')
-
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->icon('heroicon-o-newspaper'),
 
             Stat::make(__('Draft Posts'), Number::format(Post::where('is_published', false)->count()))
@@ -118,26 +135,6 @@ class GlobalStatsOverview extends BaseWidget
                 ->color($entryChange >= 0 ? 'success' : 'danger')
                 ->chart($this->getChartData(ContactEntry::class, $startDateCurrent))
                 ->icon('heroicon-o-inbox-stack'),
-
-            // Stat::make(__('Total Revenue'), __('SAR') . Number::format($totalRevenue, 2))
-            //     ->description(__('Total from all payments'))
-            //     ->color('primary')
-            //     ->icon('heroicon-o-banknotes'),
-
-            // Stat::make(__('Total Payments'), Number::format(ServicePayment::count()))
-            //     ->description(__('Number of transactions'))
-            //     ->color('info')
-            //     ->icon('heroicon-o-receipt-percent'),
-
-            // Stat::make(__('Media Library'), Number::format(Media::count()) . ' ' . __('items'))
-            //     ->description(__('Total Files: ') . Number::fileSize($totalMediaSize))
-            //     ->color('gray')
-            //     ->icon('heroicon-o-photo'),
-
-            // Stat::make(__('User Roles'), Number::format(Role::count()))
-            //     ->description(__('Total security roles available'))
-            //     ->color('gray')
-            //     ->icon('heroicon-o-shield-check'),
         ];
     }
 }

@@ -267,7 +267,7 @@ class Home extends Component
 
     public function desc(): string
     {
-        $excerpt = $this->metaDescription;
+        $excerpt = $this->metaDescriptionك;
         $idealLength = 150; // Optimal for meta descriptions
         $tolerance = 5; // ±5 characters flexibility
         $minLength = $idealLength - $tolerance;
