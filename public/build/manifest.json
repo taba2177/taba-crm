@@ -1,0 +1,26 @@
+{
+  "packages/taba/crm/src/resources/css/admin.css": {
+    "file": "assets/admin-Boq1kWyx.css",
+    "src": "packages/taba/crm/src/resources/css/admin.css",
+    "isEntry": true,
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-DTeKff6A.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CyahOdRo.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
