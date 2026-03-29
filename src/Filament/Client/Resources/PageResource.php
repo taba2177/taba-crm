@@ -16,6 +16,16 @@ class PageResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?int $navigationSort = 70;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('إدارة الموقع');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count() ?: null;
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('الصفحات');

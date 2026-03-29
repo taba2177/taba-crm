@@ -16,8 +16,18 @@ class Messages extends Page implements HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope-open';
     protected static ?int $navigationSort = 80;
-    protected static ?string $navigationGroup = null;
     protected static string $view = 'crm::client.messages';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('إدارة الموقع');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = ContactEntry::count();
+        return $count ?: null;
+    }
 
     public static function getNavigationLabel(): string
     {

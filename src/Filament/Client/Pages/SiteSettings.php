@@ -16,8 +16,12 @@ class SiteSettings extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?int $navigationSort = 90;
-    protected static ?string $navigationGroup = null;
     protected static string $view = 'crm::client.site-settings';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('إدارة الموقع');
+    }
 
     public ?array $data = [];
 

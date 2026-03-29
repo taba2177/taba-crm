@@ -83,8 +83,9 @@ class CrmClientPlugin implements Plugin
 
             $items[] = NavigationItem::make($category->name)
                 ->icon($icon)
-                ->group(__('أقسام الموقع'))
+                ->group(__('إدارة الموقع'))
                 ->sort($category->order + 10)
+                ->badge($category->posts_count ?: null)
                 ->url($url)
                 ->isActiveWhen(fn () => request()->routeIs('*section*') && request()->route('category') == $category->id);
         }
