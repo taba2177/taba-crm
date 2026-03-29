@@ -195,6 +195,8 @@ When a client clicks "Edit" on a section card:
 5. On save: maps form data back to PostCategory fields and Post records
 6. Redirect to dashboard with success toast
 
+**Smart navigation for SINGLE-layout and single-item categories:** When a section has layout `SINGLE`, or is a LIST layout but contains only one Post, the client panel skips the items index view and navigates directly to the edit form. No unnecessary listing page for sections that only have one thing to edit.
+
 The client never sees raw database fields. They see contextual labels like "عنوان الخدمة" (Service Title) instead of "Post Title".
 
 ### API v2
