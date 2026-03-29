@@ -93,6 +93,104 @@ And you're done! 🎉 You can now visit `/admin` and log in to access your new C
 
 ---
 
+## 🏗️ v2 — Component System & Client Panel
+
+### Polymorphic Section Components
+
+v2 introduces a **polymorphic component system** where each section type (Hero, FAQ, Services Grid, etc.) is a self-contained PHP class implementing `SectionComponent`. Each component defines its own form fields, validation rules, API output, and blade view.
+
+**36 built-in components** are auto-discovered and ready to use. You can also register custom components.
+
+#### Creating a Custom Component
+
+```php
+use Taba\Crm\Components\Contracts\SectionComponent;
+use Taba\Crm\Components\Contracts\SectionLayout;
+use Taba\Crm\Models\PostCategory;
+
+class MyComponent implements SectionComponent
+{
+    public function key(): string { return 'my-component'; }
+    public function label(): array { return ['ar' => 'المكون', 'en' => 'My Component']; }
+    public function icon(): string { return 'heroicon-o-star'; }
+    public function description(): array { return ['ar' => 'وصف المكون', 'en' => 'Component description']; }
+    public function layout(): SectionLayout { return SectionLayout::SINGLE; }
+
+    public function sectionFields(): array
+    {
+        return [
+            \Taba\Crm\Components\Fields\FieldFactory::make('text', 'heading', ['ar' => 'العنوان', 'en' => 'Heading']),
+        ];
+    }
+
+    public function itemFields(): array { return []; }
+    public function bladeView(): string { return 'components.homepage.my-component'; }
+
+    public function toApi(PostCategory $section): array
+    {
+        return [
+            'id' => $section->id,
+            'component' => $this->key(),
+            'order' => $section->order,
+            'title' => $section->getTranslations('name'),
+        ];
+    }
+
+    public function rules(): array { return ['name.ar' => 'required|string']; }
+    public function maxItems(): ?int { return null; }
+}
+```
+
+#### Registering Custom Components
+
+Add your component class to `config/crm.php`:
+
+```php
+'extra_components' => [
+    \App\Components\MyComponent::class,
+],
+```
+
+### Dual-Panel Architecture
+
+v2 introduces a **Client Panel** (`/dashboard`) alongside the existing Admin Panel (`/admin`):
+
+- **Admin Panel** (`CrmPlugin`): Full CRM management at `/admin`
+- **Client Panel** (`CrmClientPlugin`): Simplified content editing at `/dashboard`
+
+Register both panels in your `AdminPanelProvider`:
+
+```php
+->plugins([
+    new \Taba\Crm\CrmPlugin(),          // Admin panel
+    new \Taba\Crm\CrmClientPlugin(),     // Client panel
+])
+```
+
+### API v2
+
+Component-aware API endpoints alongside the existing v1 API:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v2/sections` | GET | All active sections with component data |
+| `/api/v2/sections/{id}` | GET | Single section |
+| `/api/v2/settings` | GET | Grouped site settings |
+| `/api/v2/pages/{slug}` | GET | Page by slug |
+| `/api/v2/menus` | GET | All menus |
+| `/api/v2/components` | GET | Available component types |
+| `/api/v2/contact` | POST | Submit contact message |
+
+Authenticated admin endpoints (requires Sanctum token):
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v2/admin/sections` | POST | Create section |
+| `/api/v2/admin/sections/{id}` | PUT | Update section |
+| `/api/v2/admin/sections/{id}` | DELETE | Deactivate section |
+
+---
+
 ## 🔧 Customization (Optional)
 
 If you need to modify the package's default behavior, you can publish its assets.

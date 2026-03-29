@@ -249,6 +249,62 @@ protected function setSeoMetadata()
 3. Access dashboard: Navigate to "Settings" → "CRM Settings"
 4. Update values and save
 
+## Component System Configuration
+
+### `extra_components` (config key)
+Register custom section components beyond the 36 built-in ones.
+
+```php
+// config/crm.php
+'extra_components' => [
+    \App\Components\CustomHero::class,
+    \App\Components\TeamSection::class,
+],
+```
+
+Each class must implement `Taba\Crm\Components\Contracts\SectionComponent`.
+
+### Available Built-in Components
+
+| Key | Layout | Description |
+|-----|--------|-------------|
+| `hero` | SINGLE | Hero/banner section |
+| `about` | SINGLE | About us section |
+| `services-grid` | LIST | Services grid |
+| `services-cards` | LIST | Services cards |
+| `portfolio-grid` | LIST | Portfolio/gallery grid |
+| `team-grid` | LIST | Team members grid |
+| `testimonials` | LIST | Client testimonials |
+| `faq` | LIST | FAQ accordion |
+| `blog-grid` | LIST | Blog posts grid |
+| `contact` | SINGLE | Contact information |
+| `cta` | SINGLE | Call to action |
+| `features` | LIST | Features list |
+| `pricing` | LIST | Pricing tables |
+| `stats` | LIST | Statistics/counters |
+| `timeline` | LIST | Timeline/history |
+| `gallery` | LIST | Image gallery |
+| `video-gallery` | LIST | Video gallery |
+| `map` | SINGLE | Map section |
+| `newsletter` | SINGLE | Newsletter subscription |
+| `partners` | LIST | Partners/clients logos |
+| `downloads` | LIST | Downloadable files |
+| `branches` | LIST | Branch locations |
+| `products` | LIST | Products catalog |
+| `events` | LIST | Events listing |
+| `courses` | LIST | Courses/training |
+| `doctors` | LIST | Medical team |
+| `departments` | LIST | Departments |
+| `offers` | LIST | Special offers |
+| `projects` | LIST | Projects showcase |
+| `certifications` | LIST | Certifications/awards |
+| `news` | LIST | News/announcements |
+| `jobs` | LIST | Job openings |
+| `before-after` | LIST | Before/after comparisons |
+| `text-block` | SINGLE | Rich text content |
+| `slider` | LIST | Image slider |
+| `default` | LIST | Generic section |
+
 ### To Extend
 Add new settings to `CrmSettingsSeeder`:
 ```php
