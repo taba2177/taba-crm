@@ -146,3 +146,35 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
         Route::post('payments',             [ServicePaymentApiController::class, 'store']);
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Taba CRM API Routes (v2) — Component-Aware
+|--------------------------------------------------------------------------
+*/
+
+use Taba\Crm\Http\Controllers\Api\V2 as V2;
+
+Route::prefix('api/v2')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleFromHeader::class])->group(function () {
+
+    // Public read endpoints
+    Route::middleware('throttle:100,1')->group(function () {
+        Route::get('sections', [V2\SectionController::class, 'index']);
+        Route::get('sections/{id}', [V2\SectionController::class, 'show']);
+        Route::get('settings', [V2\SettingController::class, 'index']);
+        Route::get('pages/{slug}', [V2\PageController::class, 'show']);
+        Route::get('menus', [V2\MenuController::class, 'index']);
+        Route::get('components', [V2\ComponentController::class, 'index']);
+    });
+
+    // Contact (stricter rate limit)
+    Route::post('contact', [V2\ContactController::class, 'store'])
+        ->middleware('throttle:30,1');
+
+    // Authenticated admin routes
+    Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+        Route::post('sections', [V2\SectionController::class, 'store']);
+        Route::put('sections/{id}', [V2\SectionController::class, 'update']);
+        Route::delete('sections/{id}', [V2\SectionController::class, 'destroy']);
+    });
+});
