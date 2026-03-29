@@ -1,0 +1,225 @@
+<h2>Design Section 2b: Polymorphic Component Architecture</h2>
+<p class="subtitle">Every component self-describes its edit form — no hardcoded section types</p>
+
+<div class="section">
+  <h3>The Problem with Hardcoded Section Types</h3>
+  <div class="split">
+    <div style="background:#fee2e2; padding:16px; border-radius:8px;">
+      <h4 style="color:#ef4444;">❌ Previous Approach (rigid)</h4>
+      <pre style="font-size:0.75em; background:#1a1a2e; color:#e5e7eb; padding:12px; border-radius:6px; overflow:auto;">
+// Hardcoded: one form per type
+if ($type === 'hero') → show hero fields
+if ($type === 'services') → show services fields  
+if ($type === 'faq') → show faq fields
+// Need code change for every new type!</pre>
+      <p style="font-size:0.85em; margin-top:8px;">New component = new code. Doesn't scale.</p>
+    </div>
+    <div style="background:#f0fdf4; padding:16px; border-radius:8px;">
+      <h4 style="color:#10b981;">✅ Polymorphic Approach (dynamic)</h4>
+      <pre style="font-size:0.75em; background:#1a1a2e; color:#e5e7eb; padding:12px; border-radius:6px; overflow:auto;">
+// Each component declares its own schema
+class HeroComponent implements SectionComponent {
+  public function editSchema(): array {
+    return [
+      Field::text('title')->translatable(),
+      Field::image('background'),
+      Field::text('cta_text'),
+      Field::url('cta_link'),
+    ];
+  }
+}
+// Zero code change for new types!</pre>
+      <p style="font-size:0.85em; margin-top:8px;">New component = new class. Auto-discovered.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>How It Works: Component Registry</h3>
+  <div class="mockup">
+    <div class="mockup-header">Architecture Flow</div>
+    <div class="mockup-body" style="padding:20px; font-size:0.85em;">
+      <div style="display:flex; gap:12px; align-items:stretch;">
+        <!-- Step 1 -->
+        <div style="flex:1; background:#eff6ff; padding:12px; border-radius:8px; text-align:center;">
+          <div style="font-size:1.5em; margin-bottom:6px;">📦</div>
+          <strong>Component Classes</strong>
+          <div style="font-size:0.8em; opacity:0.7; margin-top:4px;">
+            HeroComponent<br>
+            CardsComponent<br>
+            FaqComponent<br>
+            ContactComponent<br>
+            PortfolioComponent<br>
+            CustomComponent<br>
+            <em>...any new one you add</em>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:1.5em;">→</div>
+        <!-- Step 2 -->
+        <div style="flex:1; background:#ede9fe; padding:12px; border-radius:8px; text-align:center;">
+          <div style="font-size:1.5em; margin-bottom:6px;">📋</div>
+          <strong>Component Registry</strong>
+          <div style="font-size:0.8em; opacity:0.7; margin-top:4px;">
+            Auto-discovers all classes<br>
+            implementing SectionComponent<br><br>
+            Maps: section_component →<br>Component class
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:1.5em;">→</div>
+        <!-- Step 3 -->
+        <div style="flex:1; background:#fef3c7; padding:12px; border-radius:8px; text-align:center;">
+          <div style="font-size:1.5em; margin-bottom:6px;">📝</div>
+          <strong>Dynamic Edit Form</strong>
+          <div style="font-size:0.8em; opacity:0.7; margin-top:4px;">
+            Reads component's editSchema()<br>
+            Builds Filament form dynamically<br><br>
+            Client sees only relevant<br>fields for that section
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:1.5em;">→</div>
+        <!-- Step 4 -->
+        <div style="flex:1; background:#f0fdf4; padding:12px; border-radius:8px; text-align:center;">
+          <div style="font-size:1.5em; margin-bottom:6px;">🌐</div>
+          <strong>API + Rendering</strong>
+          <div style="font-size:0.8em; opacity:0.7; margin-top:4px;">
+            Same component handles:<br>
+            • Blade rendering<br>
+            • API JSON response<br>
+            • Preview generation
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>SectionComponent Interface</h3>
+  <div class="mockup">
+    <div class="mockup-header">Each component implements this contract</div>
+    <div class="mockup-body" style="padding:16px;">
+      <pre style="font-size:0.75em; background:#1a1a2e; color:#e5e7eb; padding:16px; border-radius:6px; overflow:auto; direction:ltr; text-align:left;">
+interface SectionComponent
+{
+    // Identity
+    public function key(): string;          // 'hero', 'cards', 'faq'
+    public function label(): array;         // ['ar' => 'القسم الرئيسي', 'en' => 'Hero']
+    public function icon(): string;         // 'heroicon-o-sparkles'
+
+    // What does this section contain?
+    public function layout(): SectionLayout; // SINGLE (one block) | LIST (repeatable items)
+
+    // Client edit form — Filament form schema
+    public function sectionFields(): array;  // Fields for the section header (PostCategory)
+    public function itemFields(): array;     // Fields per item (Post) — empty for SINGLE layout
+
+    // Rendering
+    public function bladeView(): string;     // 'crm::components.homepage.hero'
+    public function toApi(PostCategory $section): array; // JSON for Angular
+
+    // Validation
+    public function rules(): array;          // Laravel validation rules
+    public function maxItems(): ?int;        // null = unlimited
+}
+
+enum SectionLayout { case SINGLE; case LIST; }
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>Example: How Different Components Define Themselves</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+    
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#6366f1; margin-bottom:8px;">🎯 HeroComponent</div>
+      <div style="font-size:0.8em;">
+        <div><strong>Layout:</strong> SINGLE</div>
+        <div><strong>Section fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - title (translatable text)<br>
+          - subtitle (translatable text)<br>
+          - background_image (image)<br>
+          - cta_text (translatable text)<br>
+          - cta_url (url)
+        </div>
+        <div><strong>Item fields:</strong> none</div>
+      </div>
+    </div>
+
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#f59e0b; margin-bottom:8px;">⭐ ServicesComponent</div>
+      <div style="font-size:0.8em;">
+        <div><strong>Layout:</strong> LIST</div>
+        <div><strong>Section fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - title (translatable text)<br>
+          - subtitle (translatable text)
+        </div>
+        <div><strong>Item fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - title (translatable text)<br>
+          - icon (icon picker)<br>
+          - description (translatable textarea)<br>
+          - image (optional image)
+        </div>
+        <div><strong>Max items:</strong> 12</div>
+      </div>
+    </div>
+
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#10b981; margin-bottom:8px;">❓ FaqComponent</div>
+      <div style="font-size:0.8em;">
+        <div><strong>Layout:</strong> LIST</div>
+        <div><strong>Section fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - title (translatable text)
+        </div>
+        <div><strong>Item fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - question (translatable text)<br>
+          - answer (translatable richtext)
+        </div>
+        <div><strong>Max items:</strong> unlimited</div>
+      </div>
+    </div>
+
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#ec4899; margin-bottom:8px;">🆕 Your Future Component</div>
+      <div style="font-size:0.8em;">
+        <div><strong>Layout:</strong> SINGLE or LIST</div>
+        <div><strong>Section fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - whatever fields you need<br>
+          - translatable automatically
+        </div>
+        <div><strong>Item fields:</strong></div>
+        <div style="padding-right:12px; opacity:0.7;">
+          - your custom fields<br>
+          - all standard field types available
+        </div>
+        <div style="color:#ec4899; margin-top:4px;"><strong>Just add a class. Zero config.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>Available Field Types for Components</h3>
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; font-size:0.8em;">
+    <div style="background:#eff6ff; padding:8px; border-radius:4px;">📝 <strong>text</strong> — single line</div>
+    <div style="background:#eff6ff; padding:8px; border-radius:4px;">📄 <strong>textarea</strong> — multi line</div>
+    <div style="background:#eff6ff; padding:8px; border-radius:4px;">✍️ <strong>richtext</strong> — TipTap editor</div>
+    <div style="background:#eff6ff; padding:8px; border-radius:4px;">🖼️ <strong>image</strong> — Curator picker</div>
+    <div style="background:#f0fdf4; padding:8px; border-radius:4px;">🔗 <strong>url</strong> — link field</div>
+    <div style="background:#f0fdf4; padding:8px; border-radius:4px;">🎨 <strong>icon</strong> — icon picker</div>
+    <div style="background:#f0fdf4; padding:8px; border-radius:4px;">🔢 <strong>number</strong> — numeric</div>
+    <div style="background:#f0fdf4; padding:8px; border-radius:4px;">✅ <strong>toggle</strong> — on/off</div>
+    <div style="background:#fef3c7; padding:8px; border-radius:4px;">🎯 <strong>select</strong> — dropdown</div>
+    <div style="background:#fef3c7; padding:8px; border-radius:4px;">🎨 <strong>color</strong> — color picker</div>
+    <div style="background:#fef3c7; padding:8px; border-radius:4px;">📅 <strong>date</strong> — date picker</div>
+    <div style="background:#fef3c7; padding:8px; border-radius:4px;">📍 <strong>location</strong> — lat/lng</div>
+  </div>
+  <p style="font-size:0.8em; opacity:0.5; margin-top:8px;">All text-based fields support .translatable() for AR/EN</p>
+</div>

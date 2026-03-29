@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Taba\Crm\Filament\Resources\PostCategoryResource;
+use Taba\Crm\Filament\Admin\Resources\PostCategoryResource;
 use Taba\Crm\Models\PostCategory;
 use Illuminate\Support\Str;
 

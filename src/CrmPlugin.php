@@ -13,18 +13,18 @@ use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Filament\SpatieLaravelTranslatablePlugin;
 use SebastianBergmann\CodeCoverage\Report\Html\Colors;
-use Taba\Crm\Filament\Pages\GenerateComponentsFromAI;
-use Taba\Crm\Filament\Pages\GenerateSiteFromAI;
-use Taba\Crm\Filament\Widgets\LatestPosts;
-use Taba\Crm\Filament\Widgets\PostStatsOverview;
-use Taba\Crm\Filament\Widgets\VisitorAnalytics;
-use Taba\Crm\Filament\Widgets\GlobalStatsOverview;
-use Taba\Crm\Filament\Widgets\RecentActivities;
+use Taba\Crm\Filament\Admin\Pages\GenerateComponentsFromAI;
+use Taba\Crm\Filament\Admin\Pages\GenerateSiteFromAI;
+use Taba\Crm\Filament\Admin\Widgets\LatestPosts;
+use Taba\Crm\Filament\Admin\Widgets\PostStatsOverview;
+use Taba\Crm\Filament\Admin\Widgets\VisitorAnalytics;
+use Taba\Crm\Filament\Admin\Widgets\GlobalStatsOverview;
+use Taba\Crm\Filament\Admin\Widgets\RecentActivities;
 use BezhanSalleh\FilamentGoogleAnalytics\Widgets;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\ThemeMode;
-use Taba\Crm\Filament\Widgets\OthersAnalytics;
-use Taba\Crm\Filament\Widgets\PaymentAnalytics;
+use Taba\Crm\Filament\Admin\Widgets\OthersAnalytics;
+use Taba\Crm\Filament\Admin\Widgets\PaymentAnalytics;
 
 class CrmPlugin implements Plugin
 {
@@ -38,13 +38,13 @@ class CrmPlugin implements Plugin
         // Register the package's own resources, pages, and widgets.
         $panel
             ->resources([
-                \Taba\Crm\Filament\Resources\PostResource::class,
-                \Taba\Crm\Filament\Resources\PostCategoryResource::class,
+                \Taba\Crm\Filament\Admin\Resources\PostResource::class,
+                \Taba\Crm\Filament\Admin\Resources\PostCategoryResource::class,
                 \Awcodes\Curator\Resources\MediaResource::class,
-                \Taba\Crm\Filament\Resources\ContactEntryResource::class,
-                \Taba\Crm\Filament\Resources\UserResource::class,
-                \Taba\Crm\Filament\Resources\ServicePaymentResource::class,
-                \Taba\Crm\Filament\Resources\CrmSettingResource::class,
+                \Taba\Crm\Filament\Admin\Resources\ContactEntryResource::class,
+                \Taba\Crm\Filament\Admin\Resources\UserResource::class,
+                \Taba\Crm\Filament\Admin\Resources\ServicePaymentResource::class,
+                \Taba\Crm\Filament\Admin\Resources\CrmSettingResource::class,
                 // \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
                 // \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
             ]);

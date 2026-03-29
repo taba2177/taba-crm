@@ -1,0 +1,101 @@
+<h2>taba/crm v2 — Client Dashboard Concept</h2>
+<p class="subtitle">What the non-technical client sees when they log in at /dashboard</p>
+
+<div class="section">
+  <h3>🏠 Client Dashboard — "My Website" View</h3>
+  <div class="mockup">
+    <div class="mockup-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <span>📊 لوحة التحكم — My Dashboard</span>
+      <span style="font-size:0.8em; opacity:0.7;">العربية | English</span>
+    </div>
+    <div class="mockup-body" style="padding:0;">
+      <!-- Sidebar + Main -->
+      <div style="display:flex; min-height:400px;">
+        <!-- Sidebar -->
+        <div style="width:200px; background:#1a1a2e; color:#fff; padding:16px; font-size:0.85em;">
+          <div style="margin-bottom:24px; font-weight:bold; font-size:1.1em;">🌐 موقعي</div>
+          <div style="margin-bottom:12px; padding:8px; background:rgba(255,255,255,0.1); border-radius:6px;">🏠 الصفحة الرئيسية</div>
+          <div style="margin-bottom:12px; padding:8px; opacity:0.7;">📝 المقالات</div>
+          <div style="margin-bottom:12px; padding:8px; opacity:0.7;">⚙️ إعدادات الموقع</div>
+          <div style="margin-bottom:12px; padding:8px; opacity:0.7;">🖼️ الصور</div>
+          <div style="margin-bottom:12px; padding:8px; opacity:0.7;">📩 رسائل التواصل</div>
+          <div style="margin-top:auto; padding-top:40px; opacity:0.5; font-size:0.8em;">👁️ معاينة الموقع</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div style="flex:1; padding:20px; background:#f5f5f5;">
+          <h3 style="margin:0 0 4px 0;">أقسام الصفحة الرئيسية</h3>
+          <p style="margin:0 0 16px 0; opacity:0.6; font-size:0.85em;">اضغط على أي قسم لتعديله</p>
+          
+          <!-- Section Cards -->
+          <div style="display:grid; gap:12px;">
+            <!-- Hero Section -->
+            <div style="background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; border-right:4px solid #6366f1;">
+              <div style="width:80px; height:60px; background:linear-gradient(135deg,#6366f1,#8b5cf6); border-radius:6px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5em;">🎯</div>
+              <div style="flex:1;">
+                <div style="font-weight:bold;">القسم الرئيسي (Hero)</div>
+                <div style="font-size:0.8em; opacity:0.6;">العنوان، الوصف، صورة الخلفية، زر الإجراء</div>
+              </div>
+              <div style="color:#6366f1;">✏️</div>
+            </div>
+            
+            <!-- About Section -->
+            <div style="background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; border-right:4px solid #10b981;">
+              <div style="width:80px; height:60px; background:linear-gradient(135deg,#10b981,#34d399); border-radius:6px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5em;">ℹ️</div>
+              <div style="flex:1;">
+                <div style="font-weight:bold;">من نحن (About)</div>
+                <div style="font-size:0.8em; opacity:0.6;">نبذة عن الشركة، الرؤية، الرسالة</div>
+              </div>
+              <div style="color:#10b981;">✏️</div>
+            </div>
+            
+            <!-- Services -->
+            <div style="background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; border-right:4px solid #f59e0b;">
+              <div style="width:80px; height:60px; background:linear-gradient(135deg,#f59e0b,#fbbf24); border-radius:6px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5em;">⭐</div>
+              <div style="flex:1;">
+                <div style="font-weight:bold;">خدماتنا (Services)</div>
+                <div style="font-size:0.8em; opacity:0.6;">6 خدمات — اضغط لتعديل أي خدمة</div>
+              </div>
+              <div style="color:#f59e0b;">✏️</div>
+            </div>
+            
+            <!-- Contact -->
+            <div style="background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; border-right:4px solid #ef4444;">
+              <div style="width:80px; height:60px; background:linear-gradient(135deg,#ef4444,#f87171); border-radius:6px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5em;">📞</div>
+              <div style="flex:1;">
+                <div style="font-weight:bold;">تواصل معنا (Contact)</div>
+                <div style="font-size:0.8em; opacity:0.6;">رقم الهاتف، البريد، العنوان، الخريطة</div>
+              </div>
+              <div style="color:#ef4444;">✏️</div>
+            </div>
+          </div>
+          
+          <!-- Drag hint -->
+          <p style="text-align:center; margin-top:16px; opacity:0.4; font-size:0.8em;">↕️ اسحب لتغيير ترتيب الأقسام</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>Key UX Principles</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+    <div style="background:#f0fdf4; padding:16px; border-radius:8px; border-left:3px solid #10b981;">
+      <strong>Arabic-First</strong><br>
+      <span style="font-size:0.85em;">Default locale Arabic, full RTL layout, Arabic labels. English available via toggle.</span>
+    </div>
+    <div style="background:#eff6ff; padding:16px; border-radius:8px; border-left:3px solid #3b82f6;">
+      <strong>Section = Card</strong><br>
+      <span style="font-size:0.85em;">Each homepage section is one clickable card. No tables, no CRUD lists.</span>
+    </div>
+    <div style="background:#fef3c7; padding:16px; border-radius:8px; border-left:3px solid #f59e0b;">
+      <strong>5 Nav Items Max</strong><br>
+      <span style="font-size:0.85em;">Homepage, Posts, Settings, Media, Messages. Nothing else.</span>
+    </div>
+    <div style="background:#fce7f3; padding:16px; border-radius:8px; border-left:3px solid #ec4899;">
+      <strong>Preview Button</strong><br>
+      <span style="font-size:0.85em;">Every edit shows "Preview on website" before saving. Uses existing Peek integration.</span>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Models;
 
-use Taba\Crm\Filament\Resources\PostResource;
+use Taba\Crm\Filament\Admin\Resources\PostResource;
 use Awcodes\Curator\Models\Media;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

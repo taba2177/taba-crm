@@ -1,0 +1,378 @@
+<h2>Design Section 3: Technical Architecture</h2>
+<p class="subtitle">Filament 5 · Dual Panels · Polymorphic Data Layer · API v2</p>
+
+<div class="section">
+  <h3>1. Package Structure</h3>
+  <div class="mockup">
+    <div class="mockup-header">src/ directory — v2 layout</div>
+    <div class="mockup-body" style="padding:16px;">
+      <pre style="font-size:0.72em; background:#1a1a2e; color:#e5e7eb; padding:16px; border-radius:6px; overflow:auto; direction:ltr; text-align:left;">
+src/
+├── CrmPlugin.php                  # Filament plugin (admin panel)
+├── CrmClientPlugin.php            # NEW — Filament plugin (client panel)
+├── CrmServiceProvider.php         # Laravel service provider
+│
+├── Components/                    # NEW — Polymorphic section components
+│   ├── Contracts/
+│   │   ├── SectionComponent.php   # Interface
+│   │   └── SectionLayout.php      # Enum: SINGLE | LIST
+│   ├── Registry/
+│   │   └── ComponentRegistry.php  # Auto-discovery + resolution
+│   ├── Fields/
+│   │   └── FieldFactory.php       # Standard field type builders
+│   ├── Sections/                  # Built-in components (25+)
+│   │   ├── HeroComponent.php
+│   │   ├── CardsComponent.php
+│   │   ├── ServicesGridComponent.php
+│   │   ├── FaqComponent.php
+│   │   ├── ContactComponent.php
+│   │   ├── PortfolioComponent.php
+│   │   ├── ReviewsComponent.php
+│   │   ├── PricesComponent.php
+│   │   ├── GalleryComponent.php
+│   │   └── ...
+│   └── Concerns/                  # Shared traits
+│       ├── HasTranslatableFields.php
+│       └── HasItemLayout.php
+│
+├── Filament/
+│   ├── Admin/                     # RENAMED — Admin panel resources
+│   │   ├── Resources/
+│   │   │   ├── PostResource.php
+│   │   │   ├── PostCategoryResource.php
+│   │   │   └── ...
+│   │   ├── Pages/
+│   │   │   ├── GenerateSiteFromAI.php
+│   │   │   └── GenerateComponentsFromAI.php
+│   │   └── Widgets/
+│   │
+│   └── Client/                    # NEW — Client panel
+│       ├── Resources/
+│       │   └── SectionResource.php    # Dynamic — uses ComponentRegistry
+│       ├── Pages/
+│       │   ├── Dashboard.php          # Homepage section cards
+│       │   ├── EditSection.php        # Polymorphic edit form
+│       │   ├── SiteSettings.php       # Business info
+│       │   └── Messages.php           # Contact entries
+│       └── Widgets/
+│           └── WelcomeWidget.php
+│
+├── Models/                        # Existing models (unchanged schema!)
+│   ├── Post.php
+│   ├── PostCategory.php
+│   ├── CrmSetting.php
+│   ├── Page.php
+│   └── ...
+│
+├── Http/
+│   ├── Controllers/
+│   │   └── Api/
+│   │       └── V2/                # NEW — API v2 controllers
+│   │           ├── SectionController.php
+│   │           ├── SettingController.php
+│   │           └── ...
+│   └── Resources/                 # NEW — API Resources (JSON transforms)
+│       └── V2/
+│           ├── SectionResource.php
+│           └── SectionItemResource.php
+│
+├── Services/                      # Business logic
+│   ├── SiteBuilder.php            # AI site generation
+│   └── ComponentResolver.php      # Resolves component → data
+│
+└── views/
+    ├── components/homepage/       # Blade templates (unchanged)
+    └── client/                    # NEW — Client panel views
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>2. Dual Panel Architecture</h3>
+  <div style="display:flex; gap:16px;">
+    <!-- Admin Panel -->
+    <div style="flex:1; border:2px solid #6366f1; border-radius:12px; overflow:hidden;">
+      <div style="background:#6366f1; color:white; padding:10px 16px; font-weight:bold; text-align:center;">
+        Admin Panel — <code style="color:#c4b5fd;">/admin</code>
+      </div>
+      <div style="padding:16px; font-size:0.82em;">
+        <div style="font-weight:bold; margin-bottom:8px;">Who: Developer / Site admin</div>
+        <div style="margin-bottom:12px;">
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">Full PostResource CRUD</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">PostCategoryResource with component picker</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">User / Role management</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">CrmSettings (full config)</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">AI: Generate Site / Components</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">Service Payments</div>
+          <div style="background:#eff6ff; padding:6px 10px; border-radius:4px; margin-bottom:4px;">Activity log / Exceptions</div>
+        </div>
+        <div style="font-size:0.85em; opacity:0.6;">Unchanged from v1 — same power, same flexibility</div>
+      </div>
+    </div>
+    
+    <!-- Client Panel -->
+    <div style="flex:1; border:2px solid #10b981; border-radius:12px; overflow:hidden;">
+      <div style="background:#10b981; color:white; padding:10px 16px; font-weight:bold; text-align:center;">
+        Client Panel — <code style="color:#a7f3d0;">/dashboard</code>
+      </div>
+      <div style="padding:16px; font-size:0.82em;">
+        <div style="font-weight:bold; margin-bottom:8px;">Who: Business owner / Client</div>
+        <div style="margin-bottom:12px;">
+          <div style="background:#f0fdf4; padding:6px 10px; border-radius:4px; margin-bottom:4px;">📄 أقسام الموقع — Section cards + Edit</div>
+          <div style="background:#f0fdf4; padding:6px 10px; border-radius:4px; margin-bottom:4px;">📝 الصفحات — Simple page editor</div>
+          <div style="background:#f0fdf4; padding:6px 10px; border-radius:4px; margin-bottom:4px;">💬 الرسائل — Contact entries (read-only)</div>
+          <div style="background:#f0fdf4; padding:6px 10px; border-radius:4px; margin-bottom:4px;">⚙️ الإعدادات — Phone, email, social, logo</div>
+          <div style="background:#f0fdf4; padding:6px 10px; border-radius:4px; margin-bottom:4px;">👤 حسابي — Profile settings</div>
+        </div>
+        <div style="font-size:0.85em; opacity:0.6;">Simplified — only what client needs to edit</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px; background:#fef3c7; padding:12px 16px; border-radius:8px; font-size:0.85em;">
+    <strong>Key:</strong> Both panels read/write the SAME database tables. No data duplication. 
+    Client panel is a <strong>filtered, simplified view</strong> of the same data the admin sees.
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>3. Data Layer — Zero Schema Changes</h3>
+  <div class="mockup">
+    <div class="mockup-header">Existing models power everything — no migrations needed for v2 core</div>
+    <div class="mockup-body" style="padding:16px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; font-size:0.8em;">
+        
+        <div style="background:#eff6ff; padding:12px; border-radius:8px;">
+          <strong style="color:#6366f1;">PostCategory</strong>
+          <div style="opacity:0.7; margin-top:4px;">
+            = Section header<br>
+            <code>section_component</code> → component key<br>
+            <code>name</code> → section title (translatable)<br>
+            <code>description</code> → subtitle (translatable)<br>
+            <code>order</code> → sort position<br>
+            <code>is_active</code> → visibility toggle
+          </div>
+        </div>
+
+        <div style="background:#f0fdf4; padding:12px; border-radius:8px;">
+          <strong style="color:#10b981;">Post</strong>
+          <div style="opacity:0.7; margin-top:4px;">
+            = Section item<br>
+            <code>post_category_id</code> → belongs to section<br>
+            <code>title</code> → item title (translatable)<br>
+            <code>content</code> → item body (translatable)<br>
+            <code>metadata</code> → extra fields (JSON, translatable)<br>
+            <code>image_id</code> → item image<br>
+            <code>order</code> → sort within section
+          </div>
+        </div>
+
+        <div style="background:#fef3c7; padding:12px; border-radius:8px;">
+          <strong style="color:#f59e0b;">CrmSetting</strong>
+          <div style="opacity:0.7; margin-top:4px;">
+            = Site-wide config<br>
+            <code>key</code> → setting name<br>
+            <code>value</code> → setting value (JSON cast)<br>
+            Used for: phone, email, logo,<br>
+            social links, business info,<br>
+            theme colors, etc.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; background:#1a1a2e; color:#e5e7eb; padding:12px; border-radius:6px; direction:ltr; text-align:left; font-size:0.75em;">
+        <div style="color:#10b981;">// The magic — metadata JSON stores ANY extra fields</div>
+        <div>Post::create([</div>
+        <div>&nbsp;&nbsp;'title' => ['ar' => 'تصميم مواقع', 'en' => 'Web Design'],</div>
+        <div>&nbsp;&nbsp;'content' => ['ar' => 'نصمم...', 'en' => 'We design...'],</div>
+        <div>&nbsp;&nbsp;'metadata' => [</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;'icon' => 'heroicon-o-globe',       <span style="color:#6366f1;">// ServicesComponent field</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;'price' => '500',                    <span style="color:#6366f1;">// PricesComponent field</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;'cta_url' => '/contact',             <span style="color:#6366f1;">// Any component's field</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;'rating' => 5,                       <span style="color:#6366f1;">// ReviewsComponent field</span></div>
+        <div>&nbsp;&nbsp;],</div>
+        <div>]);</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>4. ComponentRegistry — Auto-Discovery</h3>
+  <div class="mockup">
+    <div class="mockup-header">How components are found and resolved</div>
+    <div class="mockup-body" style="padding:16px; font-size:0.82em;">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div style="flex:1; text-align:center;">
+          <div style="background:#ede9fe; padding:12px; border-radius:8px;">
+            <strong>Boot Time</strong><br>
+            <span style="font-size:0.85em;">ServiceProvider scans<br>for SectionComponent<br>implementations</span>
+          </div>
+        </div>
+        <div>→</div>
+        <div style="flex:1; text-align:center;">
+          <div style="background:#ede9fe; padding:12px; border-radius:8px;">
+            <strong>Registry Cache</strong><br>
+            <span style="font-size:0.85em;">key → class map<br>'hero' → HeroComponent<br>'faq' → FaqComponent</span>
+          </div>
+        </div>
+        <div>→</div>
+        <div style="flex:1; text-align:center;">
+          <div style="background:#ede9fe; padding:12px; border-radius:8px;">
+            <strong>Resolution</strong><br>
+            <span style="font-size:0.85em;">$registry->resolve('hero')<br>returns HeroComponent<br>instance</span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top:16px; background:#1a1a2e; color:#e5e7eb; padding:12px; border-radius:6px; direction:ltr; text-align:left; font-size:0.72em;">
+<div style="color:#6366f1;">// 3 ways to register components:</div>
+<div>&nbsp;</div>
+<div style="color:#10b981;">// 1. Auto-discovered from package (built-in 25+)</div>
+<div>// src/Components/Sections/*.php</div>
+<div>&nbsp;</div>
+<div style="color:#10b981;">// 2. Developer registers in their app's ServiceProvider</div>
+<div>ComponentRegistry::register(MyCustomComponent::class);</div>
+<div>&nbsp;</div>
+<div style="color:#10b981;">// 3. Discovered from config (for non-class components)</div>
+<div>// config/crm.php → 'extra_components' => [...]</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>5. API v2 — Component-Aware</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+    <div class="mockup">
+      <div class="mockup-header">GET /api/v2/sections</div>
+      <div class="mockup-body" style="padding:12px;">
+        <pre style="font-size:0.65em; background:#1a1a2e; color:#e5e7eb; padding:12px; border-radius:6px; overflow:auto; direction:ltr; text-align:left;">
+{
+  "data": [
+    {
+      "id": 1,
+      "component": "hero",
+      "order": 1,
+      "title": {"ar": "...", "en": "..."},
+      "subtitle": {"ar": "...", "en": "..."},
+      "fields": {
+        "background_image": "/storage/...",
+        "cta_text": {"ar": "تواصل", "en": "Contact"},
+        "cta_url": "/contact"
+      },
+      "items": []
+    },
+    {
+      "id": 2,
+      "component": "services-grid",
+      "order": 2,
+      "title": {"ar": "خدماتنا", "en": "Our Services"},
+      "fields": {},
+      "items": [
+        {
+          "id": 10,
+          "title": {"ar": "تصميم", "en": "Design"},
+          "content": {"ar": "...", "en": "..."},
+          "fields": {
+            "icon": "heroicon-o-globe",
+            "image": "/storage/..."
+          }
+        }
+      ]
+    }
+  ]
+}
+        </pre>
+      </div>
+    </div>
+    
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="background:#f0fdf4; padding:16px; border-radius:8px;">
+        <strong style="color:#10b981;">What's new in v2 API:</strong>
+        <ul style="font-size:0.82em; margin:8px 0 0; padding-right:16px;">
+          <li>Sections endpoint returns component-typed data</li>
+          <li>Each section includes its <code>component</code> key</li>
+          <li>Angular frontend uses component key to render</li>
+          <li><code>fields</code> object = component-specific extras from metadata</li>
+          <li>Backward compatible: v1 routes still work</li>
+        </ul>
+      </div>
+      
+      <div style="background:#eff6ff; padding:16px; border-radius:8px;">
+        <strong style="color:#6366f1;">API Routes:</strong>
+        <div style="font-size:0.78em; margin-top:8px; direction:ltr; text-align:left;">
+          <code>GET  /api/v2/sections</code> — all sections<br>
+          <code>GET  /api/v2/sections/{id}</code> — one section<br>
+          <code>GET  /api/v2/settings</code> — site settings<br>
+          <code>GET  /api/v2/pages/{slug}</code> — page by slug<br>
+          <code>GET  /api/v2/menus</code> — navigation<br>
+          <code>POST /api/v2/contact</code> — submit form<br>
+          <code>GET  /api/v2/components</code> — available types<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>6. Extensibility Points</h3>
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; font-size:0.82em;">
+    <div style="background:white; border:2px solid #6366f1; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#6366f1; margin-bottom:8px;">🔌 Custom Components</div>
+      Developer adds a PHP class<br>implementing SectionComponent.<br>
+      Auto-discovered. Shows up in<br>admin component picker + client editor.
+    </div>
+    <div style="background:white; border:2px solid #10b981; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#10b981; margin-bottom:8px;">🎨 Custom Field Types</div>
+      FieldFactory is extensible.<br>
+      Add new field types via config<br>or ServiceProvider. Used in<br>component editSchema().
+    </div>
+    <div style="background:white; border:2px solid #f59e0b; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#f59e0b; margin-bottom:8px;">🔄 Custom API Transforms</div>
+      Each component's toApi() controls<br>its JSON shape. Override for<br>any format Angular/React needs.
+    </div>
+    <div style="background:white; border:2px solid #ec4899; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#ec4899; margin-bottom:8px;">🛡️ Auth & Middleware</div>
+      Panels use Filament's built-in<br>auth. Client panel gets own guard.<br>
+      Config-driven middleware stack.
+    </div>
+    <div style="background:white; border:2px solid #8b5cf6; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#8b5cf6; margin-bottom:8px;">🌐 Locale Strategy</div>
+      Arabic-first. All translatable<br>fields default to AR. EN optional.<br>
+      Config: crm.locales = ['ar','en'].
+    </div>
+    <div style="background:white; border:2px solid #06b6d4; border-radius:8px; padding:16px;">
+      <div style="font-weight:bold; color:#06b6d4; margin-bottom:8px;">📦 Theme / Blade Override</div>
+      Components point to blade views.<br>
+      Laravel view override: publish &<br>customize any template per-project.
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px; background:#f8fafc; padding:16px; border-radius:8px;">
+  <h3 style="margin-top:0;">Migration Path from v1 → v2</h3>
+  <div style="font-size:0.85em;">
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <div style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.85em;">Step 1</div>
+      <div>Upgrade Filament 3 → 5 (follow Filament upgrade guide)</div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <div style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.85em;">Step 2</div>
+      <div>Existing admin panel moves to <code>Filament/Admin/</code> namespace — no functionality change</div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <div style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.85em;">Step 3</div>
+      <div>Component classes created for each existing blade template (1:1 mapping)</div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <div style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.85em;">Step 4</div>
+      <div>Client panel added — reads same DB, no data migration needed</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <div style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.85em;">Step 5</div>
+      <div>API v2 routes added alongside v1 (v1 stays for backward compat)</div>
+    </div>
+  </div>
+</div>
