@@ -79,4 +79,15 @@ return [
         // Maximum pagination size
         'max_per_page' => env('CRM_API_MAX_PER_PAGE', 100),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Extra Components
+    |--------------------------------------------------------------------------
+    |
+    | Register additional SectionComponent classes beyond the built-in ones.
+    | Later registrations override earlier ones with the same key.
+    |
+    */
+    'extra_components' => [],
 ];

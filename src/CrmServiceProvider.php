@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
+use Taba\Crm\Components\Registry\ComponentRegistry;
 use Taba\Crm\Livewire\Home;
 
 class CrmServiceProvider extends ServiceProvider
@@ -57,6 +58,15 @@ class CrmServiceProvider extends ServiceProvider
         foreach (config('crm.middleware', []) as $alias => $class) {
             $this->app['router']->aliasMiddleware($alias, $class);
         }
+
+        // Discover built-in section components
+        ComponentRegistry::discoverIn(
+            __DIR__ . '/Components/Sections',
+            'Taba\\Crm\\Components\\Sections'
+        );
+
+        // Register config-driven extra components
+        ComponentRegistry::fromConfig(config('crm.extra_components', []));
 
         // Only register commands and publishable assets when running in the console.
         if ($this->app->runningInConsole()) {
