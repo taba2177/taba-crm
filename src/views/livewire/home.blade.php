@@ -11,11 +11,11 @@
     @foreach ($sections as $section)
     @php
     $isHeavy = $section->posts_count > \Taba\Crm\Livewire\Home::HEAVY_SECTION_THRESHOLD || $section->HEAVY_SECTION;
-    $componentName = 'homepage.' . $section->section_component;
+    $componentName = $this->resolveComponentName($section);
     @endphp
 
     <div class="p-0 m-0" wire:key="section-{{ $section->id }}">
-        @if ($section->section_component && view()->exists('components.' . str_replace('.', '/', $componentName)))
+        @if ($componentName && view()->exists('components.' . str_replace('.', '/', $componentName)))
 
         {{-- CASE 1: LIGHT SECTION --}}
         @if (!$isHeavy)

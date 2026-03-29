@@ -5,6 +5,7 @@ namespace Taba\Crm\Livewire;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\SchemaOrg\Schema;
+use Taba\Crm\Components\Registry\ComponentRegistry;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 use Illuminate\Support\Str;
@@ -91,6 +92,21 @@ class Home extends Component
 
     // Prepare SEO data from actual content
     $this->prepareInitialSeoData();
+    }
+
+    public function resolveComponentName(PostCategory $section): ?string
+    {
+        // Use ComponentRegistry if available
+        if ($section->section_component && ComponentRegistry::has($section->section_component)) {
+            $component = ComponentRegistry::resolve($section->section_component);
+            $bladeView = $component->bladeView();
+            // Extract component name: 'crm::components.homepage.hero' -> 'homepage.hero'
+            $componentName = preg_replace('/^crm::components\./', '', $bladeView);
+            return $componentName;
+        }
+
+        // Fallback: use section_component directly
+        return $section->section_component ? 'homepage.' . $section->section_component : null;
     }
 
     public function loadRemainingHeavyPosts()
