@@ -147,7 +147,16 @@ class CrmPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        $panel->viteTheme('packages/taba/crm/src/resources/css/admin.css');
+        // Only apply viteTheme if the CSS entry exists in the consumer's Vite manifest
+        $cssPath = 'packages/taba/crm/src/resources/css/admin.css';
+        $manifestPath = public_path('build/manifest.json');
+
+        if (file_exists($manifestPath)) {
+            $manifest = json_decode(file_get_contents($manifestPath), true) ?? [];
+            if (isset($manifest[$cssPath])) {
+                $panel->viteTheme($cssPath);
+            }
+        }
     }
 
     public static function make(): static

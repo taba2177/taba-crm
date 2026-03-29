@@ -1,0 +1,124 @@
+<footer class="bg-wood-950 text-wood-300 pt-24 pb-12 relative overflow-hidden" dir="rtl">
+    <div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay pointer-events-none"></div>
+
+    <!-- Top enormous text -->
+    <div class="max-w-[100rem] mx-auto px-6 sm:px-8 mb-24 relative z-10">
+      <h2 class="text-5xl md:text-[6rem] lg:text-[8rem] font-serif font-bold text-surface/5 leading-none uppercase tracking-tighter">
+        ROWAA AL GHAD
+      </h2>
+    </div>
+
+    <div class="max-w-[100rem] mx-auto px-6 sm:px-8 grid grid-cols-1 md:grid-cols-12 gap-16 relative z-10 border-b border-wood-800 pb-20">
+        <!-- Logo and About -->
+        <div class="md:col-span-4 lg:col-span-5">
+            <a routerLink="/" class="inline-block mb-10 group">
+                @if (settings().crm_business_logo) {
+                  <img [src]="'/storage/' + settings().crm_business_logo" alt="روعة الغد" class="h-14 w-auto object-contain brightness-0 invert group-hover:scale-105 transition-transform duration-300" />
+                } @else {
+                  <div class="font-serif text-3xl font-bold tracking-wider text-surface flex items-center gap-4">
+                    <span class="w-3 h-3 bg-accent rotate-45 transform group-hover:rotate-90 transition-transform duration-500"></span>
+                    روعة الغد
+                  </div>
+                }
+            </a>
+            <p class="text-base leading-loose mb-10 text-wood-400 font-sans max-w-sm">
+              {{ t(settings().crm_business_description) || 'نصنع من الخشب تحفاً فنية، ونبني واجهات تعكس هوية المكان برقي، لتجربة استثنائية تبقى عبر الزمن.' }}
+            </p>
+            <div class="flex items-center gap-5">
+              @if (settings().crm_contact_whatsapp) {
+                <a [href]="'https://wa.me/' + settings().crm_contact_whatsapp" target="_blank" rel="noopener noreferrer" class="text-wood-500 hover:text-[#25D366] transition-colors hover:-translate-y-1 transform" aria-label="WhatsApp">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
+              }
+              @if (settings().crm_social_instagram) {
+                <a [href]="settings().crm_social_instagram" target="_blank" class="text-wood-500 hover:text-accent transition-colors hover:-translate-y-1 transform" aria-label="Instagram">
+                  <lucide-icon [img]="InstagramIcon" class="w-6 h-6"></lucide-icon>
+                </a>
+              }
+              @if (settings().crm_social_snapchat) {
+                <a [href]="settings().crm_social_snapchat" target="_blank" rel="noopener noreferrer" class="text-wood-500 hover:text-[#FFFC00] transition-colors hover:-translate-y-1 transform" aria-label="Snapchat">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12.922-.214.09-.03.176-.044.264-.044.42 0 .72.27.72.69 0 .36-.27.66-.66.84-.39.18-.84.27-1.26.39-.3.06-.51.12-.72.21-.39.18-.54.48-.66.81-.15.42-.15.84-.18 1.26-.09 1.23-1.2 2.22-3.12 2.94-1.11.42-1.89 1.02-1.89 1.68 0 .27.09.48.3.6.21.15.45.21.63.24.39.06.78.06 1.17.06.09 0 .18 0 .27.03.45.06.66.36.66.66 0 .3-.15.78-1.14.78-.75 0-1.38-.12-1.92-.27-.3-.09-.57-.15-.81-.15-.3 0-.48.12-.66.27-.27.21-.51.45-.93.84-.42.42-.96.87-1.83.87s-1.38-.42-1.83-.87c-.39-.39-.66-.63-.93-.84-.18-.15-.36-.27-.66-.27-.24 0-.51.06-.81.15-.54.15-1.17.27-1.92.27-.99 0-1.14-.48-1.14-.78 0-.3.21-.6.66-.66.09-.03.18-.03.27-.03.39 0 .78 0 1.17-.06.18-.03.42-.09.63-.24.21-.12.3-.33.3-.6 0-.66-.78-1.26-1.89-1.68-1.92-.72-3.03-1.71-3.12-2.94-.03-.42-.03-.84-.18-1.26-.12-.33-.27-.63-.66-.81-.21-.09-.42-.15-.72-.21-.42-.12-.87-.21-1.26-.39-.39-.18-.66-.48-.66-.84 0-.42.3-.69.72-.69.09 0 .18.015.27.044.27.09.63.198.93.214.18 0 .33-.045.39-.09a9.466 9.466 0 01-.03-.51l-.003-.06c-.105-1.628-.23-3.654.3-4.847C5.653 1.069 9.01.793 10 .793h2.206z"/></svg>
+                </a>
+              }
+              @if (settings().crm_social_tiktok) {
+                <a [href]="settings().crm_social_tiktok" target="_blank" rel="noopener noreferrer" class="text-wood-500 hover:text-surface transition-colors hover:-translate-y-1 transform" aria-label="TikTok">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.43V13a8.16 8.16 0 005.58 2.2V11.78a4.82 4.82 0 01-3.59-1.49V6.69h3.59z"/></svg>
+                </a>
+              }
+              @if (settings().crm_social_facebook) {
+                <a [href]="settings().crm_social_facebook" target="_blank" class="text-wood-500 hover:text-accent transition-colors hover:-translate-y-1 transform">
+                  <lucide-icon [img]="FacebookIcon" class="w-6 h-6"></lucide-icon>
+                </a>
+              }
+              @if (settings().crm_social_twitter) {
+                <a [href]="settings().crm_social_twitter" target="_blank" class="text-wood-500 hover:text-accent transition-colors hover:-translate-y-1 transform">
+                  <lucide-icon [img]="TwitterIcon" class="w-6 h-6"></lucide-icon>
+                </a>
+              }
+            </div>
+        </div>
+
+        <!-- Links -->
+        <div class="md:col-span-4 lg:col-span-3">
+            <h3 class="text-surface font-serif text-xl mb-8">روابط سريعة</h3>
+            <ul class="space-y-4">
+                <li><a routerLink="/" class="text-wood-400 hover:text-accent transition-colors font-semibold uppercase tracking-wider text-sm flex items-center gap-2 group"><span class="w-0 h-px bg-accent group-hover:w-4 transition-all duration-300"></span>الرئيسية</a></li>
+                @for (cat of categories(); track cat.id) {
+                <li><a [routerLink]="['/', cat.slug]" class="text-wood-400 hover:text-accent transition-colors font-semibold uppercase tracking-wider text-sm flex items-center gap-2 group"><span class="w-0 h-px bg-accent group-hover:w-4 transition-all duration-300"></span>{{ t(cat.name) }}</a></li>
+                }
+            </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="md:col-span-4 lg:col-span-4">
+            <h3 class="text-surface font-serif text-xl mb-8">تواصل معنا</h3>
+            <ul class="space-y-6">
+                @if (settings().crm_contact_phone) {
+                <li>
+                    <a [href]="'tel:'+settings().crm_contact_phone" class="flex items-center gap-4 group">
+                      <div class="w-12 h-12 border border-wood-800 rounded-full flex items-center justify-center text-wood-500 group-hover:bg-accent group-hover:text-surface group-hover:border-accent transition-all">
+                        <lucide-icon [img]="PhoneIcon" class="w-5 h-5"></lucide-icon>
+                      </div>
+                      <span class="font-sans text-base text-wood-300 group-hover:text-surface transition-colors" dir="ltr">{{ settings().crm_contact_phone }}</span>
+                    </a>
+                </li>
+                }
+                @if (settings().crm_contact_email) {
+                <li>
+                    <a [href]="'mailto:'+settings().crm_contact_email" class="flex items-center gap-4 group">
+                      <div class="w-12 h-12 border border-wood-800 rounded-full flex items-center justify-center text-wood-500 group-hover:bg-accent group-hover:text-surface group-hover:border-accent transition-all">
+                        <lucide-icon [img]="MailIcon" class="w-5 h-5"></lucide-icon>
+                      </div>
+                      <span class="font-sans text-base text-wood-300 group-hover:text-surface transition-colors">{{ settings().crm_contact_email }}</span>
+                    </a>
+                </li>
+                }
+                @if (settings().crm_contact_address) {
+                <li class="flex items-center gap-4 opacity-70">
+                    <div class="w-12 h-12 border border-wood-800 rounded-full flex items-center justify-center text-wood-500">
+                      <lucide-icon [img]="MapPinIcon" class="w-5 h-5"></lucide-icon>
+                    </div>
+                    <span class="font-sans text-base">{{ t(settings().crm_contact_address) }}</span>
+                </li>
+                }
+                @if (settings().crm_contact_whatsapp) {
+                <li>
+                    <a [href]="'https://wa.me/' + settings().crm_contact_whatsapp" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 group">
+                      <div class="w-12 h-12 border border-wood-800 rounded-full flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-surface group-hover:border-[#25D366] transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      </div>
+                      <span class="font-sans text-base text-wood-300 group-hover:text-surface transition-colors" dir="ltr">{{ settings().crm_contact_whatsapp }}</span>
+                    </a>
+                </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="max-w-[100rem] mx-auto px-6 sm:px-8 mt-10 relative z-10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="font-sans font-medium tracking-wide text-wood-500 text-sm">
+          جميع الحقوق محفوظة &copy; {{ settings().crm_business_year_founded || '2018' }} {{ t(settings().crm_business_name) || 'مؤسسة روعة الغد للديكورات الخشبية' }}
+        </p>
+
+    </div>
+</footer>

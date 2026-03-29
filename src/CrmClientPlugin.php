@@ -42,12 +42,13 @@ class CrmClientPlugin implements Plugin
     public function boot(Panel $panel): void
     {
         // Register dynamic navigation from PostCategories
-        $panel->navigationItems($this->buildCategoryNavigation());
+        $panel->navigationItems($this->buildCategoryNavigation($panel));
     }
 
-    protected function buildCategoryNavigation(): array
+    protected function buildCategoryNavigation(Panel $panel): array
     {
         $items = [];
+        $panelId = $panel->getId();
 
         try {
             $categories = PostCategory::query()
@@ -75,9 +76,9 @@ class CrmClientPlugin implements Plugin
                 || ($layout === SectionLayout::LIST && $category->posts_count <= 1);
 
             if ($isSingleEntry) {
-                $url = route('filament.client.pages.edit-section', ['record' => $category->id]);
+                $url = route("filament.{$panelId}.pages.edit-section", ['record' => $category->id]);
             } else {
-                $url = route('filament.client.resources.section-posts.index', ['category' => $category->id]);
+                $url = route("filament.{$panelId}.resources.section-posts.index", ['category' => $category->id]);
             }
 
             $items[] = NavigationItem::make($category->name)

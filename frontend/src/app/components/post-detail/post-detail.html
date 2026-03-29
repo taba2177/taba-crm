@@ -1,0 +1,395 @@
+@if (loading()) {
+  <div class="flex justify-center items-center min-h-screen bg-surface">
+    <div class="w-16 h-16 border-4 border-wood-200 border-t-accent animate-spin"></div>
+  </div>
+} @else if (post()) {
+  <div dir="rtl" class="bg-surface min-h-screen pt-20">
+    <!-- Hero / Banner (shared) -->
+    <section class="relative bg-wood-950 text-surface py-32 bg-cover bg-center overflow-hidden">
+      @if (getImage(post())) {
+        <div class="absolute inset-0 z-0">
+          <img [src]="getImage(post())" alt="Banner" class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
+          <div class="absolute inset-0 bg-gradient-to-t from-wood-950 via-wood-950/80 to-wood-950/50"></div>
+        </div>
+      }
+      <div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay z-0 pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 text-center mt-10">
+        <!-- Breadcrumbs -->
+        <nav class="mb-10 flex justify-center gap-4 text-xs font-semibold uppercase tracking-widest text-wood-400" scrollReveal="fade-down">
+          <a routerLink="/" class="hover:text-accent transition-colors">الرئيسية</a>
+          <span class="text-wood-600">/</span>
+          @if (category()) {
+            <a [routerLink]="['/', category().slug]" class="hover:text-accent transition-colors">{{ t(category().name) }}</a>
+            <span class="text-wood-600">/</span>
+          }
+          <span class="text-surface font-sans line-clamp-1">{{ t(post().title) }}</span>
+        </nav>
+
+        <h1 class="text-5xl md:text-7xl lg:text-[5rem] font-serif font-bold mb-8 text-surface leading-[1.1]" scrollReveal="fade-up">{{ t(post().title) }}</h1>
+
+        @if (category()) {
+          <div class="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-wood-400 border border-wood-800 px-6 py-2" scrollReveal="fade-up" [revealDelay]="200">
+            <span class="w-2 h-2 bg-accent"></span>
+            {{ t(category().name) }}
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- ARTICLE LAYOUT (about, services, partners)     -->
+    <!-- ═══════════════════════════════════════════════ -->
+    @if (isArticleLayout) {
+      <section class="py-20 bg-surface relative">
+        <div class="max-w-4xl mx-auto px-6 sm:px-8">
+
+          <!-- Featured Image (single, clean) -->
+          @if (getImage(post())) {
+            <div class="relative -mt-20 mb-16 shadow-2xl border border-wood-200 overflow-hidden" scrollReveal="fade-up">
+              <img [src]="getImage(post())" [alt]="t(post().title)" class="w-full aspect-[16/9] object-cover" />
+            </div>
+          }
+
+          <!-- Article Content -->
+          <article class="bg-surface" scrollReveal="fade-up" [revealDelay]="100">
+            @if (post().excerpt) {
+              <p class="text-2xl text-wood-700 font-serif leading-relaxed mb-12 border-r-4 border-accent pr-6">
+                {{ t(post().excerpt) }}
+              </p>
+            }
+
+            <div class="prose prose-lg prose-wood max-w-none font-sans text-wood-800 leading-loose">
+              @if (post().content) {
+                <div [innerHTML]="t(post().content)"></div>
+              }
+
+              @if (post().blocks?.length) {
+                <div class="mt-8 space-y-10">
+                  @for (block of post().blocks; track $index) {
+                    @if (block.type === 'markdown' && block.data?.content) {
+                      <div class="prose-blocks" [innerHTML]="block.data.content"></div>
+                    }
+                    @else if (block.type === 'heading' && block.data?.content) {
+                      <h2 class="text-3xl font-serif font-bold mt-12 mb-6 text-wood-950">{{ block.data.content }}</h2>
+                    }
+                    @else if (block.type === 'quote' && block.data?.content) {
+                      <blockquote class="bg-wood-50 p-8 border-r-4 border-wood-950 my-10">
+                        <p class="text-xl font-serif text-wood-900 italic m-0">{{ block.data.content }}</p>
+                      </blockquote>
+                    }
+                    @else if (block.type === 'figure' && block.data?.image) {
+                      <figure class="my-12">
+                        <img [src]="block.data.image" [alt]="block.data.alt || ''" class="w-full object-cover border border-wood-100" />
+                        @if (block.data.caption) {
+                          <figcaption class="text-center text-sm font-semibold uppercase tracking-widest text-wood-500 mt-4">{{ block.data.caption }}</figcaption>
+                        }
+                      </figure>
+                    }
+                    @else if (block.type === 'list' && block.data?.items) {
+                      <ul class="space-y-4 my-8 pl-0">
+                        @for (item of block.data.items; track $index) {
+                          <li class="flex items-start gap-3">
+                            <span class="w-2 h-2 rounded-none bg-accent mt-2.5"></span>
+                            <span class="text-wood-800">{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Inline images if any (simple grid, no Swiper) -->
+            @if (post().images?.length > 1) {
+              <div class="mt-16">
+                <h3 class="text-xl font-serif font-bold text-wood-950 mb-8">صور إضافية</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  @for (img of post().images; track img.id; let i = $index) {
+                    <div class="group relative overflow-hidden cursor-pointer border border-wood-200 hover:border-accent/50 transition-all duration-500"
+                         (click)="openLightbox(img.url)">
+                      <div class="aspect-[4/3] overflow-hidden">
+                        <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </article>
+
+          <!-- Related Posts -->
+          @if (relatedPosts().length > 0) {
+            <div class="mt-20 pt-16 border-t border-wood-200" scrollReveal="fade-up">
+              <h3 class="text-2xl font-serif font-bold text-wood-950 mb-10">مقالات ذات صلة</h3>
+              <div class="grid sm:grid-cols-2 gap-8">
+                @for (rp of relatedPosts(); track rp.id) {
+                  <a [routerLink]="['/', category().slug, rp.slug]" class="group block bg-wood-50 border border-wood-100 hover:border-accent/40 transition-all duration-500">
+                    @if (getImage(rp)) {
+                      <div class="aspect-[16/9] overflow-hidden">
+                        <img [src]="getImage(rp)" [alt]="t(rp.title)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                      </div>
+                    }
+                    <div class="p-6">
+                      <h4 class="text-lg font-serif font-bold text-wood-950 group-hover:text-accent transition-colors">{{ t(rp.title) }}</h4>
+                      @if (rp.excerpt) {
+                        <p class="text-sm text-wood-600 mt-2 line-clamp-2">{{ t(rp.excerpt) }}</p>
+                      }
+                    </div>
+                  </a>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- CTA -->
+          <div class="mt-20 bg-wood-950 text-surface p-10 relative overflow-hidden" scrollReveal="fade-up">
+            <div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay"></div>
+            <div class="relative z-10 text-center">
+              <h3 class="text-3xl font-serif font-bold mb-4 text-surface">نبني رؤيتك</h3>
+              <p class="text-wood-400 font-sans leading-relaxed mb-8 max-w-lg mx-auto">استعد لتجربة استثنائية مع فريقنا المتخصص. دعنا نبدأ مشروعك القادم.</p>
+              <a routerLink="/contact" class="inline-block px-8 py-4 bg-accent text-surface font-semibold uppercase tracking-widest text-sm hover:shadow-[0_0_30px_rgba(232,184,75,0.4)] transition-all">تواصل معنا</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- GALLERY LAYOUT (projects, works, portfolio)    -->
+    <!-- ═══════════════════════════════════════════════ -->
+    } @else {
+
+      <!-- Gallery Section (if post has multiple images) -->
+      @if (post().images?.length > 0) {
+        <section class="py-24 lg:py-32 bg-wood-950 relative overflow-hidden">
+          <!-- Decorative elements -->
+          <div class="absolute inset-0 pointer-events-none opacity-[0.03]">
+            <div class="absolute top-20 right-20 w-64 h-64 border border-accent/30 rotate-45"></div>
+            <div class="absolute bottom-20 left-20 w-48 h-48 border border-accent/30 -rotate-12"></div>
+          </div>
+          <div class="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay pointer-events-none"></div>
+
+          <div class="max-w-[100rem] mx-auto px-6 sm:px-12 relative z-10">
+            <!-- Gallery Header -->
+            <div class="text-center mb-16" scrollReveal="fade-up">
+              <div class="inline-flex items-center gap-4 mb-6">
+                <span class="h-[1px] bg-accent/60 w-12"></span>
+                <span class="text-accent tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">معرض الصور</span>
+                <span class="h-[1px] bg-accent/60 w-12"></span>
+              </div>
+              <p class="text-wood-400 text-lg max-w-xl mx-auto">صور من مشاريعنا المنجزة</p>
+            </div>
+
+            <!-- 3D Coverflow Swiper -->
+            <div class="mb-20" scrollReveal="zoom-in" [revealDelay]="200">
+              <swiper-container id="detail-swiper" init="false"
+                class="!overflow-visible !pb-16">
+                @for (img of post().images; track img.id; let i = $index) {
+                  <swiper-slide class="!w-[320px] sm:!w-[400px] lg:!w-[480px]">
+                    <div class="group relative overflow-hidden cursor-pointer border border-wood-800/50 hover:border-accent/40 transition-all duration-700 shadow-2xl"
+                         (click)="openLightbox(img.url)">
+                      <div class="aspect-[4/3] overflow-hidden">
+                        <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                             class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110" loading="lazy" />
+                      </div>
+                      <div class="absolute inset-0 bg-gradient-to-t from-wood-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <!-- Zoom icon on hover -->
+                      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div class="w-14 h-14 bg-accent/90 rounded-full flex items-center justify-center shadow-lg">
+                          <svg class="w-6 h-6 text-surface" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                        </div>
+                      </div>
+                      <div class="absolute top-4 left-4 w-9 h-9 bg-accent/80 flex items-center justify-center text-surface font-display font-bold text-xs">
+                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                      </div>
+                    </div>
+                  </swiper-slide>
+                }
+              </swiper-container>
+            </div>
+
+            <!-- Mosaic Grid with Varied Shapes -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+              @for (img of post().images; track img.id; let i = $index) {
+                @if (i % 7 === 0) {
+                  <!-- Large hero tile -->
+                  <div class="col-span-2 row-span-2 group relative overflow-hidden cursor-pointer"
+                       scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
+                    <div class="aspect-square overflow-hidden rounded-[2rem_0.5rem_2rem_0.5rem] border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl">
+                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem_0.5rem_2rem_0.5rem]"></div>
+                    </div>
+                  </div>
+                } @else if (i % 7 === 3) {
+                  <!-- Tall vertical tile -->
+                  <div class="row-span-2 group relative overflow-hidden cursor-pointer"
+                       scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
+                    <div class="h-full overflow-hidden rounded-3xl border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl">
+                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
+                    </div>
+                  </div>
+                } @else if (i % 5 === 2) {
+                  <!-- Circle shape -->
+                  <div class="group relative overflow-hidden cursor-pointer flex items-center justify-center"
+                       scrollReveal="zoom-in" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
+                    <div class="w-full aspect-square overflow-hidden rounded-full border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl hover:shadow-[0_0_30px_rgba(232,184,75,0.2)]">
+                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
+                    </div>
+                  </div>
+                } @else if (i % 5 === 4) {
+                  <!-- Diamond / rotated shape -->
+                  <div class="group relative overflow-hidden cursor-pointer flex items-center justify-center p-4"
+                       scrollReveal="flip-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
+                    <div class="w-full aspect-square overflow-hidden rotate-6 hover:rotate-0 border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl rounded-lg">
+                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                           class="w-full h-full object-cover -rotate-6 group-hover:rotate-0 group-hover:scale-110 transition-all duration-[2s]" loading="lazy" />
+                    </div>
+                  </div>
+                } @else {
+                  <!-- Standard rectangular tile with alternating rounded corners -->
+                  <div class="group relative overflow-hidden cursor-pointer"
+                       scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
+                    <div class="aspect-[4/3] overflow-hidden border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl"
+                         [class]="i % 2 === 0 ? 'rounded-[0.5rem_2rem_0.5rem_2rem]' : 'rounded-[2rem_0.5rem_2rem_0.5rem]'">
+                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Post Content -->
+      <section class="py-24 bg-surface relative">
+        <div class="max-w-[100rem] mx-auto px-6 sm:px-8">
+          <div class="grid lg:grid-cols-12 gap-16 items-start">
+
+            <!-- Content Left (Right in RTL) -->
+            <article class="lg:col-span-8 relative z-20 bg-surface p-8 sm:p-12 lg:p-16 border border-wood-200 shadow-2xl" [class]="post().images?.length > 0 ? '' : 'lg:-mt-48'" scrollReveal="fade-up">
+              @if (post().excerpt) {
+                <p class="text-2xl text-wood-700 font-serif leading-relaxed mb-12 border-r-4 border-accent pr-6">
+                  {{ t(post().excerpt) }}
+                </p>
+              }
+
+              <div class="prose prose-lg prose-wood max-w-none font-sans text-wood-800 leading-loose">
+                @if (post().content) {
+                  <div [innerHTML]="t(post().content)"></div>
+                }
+
+                @if (post().blocks?.length) {
+                  <div class="mt-8 space-y-10">
+                    @for (block of post().blocks; track $index) {
+
+                      @if (block.type === 'markdown' && block.data?.content) {
+                        <div class="prose-blocks" [innerHTML]="block.data.content"></div>
+                      }
+
+                      @else if (block.type === 'heading' && block.data?.content) {
+                        <h2 class="text-3xl font-serif font-bold mt-12 mb-6 text-wood-950">{{ block.data.content }}</h2>
+                      }
+
+                      @else if (block.type === 'quote' && block.data?.content) {
+                        <blockquote class="bg-wood-50 p-8 border-r-4 border-wood-950 my-10">
+                          <p class="text-xl font-serif text-wood-900 italic m-0">{{ block.data.content }}</p>
+                        </blockquote>
+                      }
+
+                      @else if (block.type === 'figure' && block.data?.image) {
+                        <figure class="my-12">
+                          <img [src]="block.data.image" [alt]="block.data.alt || ''" class="w-full object-cover grayscale-[10%] border border-wood-100" />
+                          @if (block.data.caption) {
+                            <figcaption class="text-center text-sm font-semibold uppercase tracking-widest text-wood-500 mt-4">{{ block.data.caption }}</figcaption>
+                          }
+                        </figure>
+                      }
+
+                      @else if (block.type === 'list' && block.data?.items) {
+                        <ul class="space-y-4 my-8 pl-0">
+                          @for (item of block.data.items; track $index) {
+                            <li class="flex items-start gap-3">
+                              <span class="w-2 h-2 rounded-none bg-accent mt-2.5"></span>
+                              <span class="text-wood-800">{{ item }}</span>
+                            </li>
+                          }
+                        </ul>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+            </article>
+
+            <!-- Sidebar (Left in RTL) -->
+            <aside class="lg:col-span-4 space-y-12" scrollReveal="fade-left" [revealDelay]="200">
+              <!-- Related Projects -->
+              @if (relatedPosts().length > 0) {
+                <div class="bg-wood-50 p-8 border border-wood-100">
+                  <h3 class="text-lg font-serif font-bold text-wood-950 mb-6 uppercase tracking-widest">مشاريع أخرى</h3>
+                  <div class="space-y-4">
+                    @for (rp of relatedPosts(); track rp.id) {
+                      <a [routerLink]="['/', category().slug, rp.slug]" class="group flex gap-4 items-center hover:bg-wood-100/50 p-2 -mx-2 transition-colors">
+                        @if (getImage(rp)) {
+                          <div class="w-16 h-16 flex-shrink-0 overflow-hidden border border-wood-200">
+                            <img [src]="getImage(rp)" [alt]="t(rp.title)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                          </div>
+                        }
+                        <span class="text-sm font-semibold text-wood-800 group-hover:text-accent transition-colors">{{ t(rp.title) }}</span>
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Share Widget -->
+              <div class="bg-wood-50 p-10 border border-wood-100">
+                <h3 class="text-lg font-serif font-bold text-wood-950 mb-6 uppercase tracking-widest">شارك هذا المشروع</h3>
+                <div class="flex gap-4">
+                  <button class="w-12 h-12 bg-surface border border-wood-200 flex items-center justify-center text-wood-500 hover:text-accent hover:border-accent transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </button>
+                  <button class="w-12 h-12 bg-surface border border-wood-200 flex items-center justify-center text-wood-500 hover:text-accent hover:border-accent transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                  </button>
+                  <button class="w-12 h-12 bg-surface border border-wood-200 flex items-center justify-center text-wood-500 hover:text-accent hover:border-accent transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.849-3.037-1.85 0-2.133 1.445-2.133 2.939v5.667H9.358V9h3.414v1.56h.05c.475-.899 1.64-1.849 3.385-1.849 3.621 0 4.293 2.383 4.293 5.485v6.25zM5.337 7.433c-1.144 0-2.062-.925-2.062-2.064 0-1.14.918-2.062 2.062-2.062 1.145 0 2.064.922 2.064 2.062 0 1.139-.92 2.064-2.064 2.064zM7.112 20.452H3.558V9h3.554v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Call to action block -->
+              <div class="bg-wood-950 text-surface p-10 relative overflow-hidden">
+                 <div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay"></div>
+                 <h3 class="text-3xl font-serif font-bold mb-4 relative z-10 text-surface">نبني رؤيتك</h3>
+                 <p class="text-wood-400 font-sans leading-relaxed mb-8 relative z-10">استعد لتجربة استثنائية مع فريقنا المتخصص. دعنا نبدأ مشروعك القادم.</p>
+                 <a routerLink="/contact" class="inline-block px-8 py-4 bg-accent text-surface font-semibold uppercase tracking-widest text-sm hover:shadow-[0_0_30px_rgba(232,184,75,0.4)] transition-all relative z-10 w-full text-center">تواصل معنا</a>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- Lightbox -->
+    @if (lightboxImage()) {
+      <div class="fixed inset-0 z-[9999] bg-wood-950/95 flex items-center justify-center p-4 cursor-pointer backdrop-blur-sm" (click)="closeLightbox()">
+        <button class="absolute top-6 left-6 w-12 h-12 bg-surface/10 hover:bg-surface/20 flex items-center justify-center text-surface transition-colors z-10" (click)="closeLightbox()">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <img [src]="lightboxImage()" alt="Gallery Image" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl" (click)="$event.stopPropagation()" />
+      </div>
+    }
+  </div>
+}

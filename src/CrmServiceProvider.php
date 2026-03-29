@@ -51,6 +51,7 @@ class CrmServiceProvider extends ServiceProvider
         }
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'crm');
+        $this->loadJsonTranslationsFrom(__DIR__.'/../lang');
         $this->loadViewsFrom(__DIR__.'/views', 'crm');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 

@@ -1,0 +1,403 @@
+@if (data()) {
+  <div class="overflow-x-hidden bg-surface text-wood-900 font-sans selection:bg-wood-900 selection:text-accent group/page">
+
+    @for (section of data()?.sections; track section.id) {
+      @switch (section.section_component) {
+
+        @case ('hero') {
+          <section class="relative min-h-[100vh] bg-wood-950 text-surface overflow-hidden">
+            <!-- Full background image -->
+            @if (section.posts && section.posts[0]) {
+              <div class="absolute inset-0 z-0">
+                <img [src]="section.posts[0].image?.url || '/storage/media/aaamal-aldykor_692b177c2b71a.jpg'" alt="Hero Image"
+                     class="w-full h-full object-cover select-none animate-scale-in" />
+                <div class="absolute inset-0 bg-wood-950/70"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-wood-950 via-transparent to-wood-950/40"></div>
+              </div>
+            }
+            <div class="absolute inset-0 z-[1] bg-noise opacity-[0.04] mix-blend-overlay pointer-events-none"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 min-h-[100vh] flex flex-col">
+              <!-- Main hero content centered -->
+              <div class="flex-1 flex items-center">
+                <div class="w-full max-w-[100rem] mx-auto px-6 sm:px-12 pt-24">
+                  <div class="max-w-4xl mx-auto text-center">
+                    <div class="inline-flex items-center gap-4 mb-10">
+                      <span class="h-[1px] bg-accent/60 w-12"></span>
+                      <span class="text-accent/90 tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">مؤسسة روعة الغد</span>
+                      <span class="h-[1px] bg-accent/60 w-12"></span>
+                    </div>
+
+                    @if (section.posts && section.posts[0]) {
+                      <h1 class="text-4xl sm:text-5xl lg:text-[4.5rem] font-display font-extrabold leading-[1.05] mb-8 text-surface">
+                        نصنع الفخامة<br/>
+                        <span class="text-accent">من الخشب والزجاج</span>
+                      </h1>
+                      <p class="text-base lg:text-lg text-wood-300/90 leading-relaxed mb-14 font-sans font-light max-w-2xl mx-auto">
+                        {{ t(settings()?.crm_business_description) || 'لتوفير الحلول الكاملة في أعمال الديكور والتصميم الداخلي والخارجي وكل ما يجعل تجربتك استثنائية وبجودة فائقة.' }}
+                      </p>
+                    }
+
+                    <div class="flex flex-col sm:flex-row gap-5 items-center justify-center">
+                      <a routerLink="/contact" class="group relative px-10 py-5 bg-accent text-surface text-center overflow-hidden inline-flex justify-center items-center gap-3 rounded-full hover:shadow-[0_0_60px_rgba(232,184,75,0.35)] transition-all duration-500">
+                        <span class="relative z-10 font-display font-bold text-base tracking-wide">اطلب استشارة مجانية</span>
+                        <lucide-icon [img]="ArrowLeftIcon" class="w-5 h-5 relative z-10 group-hover:-translate-x-2 transition-transform"></lucide-icon>
+                      </a>
+                      @if (settings().crm_contact_whatsapp) {
+                        <a [href]="'https://wa.me/' + settings().crm_contact_whatsapp" target="_blank" rel="noopener noreferrer"
+                           class="group inline-flex items-center gap-3 px-8 py-5 border border-surface/20 text-surface rounded-full hover:bg-surface/10 hover:border-surface/40 transition-all duration-300">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-[#25D366]"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                           <span class="font-display font-bold text-base">تواصل واتساب</span>
+                        </a>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom stats bar -->
+              <div class="w-full border-t border-surface/10">
+                <div class="max-w-[100rem] mx-auto px-6 sm:px-12 py-6 flex flex-wrap justify-center lg:justify-between gap-8 lg:gap-0">
+                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
+                    <span class="text-2xl font-bold text-surface">+100</span>
+                    <span>مشروع منجز</span>
+                  </div>
+                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
+                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
+                    <span class="text-2xl font-bold text-surface">2018</span>
+                    <span>سنة التأسيس</span>
+                  </div>
+                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
+                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
+                    <span class="text-2xl font-bold text-surface">الرياض</span>
+                    <span>المقر الرئيسي</span>
+                  </div>
+                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
+                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
+                    <span class="text-2xl font-bold text-accent">100%</span>
+                    <span>جودة فاخرة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('about') {
+          <section id="about" class="py-24 lg:py-36 bg-surface relative overflow-hidden">
+            <!-- architectural background lines -->
+            <div class="absolute inset-0 pointer-events-none grid grid-cols-4 gap-4 opacity-5">
+              <div class="border-r border-wood-950 h-full"></div>
+              <div class="border-r border-wood-950 h-full"></div>
+              <div class="border-r border-wood-950 h-full"></div>
+              <div class="border-r border-wood-950 h-full"></div>
+            </div>
+
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12 relative z-10">
+              <div class="grid lg:grid-cols-2 gap-20 lg:gap-32 items-center">
+                <div class="relative group" scrollReveal="fade-right">
+                  @if (section.posts && section.posts[0]) {
+                    <div class="aspect-[3/4] lg:aspect-square overflow-hidden bg-wood-200 relative">
+                      <img [src]="section.posts[0].image?.url || '/storage/media/6b2366bd-d39d-495d-8539-e382d057feae.jpeg'" alt="About Us"
+                           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out mix-blend-multiply" />
+                      <div class="absolute inset-0 bg-wood-900 mix-blend-color opacity-20"></div>
+                    </div>
+                  }
+                  <!-- brutalist floating box -->
+                  <div class="absolute -bottom-12 lg:-bottom-24 -left-6 lg:-left-12 bg-accent text-surface p-10 lg:p-16 shadow-2xl">
+                    <div class="text-[4rem] lg:text-[5.5rem] font-display font-bold leading-none mb-2 text-surface">2018</div>
+                    <div class="font-sans text-surface/80 uppercase tracking-[0.2em] text-xs font-semibold">سنة التأسيس<br>الرياض، السعودية</div>
+                  </div>
+                </div>
+
+                <div class="pt-12 lg:pt-0 pr-0 lg:pr-12" scrollReveal="fade-left" [revealDelay]="200">
+                  <div class="flex items-center gap-6 mb-10">
+                     <span class="text-accent uppercase tracking-[0.2em] font-display font-bold text-sm">من نحن</span>
+                     <span class="h-px bg-wood-300 flex-1"></span>
+                  </div>
+                  @if (section.posts && section.posts[0]) {
+                    <h2 class="text-3xl lg:text-5xl font-display font-extrabold text-wood-950 mb-10 leading-[1.1]">
+                      نصنع الفارق في<br/><span class="text-accent italic font-serif">كل زاوية</span>
+                    </h2>
+                    <div class="text-base text-wood-600 font-sans leading-loose mb-14 text-justify">
+                      {{ t(section.posts[0]?.content) || 'انطلاقاً من مبدأ الطفرة العمرانية التي تشهدها المملكة العربية السعودية تأسست مؤسسة روعة الغد لتوفير الحلول الكاملة في أعمال الديكور والتصميم الداخلي والخارجي وكل ما يجعل تجربتك إستثنائية وبجودة فائقة.' }}
+                    </div>
+                  }
+
+                  <div class="grid sm:grid-cols-2 gap-8">
+                    <div class="group border border-wood-200 hover:border-wood-900 p-8 transition-colors bg-surface">
+                      <div class="w-14 h-14 bg-wood-100 flex items-center justify-center text-wood-900 mb-6 group-hover:bg-wood-900 group-hover:text-accent transition-colors">
+                        <lucide-icon [img]="CheckCircleIcon" class="w-6 h-6"></lucide-icon>
+                      </div>
+                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">الجودة الفائقة</h4>
+                      <p class="text-wood-600 text-sm leading-relaxed">نعمل بشكل استثنائي وننتج تصاميم فريدة.</p>
+                    </div>
+
+                    <div class="group border border-wood-200 hover:border-wood-900 p-8 transition-colors bg-surface">
+                      <div class="w-14 h-14 bg-wood-100 flex items-center justify-center text-wood-900 mb-6 group-hover:bg-wood-900 group-hover:text-accent transition-colors">
+                        <lucide-icon [img]="CheckCircleIcon" class="w-6 h-6"></lucide-icon>
+                      </div>
+                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">معايير عالمية</h4>
+                      <p class="text-wood-600 text-sm leading-relaxed">تجمع الجودة العالية باللمسات الأنيقة وفقاً لأحدث المعايير.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('our-service') {
+          <section class="py-24 lg:py-36 bg-wood-950 text-surface border-t-8 border-accent">
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
+              <div class="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 border-b border-wood-800 pb-16" scrollReveal="fade-up">
+                <div class="max-w-3xl">
+                  <div class="flex items-center gap-6 mb-8 transform rotate-1 origin-left">
+                     <span class="text-accent uppercase tracking-[0.4em] font-display font-bold text-sm">خدماتنا</span>
+                     <span class="h-px bg-wood-800 w-32"></span>
+                  </div>
+                  <h2 class="text-4xl lg:text-[4rem] font-display font-extrabold text-surface leading-[1]">متخصصون في <br><span class="text-wood-500 font-serif italic">الإبداع</span></h2>
+                </div>
+                @if (section.slug) {
+                  <a [routerLink]="['/', section.slug]" class="group flex items-center gap-4 text-wood-300 hover:text-accent font-display font-bold transition-colors uppercase tracking-widest text-lg">
+                    <span>عرض الكل</span>
+                    <div class="w-16 h-[2px] bg-wood-700 group-hover:bg-accent transition-colors"></div>
+                  </a>
+                }
+              </div>
+
+              <!-- Services content -->
+              @if (section.posts && section.posts.length > 0) {
+                <div class="text-base text-wood-300 font-sans leading-loose max-w-4xl">
+                  {{ t(section.posts[0].content) }}
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        @case ('our-projects') {
+          <section class="py-24 bg-wood-50 border-t-4 border-accent">
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
+              <div class="flex items-center justify-between mb-20 pb-12 border-b border-wood-200" scrollReveal="fade-up">
+                <h2 class="text-3xl lg:text-5xl font-display font-black text-wood-950">الديكورات <span class="text-accent italic font-serif">الخشبية</span></h2>
+                @if (section.slug) {
+                  <a [routerLink]="['/', section.slug]" class="text-wood-600 hover:text-accent uppercase tracking-widest font-display font-bold text-sm transition-colors border border-wood-300 px-8 py-4 rounded-full hover:border-accent">
+                    تصفح الكل
+                  </a>
+                }
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @for (post of section.posts; track post.id; let i = $index) {
+                  <a [routerLink]="['/', section.slug, post.slug]" class="group block relative overflow-hidden bg-surface border border-wood-200 hover:border-accent hover:shadow-xl transition-all duration-500" scrollReveal="fade-up" [revealDelay]="i * 100">
+                    @if (post.image?.url) {
+                      <div class="aspect-[4/3] overflow-hidden">
+                        <img [src]="post.image.url" [alt]="t(post.title)" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
+                      </div>
+                    } @else {
+                      <div class="aspect-[4/3] bg-gradient-to-br from-wood-100 to-wood-200 flex items-center justify-center">
+                        <lucide-icon [img]="ShieldCheckIcon" class="w-12 h-12 text-wood-300"></lucide-icon>
+                      </div>
+                    }
+                    <div class="p-6">
+                      <h3 class="text-lg font-display font-bold text-wood-950 mb-3 group-hover:text-accent transition-colors">{{ t(post.title) }}</h3>
+                      <p class="text-wood-600 text-sm leading-relaxed line-clamp-2">{{ t(post.content) }}</p>
+                    </div>
+                  </a>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('our-works') {
+          <section class="py-24 lg:py-36 bg-wood-950 text-surface relative overflow-hidden">
+            <!-- Decorative background pattern -->
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03]">
+              <div class="absolute top-0 left-0 w-96 h-96 border border-accent/20 rotate-45 -translate-x-1/2 -translate-y-1/2"></div>
+              <div class="absolute bottom-0 right-0 w-[40rem] h-[40rem] border border-accent/20 rotate-12 translate-x-1/4 translate-y-1/4"></div>
+            </div>
+            <div class="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay pointer-events-none"></div>
+
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12 relative z-10">
+              <!-- Section header -->
+              <div class="text-center mb-20" scrollReveal="fade-up">
+                <div class="inline-flex items-center gap-4 mb-8">
+                  <span class="h-[1px] bg-accent/60 w-16"></span>
+                  <span class="text-accent tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">معرض الأعمال</span>
+                  <span class="h-[1px] bg-accent/60 w-16"></span>
+                </div>
+                <h2 class="text-3xl lg:text-5xl font-display font-extrabold text-surface leading-[1.1] mb-6">
+                  أعمالنا <span class="text-accent italic font-serif">المميزة</span>
+                </h2>
+                <p class="text-wood-400 text-base max-w-2xl mx-auto font-sans leading-relaxed">
+                  نفخر بتقديم مجموعة من أبرز مشاريعنا المنجزة التي تعكس الجودة والإبداع في كل تفصيلة
+                </p>
+              </div>
+
+              <!-- Swiper 3D Coverflow Gallery -->
+              @if (section.posts && section.posts[0]?.images?.length) {
+                <div class="relative" scrollReveal="zoom-in" [revealDelay]="200">
+                  <swiper-container id="works-swiper" init="false"
+                    class="works-swiper-container !overflow-visible !pb-16">
+                    @for (img of section.posts[0].images; track img.id; let i = $index) {
+                      <swiper-slide class="!w-[340px] sm:!w-[420px] lg:!w-[500px]">
+                        <div class="group relative overflow-hidden bg-wood-900/50 border border-wood-800/50 hover:border-accent/40 transition-all duration-700 shadow-2xl">
+                          <div class="overflow-hidden">
+                            <img [src]="img.url" [alt]="'مشروع ' + (i + 1)"
+                                 class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110" loading="lazy" />
+                          </div>
+                          <!-- Overlay gradient on hover -->
+                          <div class="absolute inset-0 bg-gradient-to-t from-wood-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          <!-- Slide number badge -->
+                          <div class="absolute top-4 left-4 w-10 h-10 bg-accent/90 flex items-center justify-center text-surface font-display font-bold text-sm">
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                          </div>
+                        </div>
+                      </swiper-slide>
+                    }
+                  </swiper-container>
+
+                  <!-- Custom navigation arrows -->
+                  <div class="flex justify-center gap-4 mt-10">
+                    <button onclick="document.querySelector('#works-swiper')?.swiper?.slidePrev()"
+                      class="w-14 h-14 border border-wood-700 hover:border-accent flex items-center justify-center text-wood-400 hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_rgba(232,184,75,0.2)]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <button onclick="document.querySelector('#works-swiper')?.swiper?.slideNext()"
+                      class="w-14 h-14 border border-wood-700 hover:border-accent flex items-center justify-center text-wood-400 hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_rgba(232,184,75,0.2)]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- CTA under gallery -->
+              <div class="text-center mt-16" scrollReveal="fade-up" [revealDelay]="400">
+                @if (section.slug) {
+                  <a [routerLink]="['/', section.slug]"
+                    class="group inline-flex items-center gap-4 px-10 py-5 border-2 border-accent/50 hover:border-accent text-accent rounded-full hover:bg-accent hover:text-surface transition-all duration-500 font-display font-bold text-base tracking-wide">
+                    <span>تصفح جميع الأعمال</span>
+                    <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  </a>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('four-cards') {
+          <section class="py-24 lg:py-32 bg-surface border-t border-wood-200">
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
+              <div class="flex items-center gap-6 mb-16" scrollReveal="fade-up">
+                <span class="text-accent uppercase tracking-[0.3em] font-display font-bold text-sm">{{ t(section.name) }}</span>
+                <span class="h-px bg-wood-300 flex-1"></span>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-8">
+                @for (post of section.posts; track post.id) {
+                  <a [routerLink]="['/', section.slug, post.slug]" class="group block bg-wood-50 border border-wood-200 hover:border-accent p-10 lg:p-14 transition-all duration-500 hover:shadow-xl" scrollReveal="fade-up" [revealDelay]="$index * 150">
+                    @if (post.image?.url) {
+                      <div class="aspect-video overflow-hidden mb-8 bg-wood-200">
+                        <img [src]="post.image.url" [alt]="t(post.title)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      </div>
+                    }
+                    <h3 class="text-2xl font-display font-bold text-wood-950 mb-4 group-hover:text-accent transition-colors">{{ t(post.title) }}</h3>
+                    <p class="text-wood-600 font-sans leading-relaxed line-clamp-3 text-sm">{{ t(post.content) }}</p>
+                  </a>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('service-benefit') {
+          <section class="py-20 bg-accent text-surface relative overflow-hidden">
+             <!-- Scrolling marquee text background -->
+             <div class="absolute inset-0 flex items-center whitespace-nowrap opacity-10 pointer-events-none overflow-hidden">
+                <h2 class="text-[20rem] font-display font-black blur-sm">روعة الغد روعة الغد روعة الغد</h2>
+             </div>
+
+             <div class="max-w-[100rem] mx-auto px-6 sm:px-12 relative z-10">
+               <div class="flex items-center gap-6 mb-16" scrollReveal="fade-up">
+                 <span class="text-surface/80 uppercase tracking-[0.3em] font-display font-bold text-sm">{{ t(section.name) }}</span>
+                 <span class="h-px bg-surface/20 flex-1"></span>
+               </div>
+               <div class="grid md:grid-cols-2 gap-12">
+                 @for (post of section.posts; track post.id) {
+                   <div class="group border border-surface/20 p-10 lg:p-14 hover:bg-surface/10 transition-all">
+                     <h3 class="text-2xl lg:text-3xl font-display font-bold text-surface mb-6 group-hover:-translate-y-1 transition-transform">{{ t(post.title) }}</h3>
+                     <p class="text-surface/80 font-sans leading-relaxed text-base">{{ t(post.content) }}</p>
+                   </div>
+                 }
+               </div>
+               @if (!section.posts || section.posts.length === 0) {
+                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+                   <div class="text-center px-4 border-b lg:border-b-0 lg:border-l border-surface/20 pb-8 lg:pb-0"><h3 class="text-5xl font-display font-black mb-4">+100</h3><p class="text-surface/80 font-bold uppercase text-sm">مشروع منجز</p></div>
+                   <div class="text-center px-4 border-b lg:border-b-0 lg:border-l border-surface/20 pb-8 lg:pb-0"><h3 class="text-5xl font-display font-black mb-4">2018</h3><p class="text-surface/80 font-bold uppercase text-sm">سنة التأسيس</p></div>
+                   <div class="text-center px-4 border-b lg:border-b-0 lg:border-l border-surface/20 pb-8 lg:pb-0"><h3 class="text-5xl font-display font-black mb-4">100%</h3><p class="text-surface/80 font-bold uppercase text-sm">جودة فاخرة</p></div>
+                   <div class="text-center px-4"><h3 class="text-5xl font-display font-black mb-4">24/7</h3><p class="text-surface/80 font-bold uppercase text-sm">دعم واستشارة</p></div>
+                 </div>
+               }
+             </div>
+          </section>
+        }
+
+        @case ('why-choose-us') {
+          <section class="py-24 lg:py-36 bg-wood-50">
+            <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
+              <div class="flex flex-col lg:flex-row gap-24 items-start">
+                <div class="lg:w-1/3 sticky top-32" scrollReveal="fade-right">
+                  <h2 class="text-3xl lg:text-5xl font-display font-black text-wood-950 mb-10 leading-tight">لماذا<br/>نحن؟</h2>
+                  <p class="text-wood-600 leading-relaxed font-sans text-base mb-12 border-r-4 border-accent pr-6">
+                    نفخر بكوننا الشريك الإبداعي للعديد من المشاريع على مستوى المملكة العربية السعودية (المؤسسات الحكومية، السكنية، والفنادق).
+                  </p>
+                </div>
+
+                <div class="lg:w-2/3 flex flex-col gap-8">
+                  @for (post of section.posts; track post.id; let i = $index) {
+                    <div class="bg-surface p-10 lg:p-14 border border-wood-200 hover:shadow-2xl hover:border-wood-400 transition-all duration-500 group flex flex-col md:flex-row gap-8 items-start" scrollReveal="fade-left" [revealDelay]="i * 150">
+                      <div class="text-5xl font-serif text-wood-300 group-hover:text-accent transition-colors italic">0{{ i + 1 }}</div>
+                      <div>
+                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">
+                          {{ t(post.title) }}
+                        </h3>
+                        <p class="text-wood-600 text-base leading-relaxed">{{ t(post.content) }}</p>
+                      </div>
+                    </div>
+                  }
+                  @if (!section.posts || section.posts.length === 0) {
+                     <div class="bg-surface p-14 border border-wood-200 hover:border-wood-400 group flex flex-col md:flex-row gap-8 items-start">
+                      <div class="text-5xl font-serif text-wood-300">01</div>
+                      <div>
+                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">خبرة واسعة</h3>
+                        <p class="text-wood-600 text-base">أنجزت الشركة العديد من المشاريع في مجال الديكور للمؤسسات الحكومية والسكنية والتجارية.</p>
+                      </div>
+                    </div>
+                    <div class="bg-surface p-14 border border-wood-200 hover:border-wood-400 group flex flex-col md:flex-row gap-8 items-start">
+                      <div class="text-5xl font-serif text-wood-300">02</div>
+                      <div>
+                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">جودة التنفيذ</h3>
+                        <p class="text-wood-600 text-base">نلتزم بأعلى معايير الديكور العالمية في كل تفصيلة من تفاصيل مشاريعنا.</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+        }
+
+      }
+    }
+  </div>
+} @else {
+  <div class="flex justify-center items-center h-screen bg-surface">
+    <div class="text-center">
+      <div class="w-16 h-16 border-4 border-wood-300 border-t-accent rounded-full animate-spin mx-auto mb-6"></div>
+      <p class="text-wood-500 font-display tracking-widest uppercase text-sm">جاري التحميل...</p>
+    </div>
+  </div>
+}

@@ -78,7 +78,7 @@ class PostCategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Checkbox::make('HEAVY_SECTION')
-                ->label('HEAVY_SECTION')
+                ->label('Heavy Section')
                 ->translateLabel()
                 ->visible(fn () => auth()->user()->hasRole('super_admin'))
                 ->afterStateHydrated(function (Forms\Set $set, ?PostCategory $record) {
@@ -343,7 +343,7 @@ class PostCategoryResource extends Resource
                     ->placeholder('—'),
 
                 Tables\Columns\ToggleColumn::make('HEAVY_SECTION')
-                    ->label('HEAVY_SECTION')
+                    ->label('Heavy Section')
                     ->translateLabel()
                     ->visible(fn () => auth()->user()->hasRole('super_admin')),
 

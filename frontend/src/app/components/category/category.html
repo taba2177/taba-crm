@@ -1,0 +1,76 @@
+@if (loading()) {
+  <div class="flex justify-center items-center min-h-screen bg-surface">
+    <div class="w-16 h-16 border-4 border-wood-200 border-t-accent animate-spin"></div>
+  </div>
+} @else if (category()) {
+  <div dir="rtl" class="bg-surface min-h-screen pt-20">
+    <!-- Banner -->
+    <section class="relative bg-wood-950 text-surface py-32 bg-cover bg-center overflow-hidden">
+      <!-- Image fallback as absolute -->
+      @if (posts().length && getImage(posts()[0])) {
+        <div class="absolute inset-0 z-0">
+          <img [src]="getImage(posts()[0])" alt="Banner" class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
+          <div class="absolute inset-0 bg-wood-950/80"></div>
+        </div>
+      }
+      <div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay z-0 pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 text-center">
+        <!-- Breadcrumbs -->
+        <nav class="mb-8 flex justify-center gap-4 text-xs font-semibold uppercase tracking-widest text-wood-400">
+          <a routerLink="/" class="hover:text-accent transition-colors">الرئيسية</a>
+          <span class="text-wood-600">/</span>
+          <span class="text-surface font-sans">{{ t(category().name) }}</span>
+        </nav>
+
+        <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-surface">{{ t(category().name) }}</h1>
+        @if (category().description) {
+          <p class="text-lg md:text-xl text-wood-300 max-w-2xl mx-auto font-sans leading-relaxed">{{ t(category().description) }}</p>
+        }
+      </div>
+    </section>
+
+    <!-- Posts Grid -->
+    <section class="py-24 bg-surface">
+      <div class="max-w-[100rem] mx-auto px-6 sm:px-8">
+        @if (posts().length === 0) {
+          <div class="text-center py-32 border border-wood-200 bg-wood-50">
+            <p class="text-wood-500 text-xl font-serif">لا توجد مقالات في هذا القسم حالياً</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+            @for (post of posts(); track post.id) {
+              <a [routerLink]="['/', category().slug, post.slug]"
+                 class="group flex flex-col items-start bg-transparent transition-all duration-500">
+                <div class="aspect-[4/3] w-full overflow-hidden mb-8 bg-wood-100 border border-wood-200 group-hover:border-wood-950 transition-colors">
+                  <img [src]="getImage(post) || '/images/gallery-placeholder.jpg'" [alt]="t(post.title)"
+                       class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1.5s] ease-out" />
+                </div>
+
+                <div class="flex flex-col flex-grow w-full">
+                  @if (category()) {
+                    <p class="text-xs text-accent mb-4 font-semibold uppercase tracking-widest">{{ t(category().name) }}</p>
+                  }
+                  <h3 class="text-2xl font-serif font-bold text-wood-950 group-hover:text-accent transition-colors mb-4 leading-tight">
+                    {{ t(post.title) }}
+                  </h3>
+                  @if (post.excerpt) {
+                    <p class="text-wood-600 font-sans leading-relaxed flex-grow line-clamp-3 mb-6">{{ t(post.excerpt) }}</p>
+                  }
+
+                  <!-- Brutalist button link -->
+                  <div class="mt-auto inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-wood-950 group-hover:text-accent transition-colors border-b border-transparent group-hover:border-accent pb-1">
+                    اقرأ المزيد
+                    <svg class="w-4 h-4 rtl:-scale-x-100 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

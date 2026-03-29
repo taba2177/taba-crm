@@ -1,0 +1,138 @@
+<div class="min-h-screen bg-surface pt-32 pb-24 overflow-hidden relative selection:bg-wood-900 selection:text-accent font-sans" dir="rtl">
+
+  <!-- Dramatic Background Base -->
+   <div class="absolute inset-0 z-0 bg-noise opacity-[0.03] mix-blend-overlay"></div>
+   <div class="absolute -top-32 -left-32 w-96 h-96 bg-wood-200 rounded-full blur-[100px] opacity-50 mix-blend-multiply"></div>
+   <div class="absolute bottom-0 -right-32 w-[30rem] h-[30rem] bg-accent/10 rounded-full blur-[120px] mix-blend-multiply"></div>
+
+   <div class="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-12 flex flex-col lg:flex-row gap-20 xl:gap-32">
+
+      <!-- Typography / Contact Info Column -->
+      <div class="lg:w-1/2 flex flex-col justify-center">
+         <div class="flex items-center gap-6 mb-10 transform rotate-2">
+            <span class="h-[2px] bg-accent w-20"></span>
+            <span class="text-accent uppercase tracking-[0.3em] font-display font-bold text-sm">للإستفسارات والتواصل</span>
+         </div>
+
+         <h1 class="text-6xl lg:text-8xl font-display font-extrabold leading-[1] mb-12 text-wood-950">
+            لنبني<br/><span class="text-wood-500 italic font-serif">قصة نجاحك.</span>
+         </h1>
+
+         <p class="text-xl text-wood-600 font-sans leading-loose mb-16 border-r-4 border-accent pr-6 max-w-lg">
+            {{ t(settings()?.crm_business_description) || 'نحن هنا للإجابة على جميع استفساراتك وتحويل أفكارك إلى واقع.' }}
+         </p>
+
+         <div class="flex flex-col gap-10 border-t border-wood-200 pt-12">
+            <!-- phone -->
+            @if (settings().crm_contact_phone) {
+               <a [href]="'tel:' + settings().crm_contact_phone" class="group flex items-start gap-8">
+                  <div class="w-16 h-16 bg-wood-100 flex items-center justify-center text-wood-900 group-hover:bg-wood-950 group-hover:text-accent transition-colors duration-500">
+                     <lucide-icon [img]="PhoneIcon" class="w-6 h-6"></lucide-icon>
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="text-sm font-display tracking-widest text-wood-500 mb-2 uppercase">الهاتف</span>
+                     <span class="text-3xl font-display font-bold text-wood-950 group-hover:text-accent transition-colors" dir="ltr">{{ settings().crm_contact_phone }}</span>
+                  </div>
+               </a>
+            }
+
+            <!-- email -->
+            @if (settings().crm_contact_email) {
+               <a [href]="'mailto:' + settings().crm_contact_email" class="group flex items-start gap-8">
+                  <div class="w-16 h-16 bg-wood-100 flex items-center justify-center text-wood-900 group-hover:bg-wood-950 group-hover:text-accent transition-colors duration-500">
+                     <lucide-icon [img]="MailIcon" class="w-6 h-6"></lucide-icon>
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="text-sm font-display tracking-widest text-wood-500 mb-2 uppercase">البريد الإلكتروني</span>
+                     <span class="text-2xl font-mono tracking-tight text-wood-950 group-hover:text-accent transition-colors">{{ settings().crm_contact_email }}</span>
+                  </div>
+               </a>
+            }
+
+            <!-- location -->
+            @if (settings().crm_contact_address) {
+               <div class="group flex items-start gap-8">
+                  <div class="w-16 h-16 bg-wood-100 flex items-center justify-center text-wood-900 group-hover:bg-wood-950 group-hover:text-accent transition-colors duration-500">
+                     <lucide-icon [img]="MapPinIcon" class="w-6 h-6"></lucide-icon>
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="text-sm font-display tracking-widest text-wood-500 mb-2 uppercase">المقر الرئيسي</span>
+                     <span class="text-2xl font-display font-bold text-wood-950">{{ t(settings().crm_contact_address) }}</span>
+                  </div>
+               </div>
+            }
+
+            <!-- whatsapp -->
+            @if (settings().crm_contact_whatsapp) {
+               <a [href]="'https://wa.me/' + settings().crm_contact_whatsapp" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-8">
+                  <div class="w-16 h-16 bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-surface transition-colors duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="text-sm font-display tracking-widest text-wood-500 mb-2 uppercase">واتساب</span>
+                     <span class="text-3xl font-display font-bold text-[#25D366] group-hover:text-wood-950 transition-colors" dir="ltr">{{ settings().crm_contact_whatsapp }}</span>
+                  </div>
+               </a>
+            }
+         </div>
+      </div>
+
+      <!-- Form Column (Brutalist card) -->
+      <div class="lg:w-1/2 mt-12 lg:mt-0">
+         <div class="bg-wood-950 p-10 lg:p-16 border-b-8 border-accent relative mx-auto w-full shadow-2xl">
+            <h2 class="text-3xl font-display font-bold text-surface mb-10">أرسل رسالتك</h2>
+            <form (ngSubmit)="submit()" #contactForm="ngForm" class="flex flex-col gap-8">
+
+               <div class="flex flex-col gap-2 relative group">
+                  <input type="text" id="name" name="name" [(ngModel)]="name" required
+                         class="w-full bg-transparent border-b-2 border-wood-800 text-surface text-xl py-4 focus:ring-0 focus:border-accent focus:outline-none transition-colors peer placeholder-transparent" placeholder="الاسم الكريم">
+                  <label for="name" class="absolute right-0 top-4 text-wood-500 text-xl transition-all peer-focus:-top-4 peer-focus:text-accent peer-focus:text-sm peer-valid:-top-4 peer-valid:text-sm cursor-text">الاسم الكريم</label>
+               </div>
+
+               <div class="flex flex-col gap-2 relative group mt-4">
+                  <input type="email" id="email" name="email" [(ngModel)]="email" required
+                         class="w-full bg-transparent border-b-2 border-wood-800 text-surface text-xl py-4 focus:ring-0 focus:border-accent focus:outline-none transition-colors peer placeholder-transparent" placeholder="البريد الإلكتروني" dir="ltr">
+                  <label for="email" class="absolute right-0 top-4 text-wood-500 text-xl transition-all peer-focus:-top-4 peer-focus:text-accent peer-focus:text-sm peer-valid:-top-4 peer-valid:text-sm cursor-text">البريد الإلكتروني</label>
+               </div>
+
+               <div class="flex flex-col gap-2 relative group mt-4">
+                  <textarea id="message" name="message" [(ngModel)]="message" required rows="4"
+                            class="w-full bg-transparent border-b-2 border-wood-800 text-surface text-xl py-4 focus:ring-0 focus:border-accent focus:outline-none transition-colors peer placeholder-transparent resize-none" placeholder="الرسالة"></textarea>
+                  <label for="message" class="absolute right-0 top-4 text-wood-500 text-xl transition-all peer-focus:-top-4 peer-focus:text-accent peer-focus:text-sm peer-valid:-top-4 peer-valid:text-sm cursor-text">الرسالة أو الاستفسار</label>
+               </div>
+
+               <div class="flex flex-col gap-2 relative group mt-4">
+                  <input type="text" id="quiz" name="quiz" [(ngModel)]="quiz" required
+                         class="w-full bg-transparent border-b-2 border-wood-800 text-surface text-xl py-4 focus:ring-0 focus:border-accent focus:outline-none transition-colors peer placeholder-transparent" placeholder="ما هو الرقم 4 بالعربي؟ (أربعة)">
+                  <label for="quiz" class="absolute right-0 top-4 text-wood-500 text-xl transition-all peer-focus:-top-4 peer-focus:text-accent peer-focus:text-sm peer-valid:-top-4 peer-valid:text-sm cursor-text">للتحقق: ما هو الرقم 4 بالعربي؟ (أربعة)</label>
+               </div>
+
+               <button type="submit" [disabled]="contactForm.invalid || submitting()"
+                       class="mt-8 relative px-12 py-6 bg-surface text-wood-950 font-display font-bold text-lg tracking-wide uppercase overflow-hidden group hover:shadow-[0_0_40px_rgba(232,184,75,0.2)] disabled:opacity-50 disabled:cursor-not-allowed">
+                  <span class="relative z-10 flex items-center justify-center gap-4">
+                     @if (submitting()) {
+                       <span>جاري الإرسال...</span>
+                     } @else {
+                       <span>أرسل الطلب</span>
+                       <lucide-icon [img]="SendIcon" class="w-6 h-6 rotate-180 group-hover:-translate-x-2 transition-transform"></lucide-icon>
+                     }
+                  </span>
+                  <div class="absolute inset-0 bg-accent transform scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 ease-out z-0"></div>
+                  <div class="absolute inset-x-0 bottom-0 h-1 bg-accent/20"></div>
+               </button>
+
+               @if (success()) {
+                  <div class="mt-6 bg-wood-900/50 border-r-4 border-green-500 p-6 text-green-400 font-bold font-display text-lg animate-fade-in-up">
+                     تم إرسال الرسالة بنجاح!
+                  </div>
+               }
+               @if (errorMsg()) {
+                  <div class="mt-6 bg-wood-900/50 border-r-4 border-red-500 p-6 text-red-400 font-bold font-display text-lg animate-fade-in-up">
+                     {{ errorMsg() }}
+                  </div>
+               }
+            </form>
+         </div>
+      </div>
+   </div>
+</div>

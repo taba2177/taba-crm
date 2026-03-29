@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+/* Swiper overrides for Our Works section */
+swiper-container#works-swiper {
+  --swiper-pagination-color: #E8B84B;
+  --swiper-pagination-bullet-inactive-color: #3A3F4D;
+  --swiper-pagination-bullet-inactive-opacity: 0.5;
+  --swiper-navigation-color: #E8B84B;
+  --swiper-navigation-size: 24px;
+}
+
+swiper-container#works-swiper::part(bullet-active) {
+  width: 24px;
+  border-radius: 4px;
+}
+
+swiper-container#works-swiper swiper-slide {
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
