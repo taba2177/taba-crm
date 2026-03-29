@@ -42,12 +42,16 @@ Two Filament panels share the same database. No data duplication.
 - Unchanged from v1 in functionality
 
 **Client Panel** (`/dashboard` — `CrmClientPlugin`)
-- 5 navigation items:
-  1. **أقسام الموقع** (Sections) — Card grid showing each homepage section with preview + Edit button
-  2. **الصفحات** (Pages) — Simple page list with inline title/content editing
-  3. **الرسائل** (Messages) — Read-only contact entry list with unread count badge
-  4. **الإعدادات** (Settings) — Business info: phone, email, address, social links, logo
-  5. **حسابي** (Profile) — Name, email, password
+- **Dynamic sidebar navigation** — Each active PostCategory appears as a direct navigation item with the component's real icon. Posts appear as sub-navigation items beneath their category. This gives clients a clear tree: category → posts.
+- Navigation structure:
+  - **Dashboard** — Welcome stats overview
+  - **Each PostCategory** — Auto-generated nav item per active category, using `SectionComponent::icon()` as the nav icon and `PostCategory::name` as the label. For SINGLE-layout sections, clicking goes directly to the edit form. For LIST-layout sections, clicking shows a list of posts with create/edit/delete/reorder. Posts appear as sub-nav items when there are multiple.
+  - **الصفحات** (Pages) — Simple page list with inline title/content editing
+  - **الرسائل** (Messages) — Read-only contact entry list with unread count badge
+  - **الإعدادات** (Settings) — Business info: phone, email, address, social links, logo
+  - **حسابي** (Profile) — Name, email, password
+- **Sorting & ordering**: Drag-to-reorder for both categories (admin) and posts (client). Sortable columns in list views. Category order controls nav order.
+- **Refined forms**: Create/edit forms are grouped into logical sections (basic info, media, SEO, extras). View pages show clean read-only layouts. Edit forms use proper placeholder text, help text, and Arabic labels.
 - Arabic-first, RTL layout
 - Filament's built-in auth with a separate `client` guard
 - No raw model CRUD exposed — every form is generated from the component registry
@@ -145,23 +149,47 @@ Later registrations override earlier ones (same key = override), allowing develo
 
 Each existing `src/views/components/homepage/*.blade.php` gets a corresponding SectionComponent class:
 
-- HeroComponent, Hero2Component, Hero3Component
-- CardsComponent, Cards2Component
-- ServicesGridComponent, ServicesCardsComponent
-- FaqComponent, Faq2Component
-- ContactComponent, Contact2Component
-- PortfolioComponent
-- ReviewsCarouselComponent
-- PricesComponent, Prices2Component, Prices3Component
-- GalleryComponent
-- TeamComponent
-- CounterComponent
-- TimelineComponent
-- BrandsComponent
-- MapComponent
-- CtaComponent
-- FeaturesComponent
-- TestimonialsComponent
+Each component uses a specific, meaningful Heroicon:
+
+| Component | Icon | Layout |
+|---|---|---|
+| HeroComponent | `heroicon-o-sparkles` | SINGLE |
+| Hero2Component | `heroicon-o-fire` | SINGLE |
+| Hero3Component | `heroicon-o-bolt` | SINGLE |
+| CardsComponent | `heroicon-o-squares-2x2` | LIST |
+| Cards2Component | `heroicon-o-rectangle-group` | LIST |
+| ServicesGridComponent | `heroicon-o-wrench-screwdriver` | LIST |
+| ServicesCardsComponent | `heroicon-o-briefcase` | LIST |
+| ServicesCarouselComponent | `heroicon-o-arrows-right-left` | LIST |
+| ServicesSwiperComponent | `heroicon-o-arrow-path` | LIST |
+| ServicesListComponent | `heroicon-o-clipboard-document-list` | LIST |
+| ServicesFeaturesComponent | `heroicon-o-check-badge` | LIST |
+| FaqComponent | `heroicon-o-question-mark-circle` | LIST |
+| Faq2Component | `heroicon-o-chat-bubble-left-right` | LIST |
+| ContactComponent | `heroicon-o-envelope` | SINGLE |
+| Contact2Component | `heroicon-o-phone` | SINGLE |
+| PortfolioComponent | `heroicon-o-photo` | LIST |
+| ReviewsCarouselComponent | `heroicon-o-star` | LIST |
+| PricesComponent | `heroicon-o-currency-dollar` | LIST |
+| Prices2Component | `heroicon-o-banknotes` | LIST |
+| Prices3Component | `heroicon-o-receipt-percent` | LIST |
+| GalleryComponent | `heroicon-o-camera` | LIST |
+| TeamComponent | `heroicon-o-user-group` | LIST |
+| CounterComponent | `heroicon-o-chart-bar` | LIST |
+| TimelineComponent | `heroicon-o-clock` | LIST |
+| BrandsComponent | `heroicon-o-building-storefront` | LIST |
+| MapComponent | `heroicon-o-map-pin` | SINGLE |
+| CtaComponent | `heroicon-o-megaphone` | SINGLE |
+| FeaturesComponent | `heroicon-o-light-bulb` | LIST |
+| TestimonialsComponent | `heroicon-o-chat-bubble-bottom-center-text` | LIST |
+| AboutUsComponent | `heroicon-o-information-circle` | SINGLE |
+| LatestNewsComponent | `heroicon-o-newspaper` | LIST |
+| LeftRightImageComponent | `heroicon-o-arrows-pointing-out` | SINGLE |
+| SingleViewCallActionComponent | `heroicon-o-rocket-launch` | SINGLE |
+| SingleViewPricingPackagesComponent | `heroicon-o-tag` | LIST |
+| SingleViewVisionMissionComponent | `heroicon-o-eye` | SINGLE |
+| SingleViewWhyChooseUsComponent | `heroicon-o-hand-thumb-up` | SINGLE |
+| DefaultComponent | `heroicon-o-rectangle-stack` | SINGLE |
 
 #### Field Types
 
@@ -186,16 +214,41 @@ Field types are built by `FieldFactory` which returns Filament form components. 
 
 ### Dynamic Edit Form (Client Panel)
 
-When a client clicks "Edit" on a section card:
+### Navigation-Driven Section Editing
 
-1. `EditSection` page receives the PostCategory ID
-2. Reads `section_component` from the PostCategory → resolves via `ComponentRegistry`
-3. Calls `sectionFields()` → builds section header form
-4. If layout is LIST: calls `itemFields()` → builds repeatable item forms with drag-to-reorder
-5. On save: maps form data back to PostCategory fields and Post records
-6. Redirect to dashboard with success toast
+Each active PostCategory is a **direct sidebar navigation item**. The sidebar dynamically builds from the database:
 
-**Smart navigation for SINGLE-layout and single-item categories:** When a section has layout `SINGLE`, or is a LIST layout but contains only one Post, the client panel skips the items index view and navigates directly to the edit form. No unnecessary listing page for sections that only have one thing to edit.
+1. Each active PostCategory becomes a nav item with its component's icon and the category name as label
+2. For **SINGLE** layout: clicking the nav item opens the section edit form directly (fields from `sectionFields()`)
+3. For **LIST** layout: clicking the nav item opens a list/table of Posts. Create/edit/delete/reorder are available. Each post has its own edit form (fields from `itemFields()`). The section header fields appear at the top of the list page as an editable card.
+4. Navigation order matches `PostCategory::order` — reorderable from admin panel
+5. **Smart navigation for single-item categories:** When a LIST-layout category has only one Post, the nav item links directly to the edit form rather than showing a list of one.
+
+### Form Refinements
+
+**Create forms:**
+- Grouped into logical fieldset sections (basic info, media, SEO/metadata, extras)
+- Arabic placeholder text and help text
+- Translatable fields show AR/EN tabs side by side
+- Image fields show preview thumbnails
+- Required fields clearly marked
+
+**Edit forms:**
+- Same layout as create, pre-populated with existing data
+- Save + continue editing option
+- Unsaved changes warning
+- Sidebar shows publishing status, dates, category info
+
+**View pages (admin):**
+- Clean read-only layout with all fields displayed
+- Image fields show actual images
+- Translatable fields show all language values
+- Quick action buttons (edit, delete, duplicate)
+
+**Sorting & ordering:**
+- Drag-to-reorder in list views for both categories and posts
+- Sortable table columns (date, title, order, status)
+- Bulk actions (publish, unpublish, delete) in admin panel
 
 The client never sees raw database fields. They see contextual labels like "عنوان الخدمة" (Service Title) instead of "Post Title".
 
@@ -286,14 +339,17 @@ src/
 │   │   └── Widgets/
 │   └── Client/                    # NEW — Client panel
 │       ├── Resources/
-│       │   └── SectionResource.php
+│       │   ├── SectionResource.php    # Dynamic per-category resource
+│       │   └── PageResource.php
 │       ├── Pages/
-│       │   ├── Dashboard.php
-│       │   ├── EditSection.php
+│       │   ├── Dashboard.php          # Welcome stats overview
+│       │   ├── EditSection.php        # SINGLE-layout section edit
 │       │   ├── SiteSettings.php
 │       │   └── Messages.php
-│       └── Widgets/
-│           └── WelcomeWidget.php
+│       ├── Widgets/
+│       │   └── WelcomeWidget.php
+│       └── Navigation/
+│           └── DynamicCategoryNavigation.php  # Builds nav from DB
 │
 ├── Http/
 │   └── Controllers/Api/
