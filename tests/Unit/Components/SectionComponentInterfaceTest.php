@@ -10,8 +10,8 @@ class SectionComponentInterfaceTest extends TestCase
 {
     public function test_section_layout_enum_has_single_and_list(): void
     {
-        $this->assertEquals('SINGLE', SectionLayout::SINGLE->name);
-        $this->assertEquals('LIST', SectionLayout::LIST->name);
+        $this->assertEquals('single', SectionLayout::SINGLE->value);
+        $this->assertEquals('list', SectionLayout::LIST->value);
         $this->assertCount(2, SectionLayout::cases());
     }
 

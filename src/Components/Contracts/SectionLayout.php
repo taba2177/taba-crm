@@ -2,8 +2,8 @@
 
 namespace Taba\Crm\Components\Contracts;
 
-enum SectionLayout
+enum SectionLayout: string
 {
-    case SINGLE;
-    case LIST;
+    case SINGLE = 'single';
+    case LIST = 'list';
 }
