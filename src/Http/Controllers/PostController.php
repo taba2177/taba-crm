@@ -21,6 +21,15 @@ class PostController extends Controller
         $this->category=$category;
         $posts = Post::published()->with('postCategory')->where('post_category_id', $category->id)->orderBy('order')->get();
 
+        // If only one post in the category, redirect directly to that post
+        if ($posts->count() === 1) {
+            $singlePost = $posts->first();
+            return redirect()->route('posts.show', [
+                'category' => $category->slug,
+                'post' => $singlePost->slug,
+            ]);
+        }
+
         $this->post = null;
         $this->categorySlug = $categorySlug;
         $this->setSeoMetadata();

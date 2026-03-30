@@ -29,7 +29,8 @@ class LatestPosts extends BaseWidget
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('Title')),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label(__('Author')),
+                    ->label(__('Author'))
+                    ->default('-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created At'))
                     ->dateTime(),

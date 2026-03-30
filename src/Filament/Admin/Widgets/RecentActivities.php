@@ -41,7 +41,8 @@ class RecentActivities extends BaseWidget
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description')),
                 Tables\Columns\TextColumn::make('causer.name')
-                    ->label(__('User')),
+                    ->label(__('User'))
+                    ->default('-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created At'))
                     ->dateTime(),

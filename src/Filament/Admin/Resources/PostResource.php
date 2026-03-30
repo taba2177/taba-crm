@@ -122,13 +122,7 @@ class PostResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
-
-        if (auth()->user()->hasRole('client')) {
-            $query->where('user_id', auth()->id());
-        }
-
-        return $query;
+        return parent::getEloquentQuery();
     }
 
     /**

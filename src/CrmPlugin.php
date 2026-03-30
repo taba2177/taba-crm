@@ -117,7 +117,9 @@ class CrmPlugin implements Plugin
         ->navigationGroup('collections')
         // ->navigationGroup(__('Collections'))
         ->navigationCountBadge())
-        ->databaseNotifications()
+        ->databaseNotifications(
+            \Illuminate\Support\Facades\Schema::hasTable('notifications')
+        )
         ->favicon(asset('images/favicon.png'))
         ->brandLogo(fn () => view('components.logo'))
         ->plugins([

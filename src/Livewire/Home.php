@@ -146,28 +146,56 @@ class Home extends Component
     // NOTE: I've made your SEO methods more robust to handle cases where data might not be loaded yet.
     public function prepareInitialSeoData()
     {
-        // Get the first published post from parent categories only for SEO data
+        // 1. Use CRM SEO settings if configured by admin
+        $seoTitle = crm_setting('seo.default_title');
+        $seoDescription = crm_setting('seo.default_description');
+
+        if (!empty($seoTitle)) {
+            $this->metaTitle = $seoTitle;
+            $this->metaDescription = $seoDescription ?: '';
+
+            // Try to get an image from the first post for OG tags
+            $firstPost = Post::where("show_in_home", true)
+                ->published()
+                ->excludeChildCategories()
+                ->select('image_id')
+                ->orderBy('order', 'asc')
+                ->first();
+            $this->seoimage = $firstPost?->image?->url;
+
+            return;
+        }
+
+        // 2. Build smart meta from business name + active categories
+        $businessName = crm_business('name') ?: config('app.name');
+        $categoryNames = $this->sections
+            ->take(4)
+            ->pluck('name')
+            ->filter()
+            ->toArray();
+
+        if (!empty($categoryNames)) {
+            $this->metaTitle = $businessName . ' | ' . implode('، ', $categoryNames);
+            $this->metaDescription = $businessName . ' - ' . implode('، ', $categoryNames);
+        } else {
+            $this->metaTitle = $businessName;
+            $this->metaDescription = $businessName;
+        }
+
+        // Try to get an image from the first post
         $seoPost = Post::where("show_in_home", true)
             ->published()
             ->excludeChildCategories()
-            ->select('title', 'meta_title', 'meta_description', 'content', 'image_id')
+            ->select('title', 'meta_description', 'content', 'image_id')
             ->orderBy('order', 'asc')
             ->first();
 
         if ($seoPost) {
             $this->seoimage = $seoPost->image?->url;
-            $this->metaTitle = $seoPost->meta_title ?: $seoPost->title;
-            $this->metaDescription = $seoPost->meta_description ?: Str::limit(strip_tags($seoPost->content), 155);
-        } else {
-            // Fallback: use first category if no posts available
-            $firstCategory = $this->sections->first();
-            if ($firstCategory) {
-                $this->metaTitle = $firstCategory->name;
-                $this->metaDescription = $firstCategory->description;
-            } else {
-                // Final fallback
-                $this->metaTitle = config('app.name');
-                $this->metaDescription = __('crm::forms.seo.default_description', ['name' => config('app.name')]);
+            // Enrich description with first post's content if available
+            $postDesc = $seoPost->meta_description ?: Str::limit(strip_tags($seoPost->content), 100);
+            if ($postDesc) {
+                $this->metaDescription .= ' - ' . $postDesc;
             }
         }
     }
@@ -283,7 +311,7 @@ class Home extends Component
 
     public function desc(): string
     {
-        $excerpt = $this->metaDescriptionك;
+        $excerpt = $this->metaDescription;
         $idealLength = 150; // Optimal for meta descriptions
         $tolerance = 5; // ±5 characters flexibility
         $minLength = $idealLength - $tolerance;
