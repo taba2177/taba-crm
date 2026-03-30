@@ -1180,5 +1180,13 @@
     "Force-Shown Items": "العناصر الظاهرة إجبارياً",
     "These items will always appear even if they have no records": "هذه العناصر ستظهر دائماً حتى لو لم يكن لديها سجلات",
     "Brand": "الهوية",
-    "Navigation": "التنقل"
+    "Navigation": "التنقل",
+    "Login Page": "صفحة تسجيل الدخول",
+    "Login Slideshow": "عرض شرائح تسجيل الدخول",
+    "Background images shown on the admin login page. Add multiple for a slideshow effect.": "صور الخلفية المعروضة في صفحة تسجيل الدخول. أضف عدة صور لتأثير عرض الشرائح.",
+    "Slideshow Images": "صور العرض",
+    "Image URL": "رابط الصورة",
+    "Add Image": "إضافة صورة",
+    "Slideshow Interval (seconds)": "فترة تبديل الشرائح (ثواني)",
+    "Time between image transitions": "الوقت بين انتقالات الصور"
 }

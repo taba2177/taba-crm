@@ -237,5 +237,13 @@
     "Force-Shown Items": "Force-Shown Items",
     "These items will always appear even if they have no records": "These items will always appear even if they have no records",
     "Brand": "Brand",
-    "Navigation": "Navigation"
+    "Navigation": "Navigation",
+    "Login Page": "Login Page",
+    "Login Slideshow": "Login Slideshow",
+    "Background images shown on the admin login page. Add multiple for a slideshow effect.": "Background images shown on the admin login page. Add multiple for a slideshow effect.",
+    "Slideshow Images": "Slideshow Images",
+    "Image URL": "Image URL",
+    "Add Image": "Add Image",
+    "Slideshow Interval (seconds)": "Slideshow Interval (seconds)",
+    "Time between image transitions": "Time between image transitions"
 }

@@ -116,6 +116,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Login Page
+    |--------------------------------------------------------------------------
+    |
+    | Slideshow images shown on the admin login page background.
+    | Each entry is an image URL.  Interval is in seconds.
+    |
+    */
+    'login' => [
+        'slideshow_images' => [
+            'https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        ],
+        'slideshow_interval' => 6,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Extra Components
     |--------------------------------------------------------------------------
     |

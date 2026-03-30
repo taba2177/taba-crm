@@ -7,13 +7,11 @@ namespace Taba\Crm;
 use App\Filament\Admin\Themes\Awesome;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Filament\Support\Colors\Color;
 use Awcodes\Curator\CuratorPlugin;
 use BezhanSalleh\FilamentGoogleAnalytics\FilamentGoogleAnalyticsPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Filament\SpatieLaravelTranslatablePlugin;
-use SebastianBergmann\CodeCoverage\Report\Html\Colors;
 use Taba\Crm\Filament\Admin\Pages\GenerateComponentsFromAI;
 use Taba\Crm\Filament\Admin\Pages\GenerateSiteFromAI;
 use Taba\Crm\Filament\Admin\Widgets\LatestPosts;
@@ -140,10 +138,13 @@ class CrmPlugin implements Plugin
                 ->formPanelWidth('40%')
                 ->mobileFormPanelPosition('bottom')
                 ->emptyPanelBackgroundImageOpacity('70%')
-                ->emptyPanelBackgroundImageUrl('https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')
+                ->emptyPanelView('crm::filament.login-slideshow')
 
         ])->defaultThemeMode(ThemeMode::Dark)
-        ->middleware([\Hasnayeen\Themes\Http\Middleware\SetTheme::class]);
+        ->middleware([
+            \Hasnayeen\Themes\Http\Middleware\SetTheme::class,
+            \Taba\Crm\Http\Middleware\ApplyBrandColors::class,
+        ]);
     }
 
     public function boot(Panel $panel): void
@@ -166,15 +167,8 @@ class CrmPlugin implements Plugin
     protected function applyBrandTheme(Panel $panel): void
     {
         try {
-            $primary   = \Taba\Crm\Models\CrmSetting::get('crm_brand_primary_color', config('crm.brand.primary_color', '#6366f1'));
-            $secondary = \Taba\Crm\Models\CrmSetting::get('crm_brand_secondary_color', config('crm.brand.secondary_color', '#8b5cf6'));
             $fontFamily = \Taba\Crm\Models\CrmSetting::get('crm_brand_font_family', config('crm.brand.font_family', 'Cairo'));
             $fontUrl    = \Taba\Crm\Models\CrmSetting::get('crm_brand_font_url', config('crm.brand.font_url', ''));
-
-            $panel->colors([
-                'primary' => Color::hex($primary),
-                'gray'    => Color::hex($secondary),
-            ]);
 
             if ($fontFamily) {
                 $panel->font($fontFamily, url: $fontUrl ?: null);

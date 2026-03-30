@@ -306,6 +306,40 @@ class CrmSettingResource extends Resource
                                     ]),
                             ]),
 
+                        Tabs\Tab::make('Login Page')
+                            ->label(__('Login Page'))
+                            ->icon('heroicon-o-photo')
+                            ->schema([
+                                Section::make(__('Login Slideshow'))
+                                    ->description(__('Background images shown on the admin login page. Add multiple for a slideshow effect.'))
+                                    ->schema([
+                                        Forms\Components\Repeater::make('crm_login_slideshow_images')
+                                            ->label(__('Slideshow Images'))
+                                            ->schema([
+                                                Forms\Components\TextInput::make('url')
+                                                    ->label(__('Image URL'))
+                                                    ->url()
+                                                    ->required()
+                                                    ->placeholder('https://images.pexels.com/photos/...')
+                                                    ->columnSpanFull(),
+                                            ])
+                                            ->defaultItems(1)
+                                            ->addActionLabel(__('Add Image'))
+                                            ->reorderable()
+                                            ->collapsible()
+                                            ->itemLabel(fn (array $state): ?string => $state['url'] ?? null)
+                                            ->columnSpanFull(),
+
+                                        Forms\Components\TextInput::make('crm_login_slideshow_interval')
+                                            ->label(__('Slideshow Interval (seconds)'))
+                                            ->numeric()
+                                            ->minValue(2)
+                                            ->maxValue(30)
+                                            ->default(6)
+                                            ->helperText(__('Time between image transitions')),
+                                    ]),
+                            ]),
+
                         Tabs\Tab::make('Navigation')
                             ->label(__('Navigation Visibility'))
                             ->icon('heroicon-o-eye')
@@ -364,6 +398,7 @@ class CrmSettingResource extends Resource
                         'api' => 'danger',
                         'social' => 'info',
                         'brand' => 'gray',
+                        'login' => 'warning',
                         'navigation' => 'gray',
                         default => 'primary',
                     })
@@ -394,6 +429,7 @@ class CrmSettingResource extends Resource
                         'seo' => __('SEO'),
                         'api' => __('API Keys'),
                         'brand' => __('Brand'),
+                        'login' => __('Login Page'),
                         'navigation' => __('Navigation'),
                     ]),
             ])

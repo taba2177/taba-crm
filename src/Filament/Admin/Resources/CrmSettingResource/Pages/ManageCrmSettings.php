@@ -94,6 +94,8 @@ class ManageCrmSettings extends Page implements HasForms
                     $group = 'api';
                 } elseif (str_starts_with($key, 'crm_brand_')) {
                     $group = 'brand';
+                } elseif (str_starts_with($key, 'crm_login_')) {
+                    $group = 'login';
                 } elseif (str_starts_with($key, 'crm_nav_')) {
                     $group = 'navigation';
                 }
