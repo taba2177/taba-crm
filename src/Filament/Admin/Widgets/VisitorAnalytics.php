@@ -16,6 +16,8 @@ class VisitorAnalytics extends ChartWidget
 
     protected int | string | array $columnSpan = 'full/2';
 
+    protected static ?int $sort = 3;
+
     public function getHeading(): ?string
     {
         return __('New User Registrations');

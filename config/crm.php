@@ -82,6 +82,40 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Brand / Theme
+    |--------------------------------------------------------------------------
+    |
+    | Brand colors and font applied to the Filament admin panel so it matches
+    | the consumer project's frontend identity.  Values here are defaults;
+    | they can be overridden at runtime via CRM Settings (group "brand").
+    |
+    */
+    'brand' => [
+        'primary_color'   => env('CRM_BRAND_PRIMARY', '#6366f1'),   // indigo-500
+        'secondary_color' => env('CRM_BRAND_SECONDARY', '#8b5cf6'), // violet-500
+        'font_family'     => env('CRM_BRAND_FONT', 'Cairo'),
+        'font_url'        => env('CRM_BRAND_FONT_URL', 'https://fonts.bunny.net/css?family=cairo:400,500,600,700'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Navigation Visibility
+    |--------------------------------------------------------------------------
+    |
+    | Controls which sidebar items auto-hide when they have zero records.
+    | 'auto_hide_empty' lists resource short-names that disappear when empty.
+    | 'hidden_items' is managed by the super-admin via CRM Settings UI.
+    |
+    */
+    'navigation' => [
+        'auto_hide_empty' => [
+            'contact-entries',
+            'service-payments',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Extra Components
     |--------------------------------------------------------------------------
     |

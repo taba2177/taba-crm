@@ -12,6 +12,15 @@ class LatestPosts extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
 
+    protected static ?int $sort = 4;
+
+    protected static ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('Latest Posts');
+    }
+
     public function table(Table $table): Table
     {
         return $table

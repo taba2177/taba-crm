@@ -274,6 +274,71 @@ class CrmSettingResource extends Resource
                                             ->helperText(__('Unsplash API access key for image services'))
                                             ->columnSpanFull(),
                                     ]),
+
+                        Tabs\Tab::make('Brand')
+                            ->label(__('Brand / Theme'))
+                            ->icon('heroicon-o-paint-brush')
+                            ->schema([
+                                Section::make(__('Brand Identity'))
+                                    ->description(__('Customize admin panel colors and typography'))
+                                    ->schema([
+                                        Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\ColorPicker::make('crm_brand_primary_color')
+                                                    ->label(__('Primary Color'))
+                                                    ->helperText(__('Main brand color for buttons, links, and accents')),
+
+                                                Forms\Components\ColorPicker::make('crm_brand_secondary_color')
+                                                    ->label(__('Secondary Color'))
+                                                    ->helperText(__('Used for neutral/gray tones in the panel')),
+
+                                                Forms\Components\TextInput::make('crm_brand_font_family')
+                                                    ->label(__('Font Family'))
+                                                    ->placeholder('Cairo')
+                                                    ->helperText(__('Google Font name (e.g. Cairo, Inter, Tajawal)')),
+
+                                                Forms\Components\TextInput::make('crm_brand_font_url')
+                                                    ->label(__('Font URL'))
+                                                    ->url()
+                                                    ->placeholder('https://fonts.bunny.net/css?family=cairo:400,700')
+                                                    ->helperText(__('CDN URL for the font CSS (Bunny Fonts or Google Fonts)')),
+                                            ]),
+                                    ]),
+                            ]),
+
+                        Tabs\Tab::make('Navigation')
+                            ->label(__('Navigation Visibility'))
+                            ->icon('heroicon-o-eye')
+                            ->schema([
+                                Section::make(__('Hidden Navigation Items'))
+                                    ->description(__('Select items to hide from the sidebar navigation'))
+                                    ->schema([
+                                        Forms\Components\CheckboxList::make('crm_nav_hidden_items')
+                                            ->label(__('Hidden Items'))
+                                            ->options([
+                                                'posts' => __('Posts'),
+                                                'post-categories' => __('Post Categories'),
+                                                'contact-entries' => __('Contact Entries'),
+                                                'service-payments' => __('Service Payments'),
+                                                'users' => __('Users'),
+                                            ])
+                                            ->helperText(__('Selected items will be hidden from the sidebar'))
+                                            ->columns(2),
+                                    ]),
+
+                                Section::make(__('Force-Shown Navigation Items'))
+                                    ->description(__('Override auto-hide and always show these items'))
+                                    ->schema([
+                                        Forms\Components\CheckboxList::make('crm_nav_force_shown_items')
+                                            ->label(__('Force-Shown Items'))
+                                            ->options([
+                                                'contact-entries' => __('Contact Entries'),
+                                                'service-payments' => __('Service Payments'),
+                                            ])
+                                            ->helperText(__('These items will always appear even if they have no records'))
+                                            ->columns(2),
+                                    ]),
+                            ]),
                     ])
                     ->columnSpanFull(),
             ]);
@@ -292,13 +357,16 @@ class CrmSettingResource extends Resource
                 Tables\Columns\TextColumn::make('group')
                     ->label(__('Group'))
                     ->badge()
-                    ->colors([
-                        'primary' => 'contact',
-                        'success' => 'business',
-                        'warning' => 'seo',
-                        'danger' => 'api',
-                        'info' => 'social',
-                    ])
+                    ->color(fn (string $state): string => match ($state) {
+                        'contact' => 'primary',
+                        'business' => 'success',
+                        'seo' => 'warning',
+                        'api' => 'danger',
+                        'social' => 'info',
+                        'brand' => 'gray',
+                        'navigation' => 'gray',
+                        default => 'primary',
+                    })
                     ->formatStateUsing(fn ($state) => Str::title($state)),
 
                 Tables\Columns\TextColumn::make('value')
@@ -325,6 +393,8 @@ class CrmSettingResource extends Resource
                         'business' => __('Business'),
                         'seo' => __('SEO'),
                         'api' => __('API Keys'),
+                        'brand' => __('Brand'),
+                        'navigation' => __('Navigation'),
                     ]),
             ])
             ->defaultSort('order')

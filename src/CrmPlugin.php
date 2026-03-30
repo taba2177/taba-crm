@@ -7,6 +7,7 @@ namespace Taba\Crm;
 use App\Filament\Admin\Themes\Awesome;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Support\Colors\Color;
 use Awcodes\Curator\CuratorPlugin;
 use BezhanSalleh\FilamentGoogleAnalytics\FilamentGoogleAnalyticsPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
@@ -147,6 +148,9 @@ class CrmPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
+        // Apply brand colors + font from CRM settings (DB) with config fallback
+        $this->applyBrandTheme($panel);
+
         // Only apply viteTheme if the CSS entry exists in the consumer's Vite manifest
         $cssPath = 'packages/taba/crm/src/resources/css/admin.css';
         $manifestPath = public_path('build/manifest.json');
@@ -156,6 +160,27 @@ class CrmPlugin implements Plugin
             if (isset($manifest[$cssPath])) {
                 $panel->viteTheme($cssPath);
             }
+        }
+    }
+
+    protected function applyBrandTheme(Panel $panel): void
+    {
+        try {
+            $primary   = \Taba\Crm\Models\CrmSetting::get('crm_brand_primary_color', config('crm.brand.primary_color', '#6366f1'));
+            $secondary = \Taba\Crm\Models\CrmSetting::get('crm_brand_secondary_color', config('crm.brand.secondary_color', '#8b5cf6'));
+            $fontFamily = \Taba\Crm\Models\CrmSetting::get('crm_brand_font_family', config('crm.brand.font_family', 'Cairo'));
+            $fontUrl    = \Taba\Crm\Models\CrmSetting::get('crm_brand_font_url', config('crm.brand.font_url', ''));
+
+            $panel->colors([
+                'primary' => Color::hex($primary),
+                'gray'    => Color::hex($secondary),
+            ]);
+
+            if ($fontFamily) {
+                $panel->font($fontFamily, url: $fontUrl ?: null);
+            }
+        } catch (\Throwable) {
+            // DB not yet migrated or settings table missing — skip silently
         }
     }
 

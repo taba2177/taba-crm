@@ -9,11 +9,21 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentAnalytics extends ChartWidget
 {
-    protected static ?string $heading = 'تحليل المدفوعات';
+    protected static ?string $heading = null;
 
     protected int | string | array $columnSpan = 'full/2';
 
-    protected static ?int $sort = 3; // To display it after other widgets
+    protected static ?int $sort = 2;
+
+    public static function canView(): bool
+    {
+        return ServicePayment::exists();
+    }
+
+    public function getHeading(): ?string
+    {
+        return __('Payment Analytics');
+    }
 
     protected function getData(): array
     {

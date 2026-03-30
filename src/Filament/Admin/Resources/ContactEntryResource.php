@@ -4,6 +4,7 @@ namespace Taba\Crm\Filament\Admin\Resources;
 
 use Taba\Crm\Filament\Admin\Resources\ContactEntryResource\Pages;
 use Taba\Crm\Models\ContactEntry;
+use Taba\Crm\Concerns\HasNavigationVisibility;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Illuminate\Support\HtmlString;
 
 class ContactEntryResource extends Resource
 {
+    use HasNavigationVisibility;
 
     protected static ?string $model = ContactEntry::class;
 

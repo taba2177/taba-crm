@@ -6,7 +6,6 @@ use Taba\Crm\Filament\Admin\Resources\PostResource;
 use Taba\Crm\Filament\Admin\Resources;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Pages\ListRecords\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListPosts extends ListRecords
@@ -54,24 +53,4 @@ class ListPosts extends ListRecords
     //     ];
     // }
 
-    public function getTabs(): array
-    {
-        $tabs = [];
-
-        // Get all categories from the database
-        $categories = \Taba\Crm\Models\PostCategory::all();
-
-        // Loop through the categories and create a tab for each one
-        foreach ($categories as $category) {
-            $tabs[$category->name] = Tab::make()
-                ->label(__($category->name))
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('post_category_id', $category->id));
-        }
-
-        // Add 'all' tab
-        $tabs['all'] = Tab::make()
-            ->label(__('All Posts'));
-
-        return $tabs;
-    }
 }

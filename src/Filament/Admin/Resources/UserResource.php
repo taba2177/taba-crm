@@ -4,6 +4,7 @@ namespace Taba\Crm\Filament\Admin\Resources;
 
 use Taba\Crm\Filament\Admin\Resources\UserResource\Pages;
 use Taba\Crm\Models\User;
+use Taba\Crm\Concerns\HasNavigationVisibility;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
+    use HasNavigationVisibility;
     
     /**
      * The resource model.

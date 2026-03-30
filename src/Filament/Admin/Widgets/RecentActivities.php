@@ -15,7 +15,23 @@ class RecentActivities extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Recent Activities';
+    protected static ?string $heading = null;
+
+    protected static ?int $sort = 5;
+
+    public static function canView(): bool
+    {
+        try {
+            return Activity::exists();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    public function getHeading(): ?string
+    {
+        return __('Recent Activities');
+    }
 
     public function table(Table $table): Table
     {

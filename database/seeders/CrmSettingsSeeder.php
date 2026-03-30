@@ -253,6 +253,70 @@ class CrmSettingsSeeder extends Seeder
                 'is_translatable' => false,
                 'order' => 1,
             ],
+
+            // Brand / Theme
+            [
+                'key' => 'crm_brand_primary_color',
+                'value' => '#6366f1',
+                'type' => 'text',
+                'group' => 'brand',
+                'label' => ['en' => 'Primary Color', 'ar' => 'اللون الأساسي'],
+                'description' => ['en' => 'Primary brand color (hex)', 'ar' => 'اللون الأساسي للعلامة التجارية'],
+                'is_translatable' => false,
+                'order' => 1,
+            ],
+            [
+                'key' => 'crm_brand_secondary_color',
+                'value' => '#8b5cf6',
+                'type' => 'text',
+                'group' => 'brand',
+                'label' => ['en' => 'Secondary Color', 'ar' => 'اللون الثانوي'],
+                'description' => ['en' => 'Secondary brand color (hex)', 'ar' => 'اللون الثانوي للعلامة التجارية'],
+                'is_translatable' => false,
+                'order' => 2,
+            ],
+            [
+                'key' => 'crm_brand_font_family',
+                'value' => 'Cairo',
+                'type' => 'text',
+                'group' => 'brand',
+                'label' => ['en' => 'Font Family', 'ar' => 'نوع الخط'],
+                'description' => ['en' => 'Google Font family name', 'ar' => 'اسم خط Google'],
+                'is_translatable' => false,
+                'order' => 3,
+            ],
+            [
+                'key' => 'crm_brand_font_url',
+                'value' => 'https://fonts.bunny.net/css?family=cairo:400,500,600,700',
+                'type' => 'text',
+                'group' => 'brand',
+                'label' => ['en' => 'Font URL', 'ar' => 'رابط الخط'],
+                'description' => ['en' => 'Font stylesheet URL (bunny or google)', 'ar' => 'رابط ملف CSS للخط'],
+                'is_translatable' => false,
+                'order' => 4,
+            ],
+
+            // Navigation Visibility
+            [
+                'key' => 'crm_nav_hidden_items',
+                'value' => [],
+                'type' => 'json',
+                'group' => 'navigation',
+                'label' => ['en' => 'Hidden Navigation Items', 'ar' => 'عناصر التنقل المخفية'],
+                'description' => ['en' => 'Sidebar items hidden by admin', 'ar' => 'عناصر القائمة الجانبية المخفية'],
+                'is_translatable' => false,
+                'order' => 1,
+            ],
+            [
+                'key' => 'crm_nav_force_shown_items',
+                'value' => [],
+                'type' => 'json',
+                'group' => 'navigation',
+                'label' => ['en' => 'Force-Shown Navigation Items', 'ar' => 'عناصر التنقل المعروضة دائماً'],
+                'description' => ['en' => 'Items shown even when empty', 'ar' => 'عناصر تظهر حتى لو كانت فارغة'],
+                'is_translatable' => false,
+                'order' => 2,
+            ],
         ];
 
         foreach ($settings as $setting) {

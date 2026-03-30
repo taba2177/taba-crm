@@ -69,33 +69,34 @@ class PostResource extends Resource
     }
     protected static ?string $navigationLabel = null;
 
-    // public static function getNavigationParentItem(): ?string
-    // {
-    //     return __('posts');
-    // }
+    public static function getNavigationItems(): array
+    {
+        $items = [];
 
-    // // Add a method to dynamically generate navigation items for each category
-    // public static function getNavigationItems(): array
-    // {
-    //     $items = [];
+        $items[] = NavigationItem::make(__('All Posts'))
+            ->url(static::getUrl('index'))
+            ->icon(static::getNavigationIcon())
+            ->group(static::getNavigationGroup())
+            ->sort(static::$navigationSort)
+            ->badge(static::getNavigationBadge(), static::getNavigationBadgeColor())
+            ->isActiveWhen(fn () => request()->routeIs(static::getRouteBaseName() . '.*') && !request()->query('category'));
 
-    //     // Add an 'All Posts' navigation item. This will be active when no category is selected.
-    //     $items[] = NavigationItem::make(__('All Posts'))
-    //         ->url(static::getUrl('index'))
-    //         ->isActiveWhen(fn () => !request()->query('category'));
+        $categories = PostCategory::orderBy('order')->get();
 
-    //     $categories = PostCategory::all();
+        foreach ($categories as $category) {
+            $categoryId = $category->id;
+            $items[] = NavigationItem::make($category->name)
+                ->label(__($category->name))
+                ->url(static::getUrl('index') . '?category=' . $categoryId)
+                ->icon('heroicon-o-folder')
+                ->group(static::getNavigationGroup())
+                ->sort(static::$navigationSort)
+                ->badge(Post::where('post_category_id', $categoryId)->count() ?: null)
+                ->isActiveWhen(fn () => request()->query('category') == $categoryId);
+        }
 
-    //     foreach ($categories as $category) {
-    //         $items[] = NavigationItem::make($category->name)
-    //             ->label($category->name)
-    //             ->url(static::getUrl('index', ['category' => $category->id]))
-    //             ->icon('heroicon-o-folder') // Use a folder icon for categories
-    //             ->isActiveWhen(fn () => request()->query('category') == $category->id);
-    //     }
-
-    //     return $items;
-    // }
+        return $items;
+    }
     public static function getNavigationLabel(): string
     {
         return __('Posts'); // Translate your desired label
@@ -106,7 +107,7 @@ class PostResource extends Resource
     }
     public static function getSubheading(): ?string
     {
-        return __('Custom Page Subheading');
+        return null;
     }
 
     public static function getModelLabel(): string

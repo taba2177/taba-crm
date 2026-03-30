@@ -17,15 +17,17 @@ use Illuminate\Support\Number;
 
 class GlobalStatsOverview extends BaseWidget
 {
-    // protected function getHeading(): ?string
-    // {
-    //     return 'العنوان';
-    // }
+    protected static ?int $sort = 1;
 
-    // protected function getDescription(): ?string
-    // {
-    //     return 'نظرة عامة على بعض التحليلات.';
-    // }
+    protected function getHeading(): ?string
+    {
+        return __('Overview');
+    }
+
+    protected function getDescription(): ?string
+    {
+        return __('A summary of key analytics.');
+    }
   /**
      * Helper function to calculate percentage change between two periods.
      *

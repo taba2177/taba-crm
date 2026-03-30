@@ -5,6 +5,7 @@ namespace Taba\Crm\Filament\Admin\Resources;
 use Taba\Crm\Filament\Admin\Resources\ServicePaymentResource\Pages;
 use Taba\Crm\Filament\Admin\Resources\ServicePaymentResource\RelationManagers;
 use Taba\Crm\Models\ServicePayment;
+use Taba\Crm\Concerns\HasNavigationVisibility;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ServicePaymentResource extends Resource
 {
+    use HasNavigationVisibility;
     protected static ?string $model = ServicePayment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';

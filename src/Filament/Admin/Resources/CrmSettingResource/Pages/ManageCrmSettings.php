@@ -90,8 +90,12 @@ class ManageCrmSettings extends Page implements HasForms
                     $group = 'business';
                 } elseif (str_starts_with($key, 'crm_seo_')) {
                     $group = 'seo';
-                } elseif (str_starts_with($key, 'crm_gemini_')) {
+                } elseif (str_starts_with($key, 'crm_gemini_') || str_starts_with($key, 'crm_unsplash_')) {
                     $group = 'api';
+                } elseif (str_starts_with($key, 'crm_brand_')) {
+                    $group = 'brand';
+                } elseif (str_starts_with($key, 'crm_nav_')) {
+                    $group = 'navigation';
                 }
 
                 CrmSetting::create([
