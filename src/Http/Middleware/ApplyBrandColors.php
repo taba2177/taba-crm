@@ -14,8 +14,8 @@ class ApplyBrandColors
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            $primary = CrmSetting::get('crm_brand_primary_color', config('crm.brand.primary_color', '#6366f1'));
-            $secondary = CrmSetting::get('crm_brand_secondary_color', config('crm.brand.secondary_color', '#8b5cf6'));
+            $primary = CrmSetting::get('crm_brand_primary_color', config('crm.brand.primary_color', '#ecf163'));
+            $secondary = CrmSetting::get('crm_brand_secondary_color', config('crm.brand.secondary_color', '#1f201c'));
 
             FilamentColor::register([
                 'primary' => Color::hex($primary),
