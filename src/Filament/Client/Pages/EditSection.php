@@ -32,12 +32,12 @@ class EditSection extends Page
 
     public function getTitle(): string
     {
-        return __('تعديل') . ' - ' . $this->record->name;
+        return __('تعديل') . ' - ' . ($this->record?->name ?? '');
     }
 
     public function form(Form $form): Form
     {
-        $component = ComponentRegistry::has($this->record->section_component)
+        $component = ($this->record && ComponentRegistry::has($this->record->section_component))
             ? ComponentRegistry::resolve($this->record->section_component)
             : null;
 
