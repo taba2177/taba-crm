@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class UserResource extends Resource
 {
     use HasNavigationVisibility;
-    
+
     /**
      * The resource model.
      */
