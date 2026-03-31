@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Taba\Crm\Components\Registry\ComponentRegistry;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
@@ -15,6 +16,38 @@ class SectionPostResource extends Resource
 {
     protected static ?string $model = Post::class;
     protected static bool $shouldRegisterNavigation = false;
+
+    // SectionPostResource shares the Post model with PostResource but uses
+    // Shield's "section::post" permission prefix instead of "post".
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->can('view_any_section::post') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->can('create_section::post') ?? false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()?->can('update_section::post') ?? false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()?->can('delete_section::post') ?? false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()?->can('delete_any_section::post') ?? false;
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return auth()->user()?->can('view_section::post') ?? false;
+    }
 
     public static function getSlug(): string
     {

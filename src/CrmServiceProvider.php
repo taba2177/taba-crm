@@ -5,6 +5,7 @@
 namespace Taba\Crm;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Taba\Crm\Commands\InstallCommand;
 use Illuminate\Support\Facades\App;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -40,6 +41,18 @@ class CrmServiceProvider extends ServiceProvider
         });
 
         Livewire::component('home', Home::class);
+
+        // Register policies for package models explicitly since Laravel's
+        // auto-discovery convention only works for App\Models\* → App\Policies\*.
+        Gate::policy(\Taba\Crm\Models\Post::class, \Taba\Crm\Policies\PostPolicy::class);
+        Gate::policy(\Taba\Crm\Models\PostCategory::class, \Taba\Crm\Policies\PostCategoryPolicy::class);
+        Gate::policy(\Taba\Crm\Models\Page::class, \Taba\Crm\Policies\PagePolicy::class);
+        Gate::policy(\Taba\Crm\Models\CrmSetting::class, \Taba\Crm\Policies\CrmSettingPolicy::class);
+        Gate::policy(\Taba\Crm\Models\ContactEntry::class, \Taba\Crm\Policies\ContactEntryPolicy::class);
+        Gate::policy(\Taba\Crm\Models\ServicePayment::class, \Taba\Crm\Policies\ServicePaymentPolicy::class);
+        Gate::policy(\Taba\Crm\Models\User::class, \Taba\Crm\Policies\UserPolicy::class);
+        Gate::policy(\Awcodes\Curator\Models\Media::class, \Taba\Crm\Policies\MediaPolicy::class);
+        Gate::policy(\Spatie\Permission\Models\Role::class, \Taba\Crm\Policies\RolePolicy::class);
 
         // Load package assets with a namespace to prevent conflicts.
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');

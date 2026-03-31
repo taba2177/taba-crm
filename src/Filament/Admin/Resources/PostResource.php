@@ -71,6 +71,10 @@ class PostResource extends Resource
 
     public static function getNavigationItems(): array
     {
+        if (! static::canViewAny()) {
+            return [];
+        }
+
         $items = [];
 
         $items[] = NavigationItem::make(__('All Posts'))
