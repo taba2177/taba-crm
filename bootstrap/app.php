@@ -1,45 +1,49 @@
 <?php
 
-use BezhanSalleh\FilamentExceptions\FilamentExceptions;
-use Illuminate\Foundation\App\Crmlication;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Taba\Crm\Exceptions\Handler;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Taba\Crm\Exceptions\ApiExceptionHandler;
 
 return Application::configure(basePath: dirname(__DIR__))
-
-    ->withProviders([
-        Taba\Crm\Providers\filament\AdminPanelProvider::class,
-    ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withMiddleware(function (Middleware $middleware): void {
+        // Ensure Sanctum stateful middleware is applied for API routes
+        $middleware->statefulApi();
 
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web([
-            Taba\Crm\Http\Middleware\RemovePublicFromUrl::class,
-            Taba\Crm\Http\Middleware\AddSeoDefaults::class,
-            Taba\Crm\Http\Middleware\ForceHttps::class,
-            Taba\Crm\Http\Middleware\RedirectIfFromGoogle::class,
-            Taba\Crm\Http\Middleware\GoogleTranslate::class,
+        // Add CORS middleware globally
+        $middleware->api(prepend: [
+            \Taba\Crm\Http\Middleware\ForceJsonResponse::class,
         ]);
-
-        $middleware->redirectTo(fn () => Filament\Pages\Dashboard::getUrl());
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        
-        $exceptions->handler(function ($e) {
-            return app(Handler::class)->render(request(), $e);
+    ->withExceptions(function (Exceptions $exceptions): void {
+        // Clean JSON errors for all API routes (critical for Angular)
+        $exceptions->renderable(function (ModelNotFoundException $e, $request) {
+            return ApiExceptionHandler::modelNotFound($e, $request);
         });
 
-        // You can also report exceptions using your handler if needed
-        $exceptions->report(function (Throwable $e) {
-            app(Handler::class)->report($e);
+        $exceptions->renderable(function (NotFoundHttpException $e, $request) {
+            return ApiExceptionHandler::notFound($e, $request);
         });
-        $exceptions->reportable(fn (Throwable $e) => $exceptions->handler->shouldReport($e) &&
-            FilamentExceptions::report($e)
-        );
+
+        $exceptions->renderable(function (AuthenticationException $e, $request) {
+            return ApiExceptionHandler::unauthenticated($e, $request);
+        });
+
+        $exceptions->renderable(function (MethodNotAllowedHttpException $e, $request) {
+            return ApiExceptionHandler::methodNotAllowed($e, $request);
+        });
+
+        $exceptions->renderable(function (TooManyRequestsHttpException $e, $request) {
+            return ApiExceptionHandler::tooManyRequests($e, $request);
+        });
     })->create();
