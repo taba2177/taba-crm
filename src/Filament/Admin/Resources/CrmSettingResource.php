@@ -279,7 +279,7 @@ class CrmSettingResource extends Resource
                             ->label(__('Brand / Theme'))
                             ->icon('heroicon-o-paint-brush')
                             ->schema([
-                                Section::make(__('Brand Identity'))
+                                Section::make(__('Admin Panel'))
                                     ->description(__('Customize admin panel colors and typography'))
                                     ->schema([
                                         Grid::make(2)
@@ -303,6 +303,35 @@ class CrmSettingResource extends Resource
                                                     ->placeholder('https://fonts.bunny.net/css?family=cairo:400,700')
                                                     ->helperText(__('CDN URL for the font CSS (Bunny Fonts or Google Fonts)')),
                                             ]),
+                                    ]),
+
+                                Section::make(__('Frontend Website Theme'))
+                                    ->description(__('Customize the public website colors. Changes take effect immediately — no rebuild required.'))
+                                    ->schema([
+                                        Grid::make(3)
+                                            ->schema([
+                                                Forms\Components\ColorPicker::make('crm_theme_primary_color')
+                                                    ->label(__('Primary Color'))
+                                                    ->helperText(__('Main accent color for the website (headers, buttons, backgrounds)')),
+
+                                                Forms\Components\ColorPicker::make('crm_theme_primary_light_color')
+                                                    ->label(__('Primary Light'))
+                                                    ->helperText(__('Lighter variant used for text on dark backgrounds')),
+
+                                                Forms\Components\ColorPicker::make('crm_theme_secondary_color')
+                                                    ->label(__('Secondary Color'))
+                                                    ->helperText(__('Secondary accent color for highlights and links')),
+                                            ]),
+                                        Forms\Components\TextInput::make('crm_theme_font_family')
+                                            ->label(__('Website Font'))
+                                            ->placeholder('Tajawal')
+                                            ->helperText(__('Google Font name for the public website')),
+
+                                        Forms\Components\TextInput::make('crm_theme_font_url')
+                                            ->label(__('Website Font URL'))
+                                            ->url()
+                                            ->placeholder('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap')
+                                            ->helperText(__('CDN URL for the website font CSS')),
                                     ]),
                             ]),
 

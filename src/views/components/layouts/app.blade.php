@@ -19,6 +19,13 @@
 
     @livewireStyles
 
+    {!! crm_theme_css() !!}
+
+    @if($fontUrl = crm_setting('crm_theme_font_url'))
+        <link rel="preload" href="{{ $fontUrl }}" as="style">
+        <link rel="stylesheet" href="{{ $fontUrl }}">
+    @endif
+
     {{ seo()->render() }}
 
 </head>

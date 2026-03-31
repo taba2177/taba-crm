@@ -108,3 +108,67 @@ if (!function_exists('crm_business')) {
         return crm_setting("business.{$field}");
     }
 }
+
+if (!function_exists('crm_hex_to_rgb')) {
+    /**
+     * Convert a hex color to comma-separated RGB values for CSS custom properties.
+     *
+     * @param string $hex e.g. "#3baac5" or "3baac5"
+     * @return string e.g. "59, 170, 197"
+     */
+    function crm_hex_to_rgb(string $hex): string
+    {
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+        }
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        return "{$r}, {$g}, {$b}";
+    }
+}
+
+if (!function_exists('crm_theme_css')) {
+    /**
+     * Generate inline CSS custom properties from CRM theme settings.
+     * Used in the layout <head> to make frontend colors configurable from the dashboard.
+     *
+     * @return string CSS <style> block or empty string if no theme set
+     */
+    function crm_theme_css(): string
+    {
+        try {
+            $vars = [];
+
+            $map = [
+                'crm_theme_primary_color'       => '--crm-primary',
+                'crm_theme_primary_light_color'  => '--crm-primary-light',
+                'crm_theme_secondary_color'      => '--crm-secondary',
+            ];
+
+            foreach ($map as $settingKey => $cssVar) {
+                $hex = crm_setting($settingKey);
+                if (!empty($hex) && preg_match('/^#?[0-9a-fA-F]{3,6}$/', $hex)) {
+                    $vars[] = "{$cssVar}: " . crm_hex_to_rgb($hex);
+                }
+            }
+
+            if (empty($vars)) {
+                return '';
+            }
+
+            $css = implode("; ", $vars);
+
+            // Font override
+            $font = crm_setting('crm_theme_font_family');
+            if (!empty($font)) {
+                $css .= "; --crm-font-family: '{$font}', sans-serif";
+            }
+
+            return "<style>:root { {$css}; }</style>";
+        } catch (\Throwable) {
+            return '';
+        }
+    }
+}

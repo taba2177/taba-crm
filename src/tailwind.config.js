@@ -25,48 +25,58 @@ container
 ****************************************************/
 /** @type {import('tailwindcss').Config} */
 
+// Helper: define a color that reads from a CSS custom property
+// with full Tailwind opacity modifier support (<alpha-value>).
+function cssVar(name, fallback) {
+    return ({ opacityValue }) => {
+        if (opacityValue !== undefined) {
+            return `rgba(var(${name}, ${fallback}), ${opacityValue})`;
+        }
+        return `rgb(var(${name}, ${fallback}))`;
+    };
+}
 
-// variables
-const primaryColor = "#333949"; // Dark blue-gray
-const secondaryColor = "#3baac5"; // Teal blue (primary accent)
-const lightNeutral = "#bcc9cf"; // Light gray-blue
-const mediumNeutral = "#77787c"; // Medium gray
+// Default RGB values (used as fallbacks when CSS variables are not injected).
+// These can be overridden at runtime from CRM Settings → Brand / Theme.
+const defaults = {
+    primary:      "51, 57, 73",      // #333949
+    primary2:     "59, 170, 197",    // #3baac5
+    primaryLight: "26, 42, 51",      // #1a2a33
+    secondary:    "59, 170, 197",    // #3baac5
+    secondary2:   "45, 74, 92",      // #2d4a5c
+    secondary3:   "29, 17, 41",      // #1D1129
+};
 
-// Derived Color System (maintaining all original variable names)
-const primaryColor2 = "#3baac5"; // Using secondary as primary2
-const primaryColorLight = "#1a2a33"; // Darker version of primary
-const seondaryColor = "#3baac5"; // Main secondary
-const seondaryColor2 = "#2d4a5c"; // Darker secondary
-const seondaryColor3 = "#1D1129"; // Kept from original (dark purple)
-const bodyColor = "#bcc9cf"; // Light neutral as body
-const bodyColor2 = "#77787c"; // Medium neutral
-const bodyColor3 = "#bcc9cf99"; // Semi-transparent light
+// Static colors (not configurable from dashboard)
+const bodyColor = "#bcc9cf";
+const bodyColor2 = "#77787c";
+const bodyColor3 = "#bcc9cf99";
 const whiteColor = "#ffffff";
-const whiteColor2 = "#f8fafb"; // Slightly off-white
+const whiteColor2 = "#f8fafb";
 const whiteColor3 = "rgba(255, 255, 255, 0.1)";
 const whiteColor4 = "#ffffff99";
 const blackColor = "#050709";
 const blackColor2 = "#0b0410";
 const grayColor = "#636363";
-const grayColor2 = "#77787c"; // Using medium neutral
-const grayColor3 = "#333949"; // Using primary
+const grayColor2 = "#77787c";
+const grayColor3 = "#333949";
 const grayColor4 = "#FFFFFF80";
 const borderColor = "#d9d9d9";
-const borderColor2 = "rgba(59, 170, 197, 0.2)"; // Using secondary
+const borderColor2 = "rgba(59, 170, 197, 0.2)";
 const borderColor3 = "#FFFFFF24";
 const borderColor4 = "#FFFFFF26";
 const borderColor5 = "#ffffff14";
-const creamLightColor = "#f6f7f8"; // Lighter version of body
-const darkColor = "#424757"; //0f0715
+const creamLightColor = "#f6f7f8";
+const darkColor = "#424757";
 const darkColor2 = "#0f0715";
 const bgColor = "#10171c";
 const bgColor2 = "#FFFFFF1A";
-const bgColor3 = "#bcc9cf80"; // Using light neutral
+const bgColor3 = "#bcc9cf80";
 const bgColor4 = "#0c1115";
 const bgColor5 = "#2e1f3e";
-const bgColor6 = "rgba(51, 57, 73, 0.5)"; // Using primary
-const bgColor7 = "#3baac533"; // Using secondary
-const bgColor8 = "#a8c4cc"; // Lighter secondary
+const bgColor6 = "rgba(51, 57, 73, 0.5)";
+const bgColor7 = "#3baac533";
+const bgColor8 = "#a8c4cc";
 const green1 = "#ffae00ff";
 const green2 = "#f78c00ff";
 
@@ -100,12 +110,12 @@ module.exports = {
         },
         extend: {
             colors: {
-                "primary-color": primaryColor,
-                "primary-color-2": primaryColor2,
-                "primary-color-light": primaryColorLight,
-                "seondary-color": seondaryColor,
-                "seondary-color-2": seondaryColor2,
-                "seondary-color-3": seondaryColor3,
+                "primary-color":       cssVar("--crm-primary",       defaults.primary),
+                "primary-color-2":     cssVar("--crm-primary-2",     defaults.primary2),
+                "primary-color-light": cssVar("--crm-primary-light", defaults.primaryLight),
+                "seondary-color":      cssVar("--crm-secondary",     defaults.secondary),
+                "seondary-color-2":    cssVar("--crm-secondary-2",   defaults.secondary2),
+                "seondary-color-3":    cssVar("--crm-secondary-3",   defaults.secondary3),
                 "body-color": bodyColor,
                 "body-color-2": bodyColor2,
                 "body-color-3": bodyColor3,
