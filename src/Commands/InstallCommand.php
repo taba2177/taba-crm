@@ -735,22 +735,21 @@ EOT;
         if (! File::exists($configPath)) {
             $this->info('vite.config.js not found. Creating a new one for you...');
             $stub = <<<EOT
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
-                '{$adminCssPath}',
-            ],
-            refresh: true,
-        }),
-    ],
-});
-EOT;
+                import { defineConfig } from 'vite';
+                import laravel from 'laravel-vite-plugin';
+                export default defineConfig({
+                    plugins: [
+                        laravel({
+                            input: [
+                                'resources/css/app.css',
+                                'resources/js/app.js',
+                                '{$adminCssPath}',
+                            ],
+                            refresh: true,
+                        }),
+                    ],
+                });
+                EOT;
             File::put($configPath, $stub);
             $this->info('Created vite.config.js with CRM admin.css.');
             return;
