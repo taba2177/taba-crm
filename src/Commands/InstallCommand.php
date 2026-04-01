@@ -729,7 +729,7 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $adminCssPath = 'packages/taba/crm/src/resources/css/admin.css';
+        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {
