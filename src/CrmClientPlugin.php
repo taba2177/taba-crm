@@ -75,10 +75,15 @@ class CrmClientPlugin implements Plugin
             $isSingleEntry = $layout === SectionLayout::SINGLE
                 || ($layout === SectionLayout::LIST && $category->posts_count <= 1);
 
-            if ($isSingleEntry) {
-                $url = route("filament.{$panelId}.pages.edit-section", ['record' => $category->id]);
-            } else {
-                $url = route("filament.{$panelId}.resources.section-posts.index", ['category' => $category->id]);
+            try {
+                if ($isSingleEntry) {
+                    $url = route("filament.{$panelId}.pages.edit-section", ['record' => $category->id]);
+                } else {
+                    $url = route("filament.{$panelId}.resources.section-posts.index", ['category' => $category->id]);
+                }
+            } catch (\Throwable) {
+                // Route not registered for this panel — skip this nav item
+                continue;
             }
 
             $items[] = NavigationItem::make($category->name)
