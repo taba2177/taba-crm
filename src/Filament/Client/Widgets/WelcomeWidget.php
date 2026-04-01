@@ -21,9 +21,13 @@ class WelcomeWidget extends Widget
 
     public function getSectionsCount(): int
     {
-        return PostCategory::whereNotNull('section_component')
-            ->where('is_active', true)
-            ->count();
+        try {
+            return PostCategory::whereNotNull('section_component')
+                ->where('is_active', true)
+                ->count();
+        } catch (\Throwable) {
+            return PostCategory::whereNotNull('section_component')->count();
+        }
     }
 
     public function getPostsCount(): int
@@ -38,6 +42,10 @@ class WelcomeWidget extends Widget
 
     public function getUnreadMessagesCount(): int
     {
-        return ContactEntry::where('is_read', false)->count();
+        try {
+            return ContactEntry::where('is_read', false)->count();
+        } catch (\Throwable) {
+            return 0;
+        }
     }
 }

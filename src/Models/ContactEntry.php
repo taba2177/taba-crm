@@ -12,5 +12,10 @@ class ContactEntry extends Model
         'phone',
         'message',
         'service',
+        'is_read',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
     ];
 }
