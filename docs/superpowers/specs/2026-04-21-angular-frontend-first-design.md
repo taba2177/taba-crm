@@ -171,6 +171,119 @@ $this->task('Building Angular frontend', fn() => $this->runAngularBuild());
 
 **No manual steps** are left for the developer regarding the Angular frontend. `php artisan crm:install` is the single command that publishes, installs, and builds.
 
+### 3.5 Dynamic SEO — bot-detection middleware
+
+#### Strategy
+
+Real browsers receive `index.html` as-is; Angular handles `<title>` and `<meta>` via `@angular/platform-browser` `Title` and `Meta` services after API data loads.
+
+Crawlers and social bots (Googlebot, Bingbot, facebookexternalhit, Twitterbot, WhatsApp, Telegram, Slack, LinkedInBot, etc.) need pre-rendered tags injected **before** the HTML is sent. A new middleware `Taba\Crm\Http\Middleware\InjectSeoForBots` intercepts these requests, resolves the requested page's SEO data from the database, and injects the relevant tags into `index.html`.
+
+#### Relation to `AddSeoDefaults`
+
+`AddSeoDefaults` (already exists) sets structural defaults for Blade-rendered pages: charset, viewport, CSRF, favicon links, Twitter card type. It uses the `romanzinho/seo` package and is **not changed**.
+
+`InjectSeoForBots` is a standalone middleware that operates on the raw `index.html` string response — it does **not** use `romanzinho/seo`. Both middlewares are independent.
+
+#### New middleware: `InjectSeoForBots`
+
+**Location:** `src/Http/Middleware/InjectSeoForBots.php`  
+**Namespace:** `Taba\Crm\Http\Middleware`
+
+**Bot-detection logic:**
+
+```php
+private const BOT_AGENTS = [
+    'googlebot', 'bingbot', 'slurp', 'duckduckbot',
+    'facebookexternalhit', 'twitterbot', 'linkedinbot',
+    'whatsapp', 'telegram', 'slackbot', 'discordbot',
+    'applebot', 'pinterest',
+];
+
+private function isBot(Request $request): bool
+{
+    $ua = strtolower($request->userAgent() ?? '');
+    foreach (self::BOT_AGENTS as $bot) {
+        if (str_contains($ua, $bot)) return true;
+    }
+    return false;
+}
+```
+
+**URL-to-model resolution:**
+
+Parse `$request->path()` (already stripped of leading slash by Laravel) to determine page type:
+
+| URL pattern | Page type | SEO source |
+|---|---|---|
+| `` (empty / `/`) | Home | `CrmSetting` keys: `site_name`, `site_description`, `og_image` |
+| `{slug}` (one segment) | Category page | `PostCategory::where('slug', $slug)->first()` — uses `name` as title, `description` as meta description (PostCategory has no dedicated meta columns) |
+| `{catSlug}/{postSlug}` (two segments) | Post page | `Post::where('slug', $postSlug)->first()` — uses `meta_title` (fallback: `title`), `meta_description` (fallback: first 160 chars of `content`), first URL from `images` array |
+| 3+ segments | Unknown | Fall through, serve vanilla `index.html` |
+
+**Tag injection:**
+
+Read `public_path('index.html')` as a string. Inject into `<head>` immediately before `</head>`:
+
+```html
+<title>{title}</title>
+<meta name="description" content="{description}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:image" content="{image_url}">
+<meta property="og:url" content="{canonical_url}">
+<meta property="og:type" content="website|article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<link rel="canonical" href="{canonical_url}">
+```
+
+`canonical_url` = `url($request->path())`.  
+`og:type` = `article` for Post pages, `website` otherwise.  
+`image_url` = first entry in `Post::images` array for posts; `CrmSetting` `og_image` value for home; empty string (tag omitted) for category pages.
+
+If `index.html` does not exist on disk, fall through to normal response pipeline without error.
+
+**Registration:**
+
+In `CrmServiceProvider::boot()`, alias the middleware:
+```php
+$router->aliasMiddleware('crm.seo', InjectSeoForBots::class);
+```
+
+In `routes/web.php`, apply it to the catch-all route:
+```php
+Route::middleware('crm.seo')
+    ->get('/{any}', function () {
+        return response()->file(public_path('index.html'));
+    })->where('any', '^(?!api|admin|filament).*');
+```
+
+Also apply to the root route:
+```php
+Route::middleware('crm.seo')
+    ->get('/', fn() => response()->file(public_path('index.html')));
+```
+
+#### Angular side (real browsers)
+
+Each page/route component calls Angular's `Title` and `Meta` services after the API response arrives:
+
+```ts
+// Example in PostComponent.ngOnInit()
+this.title.setTitle(post.meta_title || post.title);
+this.meta.updateTag({ name: 'description', content: post.meta_description || '' });
+this.meta.updateTag({ property: 'og:title', content: post.meta_title || post.title });
+```
+
+Components that must implement this:
+- `HomeComponent` — sets title from `settings.site_name`
+- `CategoryComponent` — sets title from category `name`
+- `PostComponent` — sets title from `post.meta_title`/`post.title`, description from `post.meta_description`
+
+This is **not optional** — without it, real users (non-bot) navigating client-side never get updated `<title>` in browser tab or history.
+
 ---
 
 ## 4. Filament Client Widgets — Fixed & Self-Contained
@@ -197,8 +310,9 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 
 - Admin panel (`CrmPlugin`, `Filament/Admin/`) — untouched
 - All existing API controllers and endpoints — untouched
-- `CrmServiceProvider` boot logic (gates, translations, migrations) — untouched except adding the new command
+- `CrmServiceProvider` boot logic (gates, translations, migrations) — untouched except adding the new middleware alias and new command tasks
 - Angular routing, `api.service.ts`, `app.config.ts` — structure preserved, `action.service.ts` added alongside
+- `AddSeoDefaults` middleware — untouched (structural defaults for Blade pages; independent of `InjectSeoForBots`)
 
 ---
 
@@ -209,8 +323,10 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 3. Add `action.service.ts` to Angular frontend source
 4. Add `tokens.scss` with CSS custom properties; update components to use them
 5. Add `publishAngularFrontend()`, `runAngularNpmInstall()`, and `runAngularBuild()` methods to the existing `InstallCommand`; wire them into the `handle()` method
-6. Update `routes/web.php` with catch-all + deprecation comments on Blade routes
-7. Update package `README.md` — new "Frontend Setup" section
+6. Update `routes/web.php` with catch-all + deprecation comments on Blade routes; apply `crm.seo` middleware to root and catch-all routes
+7. Implement `InjectSeoForBots` middleware; register alias in `CrmServiceProvider`
+8. Add `Title`/`Meta` service calls to `HomeComponent`, `CategoryComponent`, `PostComponent`
+9. Update package `README.md` — new "Frontend Setup" section
 
 ---
 
@@ -221,3 +337,6 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 - All Client panel widgets render with real data, no `App\Models\*` references
 - No Blade views required for public-facing pages
 - Changing `--color-primary` in `tokens.scss` and rebuilding produces a visually distinct theme with no other file changes required
+- A `curl -A "Googlebot/2.1"` request to `/` returns HTML containing `<meta property="og:title"` with the site name
+- A `curl -A "facebookexternalhit"` request to a post URL returns `<meta_title>` and `<meta property="og:image"` with a real image URL
+- A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
