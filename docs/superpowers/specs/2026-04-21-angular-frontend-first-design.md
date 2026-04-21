@@ -245,6 +245,93 @@ Read `public_path('index.html')` as a string. Inject into `<head>` immediately b
 
 If `index.html` does not exist on disk, fall through to normal response pipeline without error.
 
+**JSON-LD structured data (rich results):**
+
+Immediately after the meta/OG tags block, inject a `<script type="application/ld+json">` block built from the same resolved data. Schema varies by page type:
+
+*Home page — `WebSite` + `Organization`:*
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "{site_name}",
+      "url": "{base_url}",
+      "description": "{site_description}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{base_url}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "{site_name}",
+      "url": "{base_url}",
+      "logo": "{og_image_url}"
+    }
+  ]
+}
+```
+
+*Category page — `CollectionPage` + `BreadcrumbList`:*
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "name": "{category_name}",
+      "description": "{category_description}",
+      "url": "{canonical_url}"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "{site_name}", "item": "{base_url}" },
+        { "@type": "ListItem", "position": 2, "name": "{category_name}", "item": "{canonical_url}" }
+      ]
+    }
+  ]
+}
+```
+
+*Post page — `Article` + `BreadcrumbList`:*
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "{meta_title|title}",
+      "description": "{meta_description}",
+      "image": "{image_url}",
+      "url": "{canonical_url}",
+      "datePublished": "{created_at ISO8601}",
+      "dateModified": "{updated_at ISO8601}",
+      "publisher": {
+        "@type": "Organization",
+        "name": "{site_name}",
+        "logo": { "@type": "ImageObject", "url": "{og_image_url}" }
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "{site_name}", "item": "{base_url}" },
+        { "@type": "ListItem", "position": 2, "name": "{category_name}", "item": "{cat_url}" },
+        { "@type": "ListItem", "position": 3, "name": "{post_title}", "item": "{canonical_url}" }
+      ]
+    }
+  ]
+}
+```
+
+> `{site_name}` and `{og_image_url}` for post/category pages are sourced from `CrmSetting::getAllGrouped()` — a single extra query per bot request, cached with the same `Cache::remember` key used in `HomeApiController`. `{cat_url}` for the post breadcrumb is built from the `catSlug` segment already parsed from the URL, no extra DB query needed.
+
+The JSON-LD block is injected using `str_replace('</head>', $jsonLd . '</head>', $html)` on the same `index.html` string (same pass, after the meta tags injection).
+
 **Registration:**
 
 In `CrmServiceProvider::boot()`, alias the middleware:
@@ -339,4 +426,6 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 - Changing `--color-primary` in `tokens.scss` and rebuilding produces a visually distinct theme with no other file changes required
 - A `curl -A "Googlebot/2.1"` request to `/` returns HTML containing `<meta property="og:title"` with the site name
 - A `curl -A "facebookexternalhit"` request to a post URL returns `<meta_title>` and `<meta property="og:image"` with a real image URL
+- A `curl -A "Googlebot/2.1"` request to a post URL returns a `<script type="application/ld+json">` block containing `"@type": "Article"` with `headline`, `datePublished`, and a `BreadcrumbList`
+- A `curl -A "Googlebot/2.1"` request to `/` returns a JSON-LD block containing `"@type": "WebSite"` and `"@type": "Organization"`
 - A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
