@@ -221,27 +221,64 @@ Parse `$request->path()` (already stripped of leading slash by Laravel) to deter
 | `{catSlug}/{postSlug}` (two segments) | Post page | `Post::where('slug', $postSlug)->first()` — uses `meta_title` (fallback: `title`), `meta_description` (fallback: first 160 chars of `content`), first URL from `images` array |
 | 3+ segments | Unknown | Fall through, serve vanilla `index.html` |
 
+**Image data source:**
+
+`Post::getImagesAttribute()` returns a **Curator `Media` collection** — not plain URLs. Each `Media` object has:
+- `->url` — absolute file URL
+- `->alt` — alt text entered in the Filament media manager
+- `->caption` — optional caption
+
+In the middleware, resolve the first image as:
+```php
+$firstImage   = $post->images->first();
+$imageUrl     = $firstImage?->url ?? '';
+$imageAlt     = $firstImage?->alt ?? ($post->meta_title ?? $post->title);
+$imageCaption = $firstImage?->caption ?? '';
+```
+
+For home page: `$imageUrl` = `CrmSetting` `og_image` value; `$imageAlt` = site name.  
+For category pages: no image injection — omit all image-related tags.
+
+**`<html lang>` injection:**
+
+Before injecting meta tags, patch the `<html>` opening tag to include the active locale:
+```php
+$html = preg_replace('/<html([^>]*)>/i', '<html$1 lang="' . app()->getLocale() . '">', $html, 1);
+```
+This ensures Google indexes the page under the correct language without relying on Angular loading first.
+
 **Tag injection:**
 
-Read `public_path('index.html')` as a string. Inject into `<head>` immediately before `</head>`:
+Read `public_path('index.html')` as a string. Inject the following block immediately before `</head>`:
 
 ```html
+<link rel="preload" as="image" fetchpriority="high" href="{image_url}">
 <title>{title}</title>
 <meta name="description" content="{description}">
+<meta name="robots" content="index, follow">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:image" content="{image_url}">
+<meta property="og:image:alt" content="{image_alt}">
 <meta property="og:url" content="{canonical_url}">
 <meta property="og:type" content="website|article">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="{image_url}">
+<meta name="twitter:image:alt" content="{image_alt}">
 <link rel="canonical" href="{canonical_url}">
+<link rel="alternate" hreflang="ar" href="{canonical_url}">
+<link rel="alternate" hreflang="en" href="{canonical_url}">
+<link rel="alternate" hreflang="x-default" href="{canonical_url}">
 ```
 
-`canonical_url` = `url($request->path())`.  
-`og:type` = `article` for Post pages, `website` otherwise.  
-`image_url` = first entry in `Post::images` array for posts; `CrmSetting` `og_image` value for home; empty string (tag omitted) for category pages.
+Rules:
+- `canonical_url` = `url($request->path())`
+- `og:type` = `article` for Post pages, `website` otherwise
+- `<link rel="preload">` is only injected when `$imageUrl` is non-empty (Post and Home pages)
+- `hreflang` uses the **same canonical URL for both `ar` and `en`** — the URL structure has no language prefix; locale is set via session/header. This tells Google the same URL serves both languages. `x-default` also points to the same URL.
+- Image tags (`og:image`, `og:image:alt`, `twitter:image`, `twitter:image:alt`, preload) are **omitted entirely** when `$imageUrl` is empty
 
 If `index.html` does not exist on disk, fall through to normal response pipeline without error.
 
@@ -306,7 +343,12 @@ Immediately after the meta/OG tags block, inject a `<script type="application/ld
       "@type": "Article",
       "headline": "{meta_title|title}",
       "description": "{meta_description}",
-      "image": "{image_url}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "{image_url}",
+        "description": "{image_alt}",
+        "caption": "{image_caption}"
+      },
       "url": "{canonical_url}",
       "datePublished": "{created_at ISO8601}",
       "dateModified": "{updated_at ISO8601}",
@@ -353,6 +395,33 @@ Route::middleware('crm.seo')
     ->get('/', fn() => response()->file(public_path('index.html')));
 ```
 
+#### Sitemap update
+
+The existing `/sitemap` route in `routes/web.php` uses `spatie/sitemap` and writes XML to `public/sitemap.xml`. It currently references Blade-era named routes (`route('home')`, `route('dynamic.route', ...)`, `route('posts.show', ...)`). These names will either not exist or point to the wrong URLs after the Angular migration.
+
+**Required change in `routes/web.php`:** Replace all `route(...)` calls inside the sitemap closure with direct URL construction:
+
+| Before | After |
+|---|---|
+| `route('home')` | `url('/')` |
+| `route('dynamic.route', ['slug' => $category->slug])` | `url($category->slug)` |
+| `route('posts.show', ['category' => ..., 'post' => ...])` | `url($post->postCategory->slug . '/' . $post->slug)` |
+
+Also remove the `Post::whereNotNull('homepage_section_component')` filter — all published posts should be in the sitemap, not just those with a homepage section.
+
+#### `robots.txt`
+
+`public/robots.txt` must include a `Sitemap:` directive pointing to the generated file. Update or verify it contains:
+
+```
+User-agent: *
+Allow: /
+
+Sitemap: APP_URL/sitemap.xml
+```
+
+Replace `APP_URL` with the actual domain or — better — add a one-time artisan command step in `crm:install` that appends the `Sitemap:` line with `url('/sitemap.xml')` if not already present. This avoids hardcoding the domain in a versioned file.
+
 #### Angular side (real browsers)
 
 Each page/route component calls Angular's `Title` and `Meta` services after the API response arrives:
@@ -362,12 +431,17 @@ Each page/route component calls Angular's `Title` and `Meta` services after the 
 this.title.setTitle(post.meta_title || post.title);
 this.meta.updateTag({ name: 'description', content: post.meta_description || '' });
 this.meta.updateTag({ property: 'og:title', content: post.meta_title || post.title });
+this.meta.updateTag({ property: 'og:description', content: post.meta_description || '' });
+this.meta.updateTag({ property: 'og:image', content: post.images?.[0]?.url || '' });
+this.meta.updateTag({ property: 'og:image:alt', content: post.images?.[0]?.alt || post.title });
+this.meta.updateTag({ name: 'twitter:title', content: post.meta_title || post.title });
+this.meta.updateTag({ name: 'twitter:image:alt', content: post.images?.[0]?.alt || post.title });
 ```
 
 Components that must implement this:
-- `HomeComponent` — sets title from `settings.site_name`
-- `CategoryComponent` — sets title from category `name`
-- `PostComponent` — sets title from `post.meta_title`/`post.title`, description from `post.meta_description`
+- `HomeComponent` — title from `settings.site_name`, og:image from settings `og_image`
+- `CategoryComponent` — title from category `name`, no image  
+- `PostComponent` — full set as above
 
 This is **not optional** — without it, real users (non-bot) navigating client-side never get updated `<title>` in browser tab or history.
 
@@ -409,10 +483,10 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 2. Fix all 9 widget namespaces and rewrite data sources
 3. Add `action.service.ts` to Angular frontend source
 4. Add `tokens.scss` with CSS custom properties; update components to use them
-5. Add `publishAngularFrontend()`, `runAngularNpmInstall()`, and `runAngularBuild()` methods to the existing `InstallCommand`; wire them into the `handle()` method
-6. Update `routes/web.php` with catch-all + deprecation comments on Blade routes; apply `crm.seo` middleware to root and catch-all routes
-7. Implement `InjectSeoForBots` middleware; register alias in `CrmServiceProvider`
-8. Add `Title`/`Meta` service calls to `HomeComponent`, `CategoryComponent`, `PostComponent`
+5. Add `publishAngularFrontend()`, `runAngularNpmInstall()`, and `runAngularBuild()` methods to the existing `InstallCommand`; wire them into the `handle()` method. Add robots.txt `Sitemap:` line injection to `InstallCommand`.
+6. Update `routes/web.php`: catch-all + deprecation comments on Blade routes; apply `crm.seo` middleware to root and catch-all routes; fix sitemap route URL construction (remove `route(...)` references, use `url(...)` directly).
+7. Implement `InjectSeoForBots` middleware (bot detection, `<html lang>` patch, meta/OG/image/hreflang tags, preload hint, JSON-LD rich results); register `crm.seo` alias in `CrmServiceProvider`.
+8. Add full `Title`/`Meta` service calls (including `og:image`, `og:image:alt`, `twitter:image:alt`) to `HomeComponent`, `CategoryComponent`, `PostComponent`
 9. Update package `README.md` — new "Frontend Setup" section
 
 ---
@@ -424,8 +498,10 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 - All Client panel widgets render with real data, no `App\Models\*` references
 - No Blade views required for public-facing pages
 - Changing `--color-primary` in `tokens.scss` and rebuilding produces a visually distinct theme with no other file changes required
-- A `curl -A "Googlebot/2.1"` request to `/` returns HTML containing `<meta property="og:title"` with the site name
-- A `curl -A "facebookexternalhit"` request to a post URL returns `<meta_title>` and `<meta property="og:image"` with a real image URL
-- A `curl -A "Googlebot/2.1"` request to a post URL returns a `<script type="application/ld+json">` block containing `"@type": "Article"` with `headline`, `datePublished`, and a `BreadcrumbList`
-- A `curl -A "Googlebot/2.1"` request to `/` returns a JSON-LD block containing `"@type": "WebSite"` and `"@type": "Organization"`
+- A `curl -A "Googlebot/2.1"` request to `/` returns HTML with: `lang="ar"` (or active locale) on `<html>`, `<meta property="og:title">`, JSON-LD `"@type": "WebSite"` + `"@type": "Organization"`, `hreflang` alternate links
+- A `curl -A "facebookexternalhit"` request to a post URL returns `<meta property="og:image">`, `<meta property="og:image:alt">`, `<meta name="twitter:image:alt">` with real values from the Curator Media object
+- A `curl -A "Googlebot/2.1"` request to a post URL returns JSON-LD `"@type": "Article"` with `headline`, `datePublished`, an `ImageObject` containing `url`+`description`+`caption`, and a 3-level `BreadcrumbList`
+- `curl /sitemap.xml` returns valid XML containing `/`, category slugs, and post slug paths — no `route(...)` errors
+- `public/robots.txt` contains a `Sitemap:` line pointing to `/sitemap.xml`
+- A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
 - A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
