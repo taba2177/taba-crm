@@ -19,8 +19,20 @@ Make the `taba/crm` package fully self-contained with an Angular SPA as the only
 - The `frontend/` folder inside the package becomes the **canonical Angular source**.
 - A new artisan command (`php artisan crm:frontend:publish`) copies it to the consuming project root.
 - The developer runs `npm install && ng build` once; the build output lands in `public/`.
+- The published `angular.json` **must** use the **object form** for `outputPath` to suppress Angular 21's automatic `browser/` subdirectory:
+  ```json
+  "outputPath": {
+    "base": "../public",
+    "browser": ""
+  }
+  ```
+  A plain string `"../public"` still produces `public/browser/index.html` — the empty `"browser"` key is required to place `index.html` directly in `public/`.
 - Laravel's `web.php` gains a **catch-all route** that serves `public/index.html` for all paths not matched by API or admin routes.
 - Existing Livewire/Blade routes are kept in `web.php` with `@deprecated` doc comments — they still function for any project that hasn't published and built the Angular frontend yet, and will be removed in a future version.
+- **Exception:** `Route::get('/', Home::class)` is the one route that MUST be replaced (not just annotated), because `/{any}` with a required non-empty segment never matches `/`. Replace it with:
+  ```php
+  Route::get('/', fn() => response()->file(public_path('index.html')));
+  ```
 
 ### 2.2 Frontend customization contract
 
@@ -43,12 +55,12 @@ Two layers, independent of each other:
 Angular service exposing three methods:
 
 ```ts
-trackWhatsApp(source?: string): void   // fires POST /api/v1/actions { action: 'whatsapp', source, page }
-trackCall(source?: string): void       // fires POST /api/v1/actions { action: 'call', source, page }
-trackFormSubmit(source?: string): void // fires POST /api/v1/actions { action: 'form', source, page }
+trackWhatsApp(source?: string): void   // fires POST /api/v1/actions { action: 'whatsapp', source, page: window.location.pathname }
+trackCall(source?: string): void       // fires POST /api/v1/actions { action: 'call', source, page: window.location.pathname }
+trackFormSubmit(source?: string): void // fires POST /api/v1/actions { action: 'form', source, page: window.location.pathname }
 ```
 
-Components inject this service and call it on button/link clicks. No direct HTTP usage in components.
+Each method **automatically** appends `page: window.location.pathname` to the payload. Components never need to pass `page` explicitly. No direct HTTP usage in components.
 
 ---
 
@@ -64,13 +76,13 @@ Components inject this service and call it on button/link clicks. No direct HTTP
 | `action` | enum(`whatsapp`,`call`,`form`) | required |
 | `source` | varchar(50) nullable | `organic`, `ads`, `direct`, or null |
 | `page` | varchar(255) nullable | URL path where the event occurred |
-| `country` | varchar(100) nullable | from IP geo, best-effort |
-| `city` | varchar(100) nullable | from IP geo, best-effort |
-| `ip_hash` | varchar(64) nullable | SHA-256 of IP — no raw IP stored |
+| `ip_hash` | varchar(64) nullable | `hash_hmac('sha256', $request->ip(), config('app.key'))` — keyed hash, non-reversible even with full IPv4 enumeration |
 | `created_at` | timestamp | |
 | `updated_at` | timestamp | |
 
 **Model:** `Taba\Crm\Models\ActionClick` — standard Eloquent, no auth required.
+
+> **Note:** `country` and `city` columns are intentionally omitted from v1. GeoIP lookup requires a third-party package decision (e.g., `torann/geoip`, MaxMind) that is deferred to a future iteration. These columns can be added via a separate migration when a GeoIP strategy is chosen.
 
 ### 3.2 New API endpoint
 
@@ -81,15 +93,29 @@ Request body (JSON):
 { "action": "whatsapp|call|form", "source": "organic|ads|direct|null", "page": "/path" }
 ```
 
+Validation rules (enforced in `ActionClickApiController@store`):
+- `action` — required, `in:whatsapp,call,form`
+- `source` — nullable, string, max:50
+- `page` — nullable, string, max:255
+
 Response: `204 No Content`
 
-`GET /api/v1/actions/summary` — authenticated (Sanctum), used by widgets only. Returns aggregated counts by action, source, and daily breakdown for a requested period (query param `period=7d|30d|all`).
+`GET /api/v1/actions/summary` — authenticated (Sanctum). Consumed **only** by Filament widgets via server-side Eloquent queries (not by any Angular component). This endpoint is reserved for future use or external tooling. For v1 the widgets query `ActionClick` directly in PHP — the endpoint is registered but the widget implementations do not call it.
+
+Response shape (for future reference):
+```json
+{
+  "by_action": { "whatsapp": 0, "call": 0, "form": 0 },
+  "by_source": { "organic": 0, "ads": 0, "direct": 0 },
+  "daily": [ { "date": "2026-04-21", "count": 0 } ]
+}
+```
 
 Controller: `Taba\Crm\Http\Controllers\Api\ActionClickApiController`
 
 ### 3.3 Routes update
 
-`routes/api.php` gains:
+`routes/api.php` gains **(inside the existing `Route::prefix('api/v1')` group)**:
 ```php
 // Action click tracking (public)
 Route::middleware('throttle:60,1')->post('actions', [ActionClickApiController::class, 'store']);
@@ -111,8 +137,8 @@ Route::get('/{any}', function () {
 
 `php artisan crm:frontend:publish`
 
-- Source: `packages/taba/crm/frontend/`
-- Destination: `{base_path()}/frontend/`
+- **Source path:** resolved via `__DIR__` inside the command class — e.g., `dirname(__DIR__, 2) . '/frontend'` (2 levels up from `src/Commands/` reaches the package root `packages/taba/crm/`). Must NOT use `base_path('packages/...')` because the package may be installed in `vendor/` via Composer.
+- **Destination:** `base_path('frontend')` — always the consuming project root
 - Behaviour: warns if destination exists, asks for confirmation before overwriting
 - After copy, prints:
   ```
@@ -131,19 +157,19 @@ Registered in `CrmServiceProvider` via `$this->commands([PublishFrontendCommand:
 
 All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All `App\Models\*` references replaced with package models or `ActionClick`.
 
-| Widget | Fixed data source | Notes |
-|---|---|---|
-| `WelcomeWidget` | `PostCategory`, `Post`, `ContactEntry`, `CrmSetting` | Namespace fix only |
-| `AccountWidget` | `Filament\Widgets\AccountWidget` (extends) | Namespace fix only |
-| `StatsOverview` | `Post`, `PostCategory`, `ContactEntry` | Replaces app-model stats with package equivalents |
-| `ActionClicksOverview` | `ActionClick` | Replaces `App\Models\advertisement` etc. with real click data |
-| `WeeklyClicksChart` | `ActionClick` | Filter by action type and date range |
-| `AdvertisementsOverview` | `Post` stats by category | Repurposed — shows posts per category |
-| `OffersOverview` | `ContactEntry` | Repurposed — contact submissions over time |
-| `SurveyAnswersChart` | `ContactEntry` | Repurposed — form submissions breakdown by page |
-| `WeeklyReviewsChart` | `ContactEntry` | Messages per week chart |
+| Widget | Display title | Data source | Metric / chart type |
+|---|---|---|---|
+| `WelcomeWidget` | *(unchanged)* | `PostCategory`, `Post`, `ContactEntry`, `CrmSetting` | Namespace fix only — no data change |
+| `AccountWidget` | *(unchanged)* | `Filament\Widgets\AccountWidget` (extends) | Namespace fix only |
+| `StatsOverview` | "نظرة عامة" (Overview) | `Post`, `PostCategory`, `ContactEntry` | Stat cards: published posts count, active categories count, total contact submissions |
+| `ActionClicksOverview` | "نقرات التواصل" (Contact Clicks) | `ActionClick` | Stat cards: total clicks, WhatsApp clicks, Call clicks; filterable by period (7d / 30d / all) |
+| `WeeklyClicksChart` | "النقرات حسب اليوم" (Clicks by Day) | `ActionClick` | Bar chart; X=date, Y=click count; filterable by `action` type and period |
+| `AdvertisementsOverview` | "المنشورات حسب القسم" (Posts by Section) | `Post` grouped by `post_category_id` | Stat cards: one card per active category showing published post count |
+| OffersOverview | "الرسائل الواردة" (Incoming Messages) | `ContactEntry` | Stat cards: total submissions, unread count (`is_read = false` — column confirmed in migration `2026_04_01_000001`), this-week count |
+| SurveyAnswersChart | "الرسائل حسب الصفحة" (Messages by Page) | `ContactEntry` grouped by `page` column | Donut chart: breakdown of where contact submissions originated. **Requires** a new nullable `page` varchar(255) column on `contact_entries` — add as a migration in delivery step 1. The Angular contact form must send `page: window.location.pathname` in its submission payload, and `ContactEntryApiController@store` must save it. |
+| `WeeklyReviewsChart` | "الرسائل الأسبوعية" (Weekly Messages) | `ContactEntry` grouped by date | Line chart; X=date (last 7 days), Y=submission count |
 
-`CrmClientPlugin::register()` already calls `discoverWidgets()` — no plugin changes needed once namespaces are correct.
+**`discoverWidgets()` verification:** Before implementing, confirm that `CrmClientPlugin::register()` calls `discoverWidgets()` with `in:` pointing to the absolute path of `src/Filament/Client/Widgets/` inside the package. If it resolves via `__DIR__` this is already correct; if it uses any other path, update the argument.
 
 ---
 
@@ -158,7 +184,7 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 
 ## 6. Delivery Sequence
 
-1. Add `ActionClick` migration + model + `ActionClickApiController` + register routes
+1. Add `ActionClick` migration + model + `ActionClickApiController` + register routes. Also add nullable `page` varchar(255) column to `contact_entries` migration + update `ContactEntry` fillable. Update `ContactEntryApiController@store` to save the `page` field from the request.
 2. Fix all 9 widget namespaces and rewrite data sources
 3. Add `action.service.ts` to Angular frontend source
 4. Add `tokens.scss` with CSS custom properties; update components to use them
@@ -174,4 +200,4 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 - WhatsApp/Call button clicks tracked in `action_clicks` table
 - All Client panel widgets render with real data, no `App\Models\*` references
 - No Blade views required for public-facing pages
-- A new project can be up and running with a customized theme in under 30 minutes (change `tokens.scss`, run build)
+- Changing `--color-primary` in `tokens.scss` and rebuilding produces a visually distinct theme with no other file changes required
