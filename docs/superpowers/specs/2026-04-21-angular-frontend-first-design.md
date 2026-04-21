@@ -17,7 +17,7 @@ Make the `taba/crm` package fully self-contained with an Angular SPA as the only
 ### 2.1 Frontend — Angular takes over
 
 - The `frontend/` folder inside the package becomes the **canonical Angular source**.
-- A new artisan command (`php artisan crm:frontend:publish`) copies it to the consuming project root.
+- A new artisan command (`php artisan crm:install`) already exists and orchestrates all installation tasks. The frontend publish step is added as a new task inside it — no separate command is needed.
 - The developer runs `npm install && ng build` once; the build output lands in `public/`.
 - The published `angular.json` **must** use the **object form** for `outputPath` to suppress Angular 21's automatic `browser/` subdirectory:
   ```json
@@ -133,23 +133,33 @@ Route::get('/{any}', function () {
 })->where('any', '^(?!api|admin|filament).*');
 ```
 
-### 3.4 New artisan command
+### 3.4 Frontend publish — inside `crm:install`
 
-`php artisan crm:frontend:publish`
+The Angular frontend publish step is **integrated into the existing `InstallCommand`** (`src/Commands/InstallCommand.php`) rather than being a separate command.
 
-- **Source path:** resolved via `__DIR__` inside the command class — e.g., `dirname(__DIR__, 2) . '/frontend'` (2 levels up from `src/Commands/` reaches the package root `packages/taba/crm/`). Must NOT use `base_path('packages/...')` because the package may be installed in `vendor/` via Composer.
-- **Destination:** `base_path('frontend')` — always the consuming project root
-- Behaviour: warns if destination exists, asks for confirmation before overwriting
-- After copy, prints:
+A new protected method `publishAngularFrontend()` is added to `InstallCommand` and called as a task:
+
+```php
+$this->task('Publishing Angular frontend', fn() => $this->publishAngularFrontend());
+```
+
+Placement in `handle()`: after the existing `'Publishing package assets'` task and before the `skip-frontend` block.
+
+**`publishAngularFrontend()` behaviour:**
+- **Source path:** `dirname(__DIR__, 2) . '/frontend'` (2 levels up from `src/Commands/` = package root). Must NOT use `base_path('packages/...')` because the package may be installed in `vendor/` via Composer.
+- **Destination:** `base_path('frontend')`
+- If destination already exists, skip silently (do not overwrite — developer may have customized it). Log a warning via `$this->warnings[]`.
+- If `--skip-frontend` flag is set, skip this task entirely.
+- After copying, append to the final output:
   ```
-  Frontend published to frontend/
+  Angular frontend published to frontend/
   Next steps:
     cd frontend
     npm install
     ng build
   ```
 
-Registered in `CrmServiceProvider` via `$this->commands([PublishFrontendCommand::class])`.
+**No new artisan command class** is created. No changes to `CrmServiceProvider` registration.
 
 ---
 
@@ -188,7 +198,7 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 2. Fix all 9 widget namespaces and rewrite data sources
 3. Add `action.service.ts` to Angular frontend source
 4. Add `tokens.scss` with CSS custom properties; update components to use them
-5. Add `php artisan crm:frontend:publish` command
+5. Add frontend publish step inside the existing `InstallCommand::handle()` method (`publishAngularFrontend()` protected method)
 6. Update `routes/web.php` with catch-all + deprecation comments on Blade routes
 7. Update package `README.md` — new "Frontend Setup" section
 
@@ -196,7 +206,7 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 
 ## 7. Success Criteria
 
-- `php artisan crm:frontend:publish` → `npm install` → `ng build` → site loads from Angular with no errors
+- `php artisan crm:install` → Angular frontend copied to `frontend/` → `npm install` → `ng build` → site loads with no errors
 - WhatsApp/Call button clicks tracked in `action_clicks` table
 - All Client panel widgets render with real data, no `App\Models\*` references
 - No Blade views required for public-facing pages
