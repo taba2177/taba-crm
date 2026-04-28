@@ -12,6 +12,7 @@ class ContactEntry extends Model
         'phone',
         'message',
         'service',
+        'page',
         'is_read',
     ];
 

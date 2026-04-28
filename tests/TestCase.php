@@ -44,10 +44,9 @@ abstract class TestCase extends Orchestra
 
     protected function setUpDatabase()
     {
+        // Test-only fixtures first (e.g. users table — owned by the host app, not the package)
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        
-        // Run permission migrations
-        include_once __DIR__ . '/../../../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
-        (new \CreatePermissionTables())->up();
     }
 }

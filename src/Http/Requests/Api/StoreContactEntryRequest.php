@@ -21,6 +21,7 @@ class StoreContactEntryRequest extends FormRequest
             'phone'   => ['nullable', 'string', 'max:30'],
             'message' => ['required', 'string', 'max:5000'],
             'service' => ['nullable', 'string', 'max:255'],
+            'page'    => ['nullable', 'string', 'max:255'],
         ];
     }
 
