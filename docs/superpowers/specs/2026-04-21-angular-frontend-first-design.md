@@ -447,6 +447,152 @@ This is **not optional** — without it, real users (non-bot) navigating client-
 
 ---
 
+### 3.6 Agent-Ready Standards
+
+Modern AI agents (ChatGPT plugins, Claude tools, Perplexity, autonomous LLM agents) discover and consume websites through a set of emerging standards. This section specifies what the package must publish to score well across the five agent-readiness categories.
+
+#### Category 1 — Discoverability
+
+**robots.txt** (`public/robots.txt`)
+
+Replace the current near-empty file with a full version. `crm:install` writes this file if it does not already contain the `Sitemap:` line:
+
+```
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /filament
+Disallow: /api/v1/actions
+Disallow: /preview/
+
+# AI crawlers — explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Googlebot-Extended
+Allow: /
+
+Sitemap: {APP_URL}/sitemap.xml
+```
+
+`crm:install` generates this file via `file_put_contents(public_path('robots.txt'), ...)` with `url('/sitemap.xml')` substituted for `{APP_URL}/sitemap.xml`. If the file already exists with a `Sitemap:` line, skip silently.
+
+**`Link:` response headers**
+
+The `InjectSeoForBots` middleware (and the normal `response()->file(...)` routes for real browsers) must add HTTP `Link:` headers for machine discovery:
+
+```php
+$response->headers->set('Link', implode(', ', [
+    '<' . url('/sitemap.xml') . '>; rel="sitemap"',
+    '<' . url('/llms.txt') . '>; rel="describedby"',
+    '<' . url('/api/v1') . '>; rel="service"',
+]));
+```
+
+Apply via a thin `AddDiscoveryHeaders` middleware registered on the catch-all and root web routes (alongside `crm.seo`).
+
+---
+
+#### Category 2 — Content Accessibility (Markdown negotiation)
+
+AI agents prefer plain Markdown over HTML. `PostApiController::show()` already returns JSON — add a branch: when the request sends `Accept: text/markdown`, return the post `content` field as a raw Markdown response instead of JSON.
+
+**Change in `PostApiController::show()`:**
+
+```php
+if ($request->prefers('text/markdown')) {
+    return response($post->content, 200)
+        ->header('Content-Type', 'text/markdown; charset=utf-8')
+        ->header('X-Post-Title', $post->meta_title ?? $post->title)
+        ->header('X-Post-Slug', $post->slug);
+}
+```
+
+This negotiation sits **before** the `PostResource` JSON return, uses the already-cached `$post`, and requires no new route. An agent can discover the URL from the sitemap and negotiate Markdown with a single request.
+
+---
+
+#### Category 3 — Bot Access Control
+
+Covered by:
+1. The explicit per-bot `User-agent` / `Allow` blocks in `robots.txt` above
+2. `<meta name="robots" content="index, follow">` on bot-injected pages (already in 3.5)
+3. No `X-Robots-Tag: noindex` header on public pages
+
+No additional changes needed beyond the `robots.txt` update.
+
+---
+
+#### Category 4 — Protocol Discovery (`llms.txt` + API catalog)
+
+**`llms.txt`** (new standard, analogous to `robots.txt` for LLMs)
+
+Published to `public/llms.txt` during `crm:install`. Content is generated dynamically from `CrmSetting` at install time and written as a static file:
+
+```markdown
+# {site_name}
+
+> {site_description}
+
+This site is built on the taba/crm Laravel package. Content is available via a REST API.
+
+## Key URLs
+
+- Homepage: {base_url}/
+- Sitemap: {base_url}/sitemap.xml
+- Posts API: {base_url}/api/v1/posts
+- Categories API: {base_url}/api/v1/categories
+
+## Content negotiation
+
+Individual post pages support `Accept: text/markdown` for plain Markdown responses.
+Example: GET {base_url}/api/v1/posts/{slug} with Accept: text/markdown
+
+## Allowed bots
+
+All AI crawlers are permitted. See /robots.txt for details.
+```
+
+`crm:install` generates this via a new `generateLlmsTxt()` method that queries `CrmSetting::getAllGrouped()`, builds the Markdown string, and writes it to `public_path('llms.txt')`. Overwrites on every install run (not a developer-customizable file).
+
+**API catalog header**
+
+The `AddDiscoveryHeaders` middleware also sets:
+```php
+$response->headers->set('X-Api-Catalog', url('/api/v1'));
+```
+
+No full OpenAPI/JSON catalog in v1 — the header alone satisfies basic protocol discovery for agent scanners.
+
+---
+
+#### Category 5 — Commerce
+
+`x402`, `MPP`, `UCP`, `ACP` payment protocols are **not applicable** to this package in v1. No action needed.
+
+---
+
+#### Delivery additions for Section 6
+
+Agent-ready tasks slot into the existing delivery sequence:
+- **Step 5 (extended):** Add `generateLlmsTxt()` and `writeRobotsTxt()` methods to `InstallCommand`
+- **Step 6 (extended):** Register `AddDiscoveryHeaders` middleware alias `crm.discovery` in `CrmServiceProvider`; apply alongside `crm.seo` on web routes
+- **Step 7 (extended):** Add Markdown negotiation branch to `PostApiController::show()`
+
+---
+
 ## 4. Filament Client Widgets — Fixed & Self-Contained
 
 All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All `App\Models\*` references replaced with package models or `ActionClick`.
@@ -483,11 +629,12 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 2. Fix all 9 widget namespaces and rewrite data sources
 3. Add `action.service.ts` to Angular frontend source
 4. Add `tokens.scss` with CSS custom properties; update components to use them
-5. Add `publishAngularFrontend()`, `runAngularNpmInstall()`, and `runAngularBuild()` methods to the existing `InstallCommand`; wire them into the `handle()` method. Add robots.txt `Sitemap:` line injection to `InstallCommand`.
-6. Update `routes/web.php`: catch-all + deprecation comments on Blade routes; apply `crm.seo` middleware to root and catch-all routes; fix sitemap route URL construction (remove `route(...)` references, use `url(...)` directly).
-7. Implement `InjectSeoForBots` middleware (bot detection, `<html lang>` patch, meta/OG/image/hreflang tags, preload hint, JSON-LD rich results); register `crm.seo` alias in `CrmServiceProvider`.
-8. Add full `Title`/`Meta` service calls (including `og:image`, `og:image:alt`, `twitter:image:alt`) to `HomeComponent`, `CategoryComponent`, `PostComponent`
-9. Update package `README.md` — new "Frontend Setup" section
+5. Add `publishAngularFrontend()`, `runAngularNpmInstall()`, `runAngularBuild()`, `generateLlmsTxt()`, and `writeRobotsTxt()` methods to `InstallCommand`; wire all into `handle()`
+6. Update `routes/web.php`: catch-all + deprecation comments; apply `crm.seo` + `crm.discovery` middleware to root and catch-all routes; fix sitemap route URL construction
+7. Implement `InjectSeoForBots` middleware (bot detection, `<html lang>`, meta/OG/image/hreflang, preload, JSON-LD); implement `AddDiscoveryHeaders` middleware (`Link:`, `X-Api-Catalog:` headers); register both aliases in `CrmServiceProvider`
+8. Add Markdown negotiation branch (`Accept: text/markdown`) to `PostApiController::show()`
+9. Add full `Title`/`Meta` service calls to `HomeComponent`, `CategoryComponent`, `PostComponent`
+10. Update package `README.md` — new "Frontend Setup" and "Agent-Ready" sections
 
 ---
 
@@ -498,10 +645,12 @@ All widgets moved to correct namespace: `Taba\Crm\Filament\Client\Widgets`. All 
 - All Client panel widgets render with real data, no `App\Models\*` references
 - No Blade views required for public-facing pages
 - Changing `--color-primary` in `tokens.scss` and rebuilding produces a visually distinct theme with no other file changes required
-- A `curl -A "Googlebot/2.1"` request to `/` returns HTML with: `lang="ar"` (or active locale) on `<html>`, `<meta property="og:title">`, JSON-LD `"@type": "WebSite"` + `"@type": "Organization"`, `hreflang` alternate links
+- A `curl -A "Googlebot/2.1"` request to `/` returns HTML with: `lang="ar"` on `<html>`, `<meta property="og:title">`, JSON-LD `"@type": "WebSite"` + `"@type": "Organization"`, `hreflang` alternate links, and `Link:` response headers including `rel="sitemap"` and `rel="describedby"`
 - A `curl -A "facebookexternalhit"` request to a post URL returns `<meta property="og:image">`, `<meta property="og:image:alt">`, `<meta name="twitter:image:alt">` with real values from the Curator Media object
 - A `curl -A "Googlebot/2.1"` request to a post URL returns JSON-LD `"@type": "Article"` with `headline`, `datePublished`, an `ImageObject` containing `url`+`description`+`caption`, and a 3-level `BreadcrumbList`
+- `GET /api/v1/posts/{slug}` with `Accept: text/markdown` returns `Content-Type: text/markdown` and raw post Markdown content (no JSON wrapper)
+- `public/llms.txt` exists after install and contains the site name, API URL, and Markdown negotiation instructions
+- `public/robots.txt` contains explicit `Allow: /` rules for `GPTBot`, `ClaudeBot`, `PerplexityBot`, `anthropic-ai`, and a `Sitemap:` directive
 - `curl /sitemap.xml` returns valid XML containing `/`, category slugs, and post slug paths — no `route(...)` errors
-- `public/robots.txt` contains a `Sitemap:` line pointing to `/sitemap.xml`
 - A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
 - A real browser request to any path receives the standard unmodified `index.html` (no injected tags — Angular sets them after load)
