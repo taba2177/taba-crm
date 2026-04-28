@@ -18,6 +18,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Taba\Crm\Http\Controllers\Api\ActionClickApiController;
 use Taba\Crm\Http\Controllers\Api\AuthApiController;
 use Taba\Crm\Http\Controllers\Api\CategoryApiController;
 use Taba\Crm\Http\Controllers\Api\ContactEntryApiController;
@@ -86,6 +87,9 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
     Route::post('contact', [ContactEntryApiController::class, 'store'])
         ->middleware('throttle:30,1');
 
+    // Action click tracking (public, rate-limited)
+    Route::middleware('throttle:60,1')->post('actions', [ActionClickApiController::class, 'store']);
+
     /*
     |----------------------------------------------------------------------
     | Protected routes (Sanctum auth required)
@@ -144,6 +148,9 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
         Route::get('payments',              [ServicePaymentApiController::class, 'index']);
         Route::get('payments/{servicePayment}', [ServicePaymentApiController::class, 'show']);
         Route::post('payments',             [ServicePaymentApiController::class, 'store']);
+
+        // Action click summary (admin)
+        Route::get('actions/summary', [ActionClickApiController::class, 'summary']);
     });
 });
 

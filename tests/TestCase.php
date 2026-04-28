@@ -40,6 +40,12 @@ abstract class TestCase extends Orchestra
         $app['config']->set('crm.gemini_api_key', 'test_api_key');
         $app['config']->set('crm.locale', 'en');
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+
+        // Define the sanctum guard so auth:sanctum middleware resolves correctly in tests
+        $app['config']->set('auth.guards.sanctum', [
+            'driver'   => 'session',
+            'provider' => 'users',
+        ]);
     }
 
     protected function setUpDatabase()
