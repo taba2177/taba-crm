@@ -14,6 +14,9 @@ return new class extends Migration {
             $table->string('page', 255)->nullable();
             $table->string('ip_hash', 64)->nullable();
             $table->timestamps();
+
+            $table->index('action');
+            $table->index('created_at');
         });
     }
 
