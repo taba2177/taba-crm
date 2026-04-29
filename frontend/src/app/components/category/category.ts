@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 
@@ -12,6 +13,8 @@ import { t } from '../../utils/i18n';
 export class Category implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private titleSvc = inject(Title);
+  private meta = inject(Meta);
 
   category = signal<any>(null);
   posts = signal<any[]>([]);
@@ -26,7 +29,12 @@ export class Category implements OnInit {
           this.category.set(res.category);
           this.posts.set(res.posts || []);
           this.loading.set(false);
-          document.title = t(res.category?.name, 'Category');
+          const name = t(res.category?.name) || '';
+          const desc = t(res.category?.description) || '';
+          this.titleSvc.setTitle(name);
+          this.meta.updateTag({ name: 'description', content: desc });
+          this.meta.updateTag({ property: 'og:title', content: name });
+          this.meta.updateTag({ property: 'og:description', content: desc });
         },
         error: () => this.loading.set(false),
       });

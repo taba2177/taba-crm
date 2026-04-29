@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { LucideAngularModule, ArrowLeft, ArrowRight, ShieldCheck, PenTool, CheckCircle, ChevronRight, Phone, MessageCircle } from 'lucide-angular';
@@ -18,6 +19,8 @@ register();
 })
 export class Home implements OnInit {
   private api = inject(ApiService);
+  private titleSvc = inject(Title);
+  private meta = inject(Meta);
   public data = signal<any>(null);
   public settings = signal<any>({});
   public t = t;
@@ -36,9 +39,6 @@ export class Home implements OnInit {
     this.api.getHome().subscribe({
       next: (response: any) => {
         this.data.set(response);
-        if (response?.metaTitle) {
-          document.title = response.metaTitle;
-        }
         // Init Swiper after Angular renders the template
         setTimeout(() => this.initSwiper(), 500);
       },
@@ -50,6 +50,16 @@ export class Home implements OnInit {
     this.api.getNavigation().subscribe({
       next: (res: any) => {
         this.settings.set(res.settings || {});
+        const gen = res.settings?.general || {};
+        const name = t(gen['site_name']) || document.title;
+        const desc = t(gen['site_description']) || '';
+        const image = t(gen['site_logo']) || '';
+        this.titleSvc.setTitle(name);
+        this.meta.updateTag({ name: 'description', content: desc });
+        this.meta.updateTag({ property: 'og:title', content: name });
+        this.meta.updateTag({ property: 'og:description', content: desc });
+        this.meta.updateTag({ property: 'og:image', content: image });
+        this.meta.updateTag({ property: 'og:type', content: 'website' });
       }
     });
   }

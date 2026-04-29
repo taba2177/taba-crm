@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
@@ -17,6 +18,8 @@ register();
 export class PostDetail implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private titleSvc = inject(Title);
+  private meta = inject(Meta);
 
   post = signal<any>(null);
   category = signal<any>(null);
@@ -48,7 +51,18 @@ export class PostDetail implements OnInit {
           this.category.set(res.category);
           this.relatedPosts.set(res.relatedPosts || []);
           this.loading.set(false);
-          document.title = t(res.post?.title, 'Post');
+          const title = t(res.post?.meta_title) || t(res.post?.title) || '';
+          const desc  = t(res.post?.meta_description) || t(res.post?.description) || '';
+          const image = res.post?.image?.url || '';
+          this.titleSvc.setTitle(title);
+          this.meta.updateTag({ name: 'description', content: desc });
+          this.meta.updateTag({ property: 'og:title', content: title });
+          this.meta.updateTag({ property: 'og:description', content: desc });
+          this.meta.updateTag({ property: 'og:image', content: image });
+          this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+          this.meta.updateTag({ name: 'twitter:title', content: title });
+          this.meta.updateTag({ name: 'twitter:description', content: desc });
+          this.meta.updateTag({ name: 'twitter:image', content: image });
           setTimeout(() => this.initSwiper(), 500);
         },
         error: () => this.loading.set(false),
