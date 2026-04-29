@@ -1,54 +1,23 @@
-<?php
+﻿<?php
+// src/Filament/Client/Widgets/OffersOverview.php
 
-namespace App\Filament\Widgets;
+namespace Taba\Crm\Filament\Client\Widgets;
 
-use App\Filament\Resources\OffersResource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Taba\Crm\Models\ContactEntry;
 
 class OffersOverview extends BaseWidget
 {
-
-    protected int | string | array $columnSpan = 'full';
-
+    protected static ?string $heading = 'الرسائل الواردة';
     protected static ?int $sort = 7;
 
-    public function table(Table $table): Table
+    protected function getStats(): array
     {
-        return $table
-            ->query(OffersResource::getEloquentQuery())
-            ->defaultPaginationPageOption(5)
-            // ->defaultSort('created_at','desc')
-
-            ->columns([
-                Tables\Columns\TextColumn::make('product.name')
-                    ->translateLabel()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('percent')
-                    ->numeric()
-                    ->translateLabel()
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('start_date')
-                ->translateLabel()
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end_date')
-                ->translateLabel()
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                ->translateLabel()
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                ->translateLabel()
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ]);
+        return [
+            Stat::make('إجمالي الرسائل', ContactEntry::count()),
+            Stat::make('غير مقروءة', ContactEntry::where('is_read', false)->count()),
+            Stat::make('هذا الأسبوع', ContactEntry::where('created_at', '>=', now()->startOfWeek())->count()),
+        ];
     }
 }

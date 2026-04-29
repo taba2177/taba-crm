@@ -1,10 +1,11 @@
-<?php
+﻿<?php
+// src/Filament/Client/Widgets/AccountWidget.php
 
-namespace App\Filament\Widgets;
+namespace Taba\Crm\Filament\Client\Widgets;
 
-class AccountWidget extends \Filament\Widgets\AccountWidget
+use Filament\Widgets\AccountWidget as BaseAccountWidget;
+
+class AccountWidget extends BaseAccountWidget
 {
-    protected int | string | array $columnSpan = 'full';
-
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
 }
