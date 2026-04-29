@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Taba\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Factory as FakerFactory;
@@ -11,6 +11,8 @@ use Faker\Factory as FakerFactory;
  */
 class PostFactory extends Factory
 {
+    protected $model = \Taba\Crm\Models\Post::class;
+
     /**
      * Define the model's default state.
      *

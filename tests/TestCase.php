@@ -13,6 +13,17 @@ abstract class TestCase extends Orchestra
 
     protected function setUp(): void
     {
+        // Register package factory autoloader before anything runs
+        spl_autoload_register(static function (string $class): void {
+            $prefix = 'Taba\\Crm\\Database\\Factories\\';
+            if (str_starts_with($class, $prefix)) {
+                $file = __DIR__ . '/../database/factories/' . substr($class, strlen($prefix)) . '.php';
+                if (file_exists($file)) {
+                    require_once $file;
+                }
+            }
+        });
+
         parent::setUp();
 
         $this->setUpDatabase();

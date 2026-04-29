@@ -13,7 +13,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Taba\\Crm\\Tests\\": "tests/"
+            "Taba\\Crm\\Tests\\": "tests/",
+            "Taba\\Crm\\Database\\Factories\\": "database/factories/"
         }
     },
     "authors": [

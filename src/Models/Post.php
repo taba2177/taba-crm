@@ -19,6 +19,11 @@ use Taba\Crm\Models\Metadata;
 class Post extends Model
 {
     use HasFactory;
+
+    protected static function newFactory()
+    {
+        return \Taba\Crm\Database\Factories\PostFactory::new();
+    }
     use HasTranslations;
 
     /**

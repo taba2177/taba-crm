@@ -15,6 +15,11 @@ class PostCategory extends Model
 {
     use HasFactory, HasTranslations;
 
+    protected static function newFactory()
+    {
+        return \Taba\Crm\Database\Factories\PostCategoryFactory::new();
+    }
+
     protected $fillable = [
         'name',
         'slug',

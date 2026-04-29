@@ -3,6 +3,7 @@
 namespace Taba\Crm\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Taba\Crm\Http\Requests\Api\StorePostRequest;
@@ -70,7 +71,7 @@ class PostApiController extends ApiController
     /**
      * Get a single published post by slug.
      */
-    public function show(Request $request, string $slug): JsonResponse
+    public function show(Request $request, string $slug): Response
     {
         $cacheKey = 'api_post_' . $slug . '_' . md5($request->fullUrl());
         $cacheTtl = config('crm.api.cache_ttl', 300);
@@ -81,6 +82,14 @@ class PostApiController extends ApiController
                 ->with($this->parseIncludes($request, ['postCategory', 'user', 'tags', 'image']))
                 ->firstOrFail();
         });
+
+        // Markdown content negotiation for AI agents
+        if ($request->prefers('text/markdown')) {
+            return response($post->content ?? '', 200)
+                ->header('Content-Type', 'text/markdown; charset=utf-8')
+                ->header('X-Post-Title', $post->meta_title ?? $post->title)
+                ->header('X-Post-Slug', $post->slug);
+        }
 
         return (new PostResource($post))
             ->response()
