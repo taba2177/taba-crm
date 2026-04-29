@@ -49,8 +49,13 @@ class InstallCommand extends Command
             $this->task('Publishing package assets', fn() => $this->publishAssets());
             $this->task('Building frontend assets', fn() => $this->runNpmBuild());
             $this->task('Publishing Angular frontend', fn() => $this->publishAngularFrontend());
-            $this->task('Installing Angular npm packages', fn() => $this->runAngularNpmInstall());
-            $this->task('Building Angular frontend', fn() => $this->runAngularBuild());
+            $angularInstallOk = $this->task('Installing Angular npm packages', fn() => $this->runAngularNpmInstall());
+
+            if ($angularInstallOk) {
+                $this->task('Building Angular frontend', fn() => $this->runAngularBuild());
+            } else {
+                $this->warnings[] = 'Skipping Angular build because Angular npm install did not complete successfully.';
+            }
         } else {
             // When skipping frontend steps, still publish server-side assets.
             $this->task('Publishing package assets', fn() => $this->publishAssets());
@@ -571,7 +576,7 @@ class InstallCommand extends Command
             return false;
         }
 
-        $result = Process::timeout(300)->run('npm run build');
+        $result = Process::timeout(900)->run('npm run build');
         if (!$result->successful()) {
             $this->errors[] = 'npm run build failed: ' . $result->errorOutput();
             return false;
@@ -848,7 +853,8 @@ EOT;
             return true;
         }
 
-        $result = Process::path($frontendPath)->run('npm install');
+        // npm install commonly exceeds 60s in CI/Windows; allow a generous timeout.
+        $result = Process::timeout(900)->path($frontendPath)->run('npm install');
         if (! $result->successful()) {
             $this->errors[] = 'Angular npm install failed: ' . $result->errorOutput();
             return false;
@@ -866,9 +872,16 @@ EOT;
             return true;
         }
 
-        $result = Process::timeout(300)->path($frontendPath)->run('npm run build');
+        $npmCheck = Process::run('npm --version');
+        if (! $npmCheck->successful()) {
+            $this->warnings[] = 'npm not found — run `cd frontend && npm run build` manually.';
+            return true;
+        }
+
+        $result = Process::timeout(900)->path($frontendPath)->run('npm run build');
         if (! $result->successful()) {
-            $this->errors[] = 'Angular build failed: ' . $result->errorOutput();
+            $buildOutput = trim($result->errorOutput() . "\n" . $result->output());
+            $this->errors[] = 'Angular build failed: ' . $buildOutput;
             return false;
         }
 
