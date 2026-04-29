@@ -13,15 +13,27 @@ use Taba\Crm\Models\Page;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 
+// Resolve the SPA HTML entry. Angular ships with output "app.html" to avoid
+// clashing with Laravel's public/index.php; we accept either filename so
+// projects can rename freely.
+$resolveSpaIndex = static function (): ?string {
+    foreach (['app.html', 'index.html'] as $name) {
+        $path = public_path($name);
+        if (file_exists($path)) {
+            return $path;
+        }
+    }
+    return null;
+};
 
-Route::middleware('web')->group(function () {
+Route::middleware('web')->group(function () use ($resolveSpaIndex) {
 
 Route::get('/preview/post/{post}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
 
 Route::middleware(['crm.seo', 'crm.discovery'])
-    ->get('/', fn() => file_exists(public_path('index.html'))
-        ? response()->file(public_path('index.html'))
+    ->get('/', fn() => ($p = $resolveSpaIndex())
+        ? response()->file($p)
         : response('', 503))
     ->name('home');
 
@@ -94,10 +106,10 @@ Route::get('/{category}/{post:slug}',function ($category,$post) {
 
     })->name('posts.show');
 
-// Angular SPA catch-all — serves public/index.html for all non-API/admin paths
+// Angular SPA catch-all — serves the SPA HTML for all non-API/admin paths
 Route::middleware(['crm.seo', 'crm.discovery'])
-    ->get('/{any}', fn() => file_exists(public_path('index.html'))
-        ? response()->file(public_path('index.html'))
+    ->get('/{any}', fn() => ($p = $resolveSpaIndex())
+        ? response()->file($p)
         : response('', 503))
     ->where('any', '^(?!api|admin|filament|preview|sitemap|lang).*');
 

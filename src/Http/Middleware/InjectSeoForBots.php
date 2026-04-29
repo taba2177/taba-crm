@@ -28,12 +28,12 @@ class InjectSeoForBots
             return $response;
         }
 
-        $indexPath = public_path('index.html');
-        if (! file_exists($indexPath)) {
+        $indexPath = $this->resolveSpaIndex();
+        if ($indexPath === null) {
             return $response;
         }
 
-        $html = Cache::remember('spa_index_html', config('crm.api.cache_ttl', 300), fn() => file_get_contents($indexPath));
+        $html = Cache::remember('spa_index_html_' . md5($indexPath), config('crm.api.cache_ttl', 300), fn() => file_get_contents($indexPath));
         $html = $this->patchLang($html);
         [$meta, $jsonLd] = $this->buildSeoTags($request);
         $html = str_replace('</head>', $meta . $jsonLd . '</head>', $html);
@@ -42,6 +42,17 @@ class InjectSeoForBots
     }
 
     // -------------------------------------------------------------------------
+
+    private function resolveSpaIndex(): ?string
+    {
+        foreach (['app.html', 'index.html'] as $name) {
+            $path = public_path($name);
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+        return null;
+    }
 
     private function isBot(Request $request): bool
     {

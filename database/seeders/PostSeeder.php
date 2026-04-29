@@ -20,6 +20,16 @@ class PostSeeder extends Seeder
 
         $posts = require database_path('seeders/data/posts.php');
 
+        // Ensure every row has a user_id — posts.user_id is NOT NULL.
+        // Default to the first user (super admin seeded just before this seeder).
+        $defaultUserId = DB::table('users')->value('id') ?? 1;
+        foreach ($posts as &$row) {
+            if (! array_key_exists('user_id', $row) || $row['user_id'] === null) {
+                $row['user_id'] = $defaultUserId;
+            }
+        }
+        unset($row);
+
         $driver = DB::connection()->getDriverName();
 
         // 1. Disable Foreign Key Checks (Crucial if a related table is missing)
