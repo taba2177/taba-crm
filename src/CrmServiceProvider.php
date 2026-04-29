@@ -73,6 +73,12 @@ class CrmServiceProvider extends ServiceProvider
             $this->app['router']->aliasMiddleware($alias, $class);
         }
 
+        // SEO bot-injection middleware
+        $this->app['router']->aliasMiddleware('crm.seo', \Taba\Crm\Http\Middleware\InjectSeoForBots::class);
+
+        // Agent-ready discovery header middleware
+        $this->app['router']->aliasMiddleware('crm.discovery', \Taba\Crm\Http\Middleware\AddDiscoveryHeaders::class);
+
         // Discover built-in section components
         ComponentRegistry::discoverIn(
             __DIR__ . '/Components/Sections',

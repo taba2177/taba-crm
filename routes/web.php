@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Session;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 use Taba\Crm\Http\Controllers\GoogleTranslateController;
-use Taba\Crm\Livewire\Post\Show as PostShow;
-use Taba\Crm\Livewire\Posts;
-use Taba\Crm\Livewire\Home;
 use Taba\Crm\Http\Controllers\PageController;
 use Taba\Crm\Http\Controllers\PostController;
 use Taba\Crm\Http\Controllers\PreviewController;
@@ -22,14 +19,18 @@ Route::middleware('web')->group(function () {
 Route::get('/preview/post/{post}', [PreviewController::class, 'post'])->name('preview.post');
 Route::get('/preview/category/{category}', [CategoryPreviewController::class, 'category'])->name('preview.category');
 
-Route::get('/', Home::class)->name('home');
+Route::middleware(['crm.seo', 'crm.discovery'])
+    ->get('/', fn() => file_exists(public_path('index.html'))
+        ? response()->file(public_path('index.html'))
+        : response('', 503))
+    ->name('home');
 
 Route::get('/sitemap', function () {
     $sitemap = Sitemap::create();
 
     // 1. Add the homepage
     $sitemap->add(
-        Url::create(route('home'))
+        Url::create(url('/'))
             ->setLastModificationDate(now())
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
             ->setPriority(1.0)
@@ -39,7 +40,7 @@ Route::get('/sitemap', function () {
     // Fetches only categories that should be public (e.g., shown in the header)
     PostCategory::where('register_in_header', true)->each(function (PostCategory $category) use ($sitemap) {
         $sitemap->add(
-            Url::create(route('dynamic.route', ['slug' => $category->slug]))
+            Url::create(url($category->slug))
                 ->setLastModificationDate($category->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                 ->setPriority(0.8)
@@ -49,15 +50,11 @@ Route::get('/sitemap', function () {
     // 3. Add individual Post pages (using your 'posts.show' route)
     Post::with('postCategory') // Use the correct relationship name
         ->published()
-        ->whereNotNull('homepage_section_component')
         ->each(function (Post $post) use ($sitemap) {
             // Ensure the post has a category to prevent errors
             if ($post->postCategory) {
                 $sitemap->add(
-                    Url::create(route('posts.show', [
-                        'category' => $post->postCategory->slug,
-                        'post' => $post->slug
-                    ]))
+                    Url::create(url($post->postCategory->slug . '/' . $post->slug))
                     ->setLastModificationDate($post->updated_at)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setPriority(0.7)
@@ -96,6 +93,13 @@ Route::get('/{category}/{post:slug}',function ($category,$post) {
     } // [PostController::class, 'show'])
 
     })->name('posts.show');
+
+// Angular SPA catch-all — serves public/index.html for all non-API/admin paths
+Route::middleware(['crm.seo', 'crm.discovery'])
+    ->get('/{any}', fn() => file_exists(public_path('index.html'))
+        ? response()->file(public_path('index.html'))
+        : response('', 503))
+    ->where('any', '^(?!api|admin|filament|preview|sitemap|lang).*');
 
 });
 
