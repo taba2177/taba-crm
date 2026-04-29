@@ -93,6 +93,82 @@ And you're done! 🎉 You can now visit `/admin` and log in to access your new C
 
 ---
 
+---
+
+## 🅰️ Angular SPA Frontend
+
+`crm:install` automatically publishes the Angular 21 SPA frontend to the `frontend/` directory in your Laravel root and wires up the Angular build output to be served as the public website.
+
+### What gets installed
+
+| Step | What happens |
+|------|--------------|
+| `Publishing Angular frontend` | Copies `packages/taba/crm/frontend/` → `frontend/` (skipped if already exists) |
+| `Installing Angular npm packages` | Runs `npm install` inside `frontend/` |
+| `Building Angular frontend` | Runs `npm run build` inside `frontend/` — output lands in `public/browser/` |
+
+To skip all frontend steps (server-side only):
+
+```bash
+php artisan crm:install --skip-frontend
+```
+
+### CSS Design Tokens
+
+Edit `frontend/src/styles/tokens.scss` to customise brand colours, fonts, and spacing:
+
+```scss
+// frontend/src/styles/tokens.scss
+:root {
+  --clr-primary: #0d6efd;
+  --clr-accent:  #ff6b35;
+  --font-heading: 'Cairo', sans-serif;
+}
+```
+
+---
+
+## 🔍 SEO & AI Discoverability
+
+### Middleware
+
+| Alias | Class | Purpose |
+|-------|-------|---------|
+| `crm.seo` | `InjectSeoForBots` | Detects crawlers and injects full `<meta>` + Open Graph tags into SPA HTML |
+| `crm.discovery` | `AddDiscoveryHeaders` | Adds `Link:` headers pointing to `/sitemap.xml`, OpenAPI spec, and API catalog |
+
+Apply them in your routes:
+
+```php
+Route::middleware(['crm.seo', 'crm.discovery'])->group(function () {
+    Route::get('/{any}', fn() => view('app'))->where('any', '.*');
+});
+```
+
+### `llms.txt`
+
+`crm:install` writes `public/llms.txt` — a human-and-AI-readable Markdown summary of the site and its API, following the emerging [llms.txt](https://llmstxt.org) convention. Regenerate at any time:
+
+```bash
+php artisan crm:install --skip-frontend
+```
+
+### `robots.txt`
+
+`crm:install` also creates or updates `public/robots.txt` with explicit `Allow` directives for AI crawlers (GPTBot, Google-Extended, etc.) and a `Sitemap:` pointer.
+
+### Markdown content negotiation
+
+The posts API supports `Accept: text/markdown` for AI agents that prefer raw Markdown over JSON:
+
+```bash
+curl -H "Accept: text/markdown" https://yoursite.com/api/v1/posts/my-post-slug
+```
+
+Response headers include `X-Post-Title` and `X-Post-Slug`.
+
+---
+
 ## 🏗️ v2 — Component System & Client Panel
 
 ### Polymorphic Section Components
