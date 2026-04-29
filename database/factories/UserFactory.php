@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Taba\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
+use Taba\Crm\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Taba\Crm\Models\User>
@@ -17,7 +17,7 @@ class UserFactory extends Factory
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = \Taba\Crm\Models\User::class;
 
     /**
      * The current password being used by the factory.

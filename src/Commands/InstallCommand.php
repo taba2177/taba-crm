@@ -571,7 +571,7 @@ class InstallCommand extends Command
             return false;
         }
 
-        $result = Process::run('npm run build');
+        $result = Process::timeout(300)->run('npm run build');
         if (!$result->successful()) {
             $this->errors[] = 'npm run build failed: ' . $result->errorOutput();
             return false;
@@ -866,7 +866,7 @@ EOT;
             return true;
         }
 
-        $result = Process::path($frontendPath)->run('npm run build');
+        $result = Process::timeout(300)->path($frontendPath)->run('npm run build');
         if (! $result->successful()) {
             $this->errors[] = 'Angular build failed: ' . $result->errorOutput();
             return false;

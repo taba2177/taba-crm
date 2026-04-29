@@ -13,11 +13,14 @@ class AddDiscoveryHeaders
     {
         $response = $next($request);
 
-        $links = [
-            '<' . url('/sitemap.xml') . '>; rel="sitemap"',
-            '<' . url('/llms.txt') . '>; rel="describedby"',
-            '<' . url('/api/v1') . '>; rel="service"',
-        ];
+        $links = ['<' . url('/api/v1') . '>; rel="service"'];
+
+        if (file_exists(public_path('sitemap.xml'))) {
+            array_unshift($links, '<' . url('/sitemap.xml') . '>; rel="sitemap"');
+        }
+        if (file_exists(public_path('llms.txt'))) {
+            $links[] = '<' . url('/llms.txt') . '>; rel="describedby"';
+        }
 
         $response->headers->set('Link', implode(', ', $links));
         $response->headers->set('X-Api-Catalog', url('/api/v1'));

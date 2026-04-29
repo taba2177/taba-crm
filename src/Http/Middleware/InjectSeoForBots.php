@@ -33,7 +33,7 @@ class InjectSeoForBots
             return $response;
         }
 
-        $html = file_get_contents($indexPath);
+        $html = Cache::remember('spa_index_html', config('crm.api.cache_ttl', 300), fn() => file_get_contents($indexPath));
         $html = $this->patchLang($html);
         [$meta, $jsonLd] = $this->buildSeoTags($request);
         $html = str_replace('</head>', $meta . $jsonLd . '</head>', $html);
@@ -54,7 +54,12 @@ class InjectSeoForBots
 
     private function patchLang(string $html): string
     {
-        return preg_replace('/<html([^>]*)>/i', '<html$1 lang="' . app()->getLocale() . '">', $html, 1);
+        $locale = app()->getLocale();
+        // Replace existing lang attribute if present, otherwise append it
+        if (preg_match('/<html[^>]*\slang=/i', $html)) {
+            return preg_replace('/(<html[^>]*)\slang="[^"]*"/i', '$1 lang="' . $locale . '"', $html, 1);
+        }
+        return preg_replace('/<html([^>]*)>/i', '<html$1 lang="' . $locale . '">', $html, 1);
     }
 
     private function buildSeoTags(Request $request): array
@@ -133,28 +138,35 @@ class InjectSeoForBots
         string $title, string $description, string $canonical,
         string $imageUrl, string $imageAlt, string $ogType
     ): string {
+        $safeCanonical = e($canonical);
         $lines = [
-            "<title>{$title}</title>",
+            "<title>" . e($title) . "</title>",
             "<meta name=\"description\" content=\"" . e($description) . "\">",
             "<meta name=\"robots\" content=\"index, follow\">",
             "<meta property=\"og:title\" content=\"" . e($title) . "\">",
             "<meta property=\"og:description\" content=\"" . e($description) . "\">",
-            "<meta property=\"og:url\" content=\"{$canonical}\">",
-            "<meta property=\"og:type\" content=\"{$ogType}\">",
+            "<meta property=\"og:url\" content=\"{$safeCanonical}\">",
+            "<meta property=\"og:type\" content=\"" . e($ogType) . "\">",
             "<meta name=\"twitter:card\" content=\"summary_large_image\">",
             "<meta name=\"twitter:title\" content=\"" . e($title) . "\">",
             "<meta name=\"twitter:description\" content=\"" . e($description) . "\">",
-            "<link rel=\"canonical\" href=\"{$canonical}\">",
-            "<link rel=\"alternate\" hreflang=\"ar\" href=\"{$canonical}\">",
-            "<link rel=\"alternate\" hreflang=\"en\" href=\"{$canonical}\">",
-            "<link rel=\"alternate\" hreflang=\"x-default\" href=\"{$canonical}\">",
+            "<link rel=\"canonical\" href=\"{$safeCanonical}\">",
         ];
 
+        $locales = config('crm.available_locales', ['ar']);
+        foreach ((array) $locales as $locale) {
+            $lines[] = "<link rel=\"alternate\" hreflang=\"{$locale}\" href=\"{$safeCanonical}\">";
+        }
+        if (count((array) $locales) > 1) {
+            $lines[] = "<link rel=\"alternate\" hreflang=\"x-default\" href=\"{$safeCanonical}\">";
+        }
+
         if ($imageUrl) {
-            $lines[] = "<link rel=\"preload\" as=\"image\" fetchpriority=\"high\" href=\"{$imageUrl}\">";
-            $lines[] = "<meta property=\"og:image\" content=\"{$imageUrl}\">";
+            $safeImageUrl = e($imageUrl);
+            $lines[] = "<link rel=\"preload\" as=\"image\" fetchpriority=\"high\" href=\"{$safeImageUrl}\">";
+            $lines[] = "<meta property=\"og:image\" content=\"{$safeImageUrl}\">";
             $lines[] = "<meta property=\"og:image:alt\" content=\"" . e($imageAlt) . "\">";
-            $lines[] = "<meta name=\"twitter:image\" content=\"{$imageUrl}\">";
+            $lines[] = "<meta name=\"twitter:image\" content=\"{$safeImageUrl}\">";
             $lines[] = "<meta name=\"twitter:image:alt\" content=\"" . e($imageAlt) . "\">";
         }
 

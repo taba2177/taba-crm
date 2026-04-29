@@ -16,6 +16,8 @@ class AdvertisementsOverview extends BaseWidget
     protected function getStats(): array
     {
         return PostCategory::withCount(['posts' => fn($q) => $q->published()])
+            ->orderByDesc('posts_count')
+            ->limit(5)
             ->get()
             ->map(fn($cat) => Stat::make($cat->name, $cat->posts_count))
             ->toArray();
