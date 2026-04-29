@@ -9,7 +9,7 @@ use Taba\Crm\Models\ContactEntry;
 
 class OffersOverview extends BaseWidget
 {
-    protected static ?string $heading = 'الرسائل الواردة';
+    protected ?string $heading = 'الرسائل الواردة';
     protected static ?int $sort = 7;
 
     protected function getStats(): array
