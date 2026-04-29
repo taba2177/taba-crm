@@ -817,22 +817,20 @@ EOT;
 
     protected function publishAngularFrontend(): bool
     {
-        $src  = __DIR__ . '/../../frontend';
+        $source = dirname(__DIR__, 2) . '/frontend';
         $dest = base_path('frontend');
 
         if (File::isDirectory($dest)) {
-            $this->info('   ⏭  frontend/ already exists — skipping copy.');
+            $this->warnings[] = 'Angular frontend already exists at ' . $dest . ' - skipping copy (customize freely).';
             return true;
         }
 
-        if (! File::isDirectory($src)) {
+        if (! File::isDirectory($source)) {
             $this->warnings[] = 'Package frontend/ directory not found — skipping Angular publish.';
             return true;
         }
 
-        File::copyDirectory($src, $dest);
-        $this->info('   ✓ Angular frontend published to frontend/');
-        return true;
+        return File::copyDirectory($source, $dest);
     }
 
     protected function runAngularNpmInstall(): bool
@@ -852,7 +850,7 @@ EOT;
 
         $result = Process::path($frontendPath)->run('npm install');
         if (! $result->successful()) {
-            $this->warnings[] = 'Angular npm install failed: ' . $result->errorOutput();
+            $this->errors[] = 'Angular npm install failed: ' . $result->errorOutput();
             return false;
         }
 
@@ -870,7 +868,7 @@ EOT;
 
         $result = Process::path($frontendPath)->run('npm run build');
         if (! $result->successful()) {
-            $this->warnings[] = 'Angular build failed: ' . $result->errorOutput();
+            $this->errors[] = 'Angular build failed: ' . $result->errorOutput();
             return false;
         }
 
@@ -879,53 +877,55 @@ EOT;
 
     protected function generateLlmsTxt(): bool
     {
-        $dest = public_path('llms.txt');
-
         try {
             $siteName    = \Taba\Crm\Models\CrmSetting::get('site_name', 'CRM Site');
-            $description = \Taba\Crm\Models\CrmSetting::get('site_description', '');
+            $siteDesc = \Taba\Crm\Models\CrmSetting::get('site_description', '');
         } catch (\Throwable) {
             $siteName    = config('app.name', 'CRM Site');
-            $description = '';
+            $siteDesc = '';
         }
 
         $siteName    = is_array($siteName) ? ($siteName['en'] ?? reset($siteName)) : (string) $siteName;
-        $description = is_array($description) ? ($description['en'] ?? reset($description)) : (string) $description;
+        $siteDesc = is_array($siteDesc) ? ($siteDesc['en'] ?? reset($siteDesc)) : (string) $siteDesc;
+        $base = url('/');
+        $apiBase = url('/api/v1');
 
-        $content = <<<TXT
+        $content = <<<LLMS
         # {$siteName}
 
-        > {$description}
+        > {$siteDesc}
 
-        ## API
+        This site is built on the taba/crm Laravel package. Content is available via a REST API.
 
-        - JSON REST API: /api/v1/
-        - Posts (Markdown): GET /api/v1/posts/{slug} with Accept: text/markdown
-        - Action tracking: POST /api/v1/actions
+        ## Key URLs
 
-        ## Discovery
+        - Homepage: {$base}/
+        - Sitemap: {$base}/sitemap.xml
+        - Posts API: {$apiBase}/posts
+        - Categories API: {$apiBase}/categories
 
-        - Sitemap: /sitemap.xml
-        - OpenAPI: /api/openapi.yaml
-        - API Catalog: X-Api-Catalog response header
-        TXT;
+        ## Content negotiation
 
-        File::put($dest, preg_replace('/^        /m', '', $content));
-        $this->info('   ✓ Generated public/llms.txt');
+        Individual post pages support `Accept: text/markdown` for plain Markdown responses.
+        Example: GET {$apiBase}/posts/{slug} with Accept: text/markdown
+
+        ## Allowed bots
+
+        All AI crawlers are permitted. See /robots.txt for details.
+        LLMS;
+
+        File::put(public_path('llms.txt'), preg_replace('/^        /m', '', $content));
         return true;
     }
 
     protected function writeRobotsTxt(): bool
     {
-        $dest    = public_path('robots.txt');
-        $siteUrl = rtrim(config('app.url', 'http://localhost'), '/');
+        $sitemapUrl = url('/sitemap.xml');
+        $robotsPath = public_path('robots.txt');
 
-        if (File::exists($dest)) {
-            $existing = File::get($dest);
-            if (str_contains($existing, 'Sitemap:')) {
-                $this->info('   ⏭  robots.txt already has Sitemap directive — skipping.');
-                return true;
-            }
+        if (File::exists($robotsPath) && str_contains(File::get($robotsPath), 'Sitemap:')) {
+            $this->warnings[] = 'robots.txt already has a Sitemap directive - skipping overwrite.';
+            return true;
         }
 
         $content = <<<TXT
@@ -933,21 +933,32 @@ EOT;
         Allow: /
         Disallow: /admin
         Disallow: /filament
+        Disallow: /api/v1/actions
+        Disallow: /preview/
 
-        # AI crawlers — allow content discovery
+        # AI crawlers - explicitly allowed
         User-agent: GPTBot
-        Allow: /api/v1/posts
-        Allow: /api/v1/categories
+        Allow: /
 
-        User-agent: Google-Extended
-        Allow: /api/v1/posts
-        Allow: /api/v1/categories
+        User-agent: ClaudeBot
+        Allow: /
 
-        Sitemap: {$siteUrl}/sitemap.xml
+        User-agent: PerplexityBot
+        Allow: /
+
+        User-agent: anthropic-ai
+        Allow: /
+
+        User-agent: Applebot
+        Allow: /
+
+        User-agent: Googlebot-Extended
+        Allow: /
+
+        Sitemap: {$sitemapUrl}
         TXT;
 
-        File::put($dest, preg_replace('/^        /m', '', $content));
-        $this->info('   ✓ Written public/robots.txt');
+        File::put($robotsPath, preg_replace('/^        /m', '', $content));
         return true;
     }
 }
