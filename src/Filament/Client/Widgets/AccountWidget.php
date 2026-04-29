@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/Filament/Client/Widgets/AccountWidget.php
 
 namespace Taba\Crm\Filament\Client\Widgets;

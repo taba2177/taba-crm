@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/Filament/Client/Widgets/SurveyAnswersChart.php
 
 namespace Taba\Crm\Filament\Client\Widgets;

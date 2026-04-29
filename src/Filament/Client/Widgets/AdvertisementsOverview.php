@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/Filament/Client/Widgets/AdvertisementsOverview.php
 
 namespace Taba\Crm\Filament\Client\Widgets;

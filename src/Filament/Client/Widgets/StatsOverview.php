@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/Filament/Client/Widgets/StatsOverview.php
 
 namespace Taba\Crm\Filament\Client\Widgets;
