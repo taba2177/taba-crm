@@ -48,11 +48,18 @@ class InstallCommand extends Command
             $this->task('Installing NPM packages', fn() => $this->runNpmInstall());
             $this->task('Publishing package assets', fn() => $this->publishAssets());
             $this->task('Building frontend assets', fn() => $this->runNpmBuild());
+            $this->task('Publishing Angular frontend', fn() => $this->publishAngularFrontend());
+            $this->task('Installing Angular npm packages', fn() => $this->runAngularNpmInstall());
+            $this->task('Building Angular frontend', fn() => $this->runAngularBuild());
         } else {
             // When skipping frontend steps, still publish server-side assets.
             $this->task('Publishing package assets', fn() => $this->publishAssets());
             $this->info('Skipped frontend tasks (--skip-frontend).');
         }
+
+        // Always generate discovery files
+        $this->task('Generating llms.txt', fn() => $this->generateLlmsTxt());
+        $this->task('Writing robots.txt', fn() => $this->writeRobotsTxt());
 
         // Run Shield setup AFTER AdminPanelProvider is fully configured with ->default()
         $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
@@ -802,5 +809,145 @@ EOT;
                 $this->warn('Could not automatically add admin.css to vite.config.js. Please add it manually: ' . $adminCssPath);
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Angular SPA helpers (Task 10)
+    // -------------------------------------------------------------------------
+
+    protected function publishAngularFrontend(): bool
+    {
+        $src  = __DIR__ . '/../../frontend';
+        $dest = base_path('frontend');
+
+        if (File::isDirectory($dest)) {
+            $this->info('   ⏭  frontend/ already exists — skipping copy.');
+            return true;
+        }
+
+        if (! File::isDirectory($src)) {
+            $this->warnings[] = 'Package frontend/ directory not found — skipping Angular publish.';
+            return true;
+        }
+
+        File::copyDirectory($src, $dest);
+        $this->info('   ✓ Angular frontend published to frontend/');
+        return true;
+    }
+
+    protected function runAngularNpmInstall(): bool
+    {
+        $frontendPath = base_path('frontend');
+
+        if (! File::isDirectory($frontendPath)) {
+            $this->warnings[] = 'frontend/ not found — skipping Angular npm install.';
+            return true;
+        }
+
+        $npmCheck = Process::run('npm --version');
+        if (! $npmCheck->successful()) {
+            $this->warnings[] = 'npm not found — run `cd frontend && npm install` manually.';
+            return true;
+        }
+
+        $result = Process::path($frontendPath)->run('npm install');
+        if (! $result->successful()) {
+            $this->warnings[] = 'Angular npm install failed: ' . $result->errorOutput();
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function runAngularBuild(): bool
+    {
+        $frontendPath = base_path('frontend');
+
+        if (! File::isDirectory($frontendPath)) {
+            $this->warnings[] = 'frontend/ not found — skipping Angular build.';
+            return true;
+        }
+
+        $result = Process::path($frontendPath)->run('npm run build');
+        if (! $result->successful()) {
+            $this->warnings[] = 'Angular build failed: ' . $result->errorOutput();
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function generateLlmsTxt(): bool
+    {
+        $dest = public_path('llms.txt');
+
+        try {
+            $siteName    = \Taba\Crm\Models\CrmSetting::get('site_name', 'CRM Site');
+            $description = \Taba\Crm\Models\CrmSetting::get('site_description', '');
+        } catch (\Throwable) {
+            $siteName    = config('app.name', 'CRM Site');
+            $description = '';
+        }
+
+        $siteName    = is_array($siteName) ? ($siteName['en'] ?? reset($siteName)) : (string) $siteName;
+        $description = is_array($description) ? ($description['en'] ?? reset($description)) : (string) $description;
+
+        $content = <<<TXT
+        # {$siteName}
+
+        > {$description}
+
+        ## API
+
+        - JSON REST API: /api/v1/
+        - Posts (Markdown): GET /api/v1/posts/{slug} with Accept: text/markdown
+        - Action tracking: POST /api/v1/actions
+
+        ## Discovery
+
+        - Sitemap: /sitemap.xml
+        - OpenAPI: /api/openapi.yaml
+        - API Catalog: X-Api-Catalog response header
+        TXT;
+
+        File::put($dest, preg_replace('/^        /m', '', $content));
+        $this->info('   ✓ Generated public/llms.txt');
+        return true;
+    }
+
+    protected function writeRobotsTxt(): bool
+    {
+        $dest    = public_path('robots.txt');
+        $siteUrl = rtrim(config('app.url', 'http://localhost'), '/');
+
+        if (File::exists($dest)) {
+            $existing = File::get($dest);
+            if (str_contains($existing, 'Sitemap:')) {
+                $this->info('   ⏭  robots.txt already has Sitemap directive — skipping.');
+                return true;
+            }
+        }
+
+        $content = <<<TXT
+        User-agent: *
+        Allow: /
+        Disallow: /admin
+        Disallow: /filament
+
+        # AI crawlers — allow content discovery
+        User-agent: GPTBot
+        Allow: /api/v1/posts
+        Allow: /api/v1/categories
+
+        User-agent: Google-Extended
+        Allow: /api/v1/posts
+        Allow: /api/v1/categories
+
+        Sitemap: {$siteUrl}/sitemap.xml
+        TXT;
+
+        File::put($dest, preg_replace('/^        /m', '', $content));
+        $this->info('   ✓ Written public/robots.txt');
+        return true;
     }
 }
