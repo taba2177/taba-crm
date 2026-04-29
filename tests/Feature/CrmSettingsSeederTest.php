@@ -46,7 +46,7 @@ class CrmSettingsSeederTest extends TestCase
         $post = Post::factory()->create([
             'post_category_id' => $category->id,
             'show_in_home' => true,
-            'status' => 'published',
+            'is_published' => true,
             'meta_title' => 'SEO Title from Post',
             'meta_description' => 'SEO Description from Post',
             'order' => 1,

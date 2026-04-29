@@ -3,6 +3,7 @@
 namespace Taba\Crm\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Taba\Crm\CrmServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
@@ -24,6 +25,17 @@ abstract class TestCase extends Orchestra
             }
         });
 
+        // Register package seeders autoloader for test runtime
+        spl_autoload_register(static function (string $class): void {
+            $prefix = 'Taba\\Crm\\Database\\Seeders\\';
+            if (str_starts_with($class, $prefix)) {
+                $file = __DIR__ . '/../database/seeders/' . substr($class, strlen($prefix)) . '.php';
+                if (file_exists($file)) {
+                    require_once $file;
+                }
+            }
+        });
+
         parent::setUp();
 
         $this->setUpDatabase();
@@ -33,6 +45,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             CrmServiceProvider::class,
+            LivewireServiceProvider::class,
             PermissionServiceProvider::class,
         ];
     }

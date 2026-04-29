@@ -31,16 +31,16 @@ class PostModelTest extends TestCase
         $category = PostCategory::factory()->create(['name' => 'Test Category']);
         $post = Post::factory()->create(['post_category_id' => $category->id]);
 
-        $this->assertInstanceOf(PostCategory::class, $post->category);
-        $this->assertEquals('Test Category', $post->category->name);
+        $this->assertInstanceOf(PostCategory::class, $post->postCategory);
+        $this->assertEquals('Test Category', $post->postCategory->name);
     }
 
     /** @test */
     public function it_can_scope_published_posts()
     {
-        Post::factory()->create(['status' => 'published']);
-        Post::factory()->create(['status' => 'draft']);
-        Post::factory()->create(['status' => 'published']);
+        Post::factory()->create(['is_published' => true]);
+        Post::factory()->create(['is_published' => false]);
+        Post::factory()->create(['is_published' => true]);
 
         $publishedPosts = Post::published()->get();
 
@@ -50,9 +50,9 @@ class PostModelTest extends TestCase
     /** @test */
     public function it_can_filter_posts_for_home()
     {
-        Post::factory()->create(['show_in_home' => true, 'status' => 'published']);
-        Post::factory()->create(['show_in_home' => false, 'status' => 'published']);
-        Post::factory()->create(['show_in_home' => true, 'status' => 'published']);
+        Post::factory()->create(['show_in_home' => true, 'is_published' => true]);
+        Post::factory()->create(['show_in_home' => false, 'is_published' => true]);
+        Post::factory()->create(['show_in_home' => true, 'is_published' => true]);
 
         $homePosts = Post::where('show_in_home', true)->published()->get();
 
@@ -64,16 +64,16 @@ class PostModelTest extends TestCase
     {
         $post = Post::factory()->create([
             'title' => ['en' => 'English Title', 'ar' => 'عنوان عربي'],
-            'excerpt' => ['en' => 'English Excerpt', 'ar' => 'مقتطف عربي'],
+            'meta_description' => ['en' => 'English Excerpt', 'ar' => 'مقتطف عربي'],
         ]);
 
         app()->setLocale('en');
         $this->assertEquals('English Title', $post->title);
-        $this->assertEquals('English Excerpt', $post->excerpt);
+        $this->assertEquals('English Excerpt', $post->meta_description);
 
         app()->setLocale('ar');
         $this->assertEquals('عنوان عربي', $post->title);
-        $this->assertEquals('مقتطف عربي', $post->excerpt);
+        $this->assertEquals('مقتطف عربي', $post->meta_description);
     }
 
     /** @test */

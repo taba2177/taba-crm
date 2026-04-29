@@ -193,11 +193,39 @@ class Home extends Component
         if ($seoPost) {
             $this->seoimage = $seoPost->image?->url;
             // Enrich description with first post's content if available
-            $postDesc = $seoPost->meta_description ?: Str::limit(strip_tags($seoPost->content), 100);
+            $metaDescription = $this->normalizeTextValue($seoPost->meta_description);
+            $postDesc = $metaDescription !== ''
+                ? $metaDescription
+                : Str::limit(strip_tags($this->normalizeTextValue($seoPost->content)), 100);
             if ($postDesc) {
                 $this->metaDescription .= ' - ' . $postDesc;
             }
         }
+    }
+
+    private function normalizeTextValue(mixed $value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            if (isset($value[app()->getLocale()]) && is_string($value[app()->getLocale()])) {
+                return $value[app()->getLocale()];
+            }
+
+            if (isset($value['en']) && is_string($value['en'])) {
+                return $value['en'];
+            }
+
+            if (isset($value['ar']) && is_string($value['ar'])) {
+                return $value['ar'];
+            }
+
+            return json_encode($value, JSON_UNESCAPED_UNICODE) ?: '';
+        }
+
+        return (string) ($value ?? '');
     }
 
     protected function setSeoMetadata()

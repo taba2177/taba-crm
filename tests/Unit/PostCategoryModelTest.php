@@ -35,12 +35,12 @@ class PostCategoryModelTest extends TestCase
     public function it_can_get_published_posts_count()
     {
         $category = PostCategory::factory()->create();
-        Post::factory()->create(['post_category_id' => $category->id, 'status' => 'published', 'show_in_home' => true]);
-        Post::factory()->create(['post_category_id' => $category->id, 'status' => 'draft', 'show_in_home' => true]);
-        Post::factory()->create(['post_category_id' => $category->id, 'status' => 'published', 'show_in_home' => true]);
+        Post::factory()->create(['post_category_id' => $category->id, 'is_published' => true, 'show_in_home' => true]);
+        Post::factory()->create(['post_category_id' => $category->id, 'is_published' => false, 'show_in_home' => true]);
+        Post::factory()->create(['post_category_id' => $category->id, 'is_published' => true, 'show_in_home' => true]);
 
         $category->loadCount(['posts' => function ($query) {
-            $query->where('show_in_home', true)->where('status', 'published');
+            $query->where('show_in_home', true)->published();
         }]);
 
         $this->assertEquals(2, $category->posts_count);
@@ -94,12 +94,12 @@ class PostCategoryModelTest extends TestCase
         $firstPost = Post::factory()->create([
             'post_category_id' => $category->id,
             'order' => 1,
-            'status' => 'published',
+            'is_published' => true,
         ]);
         Post::factory()->create([
             'post_category_id' => $category->id,
             'order' => 2,
-            'status' => 'published',
+            'is_published' => true,
         ]);
 
         $category->load('firstPost');
