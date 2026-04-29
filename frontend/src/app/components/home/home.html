@@ -1,3 +1,11 @@
+<!--
+  STARTER TEMPLATE — taba/crm
+  This home component is a styled scaffold meant to be customised per project.
+  Brand-specific text (section headlines, feature card titles, marketing copy)
+  remains hardcoded inline in this file by design — replace those strings, the
+  imagery, and the section ordering to fit the host site. Dynamic data
+  (titles, descriptions, posts) is already bound to the CRM API/settings.
+-->
 @if (data()) {
   <div class="overflow-x-hidden bg-surface text-wood-900 font-sans selection:bg-wood-900 selection:text-accent group/page">
 
@@ -25,17 +33,16 @@
                   <div class="max-w-4xl mx-auto text-center">
                     <div class="inline-flex items-center gap-4 mb-10">
                       <span class="h-[1px] bg-accent/60 w-12"></span>
-                      <span class="text-accent/90 tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">مؤسسة روعة الغد</span>
+                      <span class="text-accent/90 tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">{{ t(settings()?.crm_business_name) || 'Your Brand' }}</span>
                       <span class="h-[1px] bg-accent/60 w-12"></span>
                     </div>
 
                     @if (section.posts && section.posts[0]) {
                       <h1 class="text-4xl sm:text-5xl lg:text-[4.5rem] font-display font-extrabold leading-[1.05] mb-8 text-surface">
-                        نصنع الفخامة<br/>
-                        <span class="text-accent">من الخشب والزجاج</span>
+                        {{ t(section.posts[0].title) || (t(settings()?.crm_seo_default_title) || 'Welcome') }}
                       </h1>
                       <p class="text-base lg:text-lg text-wood-300/90 leading-relaxed mb-14 font-sans font-light max-w-2xl mx-auto">
-                        {{ t(settings()?.crm_business_description) || 'لتوفير الحلول الكاملة في أعمال الديكور والتصميم الداخلي والخارجي وكل ما يجعل تجربتك استثنائية وبجودة فائقة.' }}
+                        {{ t(settings()?.crm_business_description) || (t(settings()?.crm_seo_default_description) || '') }}
                       </p>
                     }
 
@@ -58,27 +65,23 @@
 
               <!-- Bottom stats bar -->
               <div class="w-full border-t border-surface/10">
-                <div class="max-w-[100rem] mx-auto px-6 sm:px-12 py-6 flex flex-wrap justify-center lg:justify-between gap-8 lg:gap-0">
-                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
-                    <span class="text-2xl font-bold text-surface">+100</span>
-                    <span>مشروع منجز</span>
+                <!--
+                  Hero stats bar — edit `crm_business_stats` (JSON array of {value,label}
+                  objects) in CRM Settings to populate. Falls back to hidden when empty.
+                -->
+                @if (settings()?.crm_business_stats?.length) {
+                  <div class="max-w-[100rem] mx-auto px-6 sm:px-12 py-6 flex flex-wrap justify-center lg:justify-between gap-8 lg:gap-0">
+                    @for (stat of settings()?.crm_business_stats; track $index) {
+                      <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
+                        <span class="text-2xl font-bold" [class.text-accent]="$last" [class.text-surface]="!$last">{{ stat.value }}</span>
+                        <span>{{ t(stat.label) }}</span>
+                      </div>
+                      @if (!$last) {
+                        <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
+                      }
+                    }
                   </div>
-                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
-                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
-                    <span class="text-2xl font-bold text-surface">2018</span>
-                    <span>سنة التأسيس</span>
-                  </div>
-                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
-                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
-                    <span class="text-2xl font-bold text-surface">الرياض</span>
-                    <span>المقر الرئيسي</span>
-                  </div>
-                  <div class="w-px h-8 bg-surface/10 hidden lg:block"></div>
-                  <div class="flex items-center gap-3 text-surface/60 text-sm font-display">
-                    <span class="text-2xl font-bold text-accent">100%</span>
-                    <span>جودة فاخرة</span>
-                  </div>
-                </div>
+                }
               </div>
             </div>
           </section>
@@ -104,11 +107,17 @@
                       <div class="absolute inset-0 bg-wood-900 mix-blend-color opacity-20"></div>
                     </div>
                   }
-                  <!-- brutalist floating box -->
-                  <div class="absolute -bottom-12 lg:-bottom-24 -left-6 lg:-left-12 bg-accent text-surface p-10 lg:p-16 shadow-2xl">
-                    <div class="text-[4rem] lg:text-[5.5rem] font-display font-bold leading-none mb-2 text-surface">2018</div>
-                    <div class="font-sans text-surface/80 uppercase tracking-[0.2em] text-xs font-semibold">سنة التأسيس<br>الرياض، السعودية</div>
-                  </div>
+                  <!-- brutalist floating box — edit or remove this static block in your project -->
+                  @if (settings()?.crm_business_founded_year || settings()?.crm_contact_city) {
+                    <div class="absolute -bottom-12 lg:-bottom-24 -left-6 lg:-left-12 bg-accent text-surface p-10 lg:p-16 shadow-2xl">
+                      @if (settings()?.crm_business_founded_year) {
+                        <div class="text-[4rem] lg:text-[5.5rem] font-display font-bold leading-none mb-2 text-surface">{{ settings()?.crm_business_founded_year }}</div>
+                      }
+                      <div class="font-sans text-surface/80 uppercase tracking-[0.2em] text-xs font-semibold">
+                        {{ t(settings()?.crm_business_founded_label) || '' }}{{ t(settings()?.crm_contact_city) ? ' · ' + t(settings()?.crm_contact_city) : '' }}
+                      </div>
+                    </div>
+                  }
                 </div>
 
                 <div class="pt-12 lg:pt-0 pr-0 lg:pr-12" scrollReveal="fade-left" [revealDelay]="200">
@@ -118,10 +127,10 @@
                   </div>
                   @if (section.posts && section.posts[0]) {
                     <h2 class="text-3xl lg:text-5xl font-display font-extrabold text-wood-950 mb-10 leading-[1.1]">
-                      نصنع الفارق في<br/><span class="text-accent italic font-serif">كل زاوية</span>
+                      {{ t(section.posts[0]?.title) || (t(section.subtitle) || '') }}
                     </h2>
                     <div class="text-base text-wood-600 font-sans leading-loose mb-14 text-justify">
-                      {{ t(section.posts[0]?.content) || 'انطلاقاً من مبدأ الطفرة العمرانية التي تشهدها المملكة العربية السعودية تأسست مؤسسة روعة الغد لتوفير الحلول الكاملة في أعمال الديكور والتصميم الداخلي والخارجي وكل ما يجعل تجربتك إستثنائية وبجودة فائقة.' }}
+                      {{ t(section.posts[0]?.content) || (t(section.description) || '') }}
                     </div>
                   }
 

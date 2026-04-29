@@ -1,5 +1,8 @@
 <?php
 
+// Generic starter categories for a fresh CRM install.
+// Edit titles/descriptions in the Filament admin or in this file before seeding.
+
 return [
     // ── 1. Homepage / Hero ─────────────────────────────────────────────
     [
@@ -12,8 +15,8 @@ return [
         'HEAVY_SECTION'      => 1,
         'section_component'  => 'hero-section',
         'order'              => 1,
-        'description'        => '{"en":"SBC Clean – Professional building cleaning services in Riyadh","ar":"SBC كلين – خدمات تنظيف مباني احترافية في الرياض"}',
-        'subtitle'           => '{"en":"Building Cleaning Specialists","ar":"متخصصون في أعمال تنظيف المباني"}',
+        'description'        => '{"en":"Welcome — replace this with your tagline","ar":"أهلًا بكم — استبدل هذا النص بشعار موقعك"}',
+        'subtitle'           => '{"en":"Your tagline goes here","ar":"اكتب شعارك هنا"}',
     ],
 
     // ── 2. About ───────────────────────────────────────────────────────
@@ -27,7 +30,7 @@ return [
         'HEAVY_SECTION'      => 0,
         'section_component'  => 'about-section',
         'order'              => 2,
-        'description'        => '{"en":"Learn more about SBC Clean and our commitment to quality","ar":"تعرّف على مؤسسة تخصص المباني والتزامنا بالجودة"}',
+        'description'        => '{"en":"Tell visitors who you are and what you do","ar":"عرّف الزوار بمن أنت وماذا تقدّم"}',
         'subtitle'           => '{"en":"Who We Are","ar":"من نحن"}',
     ],
 
@@ -42,8 +45,8 @@ return [
         'HEAVY_SECTION'      => 1,
         'section_component'  => 'services-section',
         'order'              => 3,
-        'description'        => '{"en":"Comprehensive cleaning and disinfection services for residential and commercial properties","ar":"خدمات تنظيف وتعقيم شاملة للمنشآت السكنية والتجارية"}',
-        'subtitle'           => '{"en":"What We Offer","ar":"ما نقدّمه لكم"}',
+        'description'        => '{"en":"List the services or products you provide","ar":"اعرض الخدمات أو المنتجات التي تقدّمها"}',
+        'subtitle'           => '{"en":"What We Offer","ar":"ما نقدّمه"}',
     ],
 
     // ── 4. Features / Why Choose Us ────────────────────────────────────
@@ -57,7 +60,7 @@ return [
         'HEAVY_SECTION'      => 0,
         'section_component'  => 'features-section',
         'order'              => 4,
-        'description'        => '{"en":"Our service standards and quality commitments","ar":"معايير خدماتنا والتزاماتنا بالجودة"}',
+        'description'        => '{"en":"Highlight what makes you stand out","ar":"اذكر ما يميّزك عن غيرك"}',
         'subtitle'           => '{"en":"Our Advantages","ar":"مميزاتنا"}',
     ],
 
@@ -72,8 +75,8 @@ return [
         'HEAVY_SECTION'      => 0,
         'section_component'  => 'partners-section',
         'order'              => 5,
-        'description'        => '{"en":"Trusted partners who share our commitment to excellence","ar":"شركاء موثوقون يشاركوننا التزامنا بالتميّز"}',
-        'subtitle'           => '{"en":"Our Trusted Partners","ar":"شركاؤنا الموثوقون"}',
+        'description'        => '{"en":"Companies and clients you have worked with","ar":"الشركات والعملاء الذين عملت معهم"}',
+        'subtitle'           => '{"en":"Trusted Partners","ar":"شركاء موثوقون"}',
     ],
 
     // ── 6. Branches / Coverage ─────────────────────────────────────────
@@ -87,8 +90,8 @@ return [
         'HEAVY_SECTION'      => 0,
         'section_component'  => 'branches-section',
         'order'              => 6,
-        'description'        => '{"en":"We serve Riyadh and surrounding areas","ar":"نخدم الرياض والمناطق المحيطة"}',
-        'subtitle'           => '{"en":"Where We Serve","ar":"أين نخدمكم"}',
+        'description'        => '{"en":"Where you operate or which areas you serve","ar":"أماكن عملك أو المناطق التي تخدمها"}',
+        'subtitle'           => '{"en":"Where We Serve","ar":"أين نخدم"}',
     ],
 
     // ── 7. Line of Work ────────────────────────────────────────────────
@@ -102,7 +105,7 @@ return [
         'HEAVY_SECTION'      => 0,
         'section_component'  => 'line-of-work-section',
         'order'              => 7,
-        'description'        => '{"en":"Our process from inspection to delivery","ar":"مراحل عملنا من المعاينة حتى التسليم"}',
+        'description'        => '{"en":"Your typical process from first contact to delivery","ar":"خطوات العمل من أول تواصل حتى التسليم"}',
         'subtitle'           => '{"en":"Our Process","ar":"خطوات العمل"}',
     ],
 ];
