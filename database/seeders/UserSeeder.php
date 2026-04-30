@@ -30,11 +30,14 @@ class UserSeeder extends Seeder
             return;
         }
 
-        // Create super admin user using App\Models\User
-        $user = User::factory()->create([
+        // Create super admin user using App\Models\User. Use ::create() rather
+        // than ::factory() so the seeder doesn't depend on a UserFactory whose
+        // namespace varies by host project (Database\Factories vs custom).
+        $user = User::create([
             'name' => 'Taba Admin',
             'email' => 'taba@admin.com',
             'password' => Hash::make('admin'),
+            'email_verified_at' => now(),
         ]);
 
         $this->command->info('Created super admin user: taba@admin.com');
