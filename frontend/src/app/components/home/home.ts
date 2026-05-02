@@ -35,10 +35,62 @@ export class Home implements OnInit {
   readonly PhoneIcon = Phone;
   readonly WhatsAppIcon = MessageCircle;
 
+  private mapLegacySectionComponent(component: string): string {
+    switch (component) {
+      case 'hero-section':
+        return 'hero';
+      case 'about-section':
+        return 'about';
+      case 'services-section':
+        return 'our-service';
+      case 'projects-section':
+        return 'our-projects';
+      case 'features-section':
+        return 'why-choose-us';
+      case 'partners-section':
+        return 'four-cards';
+      default:
+        return (component || '').replace('-section', '');
+    }
+  }
+
+  private normalizeHomePayload(payload: any): any {
+    if (!payload || typeof payload !== 'object') {
+      return { sections: [] };
+    }
+
+    if (Array.isArray(payload.sections)) {
+      return payload;
+    }
+
+    const categories = Array.isArray(payload.categories) ? payload.categories : [];
+    const sections = categories.map((category: any) => ({
+      ...category,
+      section_component: this.mapLegacySectionComponent(category.section_component || ''),
+      posts: Array.isArray(category.posts) ? category.posts : [],
+    }));
+
+    const featuredPosts = Array.isArray(payload.featured_posts) ? payload.featured_posts : [];
+    if (featuredPosts.length > 0 && !sections.some((s: any) => s.section_component === 'hero')) {
+      sections.unshift({
+        id: 'hero-section',
+        name: 'Hero',
+        slug: '',
+        section_component: 'hero',
+        posts: [featuredPosts[0]],
+      });
+    }
+
+    return {
+      ...payload,
+      sections,
+    };
+  }
+
   ngOnInit() {
     this.api.getHome().subscribe({
       next: (response: any) => {
-        this.data.set(response);
+        this.data.set(this.normalizeHomePayload(response));
         // Init Swiper after Angular renders the template
         setTimeout(() => this.initSwiper(), 500);
       },
@@ -50,10 +102,9 @@ export class Home implements OnInit {
     this.api.getNavigation().subscribe({
       next: (res: any) => {
         this.settings.set(res.settings || {});
-        const gen = res.settings?.general || {};
-        const name = t(gen['site_name']) || document.title;
-        const desc = t(gen['site_description']) || '';
-        const image = t(gen['site_logo']) || '';
+        const name = 'Professional Starter';
+        const desc = 'A modern, dynamic starter experience for any business.';
+        const image = t(res.settings?.crm_business_logo) || '';
         this.titleSvc.setTitle(name);
         this.meta.updateTag({ name: 'description', content: desc });
         this.meta.updateTag({ property: 'og:title', content: name });

@@ -9,10 +9,14 @@
   body {
     @apply bg-surface text-wood-900 font-sans antialiased;
     direction: rtl; /* Enforce RTL globally for Arabic layout */
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(214, 158, 46, 0.08), transparent 38%),
+      radial-gradient(circle at 85% 10%, rgba(15, 76, 129, 0.08), transparent 34%);
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    @apply font-serif tracking-tight;
   }
 }
 

@@ -33,7 +33,7 @@
                   <div class="max-w-4xl mx-auto text-center">
                     <div class="inline-flex items-center gap-4 mb-10">
                       <span class="h-[1px] bg-accent/60 w-12"></span>
-                      <span class="text-accent/90 tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">{{ t(settings()?.crm_business_name) || 'Your Brand' }}</span>
+                      <span class="text-accent/90 tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">Professional Starter</span>
                       <span class="h-[1px] bg-accent/60 w-12"></span>
                     </div>
 
@@ -48,7 +48,7 @@
 
                     <div class="flex flex-col sm:flex-row gap-5 items-center justify-center">
                       <a routerLink="/contact" class="group relative px-10 py-5 bg-accent text-surface text-center overflow-hidden inline-flex justify-center items-center gap-3 rounded-full hover:shadow-[0_0_60px_rgba(232,184,75,0.35)] transition-all duration-500">
-                        <span class="relative z-10 font-display font-bold text-base tracking-wide">اطلب استشارة مجانية</span>
+                        <span class="relative z-10 font-display font-bold text-base tracking-wide">ابدأ مشروعك الآن</span>
                         <lucide-icon [img]="ArrowLeftIcon" class="w-5 h-5 relative z-10 group-hover:-translate-x-2 transition-transform"></lucide-icon>
                       </a>
                       @if (settings().crm_contact_whatsapp) {
@@ -122,7 +122,7 @@
 
                 <div class="pt-12 lg:pt-0 pr-0 lg:pr-12" scrollReveal="fade-left" [revealDelay]="200">
                   <div class="flex items-center gap-6 mb-10">
-                     <span class="text-accent uppercase tracking-[0.2em] font-display font-bold text-sm">من نحن</span>
+                    <span class="text-accent uppercase tracking-[0.2em] font-display font-bold text-sm">{{ t(section.name) || 'عن الخدمة' }}</span>
                      <span class="h-px bg-wood-300 flex-1"></span>
                   </div>
                   @if (section.posts && section.posts[0]) {
@@ -139,16 +139,16 @@
                       <div class="w-14 h-14 bg-wood-100 flex items-center justify-center text-wood-900 mb-6 group-hover:bg-wood-900 group-hover:text-accent transition-colors">
                         <lucide-icon [img]="CheckCircleIcon" class="w-6 h-6"></lucide-icon>
                       </div>
-                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">الجودة الفائقة</h4>
-                      <p class="text-wood-600 text-sm leading-relaxed">نعمل بشكل استثنائي وننتج تصاميم فريدة.</p>
+                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">جودة تنفيذ عالية</h4>
+                      <p class="text-wood-600 text-sm leading-relaxed">نقدّم حلولاً دقيقة بتركيز على الأداء والنتيجة النهائية.</p>
                     </div>
 
                     <div class="group border border-wood-200 hover:border-wood-900 p-8 transition-colors bg-surface">
                       <div class="w-14 h-14 bg-wood-100 flex items-center justify-center text-wood-900 mb-6 group-hover:bg-wood-900 group-hover:text-accent transition-colors">
                         <lucide-icon [img]="CheckCircleIcon" class="w-6 h-6"></lucide-icon>
                       </div>
-                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">معايير عالمية</h4>
-                      <p class="text-wood-600 text-sm leading-relaxed">تجمع الجودة العالية باللمسات الأنيقة وفقاً لأحدث المعايير.</p>
+                      <h4 class="font-display font-bold text-lg text-wood-900 mb-3">منهجية احترافية</h4>
+                      <p class="text-wood-600 text-sm leading-relaxed">إدارة واضحة للمراحل من التخطيط حتى التسليم بثقة.</p>
                     </div>
                   </div>
                 </div>
@@ -163,10 +163,10 @@
               <div class="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 border-b border-wood-800 pb-16" scrollReveal="fade-up">
                 <div class="max-w-3xl">
                   <div class="flex items-center gap-6 mb-8 transform rotate-1 origin-left">
-                     <span class="text-accent uppercase tracking-[0.4em] font-display font-bold text-sm">خدماتنا</span>
+                    <span class="text-accent uppercase tracking-[0.4em] font-display font-bold text-sm">{{ t(section.name) || 'الخدمات' }}</span>
                      <span class="h-px bg-wood-800 w-32"></span>
                   </div>
-                  <h2 class="text-4xl lg:text-[4rem] font-display font-extrabold text-surface leading-[1]">متخصصون في <br><span class="text-wood-500 font-serif italic">الإبداع</span></h2>
+                  <h2 class="text-4xl lg:text-[4rem] font-display font-extrabold text-surface leading-[1]">حلول <br><span class="text-wood-500 font-serif italic">احترافية</span></h2>
                 </div>
                 @if (section.slug) {
                   <a [routerLink]="['/', section.slug]" class="group flex items-center gap-4 text-wood-300 hover:text-accent font-display font-bold transition-colors uppercase tracking-widest text-lg">
@@ -190,7 +190,7 @@
           <section class="py-24 bg-wood-50 border-t-4 border-accent">
             <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
               <div class="flex items-center justify-between mb-20 pb-12 border-b border-wood-200" scrollReveal="fade-up">
-                <h2 class="text-3xl lg:text-5xl font-display font-black text-wood-950">الديكورات <span class="text-accent italic font-serif">الخشبية</span></h2>
+                <h2 class="text-3xl lg:text-5xl font-display font-black text-wood-950">{{ t(section.name) || 'أبرز الأعمال' }} <span class="text-accent italic font-serif">المختارة</span></h2>
                 @if (section.slug) {
                   <a [routerLink]="['/', section.slug]" class="text-wood-600 hover:text-accent uppercase tracking-widest font-display font-bold text-sm transition-colors border border-wood-300 px-8 py-4 rounded-full hover:border-accent">
                     تصفح الكل
@@ -235,14 +235,14 @@
               <div class="text-center mb-20" scrollReveal="fade-up">
                 <div class="inline-flex items-center gap-4 mb-8">
                   <span class="h-[1px] bg-accent/60 w-16"></span>
-                  <span class="text-accent tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">معرض الأعمال</span>
+                  <span class="text-accent tracking-[0.35em] font-display font-bold text-xs sm:text-sm uppercase">{{ t(section.name) || 'المعرض' }}</span>
                   <span class="h-[1px] bg-accent/60 w-16"></span>
                 </div>
                 <h2 class="text-3xl lg:text-5xl font-display font-extrabold text-surface leading-[1.1] mb-6">
-                  أعمالنا <span class="text-accent italic font-serif">المميزة</span>
+                  {{ t(section.name) || 'أعمالنا' }} <span class="text-accent italic font-serif">المميزة</span>
                 </h2>
                 <p class="text-wood-400 text-base max-w-2xl mx-auto font-sans leading-relaxed">
-                  نفخر بتقديم مجموعة من أبرز مشاريعنا المنجزة التي تعكس الجودة والإبداع في كل تفصيلة
+                  استعرض نماذج أعمال مختارة توضح أسلوب التنفيذ والجودة في النتائج.
                 </p>
               </div>
 
@@ -326,7 +326,7 @@
           <section class="py-20 bg-accent text-surface relative overflow-hidden">
              <!-- Scrolling marquee text background -->
              <div class="absolute inset-0 flex items-center whitespace-nowrap opacity-10 pointer-events-none overflow-hidden">
-                <h2 class="text-[20rem] font-display font-black blur-sm">روعة الغد روعة الغد روعة الغد</h2>
+                 <h2 class="text-[20rem] font-display font-black blur-sm">PROFESSIONAL STARTER PROFESSIONAL STARTER PROFESSIONAL STARTER</h2>
              </div>
 
              <div class="max-w-[100rem] mx-auto px-6 sm:px-12 relative z-10">
@@ -361,7 +361,7 @@
                 <div class="lg:w-1/3 sticky top-32" scrollReveal="fade-right">
                   <h2 class="text-3xl lg:text-5xl font-display font-black text-wood-950 mb-10 leading-tight">لماذا<br/>نحن؟</h2>
                   <p class="text-wood-600 leading-relaxed font-sans text-base mb-12 border-r-4 border-accent pr-6">
-                    نفخر بكوننا الشريك الإبداعي للعديد من المشاريع على مستوى المملكة العربية السعودية (المؤسسات الحكومية، السكنية، والفنادق).
+                    نعتمد على نهج واضح في التنفيذ يجمع بين المرونة والجودة لتحقيق نتائج قابلة للقياس.
                   </p>
                 </div>
 
@@ -381,15 +381,15 @@
                      <div class="bg-surface p-14 border border-wood-200 hover:border-wood-400 group flex flex-col md:flex-row gap-8 items-start">
                       <div class="text-5xl font-serif text-wood-300">01</div>
                       <div>
-                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">خبرة واسعة</h3>
-                        <p class="text-wood-600 text-base">أنجزت الشركة العديد من المشاريع في مجال الديكور للمؤسسات الحكومية والسكنية والتجارية.</p>
+                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">خبرة متعددة القطاعات</h3>
+                        <p class="text-wood-600 text-base">ننفذ مشاريع متنوعة بمستوى ثابت من الجودة والالتزام بالمخرجات.</p>
                       </div>
                     </div>
                     <div class="bg-surface p-14 border border-wood-200 hover:border-wood-400 group flex flex-col md:flex-row gap-8 items-start">
                       <div class="text-5xl font-serif text-wood-300">02</div>
                       <div>
-                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">جودة التنفيذ</h3>
-                        <p class="text-wood-600 text-base">نلتزم بأعلى معايير الديكور العالمية في كل تفصيلة من تفاصيل مشاريعنا.</p>
+                        <h3 class="text-2xl font-display font-bold text-wood-950 mb-5">جودة تشغيل مستمرة</h3>
+                        <p class="text-wood-600 text-base">نطبّق معايير تنفيذ دقيقة تضمن تجربة مهنية واضحة من البداية للنهاية.</p>
                       </div>
                     </div>
                   }
@@ -406,7 +406,7 @@
   <div class="flex justify-center items-center h-screen bg-surface">
     <div class="text-center">
       <div class="w-16 h-16 border-4 border-wood-300 border-t-accent rounded-full animate-spin mx-auto mb-6"></div>
-      <p class="text-wood-500 font-display tracking-widest uppercase text-sm">جاري التحميل...</p>
+      <p class="text-wood-500 font-display tracking-widest uppercase text-sm">Loading...</p>
     </div>
   </div>
 }
