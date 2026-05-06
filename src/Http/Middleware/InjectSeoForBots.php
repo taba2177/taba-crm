@@ -6,8 +6,10 @@ namespace Taba\Crm\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Taba\Crm\Models\CrmSetting;
+use Taba\Crm\Models\Page;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
 
@@ -129,18 +131,25 @@ class InjectSeoForBots
             $ogType      = 'website';
             $jsonLd      = $this->homeLd($siteName, $description, $base, $ogImage);
         } elseif (count($segments) === 1) {
-            // Category
-            $cat         = PostCategory::where('slug', $segments[0])->first();
-            $title       = $cat?->name ?? $siteName;
-            $description = $cat?->description ?? '';
-            $imageUrl    = $ogImage;  // fall back to site logo
-            $imageAlt    = $siteName;
+            // Try PostCategory first, then Page, then fall back to site defaults
+            $cat        = PostCategory::where('slug', $segments[0])->first();
+            $page       = $cat ? null : Page::where('slug', $segments[0])->first();
+            $title      = $cat?->name ?? $page?->title ?? $seoTitle;
+            $description = $cat?->description ?? $seoDesc;
+            $catImageRaw = $cat?->image ?? '';
+            $catImageUrl = $catImageRaw
+                ? $this->absoluteUrl(
+                    str_starts_with((string) $catImageRaw, 'http') ? $catImageRaw : Storage::url($catImageRaw)
+                )
+                : '';
+            $imageUrl    = $catImageUrl ?: $ogImage;
+            $imageAlt    = $title;
             $imageWidth  = 0;
             $imageHeight = 0;
             $imageType   = '';
             $ogType      = 'website';
-            $catUrl      = url($segments[0]);
-            $jsonLd      = $this->categoryLd($title, $description, $catUrl, $siteName, $base);
+            $pageUrl     = url($segments[0]);
+            $jsonLd      = $this->categoryLd($title, $description, $pageUrl, $siteName, $base);
         } elseif (count($segments) === 2) {
             // Post
             $post        = Post::where('slug', $segments[1])->published()->first();
@@ -163,8 +172,16 @@ class InjectSeoForBots
                 $siteName, $ogImage, $catName, $catUrl, $base
             );
         } else {
-            // Unknown — no injection
-            return ['', ''];
+            // Unknown depth — serve site defaults so bots still get og:image
+            $title       = $seoTitle;
+            $description = $seoDesc;
+            $imageUrl    = $ogImage;
+            $imageAlt    = $siteName;
+            $imageWidth  = 0;
+            $imageHeight = 0;
+            $imageType   = '';
+            $ogType      = 'website';
+            $jsonLd      = '';
         }
 
         $meta = $this->buildMeta($title, $description, $canonical, $imageUrl, $imageAlt, $ogType, $imageWidth, $imageHeight, $imageType, $siteName);
