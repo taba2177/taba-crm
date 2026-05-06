@@ -66,6 +66,19 @@ class InjectSeoForBots
         return false;
     }
 
+    /**
+     * Ensure an image path is an absolute URL that external crawlers can fetch.
+     * Relative paths (e.g. /storage/logo.png) are prefixed with APP_URL.
+     */
+    private function absoluteUrl(string $url): string
+    {
+        if ($url === '') return '';
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+        return rtrim(config('app.url'), '/') . '/' . ltrim($url, '/');
+    }
+
     private function patchLang(string $html): string
     {
         $locale = app()->getLocale();
@@ -98,7 +111,7 @@ class InjectSeoForBots
         };
 
         $siteName    = $str($settings['business']['crm_business_name'] ?? null, config('app.name'));
-        $ogImage     = $str($settings['business']['crm_business_logo'] ?? null, '');
+        $ogImage     = $this->absoluteUrl($str($settings['business']['crm_business_logo'] ?? null, ''));
         $seoTitle    = $str($settings['seo']['crm_seo_default_title'] ?? null, $siteName);
         $seoDesc     = $str($settings['seo']['crm_seo_default_description'] ?? null, '');
 
@@ -110,6 +123,9 @@ class InjectSeoForBots
             $imageUrl    = $ogImage;
             $imageAlt    = $siteName;
             $imageCap    = '';
+            $imageWidth  = 0;
+            $imageHeight = 0;
+            $imageType   = '';
             $ogType      = 'website';
             $jsonLd      = $this->homeLd($siteName, $description, $base, $ogImage);
         } elseif (count($segments) === 1) {
@@ -117,9 +133,11 @@ class InjectSeoForBots
             $cat         = PostCategory::where('slug', $segments[0])->first();
             $title       = $cat?->name ?? $siteName;
             $description = $cat?->description ?? '';
-            $imageUrl    = '';
-            $imageAlt    = '';
-            $imageCap    = '';
+            $imageUrl    = $ogImage;  // fall back to site logo
+            $imageAlt    = $siteName;
+            $imageWidth  = 0;
+            $imageHeight = 0;
+            $imageType   = '';
             $ogType      = 'website';
             $catUrl      = url($segments[0]);
             $jsonLd      = $this->categoryLd($title, $description, $catUrl, $siteName, $base);
@@ -129,9 +147,12 @@ class InjectSeoForBots
             $title       = $post?->meta_title ?? $post?->title ?? $siteName;
             $description = $post?->meta_description ?? '';
             $firstImage  = $post?->images->first();
-            $imageUrl    = $firstImage?->url ?? '';
+            $imageUrl    = $this->absoluteUrl($firstImage?->url ?? '');
             $imageAlt    = $firstImage?->alt ?? $title;
             $imageCap    = $firstImage?->caption ?? '';
+            $imageWidth  = $firstImage?->width ?? 0;
+            $imageHeight = $firstImage?->height ?? 0;
+            $imageType   = $firstImage?->type ?? '';
             $ogType      = 'article';
             $catUrl      = url($segments[0]);
             $catName     = $post?->postCategory?->name ?? $segments[0];
@@ -146,19 +167,25 @@ class InjectSeoForBots
             return ['', ''];
         }
 
-        $meta = $this->buildMeta($title, $description, $canonical, $imageUrl, $imageAlt, $ogType);
+        $meta = $this->buildMeta($title, $description, $canonical, $imageUrl, $imageAlt, $ogType, $imageWidth, $imageHeight, $imageType, $siteName);
         return [$meta, $jsonLd];
     }
 
     private function buildMeta(
         string $title, string $description, string $canonical,
-        string $imageUrl, string $imageAlt, string $ogType
+        string $imageUrl, string $imageAlt, string $ogType,
+        int $imageWidth = 0, int $imageHeight = 0, string $imageType = '',
+        string $siteName = ''
     ): string {
+        $locale        = app()->getLocale();
+        $siteName      = $siteName ?: config('app.name');
         $safeCanonical = e($canonical);
         $lines = [
             "<title>" . e($title) . "</title>",
             "<meta name=\"description\" content=\"" . e($description) . "\">",
             "<meta name=\"robots\" content=\"index, follow\">",
+            "<meta property=\"og:site_name\" content=\"" . e($siteName) . "\">",
+            "<meta property=\"og:locale\" content=\"" . e($locale) . "\">",
             "<meta property=\"og:title\" content=\"" . e($title) . "\">",
             "<meta property=\"og:description\" content=\"" . e($description) . "\">",
             "<meta property=\"og:url\" content=\"{$safeCanonical}\">",
@@ -170,8 +197,8 @@ class InjectSeoForBots
         ];
 
         $locales = config('crm.available_locales', ['ar']);
-        foreach ((array) $locales as $locale) {
-            $lines[] = "<link rel=\"alternate\" hreflang=\"{$locale}\" href=\"{$safeCanonical}\">";
+        foreach ((array) $locales as $loc) {
+            $lines[] = "<link rel=\"alternate\" hreflang=\"{$loc}\" href=\"{$safeCanonical}\">";
         }
         if (count((array) $locales) > 1) {
             $lines[] = "<link rel=\"alternate\" hreflang=\"x-default\" href=\"{$safeCanonical}\">";
@@ -179,9 +206,11 @@ class InjectSeoForBots
 
         if ($imageUrl) {
             $safeImageUrl = e($imageUrl);
-            $lines[] = "<link rel=\"preload\" as=\"image\" fetchpriority=\"high\" href=\"{$safeImageUrl}\">";
             $lines[] = "<meta property=\"og:image\" content=\"{$safeImageUrl}\">";
             $lines[] = "<meta property=\"og:image:alt\" content=\"" . e($imageAlt) . "\">";
+            if ($imageWidth)  $lines[] = "<meta property=\"og:image:width\" content=\"{$imageWidth}\">";
+            if ($imageHeight) $lines[] = "<meta property=\"og:image:height\" content=\"{$imageHeight}\">";
+            if ($imageType)   $lines[] = "<meta property=\"og:image:type\" content=\"" . e($imageType) . "\">";
             $lines[] = "<meta name=\"twitter:image\" content=\"{$safeImageUrl}\">";
             $lines[] = "<meta name=\"twitter:image:alt\" content=\"" . e($imageAlt) . "\">";
         }
@@ -205,12 +234,12 @@ class InjectSeoForBots
                         'query-input' => 'required name=search_term_string',
                     ],
                 ],
-                [
+                array_filter([
                     '@type' => 'Organization',
                     'name'  => $siteName,
                     'url'   => $base,
-                    'logo'  => $logo,
-                ],
+                    'logo'  => $logo ? ['@type' => 'ImageObject', 'url' => $logo] : null,
+                ]),
             ],
         ];
         return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>' . "\n";
@@ -248,17 +277,19 @@ class InjectSeoForBots
         ] : null;
 
         $article = [
-            '@type'         => 'Article',
-            'headline'      => $title,
-            'description'   => $desc,
-            'url'           => $canonical,
-            'datePublished' => $published,
-            'dateModified'  => $modified,
-            'publisher'     => [
+            '@type'            => 'Article',
+            'headline'         => $title,
+            'description'      => $desc,
+            'url'              => $canonical,
+            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $canonical],
+            'datePublished'    => $published,
+            'dateModified'     => $modified,
+            'author'           => ['@type' => 'Organization', 'name' => $siteName, 'url' => $base],
+            'publisher'        => array_filter([
                 '@type' => 'Organization',
                 'name'  => $siteName,
-                'logo'  => ['@type' => 'ImageObject', 'url' => $logo],
-            ],
+                'logo'  => $logo ? ['@type' => 'ImageObject', 'url' => $logo] : null,
+            ]),
         ];
         if ($image) $article['image'] = $image;
 
