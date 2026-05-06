@@ -97,6 +97,28 @@ class PostApiController extends ApiController
     }
 
     /**
+     * Get a single published post by category slug + post slug.
+     * Matches the Angular route pattern /categories/{category}/{post}.
+     */
+    public function showByCategory(Request $request, string $category, string $post): Response
+    {
+        $cacheKey = 'api_post_cat_' . $category . '_' . $post . '_' . md5($request->fullUrl());
+        $cacheTtl = config('crm.api.cache_ttl', 300);
+
+        $postModel = Cache::remember($cacheKey, $cacheTtl, function () use ($request, $category, $post) {
+            return Post::where('slug', $post)
+                ->whereHas('postCategory', fn ($q) => $q->where('slug', $category))
+                ->published()
+                ->with($this->parseIncludes($request, ['postCategory', 'user', 'tags', 'image']))
+                ->firstOrFail();
+        });
+
+        return (new PostResource($postModel))
+            ->response()
+            ->setStatusCode(200);
+    }
+
+    /**
      * Create a new post (authenticated).
      */
     public function store(StorePostRequest $request): JsonResponse

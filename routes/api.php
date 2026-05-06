@@ -50,9 +50,10 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
         Route::get('posts/{slug}/related', [PostApiController::class, 'related']);
 
         // Categories (public read)
-        Route::get('categories',              [CategoryApiController::class, 'index']);
-        Route::get('categories/{slug}',       [CategoryApiController::class, 'show']);
-        Route::get('categories/{slug}/posts', [CategoryApiController::class, 'posts']);
+        Route::get('categories',                       [CategoryApiController::class, 'index']);
+        Route::get('categories/{slug}',                [CategoryApiController::class, 'show']);
+        Route::get('categories/{slug}/posts',          [CategoryApiController::class, 'posts']);
+        Route::get('categories/{category}/{post}',     [PostApiController::class, 'showByCategory']);
 
         // Pages (public read)
         Route::get('pages',        [PageApiController::class, 'index']);

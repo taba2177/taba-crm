@@ -250,7 +250,12 @@ class Post extends Model
      */
     public function getBlocksAttribute()
     {
-        return json_decode(json_encode($this->content ?? []));
+        $content = $this->content ?? [];
+        // If content is a plain string (not a blocks array), wrap it as a markdown block
+        if (is_string($content)) {
+            $content = [['type' => 'markdown', 'data' => ['content' => $content]]];
+        }
+        return json_decode(json_encode($content));
     }
 
     /**
