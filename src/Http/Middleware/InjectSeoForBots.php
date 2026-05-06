@@ -36,6 +36,9 @@ class InjectSeoForBots
         $html = Cache::remember('spa_index_html_' . md5($indexPath), config('crm.api.cache_ttl', 300), fn() => file_get_contents($indexPath));
         $html = $this->patchLang($html);
         [$meta, $jsonLd] = $this->buildSeoTags($request);
+        // Remove the placeholder <title> so we don't end up with two title tags
+        // (bots/WhatsApp use the first one, which would still be "Site" otherwise).
+        $html = preg_replace('/<title>[^<]*<\/title>/i', '', $html, 1);
         $html = str_replace('</head>', $meta . $jsonLd . '</head>', $html);
 
         return response($html, 200)->header('Content-Type', 'text/html; charset=utf-8');
@@ -94,14 +97,16 @@ class InjectSeoForBots
             return (string) ($value ?? $default);
         };
 
-        $siteName = $str($settings['general']['site_name'] ?? null, config('app.name'));
-        $ogImage  = $str($settings['general']['og_image'] ?? null, '');
+        $siteName    = $str($settings['business']['crm_business_name'] ?? null, config('app.name'));
+        $ogImage     = $str($settings['business']['crm_business_logo'] ?? null, '');
+        $seoTitle    = $str($settings['seo']['crm_seo_default_title'] ?? null, $siteName);
+        $seoDesc     = $str($settings['seo']['crm_seo_default_description'] ?? null, '');
 
         // --- Resolve page type ---
         if (count($segments) === 0) {
             // Home
-            $title       = $siteName;
-            $description = $str($settings['general']['site_description'] ?? null, '');
+            $title       = $seoTitle;
+            $description = $seoDesc;
             $imageUrl    = $ogImage;
             $imageAlt    = $siteName;
             $imageCap    = '';
