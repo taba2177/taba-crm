@@ -35,10 +35,12 @@ class CrmServiceProvider extends ServiceProvider
         // Set locale from config instead of hardcoding
         \App::setLocale(config('crm.locale', 'ar'));
 
-        // Configure language switch from config
-        \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
-            $switch->locales(config('crm.available_locales', ['ar', 'en']));
-        });
+        // Configure language switch from config (optional plugin)
+        if (class_exists(\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::class)) {
+            \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function ($switch) {
+                $switch->locales(config('crm.available_locales', ['ar', 'en']));
+            });
+        }
 
         Livewire::component('home', Home::class);
 

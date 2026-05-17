@@ -33,7 +33,6 @@
         "awcodes/filament-gravatar": "^4.0",
         "bezhansalleh/filament-exceptions": "^4.2",
         "bezhansalleh/filament-google-analytics": "^3.3",
-        "bezhansalleh/filament-language-switch": "^5.0.0-beta.1",
         "bezhansalleh/filament-shield": "^4.2",
         "canyongbs/filament-tiptap-editor": "^2.3",
         "croustibat/filament-jobs-monitor": "^4.4",
