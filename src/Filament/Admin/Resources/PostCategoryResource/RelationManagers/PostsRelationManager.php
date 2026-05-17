@@ -49,8 +49,7 @@ class PostsRelationManager extends RelationManager
     }
 
 
-    public function form(Schema $schema): Schema
-    {
+    public function form(Schema $schema): Schema{
         return $schema
             ->schema([
                Wizard::make([
