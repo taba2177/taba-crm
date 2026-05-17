@@ -240,6 +240,30 @@ class InstallCommand extends Command
         // Install curator regardless (it is safe to run multiple times).
         $this->call('curator:install', ['--no-interaction' => true]);
 
+        // Patch a known bug in curator's install: when tenancy is enabled it
+        // writes `'relationship_name' => user,` (unquoted bare word) which is
+        // invalid PHP. Force tenancy off so the published config is parseable.
+        $curatorConfigPath = config_path('curator.php');
+        if (File::exists($curatorConfigPath)) {
+            $contents = File::get($curatorConfigPath);
+            $patched = preg_replace(
+                "/'relationship_name'\s*=>\s*[A-Za-z_][A-Za-z0-9_]*\s*,/",
+                "'relationship_name' => null,",
+                $contents,
+                -1,
+                $count
+            );
+            if ($count > 0) {
+                $patched = preg_replace(
+                    "/'tenancy'\s*=>\s*\[\s*'enabled'\s*=>\s*true,/",
+                    "'tenancy' => [\n            'enabled' => false,",
+                    $patched
+                );
+                File::put($curatorConfigPath, $patched);
+                $this->info('   ✓ Patched curator config (disabled broken tenancy default).');
+            }
+        }
+
         $this->call('vendor:publish', ['--tag' => 'filament-peek-assets', '--force' => true]);
 
         return true;
