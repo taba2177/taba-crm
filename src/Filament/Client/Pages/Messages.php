@@ -14,9 +14,9 @@ class Messages extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-envelope-open';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-envelope-open';
     protected static ?int $navigationSort = 80;
-    protected static string $view = 'crm::client.messages';
+    protected string $view = 'crm::client.messages';
 
     public static function getNavigationGroup(): ?string
     {

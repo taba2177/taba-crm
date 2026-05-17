@@ -24,12 +24,12 @@ class UserResource extends Resource
     /**
      * The resource navigation icon.
      */
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     /**
      * The settings navigation group.
      */
-    protected static ?string $navigationGroup = null;
+    protected static string|\UnitEnum|null $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {

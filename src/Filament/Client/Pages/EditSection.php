@@ -12,7 +12,7 @@ use Taba\Crm\Models\PostCategory;
 class EditSection extends Page
 {
     protected static bool $shouldRegisterNavigation = false;
-    protected static string $view = 'crm::client.edit-section';
+    protected string $view = 'crm::client.edit-section';
     protected static ?string $slug = 'edit-section/{record}';
 
     public ?PostCategory $record = null;

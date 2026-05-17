@@ -38,7 +38,7 @@ class CrmPlugin implements Plugin
             ->resources([
                 \Taba\Crm\Filament\Admin\Resources\PostResource::class,
                 \Taba\Crm\Filament\Admin\Resources\PostCategoryResource::class,
-                \Awcodes\Curator\Resources\MediaResource::class,
+                \Awcodes\Curator\Resources\Media\MediaResource::class,
                 \Taba\Crm\Filament\Admin\Resources\ContactEntryResource::class,
                 \Taba\Crm\Filament\Admin\Resources\UserResource::class,
                 \Taba\Crm\Filament\Admin\Resources\ServicePaymentResource::class,
@@ -112,10 +112,10 @@ class CrmPlugin implements Plugin
         ->pluralLabel("الوسائط")
         ->navigationIcon('heroicon-o-photo')
         ->navigationSort(4)
-        ->navigationLabel(__('Media'))
+        ->label(__('Media'))
         ->navigationGroup('collections')
         // ->navigationGroup(__('Collections'))
-        ->navigationCountBadge())
+        ->showBadge())
         ->databaseNotifications(
             \Illuminate\Support\Facades\Schema::hasTable('notifications')
         )

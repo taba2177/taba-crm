@@ -12,7 +12,7 @@ class VisitorAnalytics extends ChartWidget
 {
     use HasWidgetShield;
 
-    protected static ?string $heading = null;
+    protected ?string $heading = null;
 
     protected int | string | array $columnSpan = 'full/2';
 

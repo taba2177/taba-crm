@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class OthersAnalytics extends ChartWidget
 {
-    protected static ?string $heading = 'تحليل المدفوعات';
+    protected ?string $heading = 'تحليل المدفوعات';
 
     protected int | string | array $columnSpan = 'full';
 

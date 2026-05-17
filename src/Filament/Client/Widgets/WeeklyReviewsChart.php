@@ -8,7 +8,7 @@ use Taba\Crm\Models\ContactEntry;
 
 class WeeklyReviewsChart extends ChartWidget
 {
-    protected static ?string $heading = 'الرسائل الأسبوعية';
+    protected ?string $heading = 'الرسائل الأسبوعية';
     protected static ?int $sort = 9;
 
     protected function getData(): array

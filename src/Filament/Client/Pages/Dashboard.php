@@ -10,11 +10,11 @@ use Taba\Crm\Models\PostCategory;
 
 class Dashboard extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationGroup = null;
+    protected static string|\UnitEnum|null $navigationGroup = null;
     protected static bool $shouldRegisterNavigation = false;
-    protected static string $view = 'crm::client.dashboard';
+    protected string $view = 'crm::client.dashboard';
 
     public static function getNavigationLabel(): string
     {

@@ -8,7 +8,7 @@ use Taba\Crm\Models\ContactEntry;
 
 class SurveyAnswersChart extends ChartWidget
 {
-    protected static ?string $heading = 'الرسائل حسب الصفحة';
+    protected ?string $heading = 'الرسائل حسب الصفحة';
     protected static ?int $sort = 8;
 
     protected function getData(): array

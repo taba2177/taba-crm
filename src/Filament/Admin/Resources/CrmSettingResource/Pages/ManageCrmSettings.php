@@ -18,7 +18,7 @@ class ManageCrmSettings extends Page implements HasForms
 
     protected static string $resource = CrmSettingResource::class;
 
-    protected static string $view = 'crm::filament.pages.manage-crm-settings';
+    protected string $view = 'crm::filament.pages.manage-crm-settings';
 
     public ?array $data = [];
 

@@ -10,7 +10,7 @@ use Taba\Crm\Models\PostCategory;
 
 class WelcomeWidget extends Widget
 {
-    protected static string $view = 'crm::client.widgets.welcome';
+    protected string $view = 'crm::client.widgets.welcome';
     protected static ?int $sort = 1;
     protected int | string | array $columnSpan = 'full';
 

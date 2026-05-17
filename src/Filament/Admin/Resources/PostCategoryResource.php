@@ -37,9 +37,9 @@ class PostCategoryResource extends Resource
         return number_format(static::getModel()::count());
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = null;
+    protected static string|\UnitEnum|null $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {

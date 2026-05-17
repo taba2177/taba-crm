@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 
 class WeeklyClicksChart extends ChartWidget
 {
-    protected static ?string $heading = 'النقرات حسب اليوم';
+    protected ?string $heading = 'النقرات حسب اليوم';
     protected static ?int $sort = 5;
 
     protected function getData(): array
