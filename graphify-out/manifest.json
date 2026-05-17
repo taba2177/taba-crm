@@ -1,0 +1,2317 @@
+{
+  "C:\\WORK\\taba-crm\\src\\CrmClientPlugin.php": {
+    "mtime": 1778963331.4366877,
+    "ast_hash": "ff0e267e5643ebe20d0e71e10dfc9427",
+    "semantic_hash": "ff0e267e5643ebe20d0e71e10dfc9427"
+  },
+  "C:\\WORK\\taba-crm\\src\\CrmPlugin.php": {
+    "mtime": 1778963331.4382613,
+    "ast_hash": "cda7e2a49041c9d5b7b816ae7538abf8",
+    "semantic_hash": "cda7e2a49041c9d5b7b816ae7538abf8"
+  },
+  "C:\\WORK\\taba-crm\\src\\CrmServiceProvider.php": {
+    "mtime": 1778963331.439319,
+    "ast_hash": "6da4a94276033b7c8e171443ca71a2ce",
+    "semantic_hash": "6da4a94276033b7c8e171443ca71a2ce"
+  },
+  "C:\\WORK\\taba-crm\\src\\helpers.php": {
+    "mtime": 1778963331.5685873,
+    "ast_hash": "5d2f8ada12fa0ebc7adba18f62ee65f6",
+    "semantic_hash": "5d2f8ada12fa0ebc7adba18f62ee65f6"
+  },
+  "C:\\WORK\\taba-crm\\src\\package.json": {
+    "mtime": 1772623728.547111,
+    "ast_hash": "cdc173a09ed1ccaedb05e40162960fbc",
+    "semantic_hash": "cdc173a09ed1ccaedb05e40162960fbc"
+  },
+  "C:\\WORK\\taba-crm\\src\\tailwind.config.js": {
+    "mtime": 1778963331.569587,
+    "ast_hash": "62ddfbff49dd8509c3e5bb69d14fcf48",
+    "semantic_hash": "62ddfbff49dd8509c3e5bb69d14fcf48"
+  },
+  "C:\\WORK\\taba-crm\\src\\vite.config.js": {
+    "mtime": 1772623728.6306689,
+    "ast_hash": "f057979664346c6cc8dedacb87d35631",
+    "semantic_hash": "f057979664346c6cc8dedacb87d35631"
+  },
+  "C:\\WORK\\taba-crm\\src\\Commands\\demoCommand.php": {
+    "mtime": 1772623728.4391835,
+    "ast_hash": "14ab4935872cc7785e3ed7ba239bbf26",
+    "semantic_hash": "14ab4935872cc7785e3ed7ba239bbf26"
+  },
+  "C:\\WORK\\taba-crm\\src\\Commands\\ExportSqliteData.php": {
+    "mtime": 1772623728.437202,
+    "ast_hash": "c93f107a6a5dba195da53961463393ba",
+    "semantic_hash": "c93f107a6a5dba195da53961463393ba"
+  },
+  "C:\\WORK\\taba-crm\\src\\Commands\\InstallCommand.php": {
+    "mtime": 1778963331.3797243,
+    "ast_hash": "aa99dbbabacfd318884bed6f7e0d3370",
+    "semantic_hash": "aa99dbbabacfd318884bed6f7e0d3370"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Concerns\\HasTranslatableFields.php": {
+    "mtime": 1778963331.381719,
+    "ast_hash": "3d99ff0cc8dc8198b8411790174d9348",
+    "semantic_hash": "3d99ff0cc8dc8198b8411790174d9348"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Contracts\\SectionComponent.php": {
+    "mtime": 1778963331.3838708,
+    "ast_hash": "d64f486b91ac8d46b27ad75208cbf7ae",
+    "semantic_hash": "d64f486b91ac8d46b27ad75208cbf7ae"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Contracts\\SectionLayout.php": {
+    "mtime": 1778963331.3849504,
+    "ast_hash": "51fe8318d0655f5aec121a6af6d0c2d7",
+    "semantic_hash": "51fe8318d0655f5aec121a6af6d0c2d7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Fields\\FieldFactory.php": {
+    "mtime": 1778963331.3870656,
+    "ast_hash": "d89d8bee5579860596509405931e8e4b",
+    "semantic_hash": "d89d8bee5579860596509405931e8e4b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Registry\\ComponentRegistry.php": {
+    "mtime": 1778963331.3886712,
+    "ast_hash": "e333415d365b1d2ca640f34212d4ee73",
+    "semantic_hash": "e333415d365b1d2ca640f34212d4ee73"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\AboutUsComponent.php": {
+    "mtime": 1778963331.3902447,
+    "ast_hash": "19670737b890cbff6379aecc3c997411",
+    "semantic_hash": "19670737b890cbff6379aecc3c997411"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\BrandsComponent.php": {
+    "mtime": 1778963331.3918872,
+    "ast_hash": "ad755f73d02a546e7dafbc6a88dc9f94",
+    "semantic_hash": "ad755f73d02a546e7dafbc6a88dc9f94"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Cards2Component.php": {
+    "mtime": 1778963331.3930273,
+    "ast_hash": "5040dc01fbe5bd8e0cf59e85435e92aa",
+    "semantic_hash": "5040dc01fbe5bd8e0cf59e85435e92aa"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\CardsComponent.php": {
+    "mtime": 1778963331.3941815,
+    "ast_hash": "53533824ebe29d94224ed77d6394a76d",
+    "semantic_hash": "53533824ebe29d94224ed77d6394a76d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Contact2Component.php": {
+    "mtime": 1778963331.3952396,
+    "ast_hash": "d877aff7837d67e410e4ead11b5efd78",
+    "semantic_hash": "d877aff7837d67e410e4ead11b5efd78"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ContactComponent.php": {
+    "mtime": 1778963331.3968706,
+    "ast_hash": "74155d09131597fca27f196434f13afa",
+    "semantic_hash": "74155d09131597fca27f196434f13afa"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\CounterComponent.php": {
+    "mtime": 1778963331.3974276,
+    "ast_hash": "b4fa571a9ebd9a4504525cbdb69addcf",
+    "semantic_hash": "b4fa571a9ebd9a4504525cbdb69addcf"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\CtaComponent.php": {
+    "mtime": 1778963331.3985126,
+    "ast_hash": "18ab7aa04970230f53352edb549acc94",
+    "semantic_hash": "18ab7aa04970230f53352edb549acc94"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\DefaultComponent.php": {
+    "mtime": 1778963331.4005783,
+    "ast_hash": "c866e31d5beb9e3a577870754a55fc10",
+    "semantic_hash": "c866e31d5beb9e3a577870754a55fc10"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Faq2Component.php": {
+    "mtime": 1778963331.402172,
+    "ast_hash": "2f0d5482740c5f90aa176ecf2d5b4f3a",
+    "semantic_hash": "2f0d5482740c5f90aa176ecf2d5b4f3a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\FaqComponent.php": {
+    "mtime": 1778963331.403846,
+    "ast_hash": "cba4606f3d0a4659720adf632a103649",
+    "semantic_hash": "cba4606f3d0a4659720adf632a103649"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\FeaturesComponent.php": {
+    "mtime": 1778963331.4050694,
+    "ast_hash": "22aa5ed14cf03bd53057a4b11d7fd9ee",
+    "semantic_hash": "22aa5ed14cf03bd53057a4b11d7fd9ee"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\GalleryComponent.php": {
+    "mtime": 1778963331.4061868,
+    "ast_hash": "22b7fb95fdac89edab2184d0a987d59f",
+    "semantic_hash": "22b7fb95fdac89edab2184d0a987d59f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Hero2Component.php": {
+    "mtime": 1778963331.407244,
+    "ast_hash": "7b7d79c850f7e7c139ccfeb0442085af",
+    "semantic_hash": "7b7d79c850f7e7c139ccfeb0442085af"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Hero3Component.php": {
+    "mtime": 1778963331.4093661,
+    "ast_hash": "584d461f347b9752eb7ba84f6dc94ea0",
+    "semantic_hash": "584d461f347b9752eb7ba84f6dc94ea0"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\HeroComponent.php": {
+    "mtime": 1778963331.4109824,
+    "ast_hash": "921ec9275be080c77994d123c8723248",
+    "semantic_hash": "921ec9275be080c77994d123c8723248"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\LatestNewsComponent.php": {
+    "mtime": 1778963331.4120345,
+    "ast_hash": "3b3b415ec778a4abb2137cc44bf22b3e",
+    "semantic_hash": "3b3b415ec778a4abb2137cc44bf22b3e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\LeftRightImageComponent.php": {
+    "mtime": 1778963331.4131203,
+    "ast_hash": "fdb3d0cd7524e34a270fc77251ddaf4e",
+    "semantic_hash": "fdb3d0cd7524e34a270fc77251ddaf4e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\MapComponent.php": {
+    "mtime": 1778963331.414438,
+    "ast_hash": "a359f8f1c6aa7054d3ea6d2e1320cc6b",
+    "semantic_hash": "a359f8f1c6aa7054d3ea6d2e1320cc6b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\PortfolioComponent.php": {
+    "mtime": 1778963331.416186,
+    "ast_hash": "d53ab69820b8032f08541935e45aa4c7",
+    "semantic_hash": "d53ab69820b8032f08541935e45aa4c7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Prices2Component.php": {
+    "mtime": 1778963331.417241,
+    "ast_hash": "36a621c5ff92e057455bfc31fde0247f",
+    "semantic_hash": "36a621c5ff92e057455bfc31fde0247f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\Prices3Component.php": {
+    "mtime": 1778963331.4182959,
+    "ast_hash": "607f3cfa4d82b2527c8d72461877f4d0",
+    "semantic_hash": "607f3cfa4d82b2527c8d72461877f4d0"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\PricesComponent.php": {
+    "mtime": 1778963331.4193377,
+    "ast_hash": "59faf1e0acf79272a55d1c0eef93fa85",
+    "semantic_hash": "59faf1e0acf79272a55d1c0eef93fa85"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ReviewsCarouselComponent.php": {
+    "mtime": 1778963331.4198692,
+    "ast_hash": "1274a05bea7bb013ec2a4285025fc926",
+    "semantic_hash": "1274a05bea7bb013ec2a4285025fc926"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesCardsComponent.php": {
+    "mtime": 1778963331.4214737,
+    "ast_hash": "b3955a681e152abfddaf1b98fe790fa8",
+    "semantic_hash": "b3955a681e152abfddaf1b98fe790fa8"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesCarouselComponent.php": {
+    "mtime": 1778963331.4230573,
+    "ast_hash": "62bb249f185533ee973ce726688d8f2c",
+    "semantic_hash": "62bb249f185533ee973ce726688d8f2c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesFeaturesComponent.php": {
+    "mtime": 1778963331.4241536,
+    "ast_hash": "a7c1225a5d73e67a514c043d8cc56fc7",
+    "semantic_hash": "a7c1225a5d73e67a514c043d8cc56fc7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesGridComponent.php": {
+    "mtime": 1778963331.4251928,
+    "ast_hash": "73fe2b04b389d4984af380f9b1388589",
+    "semantic_hash": "73fe2b04b389d4984af380f9b1388589"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesListComponent.php": {
+    "mtime": 1778963331.4257119,
+    "ast_hash": "ee21f9d055bc84c0757a32ca697bb1bc",
+    "semantic_hash": "ee21f9d055bc84c0757a32ca697bb1bc"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\ServicesSwiperComponent.php": {
+    "mtime": 1778963331.4278712,
+    "ast_hash": "bc098b84644c03d6dbcb891c13b41d57",
+    "semantic_hash": "bc098b84644c03d6dbcb891c13b41d57"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\SingleViewCallActionComponent.php": {
+    "mtime": 1778963331.4289315,
+    "ast_hash": "b24512f0fd4d5ff34840ba0ef714bd80",
+    "semantic_hash": "b24512f0fd4d5ff34840ba0ef714bd80"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\SingleViewPricingPackagesComponent.php": {
+    "mtime": 1778963331.4302354,
+    "ast_hash": "1de651ce5ac42b9239352da4c6e8d229",
+    "semantic_hash": "1de651ce5ac42b9239352da4c6e8d229"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\SingleViewVisionMissionComponent.php": {
+    "mtime": 1778963331.4312901,
+    "ast_hash": "1b5e49ce0930c06f698f31a0b9e766f7",
+    "semantic_hash": "1b5e49ce0930c06f698f31a0b9e766f7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\SingleViewWhyChooseUsComponent.php": {
+    "mtime": 1778963331.4318051,
+    "ast_hash": "f6644cf2381bde667c9674d1338fc7d3",
+    "semantic_hash": "f6644cf2381bde667c9674d1338fc7d3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\TeamComponent.php": {
+    "mtime": 1778963331.4333851,
+    "ast_hash": "d892c747bbe3201f2c2012c76a763c80",
+    "semantic_hash": "d892c747bbe3201f2c2012c76a763c80"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\TestimonialsComponent.php": {
+    "mtime": 1778963331.4339187,
+    "ast_hash": "ef08843c8691092612d4fe69f6b3d7b1",
+    "semantic_hash": "ef08843c8691092612d4fe69f6b3d7b1"
+  },
+  "C:\\WORK\\taba-crm\\src\\Components\\Sections\\TimelineComponent.php": {
+    "mtime": 1778963331.4350839,
+    "ast_hash": "0d8b3c4908a2fa5274fcd1e64b132780",
+    "semantic_hash": "0d8b3c4908a2fa5274fcd1e64b132780"
+  },
+  "C:\\WORK\\taba-crm\\src\\Concerns\\HasNavigationVisibility.php": {
+    "mtime": 1778963331.4361656,
+    "ast_hash": "c55ab742ab5cccd6a9a8e972f5a8332a",
+    "semantic_hash": "c55ab742ab5cccd6a9a8e972f5a8332a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Concerns\\HasPreview.php": {
+    "mtime": 1772623728.4401834,
+    "ast_hash": "44ef8b6a5117437f725483a2eb869e3c",
+    "semantic_hash": "44ef8b6a5117437f725483a2eb869e3c"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\0001_01_01_000000_create_users_table.php": {
+    "mtime": 1772623728.5210776,
+    "ast_hash": "44d94b5e2b9459148077ebb45b46b01f",
+    "semantic_hash": "44d94b5e2b9459148077ebb45b46b01f"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\0001_01_01_000001_create_cache_table.php": {
+    "mtime": 1772623728.5210776,
+    "ast_hash": "6803c10a1aa695d40633ec8bea5576d5",
+    "semantic_hash": "6803c10a1aa695d40633ec8bea5576d5"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\0001_01_01_000002_create_jobs_table.php": {
+    "mtime": 1772623728.5230734,
+    "ast_hash": "ead9cce2650b36345454f85e8c0214a0",
+    "semantic_hash": "ead9cce2650b36345454f85e8c0214a0"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_01_15_160000_create_categories_table.php": {
+    "mtime": 1772623728.5230734,
+    "ast_hash": "91f1a7f07434acf80d7057cc3254f638",
+    "semantic_hash": "91f1a7f07434acf80d7057cc3254f638"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_01_15_160002_create_pages_table.php": {
+    "mtime": 1772623728.5240726,
+    "ast_hash": "219f365f45a592203b65e9e2ecb8e741",
+    "semantic_hash": "219f365f45a592203b65e9e2ecb8e741"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_01_15_160003_create_contact_entries_table.php": {
+    "mtime": 1772623728.5240726,
+    "ast_hash": "db88cbd5a883921b595738ded2d16de6",
+    "semantic_hash": "db88cbd5a883921b595738ded2d16de6"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_07_05_150102_create_menus_table.php": {
+    "mtime": 1772623728.5251095,
+    "ast_hash": "d9ff51752a14bb21b6a69e70e7b07c06",
+    "semantic_hash": "d9ff51752a14bb21b6a69e70e7b07c06"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_082215_create_posts_table.php": {
+    "mtime": 1772623728.5251095,
+    "ast_hash": "c9357191c2086eb2b59f8f3133289cde",
+    "semantic_hash": "c9357191c2086eb2b59f8f3133289cde"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_115440_make_name_unique_in_users_table.php": {
+    "mtime": 1772623728.526111,
+    "ast_hash": "4c3b9234eed58679f4afa68d6a195830",
+    "semantic_hash": "4c3b9234eed58679f4afa68d6a195830"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_121849_create_filament_exceptions_table.php": {
+    "mtime": 1772623728.526111,
+    "ast_hash": "6b603f4ff01ad1066dd8e825e06dece0",
+    "semantic_hash": "6b603f4ff01ad1066dd8e825e06dece0"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_122413_create_breezy_tables.php": {
+    "mtime": 1772623728.5271266,
+    "ast_hash": "8f8cda86766a5941e88e194435f51276",
+    "semantic_hash": "8f8cda86766a5941e88e194435f51276"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_122956_create_activity_log_table.php": {
+    "mtime": 1772623728.528111,
+    "ast_hash": "6554ade26208a9371dc1dc0b1fe19773",
+    "semantic_hash": "6554ade26208a9371dc1dc0b1fe19773"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_122957_add_event_column_to_activity_log_table.php": {
+    "mtime": 1772623728.528111,
+    "ast_hash": "1824b916ccf47c79a7d95c44e9de8419",
+    "semantic_hash": "1824b916ccf47c79a7d95c44e9de8419"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_19_122958_add_batch_uuid_column_to_activity_log_table.php": {
+    "mtime": 1772623728.53011,
+    "ast_hash": "9011bbf2d1f4f5bfbbc2cacf25de10ae",
+    "semantic_hash": "9011bbf2d1f4f5bfbbc2cacf25de10ae"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_20_014623_create_filament-jobs-monitor_table.php": {
+    "mtime": 1772623728.53011,
+    "ast_hash": "a0f608c58a01fe4524d0a69782c33c8d",
+    "semantic_hash": "a0f608c58a01fe4524d0a69782c33c8d"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_22_001413_create_notifications_table.php": {
+    "mtime": 1772623728.531111,
+    "ast_hash": "af807cb9a408e8aa9b40b957ea8c3a37",
+    "semantic_hash": "af807cb9a408e8aa9b40b957ea8c3a37"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2023_12_28_074322_add_image_to_posts_table.php": {
+    "mtime": 1772623728.531111,
+    "ast_hash": "7d62fe5c08227b2be47ad0692c631514",
+    "semantic_hash": "7d62fe5c08227b2be47ad0692c631514"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2024_12_21_120835_create_advertisements_table.php": {
+    "mtime": 1772623728.53211,
+    "ast_hash": "0eb01d9bbd3ec66f0fb51dbf96500a85",
+    "semantic_hash": "0eb01d9bbd3ec66f0fb51dbf96500a85"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2024_12_21_130000_create_offers_table.php": {
+    "mtime": 1772623728.53211,
+    "ast_hash": "4af375f835b76652a954efc70156fdc4",
+    "semantic_hash": "4af375f835b76652a954efc70156fdc4"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2025_01_20_085221_create_tags_table.php": {
+    "mtime": 1772623728.53311,
+    "ast_hash": "15a01a6f89e4a17fc46d58116e0c5807",
+    "semantic_hash": "15a01a6f89e4a17fc46d58116e0c5807"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2025_01_20_085353_create_post_tag_table.php": {
+    "mtime": 1772623728.5341122,
+    "ast_hash": "f64d0c829f46e194be0aee9c60c4b6e3",
+    "semantic_hash": "f64d0c829f46e194be0aee9c60c4b6e3"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2025_06_21_132722_create_metadata_fillter_table.php": {
+    "mtime": 1772623728.5351129,
+    "ast_hash": "90a63e450d679412343d38c73a05a2f8",
+    "semantic_hash": "90a63e450d679412343d38c73a05a2f8"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2025_07_01_141133_add_slug_to_tags_table.php": {
+    "mtime": 1772623728.5351129,
+    "ast_hash": "6a92a7207bd9889cf4daeb794c70f53f",
+    "semantic_hash": "6a92a7207bd9889cf4daeb794c70f53f"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2026_03_12_000002_drop_homepage_sections_table.php": {
+    "mtime": 1778963331.5671911,
+    "ast_hash": "47c6a7344d76e784990df98568e123f4",
+    "semantic_hash": "47c6a7344d76e784990df98568e123f4"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\migrations\\2026_04_01_000001_add_is_active_and_is_read_columns.php": {
+    "mtime": 1778963331.5671911,
+    "ast_hash": "885cf65fd8c388b44763ad63a4f30575",
+    "semantic_hash": "885cf65fd8c388b44763ad63a4f30575"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\AISiteSeeder.php": {
+    "mtime": 1772623728.5371134,
+    "ast_hash": "189abbf2e81303acb4078213a6a87fbd",
+    "semantic_hash": "189abbf2e81303acb4078213a6a87fbd"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\DatabaseSeeder.php": {
+    "mtime": 1772623728.5381143,
+    "ast_hash": "ceccb79c22a066c02cbcf93685bda517",
+    "semantic_hash": "ceccb79c22a066c02cbcf93685bda517"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\HomepageSectionSeeder.php": {
+    "mtime": 1772623728.5391128,
+    "ast_hash": "d33a93d8461f53ca91aac93ad89ae337",
+    "semantic_hash": "d33a93d8461f53ca91aac93ad89ae337"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\NewSiteSeeder copy.php": {
+    "mtime": 1772623728.5401156,
+    "ast_hash": "26918b599a7c714ea0a75432f55bba4c",
+    "semantic_hash": "26918b599a7c714ea0a75432f55bba4c"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\NewSiteSeeder.php": {
+    "mtime": 1772623728.541116,
+    "ast_hash": "26918b599a7c714ea0a75432f55bba4c",
+    "semantic_hash": "26918b599a7c714ea0a75432f55bba4c"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\PostCategorySeeder.php": {
+    "mtime": 1772623728.5421124,
+    "ast_hash": "481f9d4e072e40b75f9b4f6e89b02a9b",
+    "semantic_hash": "481f9d4e072e40b75f9b4f6e89b02a9b"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\PostSeeder.php": {
+    "mtime": 1772623728.5431118,
+    "ast_hash": "776a6d1c9ec061df0b055b7690099e70",
+    "semantic_hash": "776a6d1c9ec061df0b055b7690099e70"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\ShieldSeeder.php": {
+    "mtime": 1772623728.5441287,
+    "ast_hash": "39f68215cd8c58474411b38dc4961f23",
+    "semantic_hash": "39f68215cd8c58474411b38dc4961f23"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\SiteSeeder.php": {
+    "mtime": 1772623728.5451121,
+    "ast_hash": "e0cded70e6215d438d9f0e07a144d8aa",
+    "semantic_hash": "e0cded70e6215d438d9f0e07a144d8aa"
+  },
+  "C:\\WORK\\taba-crm\\src\\database\\seeders\\UserSeeder.php": {
+    "mtime": 1772623728.5451121,
+    "ast_hash": "485645be475a1f90ebb57b311ee228f5",
+    "semantic_hash": "485645be475a1f90ebb57b311ee228f5"
+  },
+  "C:\\WORK\\taba-crm\\src\\Exceptions\\ApiExceptionHandler.php": {
+    "mtime": 1778963331.4403758,
+    "ast_hash": "250a008d4251b2141a742d450744fa1a",
+    "semantic_hash": "250a008d4251b2141a742d450744fa1a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Exceptions\\Handler.php": {
+    "mtime": 1772623728.4421847,
+    "ast_hash": "5e0c3ef61e7cedd1ebc5a826c90749ed",
+    "semantic_hash": "5e0c3ef61e7cedd1ebc5a826c90749ed"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Pages\\GenerateComponentsFromAI.php": {
+    "mtime": 1778963331.4420462,
+    "ast_hash": "3e255f3e14e0dbaa06e8a033c3ffe2df",
+    "semantic_hash": "3e255f3e14e0dbaa06e8a033c3ffe2df"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Pages\\GenerateSiteFromAI.php": {
+    "mtime": 1778963331.4431374,
+    "ast_hash": "1c14c035ea2a76a8559b2337a525afb3",
+    "semantic_hash": "1c14c035ea2a76a8559b2337a525afb3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ActivityResource.php": {
+    "mtime": 1778963331.4449346,
+    "ast_hash": "ac4e9b9f6d7af7e934a9878a7552b301",
+    "semantic_hash": "ac4e9b9f6d7af7e934a9878a7552b301"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ContactEntryResource.php": {
+    "mtime": 1778963331.4461353,
+    "ast_hash": "7295743cea490aa735c53f591aec9d5e",
+    "semantic_hash": "7295743cea490aa735c53f591aec9d5e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\CrmSettingResource.php": {
+    "mtime": 1778963331.4520254,
+    "ast_hash": "059eba47bba7985f6372060ddce7cd25",
+    "semantic_hash": "059eba47bba7985f6372060ddce7cd25"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostCategoryResource.php": {
+    "mtime": 1778963331.4540002,
+    "ast_hash": "11239d7a59446d7173c0945fe5c12318",
+    "semantic_hash": "11239d7a59446d7173c0945fe5c12318"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource.php": {
+    "mtime": 1778963331.4640107,
+    "ast_hash": "a43cacb740d317b519a1bdaa65e6c35c",
+    "semantic_hash": "a43cacb740d317b519a1bdaa65e6c35c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ServicePaymentResource.php": {
+    "mtime": 1778963331.4739935,
+    "ast_hash": "5a61462a36b2f3bb6f6934a9da1908fb",
+    "semantic_hash": "5a61462a36b2f3bb6f6934a9da1908fb"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\UserResource.php": {
+    "mtime": 1778963331.4801009,
+    "ast_hash": "50b6bc7428993b973e0f54ce9044a08f",
+    "semantic_hash": "50b6bc7428993b973e0f54ce9044a08f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ContactEntryResource\\Pages\\CreateContactEntry.php": {
+    "mtime": 1778963331.4484062,
+    "ast_hash": "0f0e29052184ed1c3aa957329582e289",
+    "semantic_hash": "0f0e29052184ed1c3aa957329582e289"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ContactEntryResource\\Pages\\EditContactEntry.php": {
+    "mtime": 1778963331.4494588,
+    "ast_hash": "368e511bbf5c882374ea84aa1e805c33",
+    "semantic_hash": "368e511bbf5c882374ea84aa1e805c33"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ContactEntryResource\\Pages\\ListContactEntries.php": {
+    "mtime": 1778963331.4499905,
+    "ast_hash": "0dd7f44ba756f5fdb20e85d441ab2b2f",
+    "semantic_hash": "0dd7f44ba756f5fdb20e85d441ab2b2f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ContactEntryResource\\Pages\\ViewContactEntry.php": {
+    "mtime": 1778963331.4510102,
+    "ast_hash": "fa5d7ded89d3ce4840403f3e8b5df611",
+    "semantic_hash": "fa5d7ded89d3ce4840403f3e8b5df611"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\CrmSettingResource\\Pages\\ManageCrmSettings.php": {
+    "mtime": 1778963331.4540002,
+    "ast_hash": "6a4846c9098d35b1d6721a0ed114f624",
+    "semantic_hash": "6a4846c9098d35b1d6721a0ed114f624"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostCategoryResource\\Pages\\CreatePostCategory.php": {
+    "mtime": 1778963331.4560027,
+    "ast_hash": "e3fc6f8d997eb2a0b8a296233d1690e3",
+    "semantic_hash": "e3fc6f8d997eb2a0b8a296233d1690e3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostCategoryResource\\Pages\\EditPostCategory.php": {
+    "mtime": 1778963331.457999,
+    "ast_hash": "f21a34610b34ea1866b277cfb0b8c714",
+    "semantic_hash": "f21a34610b34ea1866b277cfb0b8c714"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostCategoryResource\\Pages\\ListPostCategories.php": {
+    "mtime": 1778963331.4600024,
+    "ast_hash": "48826e2df7f235a27f8298aa6b1d1c94",
+    "semantic_hash": "48826e2df7f235a27f8298aa6b1d1c94"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostCategoryResource\\RelationManagers\\PostsRelationManager.php": {
+    "mtime": 1778963331.4619951,
+    "ast_hash": "613d275ff0036d492b6a8054e2d99c25",
+    "semantic_hash": "613d275ff0036d492b6a8054e2d99c25"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\CreatePost.php": {
+    "mtime": 1778963331.4659956,
+    "ast_hash": "e2e8a9268da53876d1367a8fe26b0e4a",
+    "semantic_hash": "e2e8a9268da53876d1367a8fe26b0e4a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\EditPost.php": {
+    "mtime": 1778963331.4679956,
+    "ast_hash": "59274cd083812d0295ee31f91b8a5b5e",
+    "semantic_hash": "59274cd083812d0295ee31f91b8a5b5e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\HasPostPreview.php": {
+    "mtime": 1778963331.4690106,
+    "ast_hash": "4f87920453f5121abda7ab68e2dc723c",
+    "semantic_hash": "4f87920453f5121abda7ab68e2dc723c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\ListPosts.php": {
+    "mtime": 1778963331.4709947,
+    "ast_hash": "1b62aade094abb50c20042dd514b43b7",
+    "semantic_hash": "1b62aade094abb50c20042dd514b43b7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\PreviewPost.php": {
+    "mtime": 1778963331.4719956,
+    "ast_hash": "1959723630b959107b9d557c19e37a88",
+    "semantic_hash": "1959723630b959107b9d557c19e37a88"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Pages\\ViewPost.php": {
+    "mtime": 1778963331.4719956,
+    "ast_hash": "b7713375d1131dd7b37e757a28734833",
+    "semantic_hash": "b7713375d1131dd7b37e757a28734833"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\PostResource\\Widgets\\PostOverview.php": {
+    "mtime": 1778963331.472994,
+    "ast_hash": "d2f3d1354238fe9e2bbf24b84dd0ef89",
+    "semantic_hash": "d2f3d1354238fe9e2bbf24b84dd0ef89"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ServicePaymentResource\\Pages\\CreateServicePayment.php": {
+    "mtime": 1778963331.4771004,
+    "ast_hash": "fcf4e0df833b8d63f97ea91eb9639898",
+    "semantic_hash": "fcf4e0df833b8d63f97ea91eb9639898"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ServicePaymentResource\\Pages\\EditServicePayment.php": {
+    "mtime": 1778963331.4781015,
+    "ast_hash": "64c1b1dc6d13f2b70035fbd3b93a1549",
+    "semantic_hash": "64c1b1dc6d13f2b70035fbd3b93a1549"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ServicePaymentResource\\Pages\\ListServicePayments.php": {
+    "mtime": 1778963331.479102,
+    "ast_hash": "f6fe7539f8a7ffb60e070c25f1d9fbc4",
+    "semantic_hash": "f6fe7539f8a7ffb60e070c25f1d9fbc4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\ServicePaymentResource\\Pages\\ViewServicePayments.php": {
+    "mtime": 1778963331.479102,
+    "ast_hash": "4188e3ff4636841b3a1afd2ce87198b9",
+    "semantic_hash": "4188e3ff4636841b3a1afd2ce87198b9"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Resources\\UserResource\\Pages\\ListUsers.php": {
+    "mtime": 1778963331.4821036,
+    "ast_hash": "e48e128f60c1dd09bf084f1361c5819f",
+    "semantic_hash": "e48e128f60c1dd09bf084f1361c5819f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\GlobalStatsOverview.php": {
+    "mtime": 1778963331.4831002,
+    "ast_hash": "1dea630f7414b648dcaa1e5fcdf10681",
+    "semantic_hash": "1dea630f7414b648dcaa1e5fcdf10681"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\LatestPosts.php": {
+    "mtime": 1778963331.4841027,
+    "ast_hash": "69b877bf21251c2ccbefcba2c0daa2d8",
+    "semantic_hash": "69b877bf21251c2ccbefcba2c0daa2d8"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\OthersAnalytics.php": {
+    "mtime": 1778963331.485102,
+    "ast_hash": "de903a511d9af5f2e5c2be358277fcb4",
+    "semantic_hash": "de903a511d9af5f2e5c2be358277fcb4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\PaymentAnalytics.php": {
+    "mtime": 1778963331.486099,
+    "ast_hash": "35d00f2c0920afe0a630ce5db3a5c5c0",
+    "semantic_hash": "35d00f2c0920afe0a630ce5db3a5c5c0"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\PostOverview.php": {
+    "mtime": 1778963331.4871023,
+    "ast_hash": "0cc52fc3d4412050a1387b01e181f1e9",
+    "semantic_hash": "0cc52fc3d4412050a1387b01e181f1e9"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\PostStatsOverview.php": {
+    "mtime": 1778963331.4891133,
+    "ast_hash": "2597a6f204f1b8b3c8d1ad12877dd4b8",
+    "semantic_hash": "2597a6f204f1b8b3c8d1ad12877dd4b8"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\RecentActivities.php": {
+    "mtime": 1778963331.4901013,
+    "ast_hash": "89e8de9ac87662a3a8bc1ac7aec212c1",
+    "semantic_hash": "89e8de9ac87662a3a8bc1ac7aec212c1"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Admin\\Widgets\\VisitorAnalytics.php": {
+    "mtime": 1778963331.4901013,
+    "ast_hash": "77ff8257f2a95fd78f11d60e2b2f3d77",
+    "semantic_hash": "77ff8257f2a95fd78f11d60e2b2f3d77"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Auth\\Login.php": {
+    "mtime": 1772623728.443187,
+    "ast_hash": "f2607c5d7c76cace8ff33e7606384892",
+    "semantic_hash": "f2607c5d7c76cace8ff33e7606384892"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Blocks\\Image.php": {
+    "mtime": 1772623728.444184,
+    "ast_hash": "f4f3b0418f7be1f1f7867650ea6e9298",
+    "semantic_hash": "f4f3b0418f7be1f1f7867650ea6e9298"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Blocks\\PageCard.php": {
+    "mtime": 1772623728.444184,
+    "ast_hash": "a04eb758937bafb1277ae8f2e4f5223b",
+    "semantic_hash": "a04eb758937bafb1277ae8f2e4f5223b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Blocks\\Paragraph.php": {
+    "mtime": 1772623728.4451923,
+    "ast_hash": "adab4157c8e6523f0064fceb4aed9ce6",
+    "semantic_hash": "adab4157c8e6523f0064fceb4aed9ce6"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Blocks\\PostCard.php": {
+    "mtime": 1772623728.4451923,
+    "ast_hash": "267498f6f1f48f904d4facf43bc5da6c",
+    "semantic_hash": "267498f6f1f48f904d4facf43bc5da6c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Blocks\\Title.php": {
+    "mtime": 1772623728.4461856,
+    "ast_hash": "c2f495184069778918aec32b22e75f72",
+    "semantic_hash": "c2f495184069778918aec32b22e75f72"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Pages\\Dashboard.php": {
+    "mtime": 1778963331.4920995,
+    "ast_hash": "30c21d328b5b2ea69d4a6f7e45c06446",
+    "semantic_hash": "30c21d328b5b2ea69d4a6f7e45c06446"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Pages\\EditSection.php": {
+    "mtime": 1778963331.49311,
+    "ast_hash": "43272f316688b8feaede20f72d3faa6f",
+    "semantic_hash": "43272f316688b8feaede20f72d3faa6f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Pages\\Messages.php": {
+    "mtime": 1778963331.4951038,
+    "ast_hash": "b079cb65362bc1140229aaf9129db84b",
+    "semantic_hash": "b079cb65362bc1140229aaf9129db84b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Pages\\SiteSettings.php": {
+    "mtime": 1778963331.4961014,
+    "ast_hash": "3a887cf270a4b43513e6fb5d1f02d6a0",
+    "semantic_hash": "3a887cf270a4b43513e6fb5d1f02d6a0"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\PageResource.php": {
+    "mtime": 1778963331.498103,
+    "ast_hash": "43ebb98b69c1f22806385e0d80119df7",
+    "semantic_hash": "43ebb98b69c1f22806385e0d80119df7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\SectionPostResource.php": {
+    "mtime": 1778963331.5024202,
+    "ast_hash": "a93fc0d8b966f03bc7cf32b94af8834c",
+    "semantic_hash": "a93fc0d8b966f03bc7cf32b94af8834c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\PageResource\\Pages\\EditPage.php": {
+    "mtime": 1778963331.4991117,
+    "ast_hash": "5185b6201d4b15acb582ebdd3a2db8fb",
+    "semantic_hash": "5185b6201d4b15acb582ebdd3a2db8fb"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\PageResource\\Pages\\ListPages.php": {
+    "mtime": 1778963331.5008512,
+    "ast_hash": "1258e782e83e3aaadf5d624d1648557c",
+    "semantic_hash": "1258e782e83e3aaadf5d624d1648557c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\PageResource\\Pages\\ViewPage.php": {
+    "mtime": 1778963331.5013556,
+    "ast_hash": "bc263ae116713add8ee966fe4332e1ca",
+    "semantic_hash": "bc263ae116713add8ee966fe4332e1ca"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\SectionPostResource\\Pages\\CreateSectionPost.php": {
+    "mtime": 1778963331.5035021,
+    "ast_hash": "807ce897a8f023cf5af3a6199df8ed46",
+    "semantic_hash": "807ce897a8f023cf5af3a6199df8ed46"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\SectionPostResource\\Pages\\EditSectionPost.php": {
+    "mtime": 1778963331.5040205,
+    "ast_hash": "51d47a39e1e055d59b13cc243dd5e3fc",
+    "semantic_hash": "51d47a39e1e055d59b13cc243dd5e3fc"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\SectionPostResource\\Pages\\ListSectionPosts.php": {
+    "mtime": 1778963331.5050511,
+    "ast_hash": "c57e85613c04f49dec071ca1cf73d612",
+    "semantic_hash": "c57e85613c04f49dec071ca1cf73d612"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Resources\\SectionPostResource\\Pages\\ViewSectionPost.php": {
+    "mtime": 1778963331.5066319,
+    "ast_hash": "2ab5147bd790ac5b67e18407a22cbf6b",
+    "semantic_hash": "2ab5147bd790ac5b67e18407a22cbf6b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\AccountWidget.php": {
+    "mtime": 1778963331.507897,
+    "ast_hash": "e4f6dc9c5ca2a6c2297d8c681ed30f23",
+    "semantic_hash": "e4f6dc9c5ca2a6c2297d8c681ed30f23"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\ActionClicksOverview.php": {
+    "mtime": 1778963331.50896,
+    "ast_hash": "4734d8865c2e525718591f67fb2729d3",
+    "semantic_hash": "4734d8865c2e525718591f67fb2729d3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\AdvertisementsOverview.php": {
+    "mtime": 1778963331.5094838,
+    "ast_hash": "562969ac04d3189882519a2fbfc6b0ad",
+    "semantic_hash": "562969ac04d3189882519a2fbfc6b0ad"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\OffersOverview.php": {
+    "mtime": 1778963331.5100043,
+    "ast_hash": "7e605570c0bf82aea9a3b8f2580d1e23",
+    "semantic_hash": "7e605570c0bf82aea9a3b8f2580d1e23"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\StatsOverview.php": {
+    "mtime": 1778963331.5105653,
+    "ast_hash": "52264d535704c1cfe924c2ac718106df",
+    "semantic_hash": "52264d535704c1cfe924c2ac718106df"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\SurveyAnswersChart.php": {
+    "mtime": 1778963331.5110886,
+    "ast_hash": "75347d4b9ad0a9aa65c8ff85254b0eef",
+    "semantic_hash": "75347d4b9ad0a9aa65c8ff85254b0eef"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\WeeklyClicksChart.php": {
+    "mtime": 1778963331.5126972,
+    "ast_hash": "fb323bdbf46c6c21f226c2cce71d7e27",
+    "semantic_hash": "fb323bdbf46c6c21f226c2cce71d7e27"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\WeeklyReviewsChart.php": {
+    "mtime": 1778963331.5126972,
+    "ast_hash": "040f9d5205b5021470199322cb34061f",
+    "semantic_hash": "040f9d5205b5021470199322cb34061f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Client\\Widgets\\WelcomeWidget.php": {
+    "mtime": 1778963331.513702,
+    "ast_hash": "7aac1eab1c65c62765f730297b3d2eaa",
+    "semantic_hash": "7aac1eab1c65c62765f730297b3d2eaa"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Fields\\PageContent.php": {
+    "mtime": 1772623728.4471889,
+    "ast_hash": "f2a124ee25c9bd3f61eb663c61097845",
+    "semantic_hash": "f2a124ee25c9bd3f61eb663c61097845"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Fields\\PostContent.php": {
+    "mtime": 1772623728.4471889,
+    "ast_hash": "5586b2d79ea792b2b7d25748de9bb8d4",
+    "semantic_hash": "5586b2d79ea792b2b7d25748de9bb8d4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Fields\\PostFooter.php": {
+    "mtime": 1772623728.4481833,
+    "ast_hash": "3e3137d2aecd7accbc6c2153f34ab137",
+    "semantic_hash": "3e3137d2aecd7accbc6c2153f34ab137"
+  },
+  "C:\\WORK\\taba-crm\\src\\Filament\\Forms\\Components\\SectionSelector.php": {
+    "mtime": 1772623728.4491887,
+    "ast_hash": "27d9acc7313d101ea8544d3bbf8cf70c",
+    "semantic_hash": "27d9acc7313d101ea8544d3bbf8cf70c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\CategoryPreviewController.php": {
+    "mtime": 1772623728.4811935,
+    "ast_hash": "ab85b26ef32063a4bccd0a318a7a513e",
+    "semantic_hash": "ab85b26ef32063a4bccd0a318a7a513e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Controller.php": {
+    "mtime": 1772623728.4821937,
+    "ast_hash": "3f32097cd5030baf542037d259968da3",
+    "semantic_hash": "3f32097cd5030baf542037d259968da3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\GoogleTranslateController.php": {
+    "mtime": 1772623728.4832084,
+    "ast_hash": "892ade1509b3f18388ccb5daee48c0ac",
+    "semantic_hash": "892ade1509b3f18388ccb5daee48c0ac"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\PageController.php": {
+    "mtime": 1772623728.4832084,
+    "ast_hash": "cea7394502dd5fe7b26e3aa3a6b17f0c",
+    "semantic_hash": "cea7394502dd5fe7b26e3aa3a6b17f0c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\PostController.php": {
+    "mtime": 1778963331.5349364,
+    "ast_hash": "42f5b8bbeb8387ed455ba9350f69b616",
+    "semantic_hash": "42f5b8bbeb8387ed455ba9350f69b616"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\PreviewController.php": {
+    "mtime": 1772623728.4854007,
+    "ast_hash": "293e98693e4bbea3224cbe47dbe0e86c",
+    "semantic_hash": "293e98693e4bbea3224cbe47dbe0e86c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\ActionClickApiController.php": {
+    "mtime": 1778963331.5147033,
+    "ast_hash": "6e17844e84eeef67478678fba6487ecd",
+    "semantic_hash": "6e17844e84eeef67478678fba6487ecd"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\ApiController.php": {
+    "mtime": 1778963331.5157013,
+    "ast_hash": "4b25b5fa934d90167339ae72ede265ab",
+    "semantic_hash": "4b25b5fa934d90167339ae72ede265ab"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\AuthApiController.php": {
+    "mtime": 1778963331.516701,
+    "ast_hash": "303829cd571042b668672a59074acd9e",
+    "semantic_hash": "303829cd571042b668672a59074acd9e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\CategoryApiController.php": {
+    "mtime": 1778963331.5177047,
+    "ast_hash": "78b2722d10da4a3c189fa7645bf4e42b",
+    "semantic_hash": "78b2722d10da4a3c189fa7645bf4e42b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\ContactEntryApiController.php": {
+    "mtime": 1778963331.5187128,
+    "ast_hash": "96d695c0101d846294e0e514f498f8a8",
+    "semantic_hash": "96d695c0101d846294e0e514f498f8a8"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\HomeApiController.php": {
+    "mtime": 1778963331.5197027,
+    "ast_hash": "0af86ca79c97c87a5b50ffe8a5d3c69e",
+    "semantic_hash": "0af86ca79c97c87a5b50ffe8a5d3c69e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\MenuApiController.php": {
+    "mtime": 1778963331.5207014,
+    "ast_hash": "95e3c656677da42697b6db32df9154fc",
+    "semantic_hash": "95e3c656677da42697b6db32df9154fc"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\PageApiController.php": {
+    "mtime": 1778963331.521701,
+    "ast_hash": "257405d44f9601783430f69e3a949af4",
+    "semantic_hash": "257405d44f9601783430f69e3a949af4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\PostApiController.php": {
+    "mtime": 1778963331.5237036,
+    "ast_hash": "018b79ca7a6e297e229546cb8f46683c",
+    "semantic_hash": "018b79ca7a6e297e229546cb8f46683c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\ReviewApiController.php": {
+    "mtime": 1778963331.524705,
+    "ast_hash": "e8789763f9cf3df2670e7b1b9787af42",
+    "semantic_hash": "e8789763f9cf3df2670e7b1b9787af42"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\ServicePaymentApiController.php": {
+    "mtime": 1778963331.5257025,
+    "ast_hash": "da56088b953792ec2533838b28d357e6",
+    "semantic_hash": "da56088b953792ec2533838b28d357e6"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\SettingApiController.php": {
+    "mtime": 1778963331.5275252,
+    "ast_hash": "c657a834274075001b76c718ff28a5d6",
+    "semantic_hash": "c657a834274075001b76c718ff28a5d6"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\TagApiController.php": {
+    "mtime": 1778963331.5280285,
+    "ast_hash": "858c3bc629751db6d2e016de19994ead",
+    "semantic_hash": "858c3bc629751db6d2e016de19994ead"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\ComponentController.php": {
+    "mtime": 1778963331.5296204,
+    "ast_hash": "2ac195462e53fd04f98864a62f1fe1d7",
+    "semantic_hash": "2ac195462e53fd04f98864a62f1fe1d7"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\ContactController.php": {
+    "mtime": 1778963331.5307188,
+    "ast_hash": "00f3fd31427c5ef201bf4a15b0ee1477",
+    "semantic_hash": "00f3fd31427c5ef201bf4a15b0ee1477"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\MenuController.php": {
+    "mtime": 1778963331.5317771,
+    "ast_hash": "eccbe0d876503d34a2f7889ff1631b1d",
+    "semantic_hash": "eccbe0d876503d34a2f7889ff1631b1d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\PageController.php": {
+    "mtime": 1778963331.5322976,
+    "ast_hash": "ec1ce39837d914b8b9474dfe240edf71",
+    "semantic_hash": "ec1ce39837d914b8b9474dfe240edf71"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\SectionController.php": {
+    "mtime": 1778963331.533387,
+    "ast_hash": "8b7c6db13f36792ebf65e92679fd692f",
+    "semantic_hash": "8b7c6db13f36792ebf65e92679fd692f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Controllers\\Api\\V2\\SettingController.php": {
+    "mtime": 1778963331.5339055,
+    "ast_hash": "77e746dc7fe4e396d51f6b513eae69d4",
+    "semantic_hash": "77e746dc7fe4e396d51f6b513eae69d4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\AddDiscoveryHeaders.php": {
+    "mtime": 1778963331.5365746,
+    "ast_hash": "f543fdaeadb7e36b7f12017b6028edda",
+    "semantic_hash": "f543fdaeadb7e36b7f12017b6028edda"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\AddSeoDefaults.php": {
+    "mtime": 1772623728.4867556,
+    "ast_hash": "2c5acd641404e92bf6af4e90692c9cba",
+    "semantic_hash": "2c5acd641404e92bf6af4e90692c9cba"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\ApplyBrandColors.php": {
+    "mtime": 1778963331.5374491,
+    "ast_hash": "ee08642b52a78b8e8b45cd66636f2a0e",
+    "semantic_hash": "ee08642b52a78b8e8b45cd66636f2a0e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\ForceHttps.php": {
+    "mtime": 1772623728.4867556,
+    "ast_hash": "4cd70810e3bae6be8db82f78f1f0f931",
+    "semantic_hash": "4cd70810e3bae6be8db82f78f1f0f931"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\ForceJsonResponse.php": {
+    "mtime": 1778963331.5385084,
+    "ast_hash": "59c911553b25f1155a0d12596ba8ec75",
+    "semantic_hash": "59c911553b25f1155a0d12596ba8ec75"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\GoogleTranslate.php": {
+    "mtime": 1772623728.4877634,
+    "ast_hash": "91085b0199f70e647ddee085ea2b7c2f",
+    "semantic_hash": "91085b0199f70e647ddee085ea2b7c2f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\InjectSeoForBots.php": {
+    "mtime": 1778963331.539029,
+    "ast_hash": "a88f0db1073422caa79e3a250a71976d",
+    "semantic_hash": "a88f0db1073422caa79e3a250a71976d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\RedirectIfFromGoogle.php": {
+    "mtime": 1772623728.4891605,
+    "ast_hash": "e10bfe0e5163fe22ddaa42dbb91834f1",
+    "semantic_hash": "e10bfe0e5163fe22ddaa42dbb91834f1"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\RemovePublicFromUrl.php": {
+    "mtime": 1772623728.4891605,
+    "ast_hash": "d163a6e2a980f26b5ab6d180826fcf12",
+    "semantic_hash": "d163a6e2a980f26b5ab6d180826fcf12"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Middleware\\SetLocaleFromHeader.php": {
+    "mtime": 1778963331.5401406,
+    "ast_hash": "83803d428f79e08a5ca9b2a61683466d",
+    "semantic_hash": "83803d428f79e08a5ca9b2a61683466d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\LoginRequest.php": {
+    "mtime": 1778963331.5416942,
+    "ast_hash": "442b2be9a10373a33e17b1f5d083eb71",
+    "semantic_hash": "442b2be9a10373a33e17b1f5d083eb71"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\RegisterRequest.php": {
+    "mtime": 1778963331.5432782,
+    "ast_hash": "a35de545cf8303622c6a5b3da931d384",
+    "semantic_hash": "a35de545cf8303622c6a5b3da931d384"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\StoreCategoryRequest.php": {
+    "mtime": 1778963331.5443728,
+    "ast_hash": "aae35ff6031b39e806600ed73527ab56",
+    "semantic_hash": "aae35ff6031b39e806600ed73527ab56"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\StoreContactEntryRequest.php": {
+    "mtime": 1778963331.5449054,
+    "ast_hash": "5269f78856944c85a88f38c5ce3d45b1",
+    "semantic_hash": "5269f78856944c85a88f38c5ce3d45b1"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\StorePageRequest.php": {
+    "mtime": 1778963331.5454795,
+    "ast_hash": "c3e65ee6bcc1a432a07305c40aabccab",
+    "semantic_hash": "c3e65ee6bcc1a432a07305c40aabccab"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\StorePostRequest.php": {
+    "mtime": 1778963331.5460105,
+    "ast_hash": "5383e7f0ce0fe38b2588775142fe55bf",
+    "semantic_hash": "5383e7f0ce0fe38b2588775142fe55bf"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\UpdateCategoryRequest.php": {
+    "mtime": 1778963331.546566,
+    "ast_hash": "b67f978ec3ed0d97856e0a5952297414",
+    "semantic_hash": "b67f978ec3ed0d97856e0a5952297414"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\UpdatePageRequest.php": {
+    "mtime": 1778963331.5476701,
+    "ast_hash": "0c6201b0700a0e2dca8c92744d1cc51d",
+    "semantic_hash": "0c6201b0700a0e2dca8c92744d1cc51d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Requests\\Api\\UpdatePostRequest.php": {
+    "mtime": 1778963331.549372,
+    "ast_hash": "7d5ae608c0a78213e9580c86ffe739db",
+    "semantic_hash": "7d5ae608c0a78213e9580c86ffe739db"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\ContactEntryResource.php": {
+    "mtime": 1778963331.5503979,
+    "ast_hash": "aa75e5962a65974c5212293d4ba3d503",
+    "semantic_hash": "aa75e5962a65974c5212293d4ba3d503"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\CrmSettingResource.php": {
+    "mtime": 1778963331.5513794,
+    "ast_hash": "f787a25d8662b276205168d468315e3f",
+    "semantic_hash": "f787a25d8662b276205168d468315e3f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\MediaResource.php": {
+    "mtime": 1778963331.5520446,
+    "ast_hash": "6976a7b7a23438fd022b496d81e32b6a",
+    "semantic_hash": "6976a7b7a23438fd022b496d81e32b6a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\MenuResource.php": {
+    "mtime": 1778963331.5530782,
+    "ast_hash": "8d3311ab6365212195f789ee45e61a01",
+    "semantic_hash": "8d3311ab6365212195f789ee45e61a01"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\PageResource.php": {
+    "mtime": 1778963331.5535913,
+    "ast_hash": "4c126ea46d469f22e92e1657d8313c55",
+    "semantic_hash": "4c126ea46d469f22e92e1657d8313c55"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\PostCategoryResource.php": {
+    "mtime": 1778963331.554664,
+    "ast_hash": "1a4f47591c84329f40f6268596dbe54e",
+    "semantic_hash": "1a4f47591c84329f40f6268596dbe54e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\PostResource.php": {
+    "mtime": 1778963331.5560918,
+    "ast_hash": "c3a6eae6fae4c446b490c9bc0ca4bceb",
+    "semantic_hash": "c3a6eae6fae4c446b490c9bc0ca4bceb"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\ReviewResource.php": {
+    "mtime": 1778963331.5566118,
+    "ast_hash": "7ee121781c1b27a19a35170603e228a2",
+    "semantic_hash": "7ee121781c1b27a19a35170603e228a2"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\ServicePaymentResource.php": {
+    "mtime": 1778963331.5572667,
+    "ast_hash": "e89f2090d18590e7df1af70c24cce012",
+    "semantic_hash": "e89f2090d18590e7df1af70c24cce012"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\TagResource.php": {
+    "mtime": 1778963331.5578105,
+    "ast_hash": "af6385b08c66f37c5885c1e39df3dc18",
+    "semantic_hash": "af6385b08c66f37c5885c1e39df3dc18"
+  },
+  "C:\\WORK\\taba-crm\\src\\Http\\Resources\\Api\\UserResource.php": {
+    "mtime": 1778963331.558872,
+    "ast_hash": "4033da515864153a28c607a72c8aff62",
+    "semantic_hash": "4033da515864153a28c607a72c8aff62"
+  },
+  "C:\\WORK\\taba-crm\\src\\Jobs\\GenerateCategoryPreview.php": {
+    "mtime": 1778963331.5594323,
+    "ast_hash": "041d375637901fcdc62be46bd81862fa",
+    "semantic_hash": "041d375637901fcdc62be46bd81862fa"
+  },
+  "C:\\WORK\\taba-crm\\src\\Jobs\\SaveUnsplashImageJob.php": {
+    "mtime": 1772623728.4910457,
+    "ast_hash": "397fb499f88f1220ceaeb7c08adbb78b",
+    "semantic_hash": "397fb499f88f1220ceaeb7c08adbb78b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\ContactForm.php": {
+    "mtime": 1772623728.4918747,
+    "ast_hash": "4552706695b8314a2df9323d53aca80b",
+    "semantic_hash": "4552706695b8314a2df9323d53aca80b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\FranchiseRequestForm.php": {
+    "mtime": 1772623728.4923809,
+    "ast_hash": "c0e2bdb4cc87ac748e799f67e678ea86",
+    "semantic_hash": "c0e2bdb4cc87ac748e799f67e678ea86"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\Home.php": {
+    "mtime": 1778963331.5605216,
+    "ast_hash": "6dc63c8a01a607aecd15cf2798c05dab",
+    "semantic_hash": "6dc63c8a01a607aecd15cf2798c05dab"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\Posts.php": {
+    "mtime": 1772623728.4957292,
+    "ast_hash": "6acb03b17a2f9150eb3c103c2483a77d",
+    "semantic_hash": "6acb03b17a2f9150eb3c103c2483a77d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\RequestQuoteForm.php": {
+    "mtime": 1772623728.4969108,
+    "ast_hash": "5d9f93ce364c3b83a3ce90466c272f4c",
+    "semantic_hash": "5d9f93ce364c3b83a3ce90466c272f4c"
+  },
+  "C:\\WORK\\taba-crm\\src\\Livewire\\Post\\Show.php": {
+    "mtime": 1772623728.4946644,
+    "ast_hash": "e64d7511113d45fc81be1fab9a15736f",
+    "semantic_hash": "e64d7511113d45fc81be1fab9a15736f"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\ActionClick.php": {
+    "mtime": 1778963331.561566,
+    "ast_hash": "a681d2e95188190ea4acef2ed14afd0d",
+    "semantic_hash": "a681d2e95188190ea4acef2ed14afd0d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\ContactEntry.php": {
+    "mtime": 1778963331.561566,
+    "ast_hash": "3880dff4e5d22064d67ac1d3dc02c635",
+    "semantic_hash": "3880dff4e5d22064d67ac1d3dc02c635"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\CrmSetting.php": {
+    "mtime": 1778963331.5626073,
+    "ast_hash": "e7bd76ec89c7e37a4bcb529555826026",
+    "semantic_hash": "e7bd76ec89c7e37a4bcb529555826026"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Menu.php": {
+    "mtime": 1772623728.4999602,
+    "ast_hash": "5a7947194cbadccbd641fcd7320f6e8d",
+    "semantic_hash": "5a7947194cbadccbd641fcd7320f6e8d"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Metadata.php": {
+    "mtime": 1772623728.4999602,
+    "ast_hash": "47eb34750e6c20bbf2d2ad884dc0fbdf",
+    "semantic_hash": "47eb34750e6c20bbf2d2ad884dc0fbdf"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Page.php": {
+    "mtime": 1772623728.5019684,
+    "ast_hash": "cc07dfe923304bad8a74df07bd3387ad",
+    "semantic_hash": "cc07dfe923304bad8a74df07bd3387ad"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Post.php": {
+    "mtime": 1778963331.5626073,
+    "ast_hash": "a24eacfbfcdca6262cbe726b1eb6a855",
+    "semantic_hash": "a24eacfbfcdca6262cbe726b1eb6a855"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\PostCategory.php": {
+    "mtime": 1778963331.5641863,
+    "ast_hash": "8ce31d580c8753bc4f1a1b7cb9341fcb",
+    "semantic_hash": "8ce31d580c8753bc4f1a1b7cb9341fcb"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Review.php": {
+    "mtime": 1772623728.5039966,
+    "ast_hash": "99466694386c021caba01f50068ea99a",
+    "semantic_hash": "99466694386c021caba01f50068ea99a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\ServicePayment.php": {
+    "mtime": 1772623728.5050359,
+    "ast_hash": "c87b865745840ee1324134f43a84dbd1",
+    "semantic_hash": "c87b865745840ee1324134f43a84dbd1"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\Tag.php": {
+    "mtime": 1772623728.5060048,
+    "ast_hash": "7f1f825af25ea6b25f6e593be3585288",
+    "semantic_hash": "7f1f825af25ea6b25f6e593be3585288"
+  },
+  "C:\\WORK\\taba-crm\\src\\Models\\User.php": {
+    "mtime": 1778963331.5641863,
+    "ast_hash": "c16d330a7c61d1f7a2eac158c2e47d30",
+    "semantic_hash": "c16d330a7c61d1f7a2eac158c2e47d30"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\ContactEntryPolicy.php": {
+    "mtime": 1772623728.5070033,
+    "ast_hash": "e7486140e62bcc42bc13084adea6bd70",
+    "semantic_hash": "e7486140e62bcc42bc13084adea6bd70"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\CrmSettingPolicy.php": {
+    "mtime": 1778963331.56519,
+    "ast_hash": "e9ae50eae1312483255e86ba9679487a",
+    "semantic_hash": "e9ae50eae1312483255e86ba9679487a"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\MediaPolicy.php": {
+    "mtime": 1772623728.5080578,
+    "ast_hash": "e71fee3f54f6b68e55ff6a2d3cea6d08",
+    "semantic_hash": "e71fee3f54f6b68e55ff6a2d3cea6d08"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\PagePolicy.php": {
+    "mtime": 1778963331.5661957,
+    "ast_hash": "e95210e39ff5857ca68249926ab55231",
+    "semantic_hash": "e95210e39ff5857ca68249926ab55231"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\PostCategoryPolicy.php": {
+    "mtime": 1772623728.5090666,
+    "ast_hash": "53481bf4fb97747711753a2652eb0cc3",
+    "semantic_hash": "53481bf4fb97747711753a2652eb0cc3"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\PostPolicy.php": {
+    "mtime": 1772623728.5090666,
+    "ast_hash": "16c4badd13d4844c40b14c893aed4dce",
+    "semantic_hash": "16c4badd13d4844c40b14c893aed4dce"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\RolePolicy.php": {
+    "mtime": 1772623728.510077,
+    "ast_hash": "c4815806fd531708a6a29a30cb11b229",
+    "semantic_hash": "c4815806fd531708a6a29a30cb11b229"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\ServicePaymentPolicy.php": {
+    "mtime": 1772623728.5110729,
+    "ast_hash": "eb221ece0e6701f4d5166fa8df08b01e",
+    "semantic_hash": "eb221ece0e6701f4d5166fa8df08b01e"
+  },
+  "C:\\WORK\\taba-crm\\src\\Policies\\UserPolicy.php": {
+    "mtime": 1772623728.5110729,
+    "ast_hash": "d3969a4cd283e795a0703e0479d6bb94",
+    "semantic_hash": "d3969a4cd283e795a0703e0479d6bb94"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\admin.js": {
+    "mtime": 1772623728.553112,
+    "ast_hash": "2bef74208f84fc324ca9671c37f8d3c6",
+    "semantic_hash": "2bef74208f84fc324ca9671c37f8d3c6"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\app.js": {
+    "mtime": 1772623728.5541103,
+    "ast_hash": "0a3bb05b5d426ce6217416b2ce001f2f",
+    "semantic_hash": "0a3bb05b5d426ce6217416b2ce001f2f"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\appear.min.js": {
+    "mtime": 1772623728.5541103,
+    "ast_hash": "c8f1b4f7254b473e92d905103dec4926",
+    "semantic_hash": "c8f1b4f7254b473e92d905103dec4926"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\bootstrap.bundle.min.js": {
+    "mtime": 1772623728.5551102,
+    "ast_hash": "6baf57f25796c332144ed58a2a0cd9ee",
+    "semantic_hash": "6baf57f25796c332144ed58a2a0cd9ee"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\bootstrap.js": {
+    "mtime": 1772623728.55611,
+    "ast_hash": "3836060411368a5c3c6e59295ce7aa77",
+    "semantic_hash": "3836060411368a5c3c6e59295ce7aa77"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\gsap-scroll-to-plugin.min.js": {
+    "mtime": 1772623728.5571115,
+    "ast_hash": "20b823a95143ccbf191565d44c4b6755",
+    "semantic_hash": "20b823a95143ccbf191565d44c4b6755"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\gsap-scroll-trigger.min.js": {
+    "mtime": 1772623728.558112,
+    "ast_hash": "ccb3fd358f2e9765de0336fba6591ad3",
+    "semantic_hash": "ccb3fd358f2e9765de0336fba6591ad3"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\gsap-split-text.min.js": {
+    "mtime": 1772623728.5591123,
+    "ast_hash": "60144315c1cfb721751584d3efafc958",
+    "semantic_hash": "60144315c1cfb721751584d3efafc958"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\gsap.min.js": {
+    "mtime": 1772623728.5601118,
+    "ast_hash": "07d0bd8e0dea4cda3094b898d20789db",
+    "semantic_hash": "07d0bd8e0dea4cda3094b898d20789db"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\jquery.min.js": {
+    "mtime": 1772623728.5611334,
+    "ast_hash": "c9771cc3e90e18f5336eedbd0fffb2cf",
+    "semantic_hash": "c9771cc3e90e18f5336eedbd0fffb2cf"
+  },
+  "C:\\WORK\\taba-crm\\src\\resources\\js\\swiper.min.js": {
+    "mtime": 1772623728.5621276,
+    "ast_hash": "56c2a4e05f527d0cb52c21e5f164c059",
+    "semantic_hash": "56c2a4e05f527d0cb52c21e5f164c059"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\GeminiTranslationService.php": {
+    "mtime": 1772623728.5120711,
+    "ast_hash": "0bf971db0f33ec1d40e11a05e368bf56",
+    "semantic_hash": "0bf971db0f33ec1d40e11a05e368bf56"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\GenerateComponentService.php": {
+    "mtime": 1772623728.5130713,
+    "ast_hash": "56107bfdc58463cd168f289085cdaf4b",
+    "semantic_hash": "56107bfdc58463cd168f289085cdaf4b"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\GenerateSeederService.php": {
+    "mtime": 1772623728.5140736,
+    "ast_hash": "84cda775472c58fd5781d18d648eec19",
+    "semantic_hash": "84cda775472c58fd5781d18d648eec19"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\GenerateSeederService2.php": {
+    "mtime": 1772623728.5150785,
+    "ast_hash": "85a0309ee4807ac89b18298b8591cfab",
+    "semantic_hash": "85a0309ee4807ac89b18298b8591cfab"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\ImageSearchService.php": {
+    "mtime": 1772623728.5160787,
+    "ast_hash": "43d2afe4e95a6365ba07cbd9349990d4",
+    "semantic_hash": "43d2afe4e95a6365ba07cbd9349990d4"
+  },
+  "C:\\WORK\\taba-crm\\src\\Services\\SeoSuggestionService.php": {
+    "mtime": 1772623728.5170765,
+    "ast_hash": "6f3cc85cb9dd5031c4bd4950e3d8504c",
+    "semantic_hash": "6f3cc85cb9dd5031c4bd4950e3d8504c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\post.blade.php": {
+    "mtime": 1772623728.621117,
+    "ast_hash": "4c5142330455606f6fbd95320bc331e8",
+    "semantic_hash": "4c5142330455606f6fbd95320bc331e8"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\posts.blade.php": {
+    "mtime": 1772623728.622117,
+    "ast_hash": "929a514d7bf7da407106bf0d642b9ff7",
+    "semantic_hash": "929a514d7bf7da407106bf0d642b9ff7"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\dashboard.blade.php": {
+    "mtime": 1778963331.5705874,
+    "ast_hash": "fe115cdd7f8bc9b4d697cbb18adc6e11",
+    "semantic_hash": "fe115cdd7f8bc9b4d697cbb18adc6e11"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\edit-section.blade.php": {
+    "mtime": 1778963331.5715866,
+    "ast_hash": "92ba9631c38f1aac84bfc604b8d1d4c9",
+    "semantic_hash": "92ba9631c38f1aac84bfc604b8d1d4c9"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\message-detail.blade.php": {
+    "mtime": 1778963331.5725877,
+    "ast_hash": "fb6f4cbd66f9fa1b82812fc950b4f81c",
+    "semantic_hash": "fb6f4cbd66f9fa1b82812fc950b4f81c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\messages.blade.php": {
+    "mtime": 1778963331.5738125,
+    "ast_hash": "a00399bd3306a5f41c31252c0662a36b",
+    "semantic_hash": "a00399bd3306a5f41c31252c0662a36b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\site-settings.blade.php": {
+    "mtime": 1778963331.5743642,
+    "ast_hash": "2c038c7516399964f12150b44e7216d3",
+    "semantic_hash": "2c038c7516399964f12150b44e7216d3"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\client\\widgets\\welcome.blade.php": {
+    "mtime": 1778963331.5759118,
+    "ast_hash": "5b4b188aad2f54312f2d3da7feef8f87",
+    "semantic_hash": "5b4b188aad2f54312f2d3da7feef8f87"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\breadcrumbs.blade.php": {
+    "mtime": 1772623728.5671124,
+    "ast_hash": "18c1b565bf319e2bffb76b0dece2fa15",
+    "semantic_hash": "18c1b565bf319e2bffb76b0dece2fa15"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\breadcrumbs2.blade.php": {
+    "mtime": 1772623728.569111,
+    "ast_hash": "fa750e216288bad02b96b206a9a45c9d",
+    "semantic_hash": "fa750e216288bad02b96b206a9a45c9d"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\figure.blade.php": {
+    "mtime": 1772623728.5701122,
+    "ast_hash": "4cc3934bcc92f0dabdb17d72eadac7a6",
+    "semantic_hash": "4cc3934bcc92f0dabdb17d72eadac7a6"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\footer.blade.php": {
+    "mtime": 1772623728.5701122,
+    "ast_hash": "fbef6e7a025332c34e444fe61fe22005",
+    "semantic_hash": "fbef6e7a025332c34e444fe61fe22005"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\header.blade.php": {
+    "mtime": 1772623728.5711126,
+    "ast_hash": "8dcf59290469042a0bb9a5017de05ff7",
+    "semantic_hash": "8dcf59290469042a0bb9a5017de05ff7"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\logo.blade.php": {
+    "mtime": 1772623728.5901122,
+    "ast_hash": "06191e93cc22816168932a700f89e8ab",
+    "semantic_hash": "06191e93cc22816168932a700f89e8ab"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\main-header.blade.php": {
+    "mtime": 1772623728.5901122,
+    "ast_hash": "58551ff25fb32e9b037a0b884762c164",
+    "semantic_hash": "58551ff25fb32e9b037a0b884762c164"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\blocks\\image.blade.php": {
+    "mtime": 1772623728.5651095,
+    "ast_hash": "2bd819df250b86437695f561af36fad2",
+    "semantic_hash": "2bd819df250b86437695f561af36fad2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\blocks\\page_card.blade.php": {
+    "mtime": 1772623728.5651095,
+    "ast_hash": "fbdeaedb2d5285d329de223ffc3277dd",
+    "semantic_hash": "fbdeaedb2d5285d329de223ffc3277dd"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\blocks\\paragraph.blade.php": {
+    "mtime": 1772623728.566115,
+    "ast_hash": "b7c16c66ca99ee877cc96fb656059d58",
+    "semantic_hash": "b7c16c66ca99ee877cc96fb656059d58"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\blocks\\post_card.blade.php": {
+    "mtime": 1772623728.566115,
+    "ast_hash": "ff1e37e3f0e011affc55a92171466020",
+    "semantic_hash": "ff1e37e3f0e011affc55a92171466020"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\blocks\\title.blade.php": {
+    "mtime": 1772623728.5671124,
+    "ast_hash": "e060e077b5035435759ed5f564ec7db2",
+    "semantic_hash": "e060e077b5035435759ed5f564ec7db2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\breadcrumbs\\item.blade.php": {
+    "mtime": 1772623728.5681112,
+    "ast_hash": "07c47c7a7ed4a718f03faa09f6ee5aa7",
+    "semantic_hash": "07c47c7a7ed4a718f03faa09f6ee5aa7"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\about-us-sections.blade.php": {
+    "mtime": 1772623728.5721126,
+    "ast_hash": "f2517bac584e1c51304a9aef8f6c9474",
+    "semantic_hash": "f2517bac584e1c51304a9aef8f6c9474"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\brand-marque-light.blade.php": {
+    "mtime": 1772623728.5721126,
+    "ast_hash": "769c3a2272b84cbc512215b879932fb7",
+    "semantic_hash": "769c3a2272b84cbc512215b879932fb7"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\brand-marque.blade.php": {
+    "mtime": 1772623728.5741107,
+    "ast_hash": "6f2c26104204c8a043fa17af0c8cac8c",
+    "semantic_hash": "6f2c26104204c8a043fa17af0c8cac8c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\cards.blade.php": {
+    "mtime": 1772623728.5741107,
+    "ast_hash": "759e033237d6b9bd71330849ac177a41",
+    "semantic_hash": "759e033237d6b9bd71330849ac177a41"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\collapes.blade.php": {
+    "mtime": 1772623728.5751119,
+    "ast_hash": "1932cab84f0e9ccad92e30d31428554d",
+    "semantic_hash": "1932cab84f0e9ccad92e30d31428554d"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\contact.blade.php": {
+    "mtime": 1772623728.5751119,
+    "ast_hash": "3fa0e964acc3e267600f9142e431a57c",
+    "semantic_hash": "3fa0e964acc3e267600f9142e431a57c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\default.blade.php": {
+    "mtime": 1772623728.5761101,
+    "ast_hash": "48fc06351c8a62f25c49006218f1ed3f",
+    "semantic_hash": "48fc06351c8a62f25c49006218f1ed3f"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\faq.blade.php": {
+    "mtime": 1772623728.5771275,
+    "ast_hash": "b4d0e06319044bf61f824fad9b061d07",
+    "semantic_hash": "b4d0e06319044bf61f824fad9b061d07"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\four-cards.blade.php": {
+    "mtime": 1772623728.5771275,
+    "ast_hash": "abda0a453f9e9040a88c1d6de46fbc23",
+    "semantic_hash": "abda0a453f9e9040a88c1d6de46fbc23"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\hero.blade.php": {
+    "mtime": 1772623728.5781124,
+    "ast_hash": "f1ea4ed01cb09862348886bbb80079cb",
+    "semantic_hash": "f1ea4ed01cb09862348886bbb80079cb"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\latest-news.blade.php": {
+    "mtime": 1772623728.5781124,
+    "ast_hash": "8a4569caa1dafdc9b176f31cdc7f9a5b",
+    "semantic_hash": "8a4569caa1dafdc9b176f31cdc7f9a5b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\left-right-image-sections.blade.php": {
+    "mtime": 1772623728.5791123,
+    "ast_hash": "66b469719ba540b0e66934ffb6191ac2",
+    "semantic_hash": "66b469719ba540b0e66934ffb6191ac2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\portfolio.blade.php": {
+    "mtime": 1772623728.580112,
+    "ast_hash": "2682da5b3e5953a0f5b84788ddae7998",
+    "semantic_hash": "2682da5b3e5953a0f5b84788ddae7998"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\prices.blade.php": {
+    "mtime": 1772623728.580112,
+    "ast_hash": "7d87fdc87305e0bd650433876b7edce5",
+    "semantic_hash": "7d87fdc87305e0bd650433876b7edce5"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\reviews-carousel.blade.php": {
+    "mtime": 1772623728.5811102,
+    "ast_hash": "7cda107c19f473e587c120f33672fb06",
+    "semantic_hash": "7cda107c19f473e587c120f33672fb06"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\service-swiper.blade.php": {
+    "mtime": 1772623728.582111,
+    "ast_hash": "f9148ca8eac1735222c013cd3e879070",
+    "semantic_hash": "f9148ca8eac1735222c013cd3e879070"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\services-carousel.blade.php": {
+    "mtime": 1772623728.5831113,
+    "ast_hash": "ba51dbfb6000364e602bd8d3bd50fb70",
+    "semantic_hash": "ba51dbfb6000364e602bd8d3bd50fb70"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\services-features.blade.php": {
+    "mtime": 1772623728.5831113,
+    "ast_hash": "33c017790400892f680ed8e9649bfb81",
+    "semantic_hash": "33c017790400892f680ed8e9649bfb81"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\services-grid.blade.php": {
+    "mtime": 1772623728.5841112,
+    "ast_hash": "c153221d4a444322aa01686c977e9b75",
+    "semantic_hash": "c153221d4a444322aa01686c977e9b75"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\services-list.blade.php": {
+    "mtime": 1772623728.5841112,
+    "ast_hash": "d5bc24dfea8a4cc48efb2e697676d4ab",
+    "semantic_hash": "d5bc24dfea8a4cc48efb2e697676d4ab"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\services.blade.php": {
+    "mtime": 1772623728.585111,
+    "ast_hash": "bd7635ba913cd836c5c32a6d8a401f72",
+    "semantic_hash": "bd7635ba913cd836c5c32a6d8a401f72"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\single-view-call-action.blade.php": {
+    "mtime": 1772623728.585111,
+    "ast_hash": "13278b2afc8f5ec77d952f551c4b68ec",
+    "semantic_hash": "13278b2afc8f5ec77d952f551c4b68ec"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\single-view-pricing-packages.blade.php": {
+    "mtime": 1772623728.5861096,
+    "ast_hash": "f3289725b789f01363fa7457b317cbc3",
+    "semantic_hash": "f3289725b789f01363fa7457b317cbc3"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\single-view-vision-mission.blade.php": {
+    "mtime": 1772623728.5861096,
+    "ast_hash": "51fa32757b1c446c1051296737413729",
+    "semantic_hash": "51fa32757b1c446c1051296737413729"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\homepage\\single-view-why-choose-us.blade.php": {
+    "mtime": 1772623728.5871115,
+    "ast_hash": "6c11699749405099129af30094593924",
+    "semantic_hash": "6c11699749405099129af30094593924"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\layouts\\app.blade.php": {
+    "mtime": 1778963331.576453,
+    "ast_hash": "2459c604aae4d9ee0d997f546d9b3fb4",
+    "semantic_hash": "2459c604aae4d9ee0d997f546d9b3fb4"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\layouts\\main.blade.php": {
+    "mtime": 1772623728.589114,
+    "ast_hash": "e9a102707a490c9c12f569e405149031",
+    "semantic_hash": "e9a102707a490c9c12f569e405149031"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\layouts\\preview.blade.php": {
+    "mtime": 1772623728.589114,
+    "ast_hash": "b4714da035b9d4638031262e6a586d5e",
+    "semantic_hash": "b4714da035b9d4638031262e6a586d5e"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\gallery-item.blade.php": {
+    "mtime": 1772623728.591115,
+    "ast_hash": "edc5e7af0e9019ff0b975c178bd5265c",
+    "semantic_hash": "edc5e7af0e9019ff0b975c178bd5265c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\gallery.blade.php": {
+    "mtime": 1772623728.5921109,
+    "ast_hash": "4fdf2e4b6a9a043f2874a0a16493e89c",
+    "semantic_hash": "4fdf2e4b6a9a043f2874a0a16493e89c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\meta-grid.blade.php": {
+    "mtime": 1772623728.5921109,
+    "ast_hash": "37982be1fbce71f729c0f3b41ce0beba",
+    "semantic_hash": "37982be1fbce71f729c0f3b41ce0beba"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\meta-item.blade.php": {
+    "mtime": 1772623728.5931127,
+    "ast_hash": "51f3cf91fed074a865b9a8e6d6396b34",
+    "semantic_hash": "51f3cf91fed074a865b9a8e6d6396b34"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\nav-item.blade.php": {
+    "mtime": 1772623728.5931127,
+    "ast_hash": "55dbd11e5a7e152b14a1e466d0d727f6",
+    "semantic_hash": "55dbd11e5a7e152b14a1e466d0d727f6"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\navigation.blade.php": {
+    "mtime": 1772623728.5941105,
+    "ast_hash": "5ac3b2bdb071c73038d128104dab3e08",
+    "semantic_hash": "5ac3b2bdb071c73038d128104dab3e08"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\portfolio\\section.blade.php": {
+    "mtime": 1772623728.5941105,
+    "ast_hash": "8ed7a3d49be65087335c18e958328ce2",
+    "semantic_hash": "8ed7a3d49be65087335c18e958328ce2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\components\\templates\\default.blade.php": {
+    "mtime": 1772623728.5951107,
+    "ast_hash": "5e0ec901f5a791ca3cff63fdebc8b74e",
+    "semantic_hash": "5e0ec901f5a791ca3cff63fdebc8b74e"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\401.blade.php": {
+    "mtime": 1772623728.5961125,
+    "ast_hash": "d7d4e3c7a69faba37f32f7ae09350ac0",
+    "semantic_hash": "d7d4e3c7a69faba37f32f7ae09350ac0"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\402.blade.php": {
+    "mtime": 1772623728.598147,
+    "ast_hash": "3188024bc0ccf8a4d04ee73c09a8369b",
+    "semantic_hash": "3188024bc0ccf8a4d04ee73c09a8369b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\403.blade.php": {
+    "mtime": 1772623728.598147,
+    "ast_hash": "f87d74e76177b8715c45b712a2866963",
+    "semantic_hash": "f87d74e76177b8715c45b712a2866963"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\404.blade.php": {
+    "mtime": 1772623728.599116,
+    "ast_hash": "dd5fc1a8d60fb86620a13ecbaf1d671a",
+    "semantic_hash": "dd5fc1a8d60fb86620a13ecbaf1d671a"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\419.blade.php": {
+    "mtime": 1772623728.599116,
+    "ast_hash": "b4a99067a0eedfc6572fb08bf65ce542",
+    "semantic_hash": "b4a99067a0eedfc6572fb08bf65ce542"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\429.blade.php": {
+    "mtime": 1772623728.6001139,
+    "ast_hash": "187a637f8f516bc12cab5039966bf93a",
+    "semantic_hash": "187a637f8f516bc12cab5039966bf93a"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\500.blade.php": {
+    "mtime": 1772623728.601127,
+    "ast_hash": "2ada2f6c5f960d560eda572690524a32",
+    "semantic_hash": "2ada2f6c5f960d560eda572690524a32"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\503.blade.php": {
+    "mtime": 1772623728.601127,
+    "ast_hash": "b9dfbe660e5cd8f11e4bbdb59c7423cc",
+    "semantic_hash": "b9dfbe660e5cd8f11e4bbdb59c7423cc"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\layout.blade.php": {
+    "mtime": 1772623728.6021132,
+    "ast_hash": "5f46c6f9a51d2c8cb521d6b9c2a6cfde",
+    "semantic_hash": "5f46c6f9a51d2c8cb521d6b9c2a6cfde"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\errors\\minimal.blade.php": {
+    "mtime": 1772623728.6031108,
+    "ast_hash": "b40a5bfe0002af51100436ee1eb850f2",
+    "semantic_hash": "b40a5bfe0002af51100436ee1eb850f2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\login-slideshow.blade.php": {
+    "mtime": 1778963331.5769901,
+    "ast_hash": "bac311133f6ed6021280d9c69f414dba",
+    "semantic_hash": "bac311133f6ed6021280d9c69f414dba"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\forms\\components\\image-radio.blade.php": {
+    "mtime": 1772623728.604112,
+    "ast_hash": "2e8f05f86a7882aaae8b97bcb9533d55",
+    "semantic_hash": "2e8f05f86a7882aaae8b97bcb9533d55"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\forms\\components\\preview-section.blade.php": {
+    "mtime": 1772623728.6051102,
+    "ast_hash": "182cf36dfaa9e0c8e048a24519b86d5a",
+    "semantic_hash": "182cf36dfaa9e0c8e048a24519b86d5a"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\forms\\components\\section-selector.blade.php": {
+    "mtime": 1772623728.6061277,
+    "ast_hash": "82f27ea2bcdd0de308f7c6db5801be53",
+    "semantic_hash": "82f27ea2bcdd0de308f7c6db5801be53"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\pages\\generate-components-from-a-i.blade.php": {
+    "mtime": 1772623728.6071126,
+    "ast_hash": "c3ce99598d55249e44d3ea172454b4a7",
+    "semantic_hash": "c3ce99598d55249e44d3ea172454b4a7"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\pages\\generate-site-from-a-i.blade.php": {
+    "mtime": 1772623728.608112,
+    "ast_hash": "1be5b983a2416543d183754f60fbd791",
+    "semantic_hash": "1be5b983a2416543d183754f60fbd791"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\pages\\manage-crm-settings.blade.php": {
+    "mtime": 1772623728.608112,
+    "ast_hash": "fad78c73348d497a803af277b89ec130",
+    "semantic_hash": "fad78c73348d497a803af277b89ec130"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\filament\\resources\\post-resource\\pages\\preview-post.blade.php": {
+    "mtime": 1772623728.610118,
+    "ast_hash": "c0d575d53e04b00193cd612217c50dc8",
+    "semantic_hash": "c0d575d53e04b00193cd612217c50dc8"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\forms\\components\\homepage-section-selector.blade.php": {
+    "mtime": 1772623728.611117,
+    "ast_hash": "75d3bb28e8b48a82684069b548ec53ec",
+    "semantic_hash": "75d3bb28e8b48a82684069b548ec53ec"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\livewire\\home.blade.php": {
+    "mtime": 1778963331.5785947,
+    "ast_hash": "5477aeab82354aa79428e8c67b93b52f",
+    "semantic_hash": "5477aeab82354aa79428e8c67b93b52f"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\livewire\\home_load.blade.php": {
+    "mtime": 1772623728.6131337,
+    "ast_hash": "e5f8cf8938ae705622e88e6e722ad3dc",
+    "semantic_hash": "e5f8cf8938ae705622e88e6e722ad3dc"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\livewire\\post\\show.blade.php": {
+    "mtime": 1772623728.615227,
+    "ast_hash": "299b10a85066ff216c93ab2fe4ef4da5",
+    "semantic_hash": "299b10a85066ff216c93ab2fe4ef4da5"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\livewire\\post\\default\\show.blade.php": {
+    "mtime": 1772623728.6141171,
+    "ast_hash": "16616a606f128b8836d1a1cdd0db26e6",
+    "semantic_hash": "16616a606f128b8836d1a1cdd0db26e6"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\livewire\\post\\templates\\show.blade.php": {
+    "mtime": 1772623728.6161165,
+    "ast_hash": "bffa34bce5cd12e03b9206787bf2f80a",
+    "semantic_hash": "bffa34bce5cd12e03b9206787bf2f80a"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\page\\preview-content.blade.php": {
+    "mtime": 1772623728.6182196,
+    "ast_hash": "0e81c2b1878e47a7ec18b0375ad68c6e",
+    "semantic_hash": "0e81c2b1878e47a7ec18b0375ad68c6e"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\page\\show.blade.php": {
+    "mtime": 1772623728.6191187,
+    "ast_hash": "8968834b5595ec6b5aa787489218223b",
+    "semantic_hash": "8968834b5595ec6b5aa787489218223b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\partials\\breadcrumb.blade.php": {
+    "mtime": 1772623728.62012,
+    "ast_hash": "4df95f180fb8262194593f922edd178b",
+    "semantic_hash": "4df95f180fb8262194593f922edd178b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\partials\\post-content.blade.php": {
+    "mtime": 1772623728.62012,
+    "ast_hash": "a8f4b69d5ce2db5979b04c13c672435c",
+    "semantic_hash": "a8f4b69d5ce2db5979b04c13c672435c"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\posts\\category.blade.php": {
+    "mtime": 1772623728.6231167,
+    "ast_hash": "362f291e70709bbe12432172640e01ed",
+    "semantic_hash": "362f291e70709bbe12432172640e01ed"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\posts\\index.blade copy.php": {
+    "mtime": 1772623728.6231167,
+    "ast_hash": "1cde9efc6faee7ed3df32dbd88f325c2",
+    "semantic_hash": "1cde9efc6faee7ed3df32dbd88f325c2"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\posts\\index.blade.php": {
+    "mtime": 1772623728.6246533,
+    "ast_hash": "45cd979dd130f41f3c2c4bd3e0c4d41b",
+    "semantic_hash": "45cd979dd130f41f3c2c4bd3e0c4d41b"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\posts\\preview.blade.php": {
+    "mtime": 1772623728.6256692,
+    "ast_hash": "13f0d2ad7d2296b12724d2dada6a9176",
+    "semantic_hash": "13f0d2ad7d2296b12724d2dada6a9176"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\previews\\category.blade.php": {
+    "mtime": 1772623728.6256692,
+    "ast_hash": "6178e5ba3148f771d925da21a1927b43",
+    "semantic_hash": "6178e5ba3148f771d925da21a1927b43"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\previews\\post.blade.php": {
+    "mtime": 1772623728.6266682,
+    "ast_hash": "2444e90fcb80167c3629666600e581da",
+    "semantic_hash": "2444e90fcb80167c3629666600e581da"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\vendor\\filament-language-switch\\language-switch.blade.php": {
+    "mtime": 1772623728.629667,
+    "ast_hash": "548ff6701ec1d401cf6c7926544df3c6",
+    "semantic_hash": "548ff6701ec1d401cf6c7926544df3c6"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\vendor\\filament-language-switch\\switch.blade.php": {
+    "mtime": 1772623728.6306689,
+    "ast_hash": "d458178f9ddecd8ec9059018274fa920",
+    "semantic_hash": "d458178f9ddecd8ec9059018274fa920"
+  },
+  "C:\\WORK\\taba-crm\\src\\views\\vendor\\filament-language-switch\\components\\flag.blade.php": {
+    "mtime": 1772623728.6286674,
+    "ast_hash": "ecf4a32a4246ec28abcbc6a1c3d096fd",
+    "semantic_hash": "ecf4a32a4246ec28abcbc6a1c3d096fd"
+  },
+  "C:\\WORK\\taba-crm\\database\\factories\\PageFactory.php": {
+    "mtime": 1772623728.3980546,
+    "ast_hash": "c0b37f3d7f6475bcbd19fcf859efcf7a",
+    "semantic_hash": "c0b37f3d7f6475bcbd19fcf859efcf7a"
+  },
+  "C:\\WORK\\taba-crm\\database\\factories\\PostCategoryFactory.php": {
+    "mtime": 1778963331.2351882,
+    "ast_hash": "7609641c0d8b50077d09c2f499893bd9",
+    "semantic_hash": "7609641c0d8b50077d09c2f499893bd9"
+  },
+  "C:\\WORK\\taba-crm\\database\\factories\\PostFactory.php": {
+    "mtime": 1778963331.2362368,
+    "ast_hash": "960bef44e436cb09e0ac75fb275d11d5",
+    "semantic_hash": "960bef44e436cb09e0ac75fb275d11d5"
+  },
+  "C:\\WORK\\taba-crm\\database\\factories\\UserFactory.php": {
+    "mtime": 1778963331.23676,
+    "ast_hash": "b0fef674e152e57316b235cc13045791",
+    "semantic_hash": "b0fef674e152e57316b235cc13045791"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_01_15_160000_create_categories_table.php": {
+    "mtime": 1772623728.4010549,
+    "ast_hash": "91f1a7f07434acf80d7057cc3254f638",
+    "semantic_hash": "91f1a7f07434acf80d7057cc3254f638"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_01_15_160002_create_pages_table.php": {
+    "mtime": 1772623728.4023428,
+    "ast_hash": "219f365f45a592203b65e9e2ecb8e741",
+    "semantic_hash": "219f365f45a592203b65e9e2ecb8e741"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_01_15_160003_create_contact_entries_table.php": {
+    "mtime": 1772623728.4023428,
+    "ast_hash": "db88cbd5a883921b595738ded2d16de6",
+    "semantic_hash": "db88cbd5a883921b595738ded2d16de6"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_07_05_150102_create_menus_table.php": {
+    "mtime": 1772623728.4033518,
+    "ast_hash": "cd629cb9b48d8a9058afb1606dc1ac5e",
+    "semantic_hash": "cd629cb9b48d8a9058afb1606dc1ac5e"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_082215_create_posts_table.php": {
+    "mtime": 1772623728.4033518,
+    "ast_hash": "c9357191c2086eb2b59f8f3133289cde",
+    "semantic_hash": "c9357191c2086eb2b59f8f3133289cde"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_115440_make_name_unique_in_users_table.php": {
+    "mtime": 1778963331.2383192,
+    "ast_hash": "a21dcc7d8d9a019a7015230b9501be7d",
+    "semantic_hash": "a21dcc7d8d9a019a7015230b9501be7d"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_121849_create_filament_exceptions_table.php": {
+    "mtime": 1772623728.4053507,
+    "ast_hash": "6b603f4ff01ad1066dd8e825e06dece0",
+    "semantic_hash": "6b603f4ff01ad1066dd8e825e06dece0"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_122956_create_activity_log_table.php": {
+    "mtime": 1772623728.4053507,
+    "ast_hash": "6554ade26208a9371dc1dc0b1fe19773",
+    "semantic_hash": "6554ade26208a9371dc1dc0b1fe19773"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_122957_add_event_column_to_activity_log_table.php": {
+    "mtime": 1772623728.4066544,
+    "ast_hash": "1824b916ccf47c79a7d95c44e9de8419",
+    "semantic_hash": "1824b916ccf47c79a7d95c44e9de8419"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_19_122958_add_batch_uuid_column_to_activity_log_table.php": {
+    "mtime": 1772623728.407662,
+    "ast_hash": "9011bbf2d1f4f5bfbbc2cacf25de10ae",
+    "semantic_hash": "9011bbf2d1f4f5bfbbc2cacf25de10ae"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_20_014623_create_filament-jobs-monitor_table.php": {
+    "mtime": 1772623728.407662,
+    "ast_hash": "a0f608c58a01fe4524d0a69782c33c8d",
+    "semantic_hash": "a0f608c58a01fe4524d0a69782c33c8d"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_22_001413_create_notifications_table.php": {
+    "mtime": 1772623728.4086628,
+    "ast_hash": "f4a9e920eb529c5f49fb86ff2d02a2bf",
+    "semantic_hash": "f4a9e920eb529c5f49fb86ff2d02a2bf"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2023_12_28_074322_add_image_to_posts_table.php": {
+    "mtime": 1772623728.4086628,
+    "ast_hash": "7d62fe5c08227b2be47ad0692c631514",
+    "semantic_hash": "7d62fe5c08227b2be47ad0692c631514"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2024_01_20_000000_create_crm_settings_table.php": {
+    "mtime": 1772623728.4096725,
+    "ast_hash": "43da0bafd9ec0ad684f054a4cf0585ac",
+    "semantic_hash": "43da0bafd9ec0ad684f054a4cf0585ac"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_01_20_085221_create_tags_table.php": {
+    "mtime": 1772623728.4106717,
+    "ast_hash": "6c055a104ca619fd26d183eb59891f28",
+    "semantic_hash": "6c055a104ca619fd26d183eb59891f28"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_01_20_085353_create_post_tag_table.php": {
+    "mtime": 1772623728.4106717,
+    "ast_hash": "22ab76819dc0b19e616ebc7f1dc535a7",
+    "semantic_hash": "22ab76819dc0b19e616ebc7f1dc535a7"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_06_21_132722_create_metadata_fillter_table.php": {
+    "mtime": 1772623728.4116716,
+    "ast_hash": "90a63e450d679412343d38c73a05a2f8",
+    "semantic_hash": "90a63e450d679412343d38c73a05a2f8"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_07_01_141133_add_slug_to_tags_table.php": {
+    "mtime": 1772623728.412671,
+    "ast_hash": "6a92a7207bd9889cf4daeb794c70f53f",
+    "semantic_hash": "6a92a7207bd9889cf4daeb794c70f53f"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_07_02_125623_create_homepage_sections_table.php": {
+    "mtime": 1772623728.412671,
+    "ast_hash": "664f18da2b1b9807cbe783c59728d21e",
+    "semantic_hash": "664f18da2b1b9807cbe783c59728d21e"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_07_14_123201_create_breezy_sessions_table.php": {
+    "mtime": 1772623728.413672,
+    "ast_hash": "ded13d00853f176352ef4aab98c21a36",
+    "semantic_hash": "ded13d00853f176352ef4aab98c21a36"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_09_10_133759_create_service_payments_table.php": {
+    "mtime": 1772623728.413672,
+    "ast_hash": "b773cb8b411bde41b8b0d7d5384987cb",
+    "semantic_hash": "b773cb8b411bde41b8b0d7d5384987cb"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_09_10_155532_create_permission_tables.php": {
+    "mtime": 1772623728.4146883,
+    "ast_hash": "fd1a576bd0e0447ddcd23a52f47cb439",
+    "semantic_hash": "fd1a576bd0e0447ddcd23a52f47cb439"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_09_15_134027_add_show_in_home_and_order_to_posts_table.php": {
+    "mtime": 1772623728.4156725,
+    "ast_hash": "7530857b245d803f296925156ca1ff7f",
+    "semantic_hash": "7530857b245d803f296925156ca1ff7f"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_09_16_192018_add_icon_to_posts_table.php": {
+    "mtime": 1772623728.4156725,
+    "ast_hash": "d1c23afb8785cc4e6c2327412b28cca5",
+    "semantic_hash": "d1c23afb8785cc4e6c2327412b28cca5"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2025_11_23_131917_add_parent_id_to_post_categories_table.php": {
+    "mtime": 1772623728.4166722,
+    "ast_hash": "cf51f19671643bdc3b6737f66e3a4b1c",
+    "semantic_hash": "cf51f19671643bdc3b6737f66e3a4b1c"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2026_03_07_000001_create_reviews_table.php": {
+    "mtime": 1778963331.2399297,
+    "ast_hash": "ad897f7f0e88b16b96a605307bb7eb7d",
+    "semantic_hash": "ad897f7f0e88b16b96a605307bb7eb7d"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2026_03_12_000001_add_phone_service_to_contact_entries_table.php": {
+    "mtime": 1778963331.2409334,
+    "ast_hash": "e0308fd54a2d11b4b108f7975cb55b0b",
+    "semantic_hash": "e0308fd54a2d11b4b108f7975cb55b0b"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2026_04_01_000001_add_is_active_and_is_read_columns.php": {
+    "mtime": 1778963331.2419336,
+    "ast_hash": "885cf65fd8c388b44763ad63a4f30575",
+    "semantic_hash": "885cf65fd8c388b44763ad63a4f30575"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2026_04_28_000001_create_action_clicks_table.php": {
+    "mtime": 1778963331.2419336,
+    "ast_hash": "56d1e6d4a3978b8690bc93165695f31e",
+    "semantic_hash": "56d1e6d4a3978b8690bc93165695f31e"
+  },
+  "C:\\WORK\\taba-crm\\database\\migrations\\2026_04_28_000002_add_page_to_contact_entries_table.php": {
+    "mtime": 1778963331.2437973,
+    "ast_hash": "9741172e658549ad635f63f2be6893a2",
+    "semantic_hash": "9741172e658549ad635f63f2be6893a2"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\AngularSettingsSeeder.php": {
+    "mtime": 1778963331.246955,
+    "ast_hash": "c83413fdeca63586853b155af7ca9b77",
+    "semantic_hash": "c83413fdeca63586853b155af7ca9b77"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\CrmSettingsSeeder.php": {
+    "mtime": 1778963331.2479558,
+    "ast_hash": "4a075c7f15fe83cbdf25c108b4f57abe",
+    "semantic_hash": "4a075c7f15fe83cbdf25c108b4f57abe"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\DatabaseSeeder.php": {
+    "mtime": 1772623728.417671,
+    "ast_hash": "42257754b97a3a4fa2e4d0d36d72329c",
+    "semantic_hash": "42257754b97a3a4fa2e4d0d36d72329c"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\PostCategorySeeder.php": {
+    "mtime": 1772623728.4186692,
+    "ast_hash": "b286934c597e797af4b448ddf81ea9a6",
+    "semantic_hash": "b286934c597e797af4b448ddf81ea9a6"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\PostSeeder.php": {
+    "mtime": 1778963331.2509575,
+    "ast_hash": "d32dcb5db97d1ad72b736f0f5862682d",
+    "semantic_hash": "d32dcb5db97d1ad72b736f0f5862682d"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\RolesAndPermissionsSeeder.php": {
+    "mtime": 1772623728.4206693,
+    "ast_hash": "6d6a8080004d35b3377641ac75d13c22",
+    "semantic_hash": "6d6a8080004d35b3377641ac75d13c22"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\UserSeeder.php": {
+    "mtime": 1778963331.2532957,
+    "ast_hash": "091df00a4df822b04ca81dcfde743fa7",
+    "semantic_hash": "091df00a4df822b04ca81dcfde743fa7"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\data\\posts.php": {
+    "mtime": 1772623728.4226708,
+    "ast_hash": "cedfd8cd9b2918aabb30e97c5071b373",
+    "semantic_hash": "cedfd8cd9b2918aabb30e97c5071b373"
+  },
+  "C:\\WORK\\taba-crm\\database\\seeders\\data\\post_categories.php": {
+    "mtime": 1778963331.2553074,
+    "ast_hash": "d2c16c9aeb4fdc5f5d9e7dc39b543dfd",
+    "semantic_hash": "d2c16c9aeb4fdc5f5d9e7dc39b543dfd"
+  },
+  "C:\\WORK\\taba-crm\\routes\\api.php": {
+    "mtime": 1778963331.3514707,
+    "ast_hash": "11bad86ef03ac20751aa750c336c7413",
+    "semantic_hash": "11bad86ef03ac20751aa750c336c7413"
+  },
+  "C:\\WORK\\taba-crm\\routes\\console.php": {
+    "mtime": 1772623728.4351876,
+    "ast_hash": "157ad0b9b9296dffe8c58855651fd02b",
+    "semantic_hash": "157ad0b9b9296dffe8c58855651fd02b"
+  },
+  "C:\\WORK\\taba-crm\\routes\\web.php": {
+    "mtime": 1778963331.354472,
+    "ast_hash": "3c6e2401da91fa4d0d5d9e9f1d160006",
+    "semantic_hash": "3c6e2401da91fa4d0d5d9e9f1d160006"
+  },
+  "C:\\WORK\\taba-crm\\config\\app.php": {
+    "mtime": 1772623728.3828077,
+    "ast_hash": "04bad29c587cf3fe5f1c7b7f63262c19",
+    "semantic_hash": "04bad29c587cf3fe5f1c7b7f63262c19"
+  },
+  "C:\\WORK\\taba-crm\\config\\breadcrumbs.php": {
+    "mtime": 1772623728.3838077,
+    "ast_hash": "73fbd70448bb756513d6bc96ef873aae",
+    "semantic_hash": "73fbd70448bb756513d6bc96ef873aae"
+  },
+  "C:\\WORK\\taba-crm\\config\\cache.php": {
+    "mtime": 1772623728.3838077,
+    "ast_hash": "488b21f09c887ceb3306242d0500736f",
+    "semantic_hash": "488b21f09c887ceb3306242d0500736f"
+  },
+  "C:\\WORK\\taba-crm\\config\\crm.php": {
+    "mtime": 1778963331.2297978,
+    "ast_hash": "1a39b2ca2c11fa565b39828d97b68358",
+    "semantic_hash": "1a39b2ca2c11fa565b39828d97b68358"
+  },
+  "C:\\WORK\\taba-crm\\config\\curator.php": {
+    "mtime": 1772623728.3850472,
+    "ast_hash": "98c5316b968755b9c7df6aea7e1ca482",
+    "semantic_hash": "98c5316b968755b9c7df6aea7e1ca482"
+  },
+  "C:\\WORK\\taba-crm\\config\\database.php": {
+    "mtime": 1772623728.3860571,
+    "ast_hash": "c4d1afc13dde773daae528644879b5ec",
+    "semantic_hash": "c4d1afc13dde773daae528644879b5ec"
+  },
+  "C:\\WORK\\taba-crm\\config\\filament-exceptions.php": {
+    "mtime": 1772623728.3870556,
+    "ast_hash": "db3073bfc6179981ffc0ff1b64bba255",
+    "semantic_hash": "db3073bfc6179981ffc0ff1b64bba255"
+  },
+  "C:\\WORK\\taba-crm\\config\\filament-logger.php": {
+    "mtime": 1772623728.3880775,
+    "ast_hash": "d1dba09a4e9ca8b824de25ee23e6643e",
+    "semantic_hash": "d1dba09a4e9ca8b824de25ee23e6643e"
+  },
+  "C:\\WORK\\taba-crm\\config\\filament-peek.php": {
+    "mtime": 1772623728.3890579,
+    "ast_hash": "dd6acfd1d0c3ccefef4f50f29aa79f35",
+    "semantic_hash": "dd6acfd1d0c3ccefef4f50f29aa79f35"
+  },
+  "C:\\WORK\\taba-crm\\config\\filament-shield.php": {
+    "mtime": 1772623728.3900595,
+    "ast_hash": "67a0409300a55c243a0f58f259dd0f2c",
+    "semantic_hash": "67a0409300a55c243a0f58f259dd0f2c"
+  },
+  "C:\\WORK\\taba-crm\\config\\filament.php": {
+    "mtime": 1772623728.3900595,
+    "ast_hash": "5b582ebb49108d14dd9536b01dafcaf1",
+    "semantic_hash": "5b582ebb49108d14dd9536b01dafcaf1"
+  },
+  "C:\\WORK\\taba-crm\\config\\filesystems.php": {
+    "mtime": 1772623728.3910556,
+    "ast_hash": "6e6a829dd105744fc554ebc3d2cbe5f3",
+    "semantic_hash": "6e6a829dd105744fc554ebc3d2cbe5f3"
+  },
+  "C:\\WORK\\taba-crm\\config\\livewire.php": {
+    "mtime": 1772623728.3920562,
+    "ast_hash": "cd903ef040ed8cb1968062ead4991e18",
+    "semantic_hash": "cd903ef040ed8cb1968062ead4991e18"
+  },
+  "C:\\WORK\\taba-crm\\config\\logging.php": {
+    "mtime": 1772623728.3930566,
+    "ast_hash": "fbb56a82ae25fc5d2ce556acf26838ad",
+    "semantic_hash": "fbb56a82ae25fc5d2ce556acf26838ad"
+  },
+  "C:\\WORK\\taba-crm\\config\\mail.php": {
+    "mtime": 1772623728.3930566,
+    "ast_hash": "3dfc6aef3bd17072e52a421d8d5215c0",
+    "semantic_hash": "3dfc6aef3bd17072e52a421d8d5215c0"
+  },
+  "C:\\WORK\\taba-crm\\config\\permission.php": {
+    "mtime": 1772623728.3940594,
+    "ast_hash": "5295cacb64bbed39421577c5530fc778",
+    "semantic_hash": "5295cacb64bbed39421577c5530fc778"
+  },
+  "C:\\WORK\\taba-crm\\config\\queue.php": {
+    "mtime": 1772623728.395056,
+    "ast_hash": "fa588a4871790fca01d6a90af9208d15",
+    "semantic_hash": "fa588a4871790fca01d6a90af9208d15"
+  },
+  "C:\\WORK\\taba-crm\\config\\services.php": {
+    "mtime": 1772623728.395056,
+    "ast_hash": "179cfc985cce2fa1b362025931e1fce3",
+    "semantic_hash": "179cfc985cce2fa1b362025931e1fce3"
+  },
+  "C:\\WORK\\taba-crm\\config\\session.php": {
+    "mtime": 1772623728.3960562,
+    "ast_hash": "29698a17515e2d60b5ff7143a887ac36",
+    "semantic_hash": "29698a17515e2d60b5ff7143a887ac36"
+  },
+  "C:\\WORK\\taba-crm\\config\\view.php": {
+    "mtime": 1772623728.3970544,
+    "ast_hash": "24e00ccca17634d028fbbfdafd9e7461",
+    "semantic_hash": "24e00ccca17634d028fbbfdafd9e7461"
+  },
+  "C:\\WORK\\taba-crm\\docs\\superpowers\\specs\\.spec-context.json": {
+    "mtime": 1778963331.265411,
+    "ast_hash": "da6a587e9f632163a155892b2864fd6e",
+    "semantic_hash": "da6a587e9f632163a155892b2864fd6e"
+  },
+  "C:\\WORK\\taba-crm\\lang\\1.json": {
+    "mtime": 1772623728.4251835,
+    "ast_hash": "0f34f8aaaf22769333a3a89ceb96deef",
+    "semantic_hash": "0f34f8aaaf22769333a3a89ceb96deef"
+  },
+  "C:\\WORK\\taba-crm\\lang\\2.json": {
+    "mtime": 1772623728.4261835,
+    "ast_hash": "af103ffc628cd81cc8d6409db17ebb1e",
+    "semantic_hash": "af103ffc628cd81cc8d6409db17ebb1e"
+  },
+  "C:\\WORK\\taba-crm\\lang\\ar copy.json": {
+    "mtime": 1772623728.4261835,
+    "ast_hash": "e742e473a66bb750a4e2d40b3acf3342",
+    "semantic_hash": "e742e473a66bb750a4e2d40b3acf3342"
+  },
+  "C:\\WORK\\taba-crm\\lang\\ar.json": {
+    "mtime": 1778963331.3311057,
+    "ast_hash": "4357b5b925d08953bccb941d3dc4b0cb",
+    "semantic_hash": "4357b5b925d08953bccb941d3dc4b0cb"
+  },
+  "C:\\WORK\\taba-crm\\lang\\en.json": {
+    "mtime": 1778963331.3334334,
+    "ast_hash": "18525f2ab2cd07da8ce84e586940f8d5",
+    "semantic_hash": "18525f2ab2cd07da8ce84e586940f8d5"
+  },
+  "C:\\WORK\\taba-crm\\lang\\ar\\forms.php": {
+    "mtime": 1772623728.4291856,
+    "ast_hash": "41b3840503d186558c79b6e3dd506d05",
+    "semantic_hash": "41b3840503d186558c79b6e3dd506d05"
+  },
+  "C:\\WORK\\taba-crm\\lang\\en\\auth.php": {
+    "mtime": 1772623728.4301865,
+    "ast_hash": "4be8b878be99fbeb2b4d0c73fb70b054",
+    "semantic_hash": "4be8b878be99fbeb2b4d0c73fb70b054"
+  },
+  "C:\\WORK\\taba-crm\\lang\\en\\forms.php": {
+    "mtime": 1772623728.4311845,
+    "ast_hash": "9b88b2fc2dd2f1d3ef59a5aad11a2022",
+    "semantic_hash": "9b88b2fc2dd2f1d3ef59a5aad11a2022"
+  },
+  "C:\\WORK\\taba-crm\\lang\\en\\pagination.php": {
+    "mtime": 1772623728.4311845,
+    "ast_hash": "8c490ce6e34beb29a18e0a2f85383aa0",
+    "semantic_hash": "8c490ce6e34beb29a18e0a2f85383aa0"
+  },
+  "C:\\WORK\\taba-crm\\lang\\en\\validation.php": {
+    "mtime": 1772623728.4331827,
+    "ast_hash": "76082d4c755c9d88e32c4b3e3b859e13",
+    "semantic_hash": "76082d4c755c9d88e32c4b3e3b859e13"
+  },
+  "C:\\WORK\\taba-crm\\tests\\bootstrap.php": {
+    "mtime": 1778963331.5952308,
+    "ast_hash": "3610a2717244902877e65579ada22262",
+    "semantic_hash": "3610a2717244902877e65579ada22262"
+  },
+  "C:\\WORK\\taba-crm\\tests\\TestCase.php": {
+    "mtime": 1778963331.5884314,
+    "ast_hash": "38573dadfdd71673504a9e1e648a7d91",
+    "semantic_hash": "38573dadfdd71673504a9e1e648a7d91"
+  },
+  "C:\\WORK\\taba-crm\\tests\\database\\migrations\\0001_01_01_000000_create_users_table.php": {
+    "mtime": 1778963331.5967953,
+    "ast_hash": "8de6e58fd84f365ebe91f17f645d1978",
+    "semantic_hash": "8de6e58fd84f365ebe91f17f645d1978"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\ActionClickApiTest.php": {
+    "mtime": 1778963331.5807698,
+    "ast_hash": "771b8df77f28a4fd357c0c738a2b1326",
+    "semantic_hash": "771b8df77f28a4fd357c0c738a2b1326"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\AddDiscoveryHeadersTest.php": {
+    "mtime": 1778963331.5812905,
+    "ast_hash": "f0208f980c21c0cc16fdd0fa68d82fe8",
+    "semantic_hash": "f0208f980c21c0cc16fdd0fa68d82fe8"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\ComponentDiscoveryTest.php": {
+    "mtime": 1778963331.5818357,
+    "ast_hash": "a7c92e942a535fcaf14fe485ecc6e0be",
+    "semantic_hash": "a7c92e942a535fcaf14fe485ecc6e0be"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\ComponentFlowTest.php": {
+    "mtime": 1778963331.5830128,
+    "ast_hash": "27c66ddf05c32dc9b0b6e8b470733bfa",
+    "semantic_hash": "27c66ddf05c32dc9b0b6e8b470733bfa"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\ContactEntryPageTest.php": {
+    "mtime": 1778963331.5830128,
+    "ast_hash": "8ff8e492c2aad0cab6465e4d6ce189ee",
+    "semantic_hash": "8ff8e492c2aad0cab6465e4d6ce189ee"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\CrmSettingsSeederTest.php": {
+    "mtime": 1778963331.5840518,
+    "ast_hash": "61c0f812da42b8d4d9d077837a173898",
+    "semantic_hash": "61c0f812da42b8d4d9d077837a173898"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\HomeComponentTest.php": {
+    "mtime": 1778963331.5857542,
+    "ast_hash": "9920ca89a94f8f8d9652d0a9301ba3c1",
+    "semantic_hash": "9920ca89a94f8f8d9652d0a9301ba3c1"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\InjectSeoForBotsTest.php": {
+    "mtime": 1778963331.5868046,
+    "ast_hash": "d25b34c4f4710bbd5ff51203b7728711",
+    "semantic_hash": "d25b34c4f4710bbd5ff51203b7728711"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\MarkdownNegotiationTest.php": {
+    "mtime": 1778963331.5873253,
+    "ast_hash": "90fb91a31222b6d6e526636c57b2d59e",
+    "semantic_hash": "90fb91a31222b6d6e526636c57b2d59e"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\RolesAndPermissionsTest.php": {
+    "mtime": 1772623728.6376736,
+    "ast_hash": "588b02a99fdd3b4b6d5cf891db2cd1ad",
+    "semantic_hash": "588b02a99fdd3b4b6d5cf891db2cd1ad"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Feature\\WidgetClassLoadingTest.php": {
+    "mtime": 1778963331.5878937,
+    "ast_hash": "9791705be764bd14ff8bcca8e87780fe",
+    "semantic_hash": "9791705be764bd14ff8bcca8e87780fe"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\CrmSettingTest.php": {
+    "mtime": 1772623728.640676,
+    "ast_hash": "0b23f02dcaf110ec2e11f67457a8d46e",
+    "semantic_hash": "0b23f02dcaf110ec2e11f67457a8d46e"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\HelperFunctionsTest.php": {
+    "mtime": 1772623728.6416724,
+    "ast_hash": "1a957df8b021d24e24d307b1f5be8488",
+    "semantic_hash": "1a957df8b021d24e24d307b1f5be8488"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\PostCategoryModelTest.php": {
+    "mtime": 1778963331.5942016,
+    "ast_hash": "a7c4b612dbb5fd43165bb06c234ca9dc",
+    "semantic_hash": "a7c4b612dbb5fd43165bb06c234ca9dc"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\PostModelTest.php": {
+    "mtime": 1778963331.5947156,
+    "ast_hash": "4b547e204e71601745dcaa4ab6a10fc5",
+    "semantic_hash": "4b547e204e71601745dcaa4ab6a10fc5"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\UserModelTest.php": {
+    "mtime": 1772623728.6446705,
+    "ast_hash": "16610a796d0789387128b327df5deb7a",
+    "semantic_hash": "16610a796d0789387128b327df5deb7a"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\Components\\ComponentRegistryTest.php": {
+    "mtime": 1778963331.5899973,
+    "ast_hash": "49967e92bc634520d74127a6902435c4",
+    "semantic_hash": "49967e92bc634520d74127a6902435c4"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\Components\\FieldFactoryTest.php": {
+    "mtime": 1778963331.5910327,
+    "ast_hash": "5bb4f2d33cc4ac33985af5e81786c511",
+    "semantic_hash": "5bb4f2d33cc4ac33985af5e81786c511"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\Components\\SectionComponentInterfaceTest.php": {
+    "mtime": 1778963331.592092,
+    "ast_hash": "78fbb6c4463adbeffd03e7b58f33f5c4",
+    "semantic_hash": "78fbb6c4463adbeffd03e7b58f33f5c4"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\Components\\Sections\\AllComponentsTest.php": {
+    "mtime": 1778963331.592636,
+    "ast_hash": "2b66000665361e3bec102b2fb9553e55",
+    "semantic_hash": "2b66000665361e3bec102b2fb9553e55"
+  },
+  "C:\\WORK\\taba-crm\\tests\\Unit\\Components\\Sections\\HeroComponentTest.php": {
+    "mtime": 1778963331.593685,
+    "ast_hash": "9b913a7a170db44b74cea026d35eae82",
+    "semantic_hash": "9b913a7a170db44b74cea026d35eae82"
+  },
+  "C:\\WORK\\taba-crm\\docs\\CRM-SETTINGS.md": {
+    "mtime": 1778963331.2590487,
+    "ast_hash": "ef2c3fa62c53c1543bc7c102a9be066e",
+    "semantic_hash": "ef2c3fa62c53c1543bc7c102a9be066e"
+  },
+  "C:\\WORK\\taba-crm\\docs\\superpowers\\plans\\2026-03-29-taba-crm-v2.md": {
+    "mtime": 1778963331.261651,
+    "ast_hash": "ab41a46549ff52f8f1663cbb972452d8",
+    "semantic_hash": "ab41a46549ff52f8f1663cbb972452d8"
+  },
+  "C:\\WORK\\taba-crm\\docs\\superpowers\\plans\\2026-04-28-angular-frontend-first.md": {
+    "mtime": 1778963331.2643392,
+    "ast_hash": "c75da6038cd0759db2c4a1c3c7f6ad94",
+    "semantic_hash": "c75da6038cd0759db2c4a1c3c7f6ad94"
+  },
+  "C:\\WORK\\taba-crm\\docs\\superpowers\\specs\\2026-03-29-taba-crm-v2-design.md": {
+    "mtime": 1778963331.2669845,
+    "ast_hash": "9fff9307241221f540a78a830ecb6b74",
+    "semantic_hash": "9fff9307241221f540a78a830ecb6b74"
+  },
+  "C:\\WORK\\taba-crm\\docs\\superpowers\\specs\\2026-04-21-angular-frontend-first-design.md": {
+    "mtime": 1778963331.268598,
+    "ast_hash": "8b7d7fe491a6c4d65ec34dafbb792e65",
+    "semantic_hash": "8b7d7fe491a6c4d65ec34dafbb792e65"
+  },
+  "C:\\WORK\\taba-crm\\tests\\README.md": {
+    "mtime": 1772623728.6386719,
+    "ast_hash": "97392f8ad4539f08b511cb6150ad0e68",
+    "semantic_hash": "97392f8ad4539f08b511cb6150ad0e68"
+  }
+}
