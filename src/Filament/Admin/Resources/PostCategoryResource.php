@@ -10,6 +10,7 @@ use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions;
 use IbrahimBougaoua\RadioButtonImage\RadioButtonImage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -21,6 +22,7 @@ use JaOcero\RadioDeck\Forms\Components\RadioDeck;
 use Taba\Crm\Filament\Clusters\Posts;
 use Alkoumi\FilamentImageRadioButton\Forms\Components\ImageRadioGroup;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconSize;
 use Taba\Crm\Models\Post;
@@ -78,7 +80,7 @@ class PostCategoryResource extends Resource
                 ->label('Heavy Section')
                 ->translateLabel()
                 ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                ->afterStateHydrated(function (Forms\Set $set, ?PostCategory $record) {
+                ->afterStateHydrated(function (Set $set, ?PostCategory $record) {
                     if (!$record) {
                         return;
                     }
@@ -103,12 +105,12 @@ class PostCategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                 ->translateLabel()
                 ->suffixAction(
-                                        Forms\Components\Actions\Action::make('translateTitle')
+                                        Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
+                                            ->action(function (PostCategory $record, Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -152,12 +154,12 @@ class PostCategoryResource extends Resource
                     //add more rows to the textinput
                     // ->rows(5)
                       ->suffixAction(
-                                Forms\Components\Actions\Action::make('translateTitle')
+                                Actions\Action::make('translateTitle')
                                     ->icon('heroicon-o-language')
                                     ->iconSize('sm')
                                     ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                     ->tooltip('Auto-translate title')
-                                    ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
+                                    ->action(function (PostCategory $record, Set $set, Get $get) {
                                         try {
                                             $currentLocale = app()->getLocale();
                                             $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -195,12 +197,12 @@ class PostCategoryResource extends Resource
 
                 Forms\Components\TextInput::make('subtitle')
                   ->suffixAction(
-                                        Forms\Components\Actions\Action::make('translateTitle')
+                                        Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
+                                            ->action(function (PostCategory $record, Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -235,7 +237,7 @@ class PostCategoryResource extends Resource
                                     )
                     ->translateLabel(),
 
-                Forms\Components\Section::make()
+                \Filament\Schemas\Components\Section::make()
                     ->columnSpanFull()
                     ->schema([
                         // Forms\Components\Select::make('section_component')
@@ -259,15 +261,10 @@ class PostCategoryResource extends Resource
                     ->options(ComponentRegistry::forSelect())
                     ->iconSize(IconSize::Large)
                     ->visible(fn () => auth()->user()->hasRole('super_admin'))
-                    ->direction('column')
                     ->color('primary')
                     ->default(null)
                     ->nullable()
-                    ->iconSizes([ // Customize the values for each icon size
-                        'sm' => 'h-full w-full',
-                        'md' => 'h-full w-full',
-                        'lg' => 'h-full w-full',
-                    ])->gap('gap-5')
+                    ->optionsGap('gap-5')
                     ->descriptions([
                         'none' => 'No specific layout - use default rendering',
                     ])
@@ -363,16 +360,16 @@ class PostCategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
+                Actions\ActionGroup::make([
                     ListPreviewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    Actions\EditAction::make(),
+                    Actions\DeleteAction::make(),
                 ]),
             ])
 
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make()
                         ->translateLabel(),
                 ]),
             ])

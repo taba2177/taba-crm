@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Filament\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Taba\Crm\Models\ContactEntry;
 
@@ -67,7 +68,7 @@ class Messages extends Page implements HasTable
                     ->limit(50),
             ])
             ->actions([
-                Tables\Actions\Action::make('view')
+                Actions\Action::make('view')
                     ->label(__('عرض'))
                     ->icon('heroicon-o-eye')
                     ->modalHeading(fn (ContactEntry $record) => __('رسالة من') . ' ' . $record->name)

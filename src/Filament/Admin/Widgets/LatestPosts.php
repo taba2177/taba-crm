@@ -7,9 +7,12 @@ use Taba\Crm\Models\Post;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Actions;
 
 class LatestPosts extends BaseWidget
 {
+    protected static bool $isLazy = false;
+
     protected int | string | array $columnSpan = 'full';
 
     protected static ?int $sort = 4;
@@ -36,7 +39,7 @@ class LatestPosts extends BaseWidget
                     ->dateTime(),
             ])
             ->actions([
-                Tables\Actions\Action::make('edit')
+                Actions\Action::make('edit')
                     ->label(__('Edit'))
                     ->url(fn (Post $record): string => PostResource::getUrl('edit', ['record' => $record])),
             ]);

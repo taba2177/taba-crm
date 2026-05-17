@@ -76,7 +76,6 @@ Use the following patterns to model data for the `\$metadata` parameter of the `
 use Illuminate\Database\Seeder;
 use Taba\Crm\Models\Post;
 use Taba\Crm\Models\PostCategory;
-use Illuminate\Support\Str;
 use Taba\Crm\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Taba\Crm\Models\Tag;

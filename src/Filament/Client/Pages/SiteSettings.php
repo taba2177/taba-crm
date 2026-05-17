@@ -60,7 +60,7 @@ class SiteSettings extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Forms\Components\Section::make(__('معلومات النشاط'))
+                \Filament\Schemas\Components\Section::make(__('معلومات النشاط'))
                     ->schema([
                         Forms\Components\TextInput::make('business_name')
                             ->label(__('اسم النشاط'))
@@ -80,7 +80,7 @@ class SiteSettings extends Page implements HasForms
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make(__('التواصل الاجتماعي'))
+                \Filament\Schemas\Components\Section::make(__('التواصل الاجتماعي'))
                     ->schema([
                         Forms\Components\TextInput::make('facebook')
                             ->label(__('فيسبوك'))
@@ -105,7 +105,7 @@ class SiteSettings extends Page implements HasForms
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make(__('الشعار'))
+                \Filament\Schemas\Components\Section::make(__('الشعار'))
                     ->schema([
                         Forms\Components\FileUpload::make('logo')
                             ->label(__('شعار الموقع'))

@@ -7,11 +7,14 @@ use Spatie\Activitylog\Models\Activity;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Actions;
 use Taba\Crm\Filament\Admin\Resources\ActivityResource;
 
 class RecentActivities extends BaseWidget
 {
     use HasWidgetShield;
+
+    protected static bool $isLazy = false;
 
     protected int | string | array $columnSpan = 'full';
 
@@ -48,7 +51,7 @@ class RecentActivities extends BaseWidget
                     ->dateTime(),
             ])
             ->actions([
-                // Tables\Actions\Action::make('view')
+                // Actions\Action::make('view')
                 //     ->label(__('View'))
                 //     ->url(fn (Activity $record): string => ActivityResource::getUrl('edit', ['record' => $record])),
             ]);

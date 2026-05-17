@@ -91,8 +91,8 @@ return [
     |
     */
     'brand' => [
-        'primary_color'   => env('CRM_BRAND_PRIMARY', '#6366f1'),   // indigo-500
-        'secondary_color' => env('CRM_BRAND_SECONDARY', '#8b5cf6'), // violet-500
+        'primary_color'   => env('CRM_BRAND_PRIMARY', '#0ea5e9'),   // sky-500
+        'secondary_color' => env('CRM_BRAND_SECONDARY', '#64748b'), // slate-500
         'font_family'     => env('CRM_BRAND_FONT', 'Cairo'),
         'font_url'        => env('CRM_BRAND_FONT_URL', 'https://fonts.bunny.net/css?family=cairo:400,500,600,700'),
     ],

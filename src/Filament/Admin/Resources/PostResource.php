@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions;
 use Illuminate\Support\Str;
 use Filament\Notifications\Notification;
 use Taba\Crm\Services\GeminiTranslationService;
@@ -30,7 +31,7 @@ use Filament\Resources\Pages\Page;
 use Taba\Crm\Models\PostCategory;
 // SubNavigationPosition
 use Filament\Pages\Enums\SubNavigationPosition;
-use Guava\FilamentIconPicker\Forms\IconPicker;
+use Guava\IconPicker\Forms\Components\IconPicker;
 use Taba\Crm\Filament\Clusters\Posts;
 
 
@@ -151,7 +152,7 @@ class PostResource extends Resource
                     Wizard\Step::make(__('Content'))
                     ->icon('heroicon-o-pencil')
                     ->schema([
-                            Forms\Components\Grid::make(2)->schema([
+                            \Filament\Schemas\Components\Grid::make(2)->schema([
                                 Forms\Components\TextInput::make('order')->translateLabel()
                                      ->required()
                                      ->numeric()
@@ -169,12 +170,12 @@ class PostResource extends Resource
                                     ->autofocus()
                                     ->translateLabel()
                                     ->suffixAction(
-                                        Forms\Components\Actions\Action::make('translateTitle')
+                                        Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->visible(fn () => auth()->user()->hasRole('super_admin'))
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                            ->action(function (Post $record, Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -263,7 +264,7 @@ class PostResource extends Resource
                                                 'application/pdf', // <-- Add this for PDF files
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->maxSize(20000)->translateLabel(),
-                                            Forms\Components\Fieldset::make('Details')
+                                            \Filament\Schemas\Components\Fieldset::make('Details')
                                                 ->schema([
                                                     Forms\Components\TextInput::make('alt')->label('Alt Text')->placeholder('Enter alt text')->required()->maxLength(255)->translateLabel(),
                                                     Forms\Components\TextInput::make('caption')->placeholder('Enter a caption')->maxLength(255)->translateLabel(),
@@ -275,7 +276,7 @@ class PostResource extends Resource
                     Wizard\Step::make(__('Media'))
                     ->icon('heroicon-o-paper-clip')
                         ->schema([
-                            Forms\Components\Section::make(__('Featured Image'))
+                            \Filament\Schemas\Components\Section::make(__('Featured Image'))
                                 ->schema([
                                     CuratorPicker::make('image_id')->label('Featured Image')->acceptedFileTypes([
                                                 'image/jpeg',
@@ -286,7 +287,7 @@ class PostResource extends Resource
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->maxSize(20000)->translateLabel(),
                                 ]),
-                            Forms\Components\Section::make(__('Additional Images'))
+                            \Filament\Schemas\Components\Section::make(__('Additional Images'))
                                 ->schema([
                                     CuratorPicker::make('images')->maxSize(20000)->acceptedFileTypes([
                                                 'image/jpeg',
@@ -309,13 +310,13 @@ class PostResource extends Resource
                     Wizard\Step::make(__('SEO & Publishing'))
                         ->icon('heroicon-o-photo')
                         ->schema([
-                            Forms\Components\Section::make(__('SEO'))
+                            \Filament\Schemas\Components\Section::make(__('SEO'))
                                 ->icon('heroicon-o-photo')
                                 ->schema([
                                     Forms\Components\Textarea::make('meta_title')->rows(2)->translateLabel()->maxLength(60),
                                     Forms\Components\Textarea::make('meta_description')->translateLabel()->rows(5)->maxLength(160),
                                 ]),
-                            Forms\Components\Section::make(__('Publishing'))
+                            \Filament\Schemas\Components\Section::make(__('Publishing'))
                                 ->schema([
                                     Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
                                     Forms\Components\Toggle::make('is_published')->label('Published')->required()->translateLabel(),
@@ -326,7 +327,7 @@ class PostResource extends Resource
                     Wizard\Step::make(__('Advanced'))
                         ->icon('heroicon-o-adjustments-horizontal')
                         ->schema([
-                            Forms\Components\Section::make(__('Author & Tags'))
+                            \Filament\Schemas\Components\Section::make(__('Author & Tags'))
                                 ->schema([
                                     Forms\Components\Select::make('user_id')->label('Author')->relationship('user', 'name')->default(fn() => auth()->id())->searchable()->required()->translateLabel(),
                                     Select::make('tags')
@@ -343,7 +344,7 @@ class PostResource extends Resource
                                             return $tag->id;
                                         }),
                                 ]),
-                            Forms\Components\Section::make('metadata')
+                            \Filament\Schemas\Components\Section::make('metadata')
                                 ->icon('heroicon-o-adjustments-horizontal')
                                 ->schema([
                                     Forms\Components\KeyValue::make('metadata')
@@ -357,7 +358,7 @@ class PostResource extends Resource
                 ->skippable()
                 ->columnSpanFull(),
 
-                Forms\Components\Section::make()
+                \Filament\Schemas\Components\Section::make()
                     ->columnSpan(1)
                     ->schema([
                         Forms\Components\Select::make('homepage_section_component')
@@ -495,18 +496,18 @@ class PostResource extends Resource
             ])
 
             ->actions([
-                // Tables\Actions\EditAction::make()
+                // Actions\EditAction::make()
                 //     ->translateLabel(),
-                Tables\Actions\ActionGroup::make([
+                Actions\ActionGroup::make([
                     // ListPreviewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    Actions\EditAction::make(),
+                    Actions\ViewAction::make(),
+                    Actions\DeleteAction::make(),
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make()
                         ->translateLabel(),
                 ]),
             ])

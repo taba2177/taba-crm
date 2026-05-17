@@ -5,6 +5,7 @@ namespace Taba\Crm\Filament\Admin\Resources\PostCategoryResource\RelationManager
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Actions;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Taba\Crm\Models\Post;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
@@ -56,7 +57,7 @@ class PostsRelationManager extends RelationManager
                     Wizard\Step::make(__('Content'))
                     ->icon('heroicon-o-pencil')
                     ->schema([
-                            Forms\Components\Grid::make(2)->schema([
+                            \Filament\Schemas\Components\Grid::make(2)->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->placeholder('Enter a title')
                                     ->live(debounce: 500)
@@ -70,11 +71,11 @@ class PostsRelationManager extends RelationManager
                                     ->autofocus()
                                     ->translateLabel()
                                     ->suffixAction(
-                                        Forms\Components\Actions\Action::make('translateTitle')
+                                        Actions\Action::make('translateTitle')
                                             ->icon('heroicon-o-language')
                                             ->iconSize('sm')
                                             ->tooltip('Auto-translate title')
-                                            ->action(function (Post $record, Forms\Set $set, Get $get) {
+                                            ->action(function (Post $record, Set $set, Get $get) {
                                                 try {
                                                     $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
@@ -149,7 +150,7 @@ class PostsRelationManager extends RelationManager
                                                 'application/pdf', // <-- Add this for PDF files
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->translateLabel(),
-                                            Forms\Components\Fieldset::make('Details')
+                                            \Filament\Schemas\Components\Fieldset::make('Details')
                                                 ->schema([
                                                     Forms\Components\TextInput::make('alt')->label('Alt Text')->placeholder('Enter alt text')->required()->maxLength(255)->translateLabel(),
                                                     Forms\Components\TextInput::make('caption')->placeholder('Enter a caption')->maxLength(255)->translateLabel(),
@@ -161,7 +162,7 @@ class PostsRelationManager extends RelationManager
                     Wizard\Step::make(__('Media'))
                     ->icon('heroicon-o-paper-clip')
                         ->schema([
-                            Forms\Components\Section::make(__('Featured Image'))
+                            \Filament\Schemas\Components\Section::make(__('Featured Image'))
                                 ->schema([
                                     CuratorPicker::make('image_id')->maxSize(20000)->acceptedFileTypes([
                                                 'image/jpeg',
@@ -172,7 +173,7 @@ class PostsRelationManager extends RelationManager
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->label('Featured Image')->translateLabel(),
                                 ]),
-                            Forms\Components\Section::make(__('Additional Images'))
+                            \Filament\Schemas\Components\Section::make(__('Additional Images'))
                                 ->schema([
                                     CuratorPicker::make('images')->maxSize(20000)->acceptedFileTypes([
                                                 'image/jpeg',
@@ -183,7 +184,7 @@ class PostsRelationManager extends RelationManager
                                                 'video/mp4',       // <-- Add this for MP4 video files
                                             ])->multiple()->translateLabel(),
                                 ]),
-                            Forms\Components\Section::make('metadata')
+                            \Filament\Schemas\Components\Section::make('metadata')
                                 ->icon('heroicon-o-adjustments-horizontal')
                                 ->schema([
                                     Forms\Components\KeyValue::make('metadata')
@@ -197,7 +198,7 @@ class PostsRelationManager extends RelationManager
                     Wizard\Step::make(__('SEO & Publishing'))
                         ->icon('heroicon-o-photo')
                         ->schema([
-                            Forms\Components\Section::make(__('SEO'))
+                            \Filament\Schemas\Components\Section::make(__('SEO'))
                                 ->icon('heroicon-o-photo')
                                 ->schema([
                                     Forms\Components\Textarea::make('meta_title')->rows(2)->translateLabel()->maxLength(60),
@@ -223,7 +224,7 @@ class PostsRelationManager extends RelationManager
                     Wizard\Step::make(__('Advanced'))
                         ->icon('heroicon-o-adjustments-horizontal')
                         ->schema([
-                            Forms\Components\Section::make(__('Author & Tags'))
+                            \Filament\Schemas\Components\Section::make(__('Author & Tags'))
                                 ->schema([
                                     Forms\Components\DatePicker::make('published_at')->label('Publish Date')->default(now())->required()->translateLabel(),
                                     Forms\Components\Select::make('user_id')->columns(2)->label('Author')->relationship('user', 'name')->default(fn () => \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::id() : null)->searchable()->required()->translateLabel(),
@@ -235,7 +236,7 @@ class PostsRelationManager extends RelationManager
                 ->skippable()
                 ->columnSpanFull(),
 
-                Forms\Components\Section::make()
+                \Filament\Schemas\Components\Section::make()
                     ->columnSpan(1)
                     ->schema([
                         Forms\Components\Select::make('homepage_section_component')
@@ -354,22 +355,22 @@ class PostsRelationManager extends RelationManager
                 // Tables\Filters\TrashedFilter::make()
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                // Tables\Actions\AssociateAction::make(),
+                Actions\CreateAction::make(),
+                // Actions\AssociateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\DissociateAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                // Tables\Actions\ForceDeleteAction::make(),
-                // Tables\Actions\RestoreAction::make(),
+                Actions\EditAction::make(),
+                // Actions\DissociateAction::make(),
+                // Actions\DeleteAction::make(),
+                // Actions\ForceDeleteAction::make(),
+                // Actions\RestoreAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DissociateBulkAction::make(),
-                    // Tables\Actions\DeleteBulkAction::make(),
-                    // Tables\Actions\ForceDeleteBulkAction::make(),
-                    // Tables\Actions\RestoreBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    // Actions\DissociateBulkAction::make(),
+                    // Actions\DeleteBulkAction::make(),
+                    // Actions\ForceDeleteBulkAction::make(),
+                    // Actions\RestoreBulkAction::make(),
                 ]),
             ])->defaultSort('order')
             ->reorderable('order');

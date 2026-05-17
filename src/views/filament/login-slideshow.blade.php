@@ -43,4 +43,7 @@
         ></div>
     </template>
 </div>
+@else
+{{-- Fallback: brand-colored gradient when no slideshow images are configured --}}
+<div class="absolute inset-0 h-full w-full" style="background: linear-gradient(135deg, var(--color-primary-700, #0369a1) 0%, var(--color-primary-500, #0ea5e9) 50%, var(--color-primary-400, #38bdf8) 100%); opacity: {{ $opacity }};"></div>
 @endif

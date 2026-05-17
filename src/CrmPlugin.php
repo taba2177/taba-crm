@@ -7,6 +7,7 @@ namespace Taba\Crm;
 use App\Filament\Admin\Themes\Awesome;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Support\Colors\Color;
 use Awcodes\Curator\CuratorPlugin;
 use BezhanSalleh\FilamentGoogleAnalytics\FilamentGoogleAnalyticsPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
@@ -77,6 +78,14 @@ class CrmPlugin implements Plugin
                         'sm' => 2,
                     ]),
             ])
+        ->colors([
+            'primary'  => Color::Sky,
+            'gray'     => Color::Slate,
+            'danger'   => Color::Rose,
+            'info'     => Color::Blue,
+            'success'  => Color::Teal,
+            'warning'  => Color::Amber,
+        ])
         ->default()
         ->login()
         // ->registration()
@@ -142,6 +151,37 @@ class CrmPlugin implements Plugin
     {
         // Apply brand colors + font from CRM settings (DB) with config fallback
         $this->applyBrandTheme($panel);
+
+        // Fix AuthUIEnhancer layout — Tailwind JIT classes (lg:flex-row-reverse,
+        // lg:w-[var(--form-panel-width)], bg-[var(--...)]) are not compiled in
+        // Filament's pre-built CSS, so the auth split-panel layout breaks.
+        // We inject equivalent plain CSS rules that don't require a Tailwind build.
+        \Filament\Support\Facades\FilamentView::registerRenderHook(
+            \Filament\View\PanelsRenderHook::HEAD_END,
+            fn () => '
+            <style>
+            /* AuthUIEnhancer split-panel fix — formPanelPosition: left */
+            @media (min-width: 1024px) {
+                .custom-auth-wrapper {
+                    flex-direction: row-reverse;
+                }
+                .custom-auth-form-panel {
+                    width: var(--form-panel-width, 40%) !important;
+                    flex-shrink: 0;
+                }
+                .custom-auth-empty-panel {
+                    display: flex !important;
+                    flex-direction: column;
+                    flex-grow: 1;
+                }
+            }
+            .custom-auth-empty-panel {
+                background-color: var(--empty-panel-background-color, var(--color-primary-500, #0ea5e9));
+                min-height: 200px;
+            }
+            </style>
+            '
+        );
 
         // Only apply viteTheme if the CSS entry exists in the consumer's Vite manifest
         $cssPath = 'packages/taba/crm/src/resources/css/admin.css';

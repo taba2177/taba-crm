@@ -7,6 +7,7 @@ use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions;
 use Taba\Crm\Models\Page;
 
 class PageResource extends Resource
@@ -50,7 +51,7 @@ class PageResource extends Resource
     {
         return $schema
             ->schema([
-                Forms\Components\Section::make(__('المحتوى'))
+                \Filament\Schemas\Components\Section::make(__('المحتوى'))
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label(__('العنوان'))
@@ -87,8 +88,8 @@ class PageResource extends Resource
             ])
             ->defaultSort('title')
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Actions\ViewAction::make(),
+                Actions\EditAction::make(),
             ]);
     }
 

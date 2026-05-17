@@ -61,19 +61,19 @@ class EditSection extends Page
         $schema = [];
 
         if (!empty($basicFields)) {
-            $schema[] = Forms\Components\Section::make(__('المعلومات الأساسية'))
+            $schema[] = \Filament\Schemas\Components\Section::make(__('المعلومات الأساسية'))
                 ->schema($basicFields)
                 ->collapsible();
         }
 
         if (!empty($mediaFields)) {
-            $schema[] = Forms\Components\Section::make(__('الوسائط'))
+            $schema[] = \Filament\Schemas\Components\Section::make(__('الوسائط'))
                 ->schema($mediaFields)
                 ->collapsible();
         }
 
         if (!empty($extraFields)) {
-            $schema[] = Forms\Components\Section::make(__('إعدادات إضافية'))
+            $schema[] = \Filament\Schemas\Components\Section::make(__('إعدادات إضافية'))
                 ->schema($extraFields)
                 ->collapsible();
         }

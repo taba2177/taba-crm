@@ -30,7 +30,7 @@ class ManageCrmSettings extends Page implements HasForms
     public function form(Schema $schema): Schema
     {
         return $schema
-            ->schema(CrmSettingResource::form($form)->getComponents())
+            ->schema(CrmSettingResource::form($schema)->getComponents())
             ->statePath('data');
     }
 
