@@ -6,7 +6,7 @@ use Taba\Crm\Filament\Admin\Resources\UserResource\Pages;
 use Taba\Crm\Models\User;
 use Taba\Crm\Concerns\HasNavigationVisibility;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -60,9 +60,9 @@ class UserResource extends Resource
     /**
      * The resource form.
      */
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()

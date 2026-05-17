@@ -11,7 +11,6 @@ use Awcodes\Curator\CuratorPlugin;
 use BezhanSalleh\FilamentGoogleAnalytics\FilamentGoogleAnalyticsPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
-use Filament\SpatieLaravelTranslatablePlugin;
 use Taba\Crm\Filament\Admin\Pages\GenerateComponentsFromAI;
 use Taba\Crm\Filament\Admin\Pages\GenerateSiteFromAI;
 use Taba\Crm\Filament\Admin\Widgets\LatestPosts;
@@ -124,15 +123,6 @@ class CrmPlugin implements Plugin
         ->brandLogo(fn () => view('components.logo'))
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
-            \Hasnayeen\Themes\ThemesPlugin::make()
-            // ->canViewThemesPage(fn () => auth()->user()->hasRole('super_admin'))
-            ->registerTheme(
-                        [
-                            \Hasnayeen\Themes\Themes\DefaultTheme::class,
-                        ],
-                        override: true,
-                    ),
-            SpatieLaravelTranslatablePlugin::make()->defaultLocales(['ar', 'en']),
             FilamentPeekPlugin::make(),
             AuthUIEnhancerPlugin::make()
                 ->showEmptyPanelOnMobile(true)
@@ -144,7 +134,6 @@ class CrmPlugin implements Plugin
 
         ])->defaultThemeMode(ThemeMode::Dark)
         ->middleware([
-            \Hasnayeen\Themes\Http\Middleware\SetTheme::class,
             \Taba\Crm\Http\Middleware\ApplyBrandColors::class,
         ]);
     }

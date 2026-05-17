@@ -4,7 +4,7 @@ namespace Taba\Crm\Filament\Auth;
 
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Pages\Auth\Login as BaseAuth;
 use Illuminate\Validation\ValidationException;
@@ -14,9 +14,9 @@ class Login extends BaseAuth
     /**
      * Get the form for the resource.
      */
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 $this->getUsernameFormComponent(),
                 $this->getPasswordFormComponent(),

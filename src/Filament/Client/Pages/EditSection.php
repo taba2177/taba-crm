@@ -3,7 +3,7 @@
 namespace Taba\Crm\Filament\Client\Pages;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Taba\Crm\Components\Registry\ComponentRegistry;
@@ -35,7 +35,7 @@ class EditSection extends Page
         return __('تعديل') . ' - ' . ($this->record?->name ?? '');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
         $component = ($this->record && ComponentRegistry::has($this->record->section_component))
             ? ComponentRegistry::resolve($this->record->section_component)
@@ -78,7 +78,7 @@ class EditSection extends Page
                 ->collapsible();
         }
 
-        return $form->schema($schema)->statePath('data');
+        return $schema->schema($schema)->statePath('data');
     }
 
     public function save(): void

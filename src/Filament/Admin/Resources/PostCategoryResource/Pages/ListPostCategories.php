@@ -11,17 +11,11 @@ class ListPostCategories extends ListRecords
 {
 
     use HasPostPreview;
-    use ListRecords\Concerns\Translatable;
     protected static string $resource = PostCategoryResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\LocaleSwitcher::make()
-                ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))
-                ->icon('heroicon-o-globe-alt')
-                ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
-                ->size('sm'),
             Actions\CreateAction::make(),
         ];
     }

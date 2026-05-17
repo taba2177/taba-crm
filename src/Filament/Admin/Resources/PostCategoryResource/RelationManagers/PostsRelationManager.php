@@ -10,9 +10,9 @@ use Taba\Crm\Models\Post;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use Filament\Forms\Components\Builder;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Notifications\Notification;
@@ -20,14 +20,11 @@ use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
 use Illuminate\Support\Facades\File;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Wizard;
-use Filament\Resources\RelationManagers\Concerns\Translatable;
+use Filament\Schemas\Components\Wizard;
 use Illuminate\Support\Arr;
 
 class PostsRelationManager extends RelationManager
 {
-use Translatable;
-
     protected static string $relationship = 'posts';
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -52,9 +49,9 @@ use Translatable;
     }
 
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                Wizard::make([
                     Wizard\Step::make(__('Content'))
@@ -80,7 +77,7 @@ use Translatable;
                                             ->tooltip('Auto-translate title')
                                             ->action(function (Post $record, Forms\Set $set, Get $get) {
                                                 try {
-                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
                                                     $currentTitle = trim($get('title') ?? '');
 

@@ -10,7 +10,7 @@ use Filament\Notifications\Notification;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 
 class ManageCrmSettings extends Page implements HasForms
 {
@@ -27,9 +27,9 @@ class ManageCrmSettings extends Page implements HasForms
         $this->loadSettings();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema(CrmSettingResource::form($form)->getComponents())
             ->statePath('data');
     }

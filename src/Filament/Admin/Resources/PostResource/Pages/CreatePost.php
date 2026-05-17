@@ -8,7 +8,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePost extends CreateRecord
 {
     use HasPostPreview;
-    use CreateRecord\Concerns\Translatable;
     /**
      * The resource model.
      */

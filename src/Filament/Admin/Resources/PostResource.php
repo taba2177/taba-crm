@@ -10,9 +10,9 @@ use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use Filament\Forms;
 use Filament\Forms\Components\Builder;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,11 +21,10 @@ use Filament\Notifications\Notification;
 use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
 use Filament\Forms\Components\Select;
-use Filament\Resources\Concerns\Translatable;
 use Taba\Crm\Models\MetadataFillter;
 use Illuminate\Support\Facades\File;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
-use Filament\Forms\Components\Wizard;
+use Filament\Schemas\Components\Wizard;
 use Filament\Navigation\NavigationItem;
 use Filament\Resources\Pages\Page;
 use Taba\Crm\Models\PostCategory;
@@ -37,7 +36,6 @@ use Taba\Crm\Filament\Clusters\Posts;
 
 class PostResource extends Resource
 {
-    use Translatable;
     /**
      * The resource record title.
      */
@@ -145,9 +143,9 @@ class PostResource extends Resource
     /**
      * Get the form for the resource.
      */
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Wizard::make([
                     Wizard\Step::make(__('Content'))
@@ -178,7 +176,7 @@ class PostResource extends Resource
                                             ->tooltip('Auto-translate title')
                                             ->action(function (Post $record, Forms\Set $set, Get $get) {
                                                 try {
-                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
                                                     $currentTitle = trim($get('title') ?? '');
 

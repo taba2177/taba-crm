@@ -16,7 +16,6 @@ use Spatie\Browsershot\Browsershot;
 class EditPostCategory extends EditRecord
 {
     use HasPreviewModal;
-    use EditRecord\Concerns\Translatable;
 
 
     protected static string $resource = PostCategoryResource::class;
@@ -47,11 +46,6 @@ class EditPostCategory extends EditRecord
     {
         return [
             PreviewAction::make(),
-            Actions\LocaleSwitcher::make()
-                ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))
-                ->icon('heroicon-o-globe-alt')
-                ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
-                ->size('sm'),
 
             Actions\Action::make('generate_preview')
                 ->label('Generate Preview Image')

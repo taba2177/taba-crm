@@ -3,7 +3,7 @@
 namespace Taba\Crm\Filament\Client\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -64,7 +64,7 @@ class SectionPostResource extends Resource
         return __('العناصر');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
         $categoryId = request()->route('category');
         $category = $categoryId ? PostCategory::find($categoryId) : null;
@@ -113,7 +113,7 @@ class SectionPostResource extends Resource
 
         $schema[] = Forms\Components\Hidden::make('post_category_id')->default($categoryId);
 
-        return $form->schema($schema);
+        return $schema->schema($schema);
     }
 
     public static function table(Table $table): Table

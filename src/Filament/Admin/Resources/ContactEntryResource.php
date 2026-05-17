@@ -6,7 +6,7 @@ use Taba\Crm\Filament\Admin\Resources\ContactEntryResource\Pages;
 use Taba\Crm\Models\ContactEntry;
 use Taba\Crm\Concerns\HasNavigationVisibility;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -46,9 +46,9 @@ class ContactEntryResource extends Resource
         return __('Contact Entries');
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->schema([
             Infolists\Components\TextEntry::make('created_at')
                 ->label('Date')
                 ->translateLabel()

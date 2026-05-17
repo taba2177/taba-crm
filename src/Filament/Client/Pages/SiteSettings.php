@@ -5,7 +5,7 @@ namespace Taba\Crm\Filament\Client\Pages;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Taba\Crm\Models\CrmSetting;
@@ -56,9 +56,9 @@ class SiteSettings extends Page implements HasForms
         $this->form->fill($data);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\Section::make(__('معلومات النشاط'))
                     ->schema([

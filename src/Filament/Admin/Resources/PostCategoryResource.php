@@ -6,8 +6,7 @@ use Taba\Crm\Filament\Admin\Resources\PostCategoryResource\Pages;
 use Taba\Crm\Filament\Admin\Resources\PostCategoryResource\RelationManagers;
 use Taba\Crm\Models\PostCategory;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 use JaOcero\RadioDeck\Forms\Components\RadioDeck;
 use Taba\Crm\Filament\Clusters\Posts;
 use Alkoumi\FilamentImageRadioButton\Forms\Components\ImageRadioGroup;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconSize;
 use Taba\Crm\Models\Post;
@@ -30,8 +29,6 @@ use Taba\Crm\Components\Registry\ComponentRegistry;
 
 class PostCategoryResource extends Resource
 {
-    use Translatable;
-
     protected static ?string $model = PostCategory::class;
     // protected static ?string $cluster = Posts::class;
 
@@ -73,9 +70,9 @@ class PostCategoryResource extends Resource
         return __('Post Category');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\Checkbox::make('HEAVY_SECTION')
                 ->label('Heavy Section')
@@ -113,7 +110,7 @@ class PostCategoryResource extends Resource
                                             ->tooltip('Auto-translate title')
                                             ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
-                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
                                                     $currentTitle = trim($get('name') ?? '');
 
@@ -162,7 +159,7 @@ class PostCategoryResource extends Resource
                                     ->tooltip('Auto-translate title')
                                     ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                         try {
-                                            $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                            $currentLocale = app()->getLocale();
                                             $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
                                             $currentTitle = trim($get('description') ?? '');
 
@@ -205,7 +202,7 @@ class PostCategoryResource extends Resource
                                             ->tooltip('Auto-translate title')
                                             ->action(function (PostCategory $record, Forms\Set $set, Get $get) {
                                                 try {
-                                                    $currentLocale = \Filament\Resources\Concerns\Translatable::getDefaultTranslatableLocale();
+                                                    $currentLocale = app()->getLocale();
                                                     $oppositeLocale = $currentLocale === 'en' ? 'ar' : 'en';
                                                     $currentTitle = trim($get('subtitle') ?? '');
 

@@ -2,7 +2,7 @@
 
 namespace Taba\Crm\Filament\Admin\Resources;
 
-use Z3d0X\FilamentLogger\Resources\ActivityResource as BaseResource;
+use Jacobtims\FilamentLogger\Resources\ActivityResource as BaseResource;
 
 class ActivityResource extends BaseResource
 {

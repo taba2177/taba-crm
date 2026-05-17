@@ -12,24 +12,12 @@ class ListPosts extends ListRecords
 {
     use HasPostPreview;
 
-    use ListRecords\Concerns\Translatable;
-    /**
-     * The resource model.
-     */
     protected static string $resource = PostResource::class;
 
-    /**
-     * The header actions.
-     */
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
-            Actions\LocaleSwitcher::make()
-                ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))
-                ->icon('heroicon-o-globe-alt')
-                ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
-                ->size('sm'),
         ];
     }
 

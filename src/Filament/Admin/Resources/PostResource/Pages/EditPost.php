@@ -7,8 +7,8 @@ use Taba\Crm\Filament\Admin\Resources\PostResource;
 use Filament\Actions;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -27,11 +27,6 @@ class EditPost extends EditRecord
 {
     use HasPreviewModal;
 
-    use EditRecord\Concerns\Translatable;
-
-    /**
-     * The resource model.
-     */
     protected static string $resource = PostResource::class;
 
 
@@ -64,12 +59,6 @@ class EditPost extends EditRecord
     {
         return [
             PreviewAction::make(),
-
-            Actions\LocaleSwitcher::make()
-                ->label(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.label'))
-                ->icon('heroicon-o-globe-alt')
-                ->tooltip(__('filament-locale-switcher::filament-locale-switcher.actions.locale_switcher.tooltip'))
-                ->size('sm'),
 
          Actions\Action::make('find_featured_image')
             ->label(__('Find Featured Image'))
@@ -197,7 +186,7 @@ class EditPost extends EditRecord
 
                         // --- THE FIX ---
                         // 1. Directly update the model's translations for the current locale
-                        $activeLocale = $this->activeLocale;
+                        $activeLocale = app()->getLocale();
                         $record->setTranslation('meta_title', $activeLocale, $seoData['meta_title']);
                         $record->setTranslation('meta_description', $activeLocale, $seoData['meta_description']);
 
@@ -252,7 +241,7 @@ class EditPost extends EditRecord
                         $translator = app(GeminiTranslationService::class);
 
                         // Determine source and target languages based on the active tab
-                        $sourceLocale = $this->activeLocale;
+                        $sourceLocale = app()->getLocale();
                         $targetLocale = $sourceLocale === 'en' ? 'ar' : 'en';
 
                         // 1. Prepare all translatable texts in a single batch

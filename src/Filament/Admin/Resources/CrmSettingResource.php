@@ -3,15 +3,15 @@
 namespace Taba\Crm\Filament\Admin\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Taba\Crm\Filament\Admin\Resources\CrmSettingResource\Pages;
 use Taba\Crm\Models\CrmSetting;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
 use Illuminate\Support\Str;
 
 class CrmSettingResource extends Resource
@@ -39,9 +39,9 @@ class CrmSettingResource extends Resource
         return __('CRM Settings');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Tabs::make('Settings')
                     ->tabs([
