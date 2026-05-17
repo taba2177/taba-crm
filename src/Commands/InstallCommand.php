@@ -66,12 +66,14 @@ class InstallCommand extends Command
         $this->task('Generating llms.txt', fn() => $this->generateLlmsTxt());
         $this->task('Writing robots.txt', fn() => $this->writeRobotsTxt());
 
-        // Run Shield setup AFTER AdminPanelProvider is fully configured with ->default()
-        $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
+        // Run Shield setup while AdminPanelProvider still has ->default() (added by updateAdminPanelProvider)
         $this->task('Setting up Filament Shield', fn() => $this->setupFilamentShield());
 
         // Seed AFTER Shield creates roles and permissions
         $this->task('Seeding database with super admin', fn() => $this->runSeeder());
+
+        // Now that Shield is done, remove ->default() since CrmPlugin sets it
+        $this->task('Finalizing AdminPanelProvider configuration', fn() => $this->finalizeAdminPanelProvider());
 
         $this->displayResults();
 
@@ -603,6 +605,7 @@ class InstallCommand extends Command
             'cropperjs' => '^1.6.2',
             'preline' => '^3.2.3',
             'flowbite' => '^2.5.2',
+            'axios' => '^1.7.0',
         ];
 
         $packageJson = json_decode(File::get(base_path('package.json')), true);
