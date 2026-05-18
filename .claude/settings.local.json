@@ -60,7 +60,11 @@
       "Bash(git ls-remote *)",
       "Bash(git tag *)",
       "Bash(git push *)",
-      "Bash(composer update *)"
+      "Bash(composer update *)",
+      "Bash(nohup /c/MAMP/bin/php/php8.3.1/php.exe artisan serve --host=127.0.0.1 --port=8001)",
+      "Bash(disown)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri 'http://127.0.0.1:8001/admin' -TimeoutSec 120 -MaximumRedirection 5 -ErrorAction Stop; \"code=$\\($r.StatusCode\\) size=$\\($r.RawContentLength\\) url=$\\($r.BaseResponse.ResponseUri\\)\" } catch { \"ERR: $\\($_.Exception.Message\\)\"; if\\($_.Exception.Response\\){ \"status=$\\([int]$_.Exception.Response.StatusCode\\)\"; try { $s = $_.Exception.Response.GetResponseStream\\(\\); $rd = New-Object IO.StreamReader\\($s\\); $b = $rd.ReadToEnd\\(\\); $b.Substring\\(0, [Math]::Min\\(800, $b.Length\\)\\) } catch {} } })",
+      "PowerShell($wc = New-Object System.Net.WebClient; try { $html = $wc.DownloadString\\('http://127.0.0.1:8001/admin'\\) } catch { try { $s = $_.Exception.InnerException.Response.GetResponseStream\\(\\); $r = New-Object IO.StreamReader\\($s\\); $html = $r.ReadToEnd\\(\\) } catch { $html = $_.Exception.Message } }; Set-Content -Path tests\\\\browser-pw\\\\artifacts\\\\taba-admin.html -Value $html; \"saved: $\\($html.Length\\) bytes\"; $i = $html.IndexOf\\('ErrorException'\\); if\\($i -lt 0\\){ $i = $html.IndexOf\\('Error'\\) }; if\\($i -ge 0\\){ $html.Substring\\([Math]::Max\\(0,$i-50\\), [Math]::Min\\(800, $html.Length - [Math]::Max\\(0,$i-50\\)\\)\\) })"
     ],
     "additionalDirectories": [
       "C:\\WORK\\linktree-saas\\vendor\\taba\\crm\\src"
