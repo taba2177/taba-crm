@@ -14,7 +14,7 @@ class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
     protected static bool $shouldRegisterNavigation = true;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
     protected static ?int $navigationSort = 70;
 
     public static function getNavigationGroup(): ?string
