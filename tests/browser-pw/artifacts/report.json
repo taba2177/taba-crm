@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:8000",
+  "when": "2026-05-18T15:34:08.138Z",
+  "results": [
+    {
+      "name": "GET /",
+      "ok": true,
+      "info": "HTTP 200"
+    },
+    {
+      "name": "GET /admin",
+      "ok": true,
+      "info": "HTTP 200 -> http://127.0.0.1:8000/admin/login"
+    },
+    {
+      "name": "login form rendered",
+      "ok": true,
+      "info": ""
+    },
+    {
+      "name": "login succeeded",
+      "ok": false,
+      "info": "landed on http://127.0.0.1:8000/admin/login"
+    }
+  ],
+  "consoleLogs": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://127.0.0.1:8000/"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://127.0.0.1:8000/admin/login"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "http://127.0.0.1:8000/admin/login"
+    }
+  ],
+  "pageErrors": [],
+  "networkFailures": []
+}
