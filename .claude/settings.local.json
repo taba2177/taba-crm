@@ -55,7 +55,12 @@
       "Bash(curl -sS -o /tmp/admin.html -w \"GET /admin -> %{http_code} time=%{time_total}s size=%{size_download}\\\\n\" --max-time 180 http://127.0.0.1:8000/admin -L)",
       "Bash(git checkout *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(grep -rn 'static.*$navigationGroup\\\\s*=\\\\|static.*$navigationIcon\\\\s*=' /c/WORK/linktree-saas/vendor/filament/filament/src/Resources/ /c/WORK/linktree-saas/vendor/filament/filament/src/Pages/)",
+      "Bash(git ls-remote *)",
+      "Bash(git tag *)",
+      "Bash(git push *)",
+      "Bash(composer update *)"
     ],
     "additionalDirectories": [
       "C:\\WORK\\linktree-saas\\vendor\\taba\\crm\\src"
