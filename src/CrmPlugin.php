@@ -152,8 +152,8 @@ class CrmPlugin implements Plugin
         // Apply brand colors + font from CRM settings (DB) with config fallback
         $this->applyBrandTheme($panel);
 
-        // Fix AuthUIEnhancer layout — Tailwind JIT classes (lg:flex-row-reverse,
-        // lg:w-[var(--form-panel-width)], bg-[var(--...)]) are not compiled in
+        // Fix AuthUIEnhancer layout — Tailwind JIT/utility classes (flex, lg:flex-row-reverse,
+        // lg:w-[var(--form-panel-width)], bg-[var(--...)]) are not included in
         // Filament's pre-built CSS, so the auth split-panel layout breaks.
         // We inject equivalent plain CSS rules that don't require a Tailwind build.
         \Filament\Support\Facades\FilamentView::registerRenderHook(
@@ -161,6 +161,12 @@ class CrmPlugin implements Plugin
             fn () => '
             <style>
             /* AuthUIEnhancer split-panel fix — formPanelPosition: left */
+            .custom-auth-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                min-height: 100vh;
+            }
             @media (min-width: 1024px) {
                 .custom-auth-wrapper {
                     flex-direction: row-reverse;
@@ -178,19 +184,37 @@ class CrmPlugin implements Plugin
             .custom-auth-empty-panel {
                 background-color: var(--empty-panel-background-color, var(--color-primary-500, #0ea5e9));
                 min-height: 200px;
+                position: relative;
+            }
+
+            /* Hide the sidebar nav scrollbar in RTL — it appears at the boundary
+               between content and sidebar (middle of viewport), looking like an
+               internal scrollbar. The sidebar remains scroll-able via mousewheel. */
+            .fi-sidebar-nav {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .fi-sidebar-nav::-webkit-scrollbar {
+                display: none;
             }
             </style>
             '
         );
 
-        // Only apply viteTheme if the CSS entry exists in the consumer's Vite manifest
-        $cssPath = 'packages/taba/crm/src/resources/css/admin.css';
+        // Inject admin.css as a <link> (not viteTheme) so Filament's own app.css is preserved.
+        // viteTheme() replaces Filament's default CSS bundle; using a render hook adds on top of it.
+        $cssPath = 'vendor/taba/crm/src/resources/css/admin.css';
         $manifestPath = public_path('build/manifest.json');
 
         if (file_exists($manifestPath)) {
             $manifest = json_decode(file_get_contents($manifestPath), true) ?? [];
-            if (isset($manifest[$cssPath])) {
-                $panel->viteTheme($cssPath);
+            $assetFile = $manifest[$cssPath]['file'] ?? null;
+            if ($assetFile) {
+                $assetUrl = asset('build/' . $assetFile);
+                \Filament\Support\Facades\FilamentView::registerRenderHook(
+                    \Filament\View\PanelsRenderHook::HEAD_END,
+                    fn () => '<link rel="stylesheet" href="' . e($assetUrl) . '">',
+                );
             }
         }
     }
