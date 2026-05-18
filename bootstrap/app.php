@@ -4,8 +4,7 @@ use BezhanSalleh\FilamentExceptions\FilamentExceptions;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Taba\Crm\Exceptions\Handler;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
 
@@ -30,16 +29,23 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectTo(fn () => Filament\Pages\Dashboard::getUrl());
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        
-        $exceptions->handler(function ($e) {
-            return app(Handler::class)->render(request(), $e);
+        $exceptions->render(function (Throwable $e, $request) {
+            if ($request->header('X-Livewire')) {
+                return response()->json([
+                    'message' => 'Something went wrong. Please refresh the page.',
+                ], 500);
+            }
+
+            if ($e instanceof HttpExceptionInterface) {
+                $status = $e->getStatusCode();
+                if (in_array($status, [404, 419, 500, 503], true)
+                    && view()->exists("errors.{$status}")) {
+                    return response()->view("errors.{$status}", [], $status);
+                }
+            }
         });
 
-        // You can also report exceptions using your handler if needed
-        $exceptions->report(function (Throwable $e) {
-            app(Handler::class)->report($e);
+        $exceptions->reportable(function (Throwable $e) {
+            return FilamentExceptions::report($e);
         });
-        $exceptions->reportable(fn (Throwable $e) => $exceptions->handler->shouldReport($e) &&
-            FilamentExceptions::report($e)
-        );
     })->create();

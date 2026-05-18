@@ -30,7 +30,7 @@ use Filament\Navigation\NavigationItem;
 use Filament\Resources\Pages\Page;
 use Taba\Crm\Models\PostCategory;
 // SubNavigationPosition
-use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Pages\SubNavigationPosition;
 use Guava\IconPicker\Forms\Components\IconPicker;
 use Taba\Crm\Filament\Clusters\Posts;
 
@@ -52,15 +52,15 @@ class PostResource extends Resource
     /**
      * The resource icon.
      */
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     // sub navigation posistin
-    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     /**
      * The resource navigation group.
      */
-    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?string $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {

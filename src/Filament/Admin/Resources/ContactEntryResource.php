@@ -19,7 +19,7 @@ class ContactEntryResource extends Resource
 
     protected static ?string $model = ContactEntry::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
+    protected static ?string $navigationIcon = 'heroicon-o-envelope';
     protected static ?int $navigationSort = 3;
 
     public static function getNavigationBadge(): ?string
@@ -27,7 +27,7 @@ class ContactEntryResource extends Resource
         return number_format(static::getModel()::count());
     }
     // protected static ?string $navigationGroup = 'Contact';
-    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?string $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {

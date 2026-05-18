@@ -20,9 +20,9 @@ class GenerateComponentsFromAI extends Page implements HasForms
     use HasPageShield;
 
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-view-columns';
+    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
     protected string $view = 'crm::filament.pages.generate-components-from-a-i';
-    protected static string|\UnitEnum|null $navigationGroup = 'AI Tools';
+    protected static ?string $navigationGroup = 'AI Tools';
     protected static ?int $navigationSort = 2;
     protected static ?string $title = 'Generate Blade Components';
 

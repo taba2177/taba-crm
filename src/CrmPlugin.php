@@ -129,7 +129,7 @@ class CrmPlugin implements Plugin
             \Illuminate\Support\Facades\Schema::hasTable('notifications')
         )
         ->favicon(asset('images/favicon.png'))
-        ->brandLogo(fn () => view('components.logo'))
+        ->brandLogo(fn () => new \Illuminate\Support\HtmlString(view('crm::components.logo')->render()))
         ->plugins([
             // FilamentGoogleAnalyticsPlugin::make(),
             FilamentPeekPlugin::make(),

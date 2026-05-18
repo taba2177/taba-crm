@@ -20,9 +20,9 @@ class ServicePaymentResource extends Resource
     use HasNavigationVisibility;
     protected static ?string $model = ServicePayment::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-currency-dollar';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?string $navigationGroup = null;
 
     public static function getNavigationBadge(): ?string
     {
