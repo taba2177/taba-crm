@@ -92,7 +92,7 @@ return [
     */
     'brand' => [
         'primary_color'   => env('CRM_BRAND_PRIMARY', '#0ea5e9'),   // sky-500
-        'secondary_color' => env('CRM_BRAND_SECONDARY', '#64748b'), // slate-500
+        'gray_palette'    => env('CRM_BRAND_GRAY', 'Slate'),       // Filament named color: Slate, Zinc, Gray, Neutral, Stone
         'font_family'     => env('CRM_BRAND_FONT', 'Cairo'),
         'font_url'        => env('CRM_BRAND_FONT_URL', 'https://fonts.bunny.net/css?family=cairo:400,500,600,700'),
     ],
@@ -132,7 +132,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Extra Components
+    | Frontend Sections
+    |--------------------------------------------------------------------------
+    |
+    | Section component keys supported by the Angular frontend.
+    | Each key maps to the @case block in home.html.
+    | Add new entries here when new section templates are added
+    | to the frontend.  The admin section-selector reads from this list.
+    |
+    */
+    'frontend_sections' => [
+        'hero'            => ['label' => ['ar' => 'القسم الرئيسي',       'en' => 'Hero'],              'icon' => 'heroicon-o-star'],
+        'about'           => ['label' => ['ar' => 'من نحن',             'en' => 'About Us'],           'icon' => 'heroicon-o-information-circle'],
+        'our-service'     => ['label' => ['ar' => 'خدماتنا',            'en' => 'Our Services'],       'icon' => 'heroicon-o-briefcase'],
+        'our-projects'    => ['label' => ['ar' => 'أعمالنا',            'en' => 'Our Projects'],       'icon' => 'heroicon-o-square-3-stack-3d'],
+        'our-works'       => ['label' => ['ar' => 'معرض الأعمال',       'en' => 'Works Gallery'],      'icon' => 'heroicon-o-photo'],
+        'four-cards'      => ['label' => ['ar' => 'بطاقات',             'en' => 'Cards'],              'icon' => 'heroicon-o-rectangle-group'],
+        'service-benefit' => ['label' => ['ar' => 'مميزات الخدمة',      'en' => 'Service Benefits'],   'icon' => 'heroicon-o-check-badge'],
+        'why-choose-us'   => ['label' => ['ar' => 'لماذا نحن',          'en' => 'Why Choose Us'],      'icon' => 'heroicon-o-hand-thumb-up'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Extra Components (legacy)
     |--------------------------------------------------------------------------
     |
     | Register additional SectionComponent classes beyond the built-in ones.

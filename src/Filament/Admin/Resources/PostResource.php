@@ -23,7 +23,6 @@ use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
 use Filament\Forms\Components\Select;
 use Taba\Crm\Models\MetadataFillter;
-use Illuminate\Support\Facades\File;
 use Pboivin\FilamentPeek\Tables\Actions\ListPreviewAction;
 use Filament\Schemas\Components\Wizard;
 use Filament\Navigation\NavigationItem;
@@ -386,18 +385,7 @@ class PostResource extends Resource
 
     protected static function getHomepageComponentOptions(): array
     {
-        $componentPath = resource_path('views/livewire/post/templates');
-        $componentSection = resource_path('views/components/homepage');
-        $files = File::files($componentPath);
-        $files = array_merge($files, File::files($componentSection));
-        $options = [];
-
-        foreach ($files as $file) {
-            $name = Str::before($file->getFilename(), '.blade.php');
-            $options[$name] = Str::title(str_replace('-', ' ', $name));
-        }
-
-        return $options;
+        return \Taba\Crm\Components\Registry\ComponentRegistry::frontendSections();
     }
 
     /**

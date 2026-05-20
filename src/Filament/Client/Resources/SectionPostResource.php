@@ -50,7 +50,7 @@ class SectionPostResource extends Resource
         return auth()->user()?->can('view_section::post') ?? false;
     }
 
-    public static function getSlug(): string
+    public static function getSlug(?\Filament\Panel $panel = null): string
     {
         return 'section-posts';
     }

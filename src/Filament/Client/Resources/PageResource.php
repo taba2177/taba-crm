@@ -42,7 +42,7 @@ class PageResource extends Resource
         return __('الصفحات');
     }
 
-    public static function getSlug(): string
+    public static function getSlug(?\Filament\Panel $panel = null): string
     {
         return 'pages';
     }

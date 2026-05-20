@@ -35,7 +35,7 @@ class Messages extends Page implements HasTable
         return __('الرسائل');
     }
 
-    public static function getSlug(): string
+    public static function getSlug(?\Filament\Panel $panel = null): string
     {
         return 'messages';
     }

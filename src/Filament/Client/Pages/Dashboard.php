@@ -21,7 +21,7 @@ class Dashboard extends Page
         return __('الرئيسية');
     }
 
-    public static function getSlug(): string
+    public static function getSlug(?\Filament\Panel $panel = null): string
     {
         return 'dashboard';
     }

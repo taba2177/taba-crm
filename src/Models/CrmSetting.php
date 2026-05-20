@@ -4,10 +4,11 @@ namespace Taba\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Taba\Crm\Traits\FilamentTranslatable;
 
 class CrmSetting extends Model
 {
-    use HasTranslations;
+    use HasTranslations, FilamentTranslatable;
 
     protected $fillable = [
         'key',
@@ -22,8 +23,6 @@ class CrmSetting extends Model
 
     protected $casts = [
         'value' => 'json',
-        'label' => 'json',
-        'description' => 'json',
         'is_translatable' => 'boolean',
     ];
 

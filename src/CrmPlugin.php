@@ -36,6 +36,9 @@ class CrmPlugin implements Plugin
     {
         // Register the package's own resources, pages, and widgets.
         $panel
+            ->pages([
+                \Filament\Pages\Dashboard::class,
+            ])
             ->resources([
                 \Taba\Crm\Filament\Admin\Resources\PostResource::class,
                 \Taba\Crm\Filament\Admin\Resources\PostCategoryResource::class,
@@ -78,14 +81,7 @@ class CrmPlugin implements Plugin
                         'sm' => 2,
                     ]),
             ])
-        ->colors([
-            'primary'  => Color::Sky,
-            'gray'     => Color::Slate,
-            'danger'   => Color::Rose,
-            'info'     => Color::Blue,
-            'success'  => Color::Teal,
-            'warning'  => Color::Amber,
-        ])
+        ->colors($this->resolveColors())
         ->default()
         ->login()
         // ->registration()
@@ -186,7 +182,7 @@ class CrmPlugin implements Plugin
                 justify-content: center;
                 padding-left: 1rem;
                 padding-right: 1rem;
-                background-color: var(--empty-panel-background-color, var(--color-primary-500, #0ea5e9));
+                background-color: var(--empty-panel-background-color, var(--primary-500));
                 min-height: 200px;
             }
 
@@ -260,6 +256,37 @@ class CrmPlugin implements Plugin
                 );
             }
         }
+    }
+
+    protected function resolveColors(): array
+    {
+        try {
+            $primary   = \Taba\Crm\Models\CrmSetting::get('crm_brand_primary_color', config('crm.brand.primary_color', '#0ea5e9'));
+            $grayName  = \Taba\Crm\Models\CrmSetting::get('crm_brand_gray_palette', config('crm.brand.gray_palette', 'Slate'));
+        } catch (\Throwable) {
+            $primary   = config('crm.brand.primary_color', '#0ea5e9');
+            $grayName  = config('crm.brand.gray_palette', 'Slate');
+        }
+
+        return [
+            'primary' => Color::hex($primary),
+            'gray'    => self::resolveNamedColor($grayName, Color::Slate),
+            'danger'  => Color::Rose,
+            'info'    => Color::Blue,
+            'success' => Color::Teal,
+            'warning' => Color::Amber,
+        ];
+    }
+
+    protected static function resolveNamedColor(string $name, array $fallback): array
+    {
+        $const = strtoupper($name[0]) . strtolower(substr($name, 1));
+
+        if (defined(Color::class . '::' . $const)) {
+            return constant(Color::class . '::' . $const);
+        }
+
+        return $fallback;
     }
 
     protected function applyBrandTheme(Panel $panel): void

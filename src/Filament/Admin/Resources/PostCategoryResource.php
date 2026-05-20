@@ -12,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Actions;
 use IbrahimBougaoua\RadioButtonImage\RadioButtonImage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -257,38 +256,19 @@ class PostCategoryResource extends Resource
                     //         ->columns(3), // Display in 3 columns
                             // ->default(CategoryLayout::Default), // Set default for new records
                  RadioDeck::make('section_component')
-                    ->label('Select a Layout Style')
-                    ->options(ComponentRegistry::forSelect())
+                    ->label(__('اختر تصميم القسم'))
+                    ->options(ComponentRegistry::frontendSections())
                     ->iconSize(IconSize::Large)
                     ->visible(fn () => auth()->user()->hasRole('super_admin'))
                     ->color('primary')
                     ->default(null)
                     ->nullable()
                     ->optionsGap('gap-5')
-                    ->descriptions([
-                        'none' => 'No specific layout - use default rendering',
-                    ])
                     ->extraCardsAttributes([
                         'class' => 'mb-5'
                     ])
                     ->live(debounce: '500ms')
-                    ->icons(function (): array {
-                        $optionKeys = array_keys(self::getHomepageComponentOptions());
-                        $icons = [];
-                        foreach ($optionKeys as $key) {
-                            if ($key === 'none') {
-                                $icons[$key] = 'heroicon-o-x-circle';
-                            } else {
-                                $imagePath = public_path("images/homepage/{$key}.png");
-                                if (file_exists($imagePath)) {
-                                    $icons[$key] = asset("images/homepage/{$key}.png");
-                                } else {
-                                    $icons[$key] = 'heroicon-o-document-text';
-                                }
-                            }
-                        }
-                        return $icons;
-                    })
+                    ->icons(ComponentRegistry::frontendSectionIcons())
                     ->columns(4)
                     ->dehydrateStateUsing(fn ($state) => $state === 'none' ? null : $state)
                     ->afterStateHydrated(function ($component, $state) {
@@ -303,16 +283,7 @@ class PostCategoryResource extends Resource
 
     protected static function getHomepageComponentOptions(): array
     {
-        $componentPath = resource_path('views/components/homepage');
-        $files = File::files($componentPath);
-        $options = [
-            'none' => 'None (No Layout)', // Add None option
-        ];
-        foreach ($files as $file) {
-            $name = Str::before($file->getFilename(), '.blade.php');
-            $options[$name] = Str::title(str_replace('-', ' ', $name));
-        }
-        return $options;
+        return ['none' => __('بدون تصميم')] + ComponentRegistry::frontendSections();
     }
 
     public static function table(Table $table): Table

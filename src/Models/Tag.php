@@ -5,11 +5,12 @@ namespace Taba\Crm\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Translatable\HasTranslations;
+use Taba\Crm\Traits\FilamentTranslatable;
 use Taba\Crm\Models\Post;
 
 class Tag extends Model
 {
-    use HasTranslations;
+    use HasTranslations, FilamentTranslatable;
 
     protected $fillable = ['name', 'slug'];
 

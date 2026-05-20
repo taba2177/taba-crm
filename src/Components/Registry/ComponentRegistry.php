@@ -83,4 +83,25 @@ class ComponentRegistry
     {
         static::$components = [];
     }
+
+    public static function frontendSections(): array
+    {
+        $locale = app()->getLocale();
+        $sections = config('crm.frontend_sections', []);
+        $map = [];
+        foreach ($sections as $key => $meta) {
+            $map[$key] = $meta['label'][$locale] ?? $meta['label']['ar'] ?? $key;
+        }
+        return $map;
+    }
+
+    public static function frontendSectionIcons(): array
+    {
+        $sections = config('crm.frontend_sections', []);
+        $icons = [];
+        foreach ($sections as $key => $meta) {
+            $icons[$key] = $meta['icon'] ?? 'heroicon-o-document-text';
+        }
+        return $icons;
+    }
 }

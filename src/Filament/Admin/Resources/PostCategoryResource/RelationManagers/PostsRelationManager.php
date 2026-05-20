@@ -19,7 +19,6 @@ use Illuminate\Support\Str;
 use Filament\Notifications\Notification;
 use Taba\Crm\Services\GeminiTranslationService;
 use Taba\Crm\Models\Tag;
-use Illuminate\Support\Facades\File;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Wizard;
 use Illuminate\Support\Arr;
@@ -264,29 +263,7 @@ class PostsRelationManager extends RelationManager
 
     protected static function getHomepageComponentOptions(): array
     {
-                // // Get the base path for the 'crm' view namespace
-        // $crmViewPath = \Illuminate\Support\Facades\View::getFinder()->getHints()['crm'][0];        // // Now, construct the correct full paths by appending your sbdirectories
-        // $componentPath = $crmViewPath . '/livewire/post/templates';
-        // $componentSection = $crmViewPath . '/components/homepage';
-        $componentPath = resource_path('views/livewire/post/templates');
-        $componentSection = resource_path('views/components/homepage');
-      $files = File::files($componentPath, $componentSection);
-      $files = array_merge($files, File::files($componentSection));
-       $files = [];
-       if (is_dir($componentPath)) {
-         $files = array_merge($files, File::files($componentPath));
-     }
-      if (is_dir($componentSection)) {
-          $files = array_merge($files, File::files($componentSection));
-     }
-         $options = [];
-
-        foreach ($files as $file) {
-            $name = Str::before($file->getFilename(), '.blade.php');
-            $options[$name] = Str::title(str_replace('-', ' ', $name));
-        }
-
-        return $options;
+        return \Taba\Crm\Components\Registry\ComponentRegistry::frontendSections();
     }
 
     public function table(Table $table): Table

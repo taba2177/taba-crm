@@ -30,7 +30,7 @@ class SiteSettings extends Page implements HasForms
         return __('إعدادات الموقع');
     }
 
-    public static function getSlug(): string
+    public static function getSlug(?\Filament\Panel $panel = null): string
     {
         return 'site-settings';
     }

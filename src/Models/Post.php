@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Spatie\Translatable\HasTranslations;
+use Taba\Crm\Traits\FilamentTranslatable;
 use Taba\Crm\Models\PostCategory;
 use Taba\Crm\Models\Tag;
 use Taba\Crm\Models\User;
@@ -18,13 +19,12 @@ use Taba\Crm\Models\Metadata;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations, FilamentTranslatable;
 
     protected static function newFactory()
     {
         return \Taba\Crm\Database\Factories\PostFactory::new();
     }
-    use HasTranslations;
 
     /**
      * The attributes that are mass assignable.
@@ -65,13 +65,9 @@ class Post extends Model
      * @var array
      */
     protected $casts = [
-        'title' => 'array',
-        'content' => 'array',
         'images' => 'array',
         'is_published' => 'boolean',
         'published_at' => 'datetime',
-        'metadata' => 'array',
-        'metadata.nested' => 'array',
         'homepage_section_content' => 'array',
     ];
 

@@ -4,10 +4,11 @@ namespace Taba\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations as translatable;
+use Taba\Crm\Traits\FilamentTranslatable;
 
 class Metadata extends Model
 {
-    use translatable;
+    use translatable, FilamentTranslatable;
 
     protected $fillable = ['key', 'value'];
 
@@ -16,11 +17,7 @@ class Metadata extends Model
      *
      * @var array
      */
-    protected $casts = [
-        'key' => 'array',
-        'value' => 'array',
-        'value.nested' => 'array',
-    ];
+    protected $casts = [];
 
     public $translatable = ['key', 'value'];
 

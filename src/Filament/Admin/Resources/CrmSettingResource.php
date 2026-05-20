@@ -289,9 +289,17 @@ class CrmSettingResource extends Resource
                                                     ->label(__('Primary Color'))
                                                     ->helperText(__('Main brand color for buttons, links, and accents')),
 
-                                                Forms\Components\ColorPicker::make('crm_brand_secondary_color')
-                                                    ->label(__('Secondary Color'))
-                                                    ->helperText(__('Used for neutral/gray tones in the panel')),
+                                                Forms\Components\Select::make('crm_brand_gray_palette')
+                                                    ->label(__('Gray Palette'))
+                                                    ->options([
+                                                        'Slate'   => 'Slate',
+                                                        'Gray'    => 'Gray',
+                                                        'Zinc'    => 'Zinc',
+                                                        'Neutral' => 'Neutral',
+                                                        'Stone'   => 'Stone',
+                                                    ])
+                                                    ->default('Slate')
+                                                    ->helperText(__('Neutral color palette for backgrounds, borders, and text')),
 
                                                 Forms\Components\TextInput::make('crm_brand_font_family')
                                                     ->label(__('Font Family'))

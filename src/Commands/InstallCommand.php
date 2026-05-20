@@ -559,6 +559,16 @@ class InstallCommand extends Command
             $this->warn('Note: Could not pre-register panel: ' . $e->getMessage());
         }
 
+        // Publish and patch Shield config so super_admin bypasses Gate
+        $this->call('vendor:publish', ['--tag' => 'filament-shield-config', '--force' => false]);
+        $shieldConfigPath = config_path('filament-shield.php');
+        if (File::exists($shieldConfigPath)) {
+            $shieldCfg = File::get($shieldConfigPath);
+            if (str_contains($shieldCfg, "'define_via_gate' => false")) {
+                File::put($shieldConfigPath, str_replace("'define_via_gate' => false", "'define_via_gate' => true", $shieldCfg));
+            }
+        }
+
         // Install Filament Shield for admin panel
         $installResult = $this->call('shield:install', ['panel' => 'admin']);
 
