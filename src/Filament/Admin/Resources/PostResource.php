@@ -575,11 +575,11 @@ class PostResource extends Resource
             'index' => Pages\ListPosts::route('/'),
             'create' => Pages\CreatePost::route('/create'),
         ];
-        // Here is the conditional logic.
-        // We check the total count of Post records in the database.
-        if (Post::count() > 1) {
-            // If the count is greater than one, we add the 'edit' page
-            // to our array of pages.
+        try {
+            if (Post::count() > 1) {
+                $pages['edit'] = Pages\EditPost::route('/{record}/edit');
+            }
+        } catch (\Throwable) {
             $pages['edit'] = Pages\EditPost::route('/{record}/edit');
         }
 

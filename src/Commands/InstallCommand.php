@@ -237,8 +237,13 @@ class InstallCommand extends Command
             $this->call('view:clear');
         }
 
-        // Install curator regardless (it is safe to run multiple times).
-        $this->call('curator:install', ['--no-interaction' => true]);
+        // Install curator — skip if a curator migration already exists.
+        $existingCuratorMigration = glob(database_path('migrations/*_create_curator_table.php'));
+        if (empty($existingCuratorMigration)) {
+            $this->call('curator:install', ['--no-interaction' => true]);
+        } else {
+            $this->info('Curator migration already exists — skipping curator:install.');
+        }
 
         // Patch a known bug in curator's install: when tenancy is enabled it
         // writes `'relationship_name' => user,` (unquoted bare word) which is
@@ -621,8 +626,8 @@ class InstallCommand extends Command
             'tailwindcss' => '^3.4.0',
             'postcss' => '^8.4.38',
             'autoprefixer' => '^10.4.19',
-            'vite' => '^7.0.0',
-            'laravel-vite-plugin' => '^2.0.0',
+            'vite' => '^8.0.0',
+            'laravel-vite-plugin' => '^3.0.0',
             '@tailwindcss/forms' => '^0.5.7',
             '@tailwindcss/typography' => '^0.5.10',
             'postcss-nesting' => '^12.1.5',
@@ -768,7 +773,7 @@ EOT;
     protected function updateViteConfig(): void
     {
         $configPath = base_path('vite.config.js');
-        $adminCssPath = 'vendor/taba/crm/src/resources/css/admin.css';
+        $adminCssPath = 'resources/css/admin.css';
 
         // If vite.config.js does not exist, create it from a standard Laravel stub.
         if (! File::exists($configPath)) {

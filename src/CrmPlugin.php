@@ -160,7 +160,13 @@ class CrmPlugin implements Plugin
             \Filament\View\PanelsRenderHook::HEAD_END,
             fn () => '
             <style>
-            /* AuthUIEnhancer split-panel fix — formPanelPosition: left */
+            /*
+             split-panel fix
+               Filament v4 pre-builds its own Tailwind v4 CSS which does NOT include
+               the utility classes used in AuthUIEnhancer blade templates.
+               We supply plain CSS equivalents for every class used in custom-auth-layout.blade.php. */
+
+            /* --- Wrapper --- */
             .custom-auth-wrapper {
                 display: flex;
                 flex-direction: column;
@@ -168,47 +174,84 @@ class CrmPlugin implements Plugin
                 min-height: 100vh;
             }
             @media (min-width: 1024px) {
-                .custom-auth-wrapper {
-                    flex-direction: row-reverse;
-                }
+                .custom-auth-wrapper { flex-direction: row-reverse; }
+            }
+
+            /* --- Empty (hero) panel --- */
+            .custom-auth-empty-panel {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                justify-content: center;
+                padding-left: 1rem;
+                padding-right: 1rem;
+                background-color: var(--empty-panel-background-color, var(--color-primary-500, #0ea5e9));
+                min-height: 200px;
+            }
+
+            /* --- Form panel --- */
+            .custom-auth-form-panel {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+                padding: 3rem 1rem;
+                background-color: var(--form-panel-background-color, transparent);
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+            @media (min-width: 640px) {
+                .custom-auth-form-panel { padding-left: 1.5rem; padding-right: 1.5rem; }
+            }
+            @media (min-width: 1024px) {
                 .custom-auth-form-panel {
                     width: var(--form-panel-width, 40%) !important;
                     flex-shrink: 0;
-                }
-                .custom-auth-empty-panel {
-                    display: flex !important;
-                    flex-direction: column;
-                    flex-grow: 1;
+                    padding-left: 5rem;
+                    padding-right: 5rem;
                 }
             }
-            .custom-auth-empty-panel {
-                background-color: var(--empty-panel-background-color, var(--color-primary-500, #0ea5e9));
-                min-height: 200px;
-                position: relative;
+            @media (min-width: 1280px) {
+                .custom-auth-form-panel { padding-left: 9rem; padding-right: 9rem; }
             }
 
-            /* Hide the sidebar nav scrollbar in RTL — it appears at the boundary
-               between content and sidebar (middle of viewport), looking like an
-               internal scrollbar. The sidebar remains scroll-able via mousewheel. */
+            /* --- Form inner wrapper --- */
+            .custom-auth-form-wrapper {
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                max-width: 24rem;
+            }
+
+            /* --- Sidebar scrollbar hide (RTL fix) --- */
             .fi-sidebar-nav {
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
-            .fi-sidebar-nav::-webkit-scrollbar {
-                display: none;
-            }
+            .fi-sidebar-nav::-webkit-scrollbar { display: none; }
             </style>
             '
         );
 
         // Inject admin.css as a <link> (not viteTheme) so Filament's own app.css is preserved.
         // viteTheme() replaces Filament's default CSS bundle; using a render hook adds on top of it.
-        $cssPath = 'vendor/taba/crm/src/resources/css/admin.css';
         $manifestPath = public_path('build/manifest.json');
+        $cssKeys = [
+            'resources/css/admin.css',
+            'vendor/taba/crm/src/resources/css/admin.css',
+            'packages/taba/crm/src/resources/css/admin.css',
+        ];
 
         if (file_exists($manifestPath)) {
             $manifest = json_decode(file_get_contents($manifestPath), true) ?? [];
-            $assetFile = $manifest[$cssPath]['file'] ?? null;
+            $assetFile = null;
+            foreach ($cssKeys as $key) {
+                if (isset($manifest[$key]['file'])) {
+                    $assetFile = $manifest[$key]['file'];
+                    break;
+                }
+            }
             if ($assetFile) {
                 $assetUrl = asset('build/' . $assetFile);
                 \Filament\Support\Facades\FilamentView::registerRenderHook(
