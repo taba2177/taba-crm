@@ -22,7 +22,13 @@ class UserSeeder extends Seeder
             $this->command->info('Super admin user already exists: taba@admin.com');
 
             // Assign role if not already assigned (Shield uses super_admin with underscore)
-            $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super_admin';
+            $roleName = config('filament-shield.super_admin.name', 'super_admin');
+            
+            // Ensure the role exists
+            if (!Role::where('name', $roleName)->exists()) {
+                Role::create(['name' => $roleName, 'guard_name' => 'web']);
+            }
+
             if (!$existingUser->hasRole($roleName)) {
                 $existingUser->assignRole($roleName);
                 $this->command->info("Assigned {$roleName} role to existing user");
@@ -43,10 +49,14 @@ class UserSeeder extends Seeder
         $this->command->info('Created super admin user: taba@admin.com');
 
         // Assign super_admin role (Shield uses super_admin with underscore)
-        $roleName = Role::where('name', 'super_admin')->exists() ? 'super_admin' : 'super_admin';
-        if (Role::where('name', $roleName)->exists()) {
-            $user->assignRole($roleName);
-            $this->command->info("Assigned {$roleName} role to user");
+        $roleName = config('filament-shield.super_admin.name', 'super_admin');
+        
+        // Ensure the role exists
+        if (!Role::where('name', $roleName)->exists()) {
+            Role::create(['name' => $roleName, 'guard_name' => 'web']);
         }
+
+        $user->assignRole($roleName);
+        $this->command->info("Assigned {$roleName} role to user");
     }
 }
