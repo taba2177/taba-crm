@@ -256,6 +256,7 @@ class CrmPlugin implements Plugin
                 );
             }
         }
+
     }
 
     protected function resolveColors(): array

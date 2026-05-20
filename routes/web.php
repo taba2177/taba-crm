@@ -111,7 +111,7 @@ Route::middleware(['crm.seo', 'crm.discovery'])
     ->get('/{any}', fn() => ($p = $resolveSpaIndex())
         ? response()->file($p)
         : response('', 503))
-    ->where('any', '^(?!api|admin|filament|preview|sitemap|lang).*');
+    ->where('any', '^(?!api|admin|client|filament|css|js|preview|sitemap|lang|livewire|storage|sanctum).*');
 
 });
 
