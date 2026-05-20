@@ -3,7 +3,6 @@
 namespace Taba\Crm\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Taba\Crm\Http\Resources\Api\PostCategoryResource;
 use Taba\Crm\Http\Resources\Api\PostResource;
@@ -33,36 +32,53 @@ class PreviewApiController extends ApiController
     {
         $formData = $preview['data'];
         $categoryId = $preview['id'];
+        $locale = app()->getLocale();
 
         $categories = PostCategory::where('register_in_header', true)
-            ->with(['firstPost', 'children'])
             ->withCount('posts')
             ->orderBy('order')
             ->get();
 
-        $sections = $categories->map(function ($category) use ($categoryId, $formData) {
-            $resource = (new PostCategoryResource($category))->toArray(request());
+        $sections = $categories->map(function ($category) use ($categoryId, $formData, $locale) {
+            $section = [
+                'id'                => $category->id,
+                'name'              => $category->getTranslation('name', $locale, false),
+                'slug'              => $category->slug,
+                'description'       => $category->getTranslation('description', $locale, false),
+                'subtitle'          => $category->getTranslation('subtitle', $locale, false),
+                'section_component' => $category->section_component,
+                'order'             => $category->order,
+            ];
 
             if ($category->id === $categoryId) {
-                $resource['name'] = $formData['name'] ?? $resource['name'];
-                $resource['description'] = $formData['description'] ?? $resource['description'];
-                $resource['subtitle'] = $formData['subtitle'] ?? $resource['subtitle'];
-                $resource['section_component'] = $formData['section_component'] ?? $resource['section_component'];
+                $section['name'] = $formData['name'] ?? $section['name'];
+                $section['description'] = $formData['description'] ?? $section['description'];
+                $section['subtitle'] = $formData['subtitle'] ?? $section['subtitle'];
+                $section['section_component'] = $formData['section_component'] ?? $section['section_component'];
             }
 
             $posts = Post::where('post_category_id', $category->id)
                 ->where('show_in_home', true)
                 ->with(['postCategory', 'image', 'tags'])
                 ->orderBy('order')
-                ->get();
+                ->get()
+                ->map(fn ($post) => $this->serializePost($post, $locale));
 
-            $resource['posts'] = PostResource::collection($posts)->toArray(request());
+            $section['posts'] = $posts;
 
-            return $resource;
+            return $section;
         });
+
+        $featuredPosts = Post::published()
+            ->where('show_in_home', true)
+            ->with(['postCategory', 'image', 'tags'])
+            ->orderBy('order')
+            ->get()
+            ->map(fn ($post) => $this->serializePost($post, $locale));
 
         return $this->success([
             'sections' => $sections,
+            'featured_posts' => $featuredPosts,
             '_preview' => true,
         ]);
     }
@@ -75,23 +91,86 @@ class PreviewApiController extends ApiController
 
         $post = Post::with(['postCategory', 'image', 'tags'])->findOrFail($postId);
 
-        $postData = (new PostResource($post))->toArray(request());
+        $postData = $this->serializePost($post, $locale);
         $postData['title'] = $formData['title'] ?? $postData['title'];
         $postData['content'] = $formData['content'] ?? $postData['content'];
         $postData['meta_title'] = $formData['meta_title'] ?? $postData['meta_title'];
         $postData['meta_description'] = $formData['meta_description'] ?? $postData['meta_description'];
         $postData['icon'] = $formData['icon'] ?? $postData['icon'];
+        $postData['homepage_section_component'] = $formData['homepage_section_component'] ?? $post->homepage_section_component;
 
         $category = $post->postCategory;
-        $categoryData = $category ? (new PostCategoryResource($category))->toArray(request()) : null;
+        $categorySlug = $category?->slug;
 
-        $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
+        $categoryId = $post->post_category_id;
+        $categories = PostCategory::where('register_in_header', true)
+            ->withCount('posts')
+            ->orderBy('order')
+            ->get();
+
+        $sections = $categories->map(function ($cat) use ($categoryId, $postData, $locale, $postId) {
+            $section = [
+                'id'                => $cat->id,
+                'name'              => $cat->getTranslation('name', $locale, false),
+                'slug'              => $cat->slug,
+                'section_component' => $cat->section_component,
+                'order'             => $cat->order,
+            ];
+
+            $posts = Post::where('post_category_id', $cat->id)
+                ->where('show_in_home', true)
+                ->with(['postCategory', 'image', 'tags'])
+                ->orderBy('order')
+                ->get()
+                ->map(function ($p) use ($postId, $postData, $locale) {
+                    if ($p->id === $postId) {
+                        return $postData;
+                    }
+                    return $this->serializePost($p, $locale);
+                });
+
+            $section['posts'] = $posts;
+            return $section;
+        });
+
+        $featuredPosts = Post::published()
+            ->where('show_in_home', true)
+            ->with(['postCategory', 'image', 'tags'])
+            ->orderBy('order')
+            ->get()
+            ->map(function ($p) use ($postId, $postData, $locale) {
+                if ($p->id === $postId) {
+                    return $postData;
+                }
+                return $this->serializePost($p, $locale);
+            });
 
         return $this->success([
-            'post' => $postData,
-            'category' => $categoryData,
-            'relatedPosts' => PostResource::collection($relatedPosts)->toArray(request()),
+            'sections' => $sections,
+            'featured_posts' => $featuredPosts,
             '_preview' => true,
         ]);
+    }
+
+    private function serializePost(Post $post, string $locale): array
+    {
+        return [
+            'id'          => $post->id,
+            'title'       => $post->getTranslation('title', $locale, false),
+            'slug'        => $post->slug,
+            'content'     => $post->getTranslation('content', $locale, false),
+            'excerpt'     => $post->excerpt,
+            'image_url'   => $post->image?->url ?? null,
+            'icon'        => $post->icon,
+            'meta_title'  => $post->getTranslation('meta_title', $locale, false),
+            'meta_description' => $post->getTranslation('meta_description', $locale, false),
+            'metadata'    => $post->getTranslation('metadata', $locale, false),
+            'show_in_home' => $post->show_in_home,
+            'order'       => $post->order,
+            'image'       => $post->image ? [
+                'id'  => $post->image->id,
+                'url' => $post->image->url,
+            ] : null,
+        ];
     }
 }

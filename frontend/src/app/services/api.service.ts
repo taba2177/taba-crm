@@ -47,6 +47,12 @@ export class ApiService {
     );
   }
 
+  getPreview(key: string): Observable<any> {
+    return this.http.get(`/api/v1/preview/${encodeURIComponent(key)}`).pipe(
+      map((res) => this.unwrapPayload(res))
+    );
+  }
+
   getNavigation(): Observable<any> {
     if (!this.navigationCache$) {
       this.navigationCache$ = this.http.get('/api/v1/init').pipe(

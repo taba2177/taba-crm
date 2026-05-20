@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { LucideAngularModule, ArrowLeft, ArrowRight, ShieldCheck, PenTool, CheckCircle, ChevronRight, Phone, MessageCircle } from 'lucide-angular';
@@ -19,10 +20,12 @@ register();
 })
 export class Home implements OnInit {
   private api = inject(ApiService);
+  private route = inject(ActivatedRoute);
   private titleSvc = inject(Title);
   private meta = inject(Meta);
   public data = signal<any>(null);
   public settings = signal<any>({});
+  public isPreview = signal(false);
   public t = t;
 
   // Icons
@@ -59,16 +62,22 @@ export class Home implements OnInit {
       return { sections: [] };
     }
 
-    if (Array.isArray(payload.sections)) {
-      return payload;
-    }
+    let sections: any[];
 
-    const categories = Array.isArray(payload.categories) ? payload.categories : [];
-    const sections = categories.map((category: any) => ({
-      ...category,
-      section_component: this.mapLegacySectionComponent(category.section_component || ''),
-      posts: Array.isArray(category.posts) ? category.posts : [],
-    }));
+    if (Array.isArray(payload.sections)) {
+      sections = payload.sections.map((s: any) => ({
+        ...s,
+        section_component: this.mapLegacySectionComponent(s.section_component || ''),
+        posts: Array.isArray(s.posts) ? s.posts : [],
+      }));
+    } else {
+      const categories = Array.isArray(payload.categories) ? payload.categories : [];
+      sections = categories.map((category: any) => ({
+        ...category,
+        section_component: this.mapLegacySectionComponent(category.section_component || ''),
+        posts: Array.isArray(category.posts) ? category.posts : [],
+      }));
+    }
 
     const featuredPosts = Array.isArray(payload.featured_posts) ? payload.featured_posts : [];
     if (featuredPosts.length > 0 && !sections.some((s: any) => s.section_component === 'hero')) {
@@ -88,10 +97,19 @@ export class Home implements OnInit {
   }
 
   ngOnInit() {
-    this.api.getHome().subscribe({
+    const previewKey = this.route.snapshot.queryParamMap.get('_preview');
+
+    const source$ = previewKey
+      ? this.api.getPreview(previewKey)
+      : this.api.getHome();
+
+    if (previewKey) {
+      this.isPreview.set(true);
+    }
+
+    source$.subscribe({
       next: (response: any) => {
         this.data.set(this.normalizeHomePayload(response));
-        // Init Swiper after Angular renders the template
         setTimeout(() => this.initSwiper(), 500);
       },
       error: (err) => {
