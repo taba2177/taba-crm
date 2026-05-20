@@ -3,47 +3,23 @@
 namespace Taba\Crm\Http\Controllers;
 
 use Taba\Crm\Models\Post;
-use Taba\Crm\Models\PostCategory;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class PreviewController extends Controller
 {
     public function post(Post $post)
     {
-        // $posts = Post::with('postCategory')
-        //     ->where('post_category_id', $post_category_id)
-        //     ->get();
+        $key = 'post_' . Str::random(12);
 
-            // if (view()->exists('components.homepage.' . request()->input('data.homepage_section_component'))) {
-            $componentView = 'components.homepage.' . request()->input('data.homepage_section_component');
-            // $posts = collect([$post]);
+        Cache::put("preview:{$key}", [
+            'type' => 'post',
+            'id'   => $post->id,
+            'data' => request()->input('data', []),
+        ], now()->addMinutes(10));
 
-            // return view('previews.category', [
-            //     'posts' => $posts,
-            //     'componentView' => $componentView
-            // ]);
-        // } else {
-            $componentView = 'livewire.post.templates.' . request()->input('data.homepage_section_component');
-            $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
+        $categorySlug = $post->postCategory?->slug ?? 'uncategorized';
 
-            // $posts = PostCategory::with(['posts' => function ($query) {
-            //     $query->published()->latest();
-            // }])
-            //     ->whereNotNull('section_component') // Only fetch categories with a defined section_component
-            //     ->orderBy('order')
-            //     ->get();
-
-            // $posts = collect([$post]);
-        // }
-
-        // dd($componentView);
-        // $relatedPosts = $post->relatedPosts()->published()->latest()->take(4)->get();
-
-        // dd($post);
-        return view('previews.post', [
-            'post' => $post,
-            'componentView' => $componentView,
-            'relatedPosts' => $relatedPosts,
-        ]);
+        return redirect("/{$categorySlug}/{$post->slug}?_preview={$key}");
     }
 }

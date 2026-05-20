@@ -23,6 +23,7 @@ use Taba\Crm\Http\Controllers\Api\AuthApiController;
 use Taba\Crm\Http\Controllers\Api\CategoryApiController;
 use Taba\Crm\Http\Controllers\Api\ContactEntryApiController;
 use Taba\Crm\Http\Controllers\Api\HomeApiController;
+use Taba\Crm\Http\Controllers\Api\PreviewApiController;
 use Taba\Crm\Http\Controllers\Api\MenuApiController;
 use Taba\Crm\Http\Controllers\Api\PageApiController;
 use Taba\Crm\Http\Controllers\Api\PostApiController;
@@ -43,6 +44,7 @@ Route::prefix('api/v1')->middleware(['api', \Taba\Crm\Http\Middleware\SetLocaleF
     Route::middleware('throttle:100,1')->group(function () {
         Route::get('init', [HomeApiController::class, 'init']);
         Route::get('home', [HomeApiController::class, 'home']);
+        Route::get('preview/{key}', [PreviewApiController::class, 'home']);
 
         // Posts (public read)
         Route::get('posts',                [PostApiController::class, 'index']);
