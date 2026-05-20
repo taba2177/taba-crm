@@ -138,6 +138,7 @@ class CrmPlugin implements Plugin
                 ->emptyPanelView('crm::filament.login-slideshow')
 
         ])->defaultThemeMode(ThemeMode::Dark)
+        ->viteTheme('packages/taba/crm/src/resources/css/filament-theme.css')
         ->middleware([
             \Taba\Crm\Http\Middleware\ApplyBrandColors::class,
         ]);

@@ -1,0 +1,11 @@
+@import '../../../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+
+@source '../../../../../../vendor/awcodes/filament-curator/resources/**/*.blade.php';
+@source '../../../../../../vendor/jeffgreco13/filament-breezy/resources/**/*.blade.php';
+@source '../../../../../../vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php';
+@source '../../../../../../vendor/pboivin/filament-peek/resources/**/*.blade.php';
+@source '../../../../../../vendor/jaocero/radio-deck/resources/**/*.blade.php';
+@source '../../../../../../vendor/asosick/filament-layout-manager/resources/**/*.blade.php';
+@source '../../../../../../app/Filament/**/*';
+@source '../../../../../../resources/views/filament/**/*';
