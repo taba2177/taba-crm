@@ -11,13 +11,16 @@ class PreviewController extends Controller
     public function post(Post $post)
     {
         $key = 'post_' . Str::random(12);
+        $data = request()->input('data', []);
 
         Cache::put("preview:{$key}", [
             'type' => 'post',
             'id'   => $post->id,
-            'data' => request()->input('data', []),
+            'data' => $data,
         ], now()->addMinutes(10));
 
-        return redirect("/?_preview={$key}");
+        $sectionComponent = $post->postCategory?->section_component ?? '';
+
+        return redirect("/?_preview={$key}&_section=" . urlencode($sectionComponent));
     }
 }

@@ -1,42 +1,41 @@
-import { Component, inject, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, OnInit, ViewContainerRef, ViewChild, effect, Type } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
-import { LucideAngularModule, ArrowLeft, ArrowRight, ShieldCheck, PenTool, CheckCircle, ChevronRight, Phone, MessageCircle } from 'lucide-angular';
-import { RouterLink } from '@angular/router';
-import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
-import { register } from 'swiper/element/bundle';
-
-register();
+import { SECTION_COMPONENT_MAP } from '../sections';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, LucideAngularModule, RouterLink, ScrollRevealDirective],
-  templateUrl: './home.html',
-  styleUrl: './home.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    @if (data()) {
+      <div class="overflow-x-hidden bg-surface text-wood-900 font-sans selection:bg-wood-900 selection:text-accent group/page">
+        <ng-container #sectionOutlet></ng-container>
+      </div>
+    } @else {
+      <div class="flex justify-center items-center h-screen bg-surface">
+        <div class="text-center">
+          <div class="w-16 h-16 border-4 border-wood-300 border-t-accent rounded-full animate-spin mx-auto mb-6"></div>
+          <p class="text-wood-500 font-display tracking-widest uppercase text-sm">Loading...</p>
+        </div>
+      </div>
+    }
+  `,
+  styles: [`:host { display: block; }`],
 })
 export class Home implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
   private titleSvc = inject(Title);
   private meta = inject(Meta);
-  public data = signal<any>(null);
-  public settings = signal<any>({});
-  public isPreview = signal(false);
-  public t = t;
 
-  // Icons
-  readonly ArrowLeftIcon = ArrowLeft;
-  readonly ArrowRightIcon = ArrowRight;
-  readonly ShieldCheckIcon = ShieldCheck;
-  readonly PenToolIcon = PenTool;
-  readonly CheckCircleIcon = CheckCircle;
-  readonly ChevronRightIcon = ChevronRight;
-  readonly PhoneIcon = Phone;
-  readonly WhatsAppIcon = MessageCircle;
+  @ViewChild('sectionOutlet', { read: ViewContainerRef, static: false })
+  sectionOutlet!: ViewContainerRef;
+
+  data = signal<any>(null);
+  settings = signal<any>({});
+  isPreview = signal(false);
+  previewSection = signal<string | null>(null);
 
   private mapLegacySectionComponent(component: string): string {
     switch (component) {
@@ -90,80 +89,78 @@ export class Home implements OnInit {
       });
     }
 
-    return {
-      ...payload,
-      sections,
-    };
+    return { ...payload, sections };
+  }
+
+  constructor() {
+    effect(() => {
+      const payload = this.data();
+      const settings = this.settings();
+      if (!payload?.sections || !this.sectionOutlet) return;
+      this.renderSections(payload.sections, settings);
+    });
   }
 
   ngOnInit() {
-    const previewKey = this.route.snapshot.queryParamMap.get('_preview');
+    const params = this.route.snapshot.queryParamMap;
+    const previewKey = params.get('_preview');
+    const previewSectionParam = params.get('_section');
+
+    if (previewKey) {
+      this.isPreview.set(true);
+      if (previewSectionParam) {
+        this.previewSection.set(this.mapLegacySectionComponent(previewSectionParam));
+      }
+    }
 
     const source$ = previewKey
       ? this.api.getPreview(previewKey)
       : this.api.getHome();
 
-    if (previewKey) {
-      this.isPreview.set(true);
-    }
-
     source$.subscribe({
       next: (response: any) => {
         this.data.set(this.normalizeHomePayload(response));
-        setTimeout(() => this.initSwiper(), 500);
       },
       error: (err) => {
         console.error('Error fetching home data:', err);
-      }
+      },
     });
 
     this.api.getNavigation().subscribe({
       next: (res: any) => {
         this.settings.set(res.settings || {});
-        const name = 'Professional Starter';
-        const desc = 'A modern, dynamic starter experience for any business.';
+        const name = t(res.settings?.crm_business_name) || t(res.settings?.crm_seo_default_title) || '';
+        const desc = t(res.settings?.crm_seo_default_description) || '';
         const image = t(res.settings?.crm_business_logo) || '';
-        this.titleSvc.setTitle(name);
+        if (name) this.titleSvc.setTitle(name);
         this.meta.updateTag({ name: 'description', content: desc });
         this.meta.updateTag({ property: 'og:title', content: name });
         this.meta.updateTag({ property: 'og:description', content: desc });
         this.meta.updateTag({ property: 'og:image', content: image });
         this.meta.updateTag({ property: 'og:type', content: 'website' });
-      }
+      },
     });
   }
 
-  private initSwiper() {
-    const swiperEl = document.querySelector('swiper-container#works-swiper') as any;
-    if (swiperEl && !swiperEl.swiper) {
-      Object.assign(swiperEl, {
-        effect: 'coverflow',
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 3,
-        loop: true,
-        autoplay: { delay: 3000, disableOnInteraction: false },
-        coverflowEffect: {
-          rotate: 8,
-          stretch: 0,
-          depth: 200,
-          modifier: 1.5,
-          slideShadows: true,
-        },
-        pagination: { clickable: true },
-        breakpoints: {
-          320: { slidesPerView: 1.2 },
-          640: { slidesPerView: 1.8 },
-          1024: { slidesPerView: 2.5 },
-          1440: { slidesPerView: 3 },
-        },
-      });
-      swiperEl.initialize();
-    }
-  }
+  private renderSections(sections: any[], settings: any) {
+    if (!this.sectionOutlet) return;
+    this.sectionOutlet.clear();
 
-  getSectionData(componentName: string): any {
-    if (!this.data()?.sections) return null;
-    return this.data().sections.find((s: any) => s.section_component === componentName) || null;
+    const targetSection = this.previewSection();
+
+    for (const section of sections) {
+      const componentName = section.section_component;
+
+      if (targetSection && componentName !== targetSection) {
+        continue;
+      }
+
+      const componentType: Type<any> | undefined = SECTION_COMPONENT_MAP[componentName];
+      if (!componentType) continue;
+
+      const ref = this.sectionOutlet.createComponent(componentType);
+      ref.setInput('section', section);
+      ref.setInput('settings', settings);
+    }
   }
 }

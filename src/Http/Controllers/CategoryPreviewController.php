@@ -11,13 +11,16 @@ class CategoryPreviewController extends Controller
     public function category(PostCategory $category)
     {
         $key = 'cat_' . Str::random(12);
+        $data = request()->input('data', []);
 
         Cache::put("preview:{$key}", [
             'type' => 'category',
             'id'   => $category->id,
-            'data' => request()->input('data', []),
+            'data' => $data,
         ], now()->addMinutes(10));
 
-        return redirect('/?_preview=' . $key);
+        $sectionComponent = $data['section_component'] ?? $category->section_component;
+
+        return redirect('/?_preview=' . $key . '&_section=' . urlencode($sectionComponent));
     }
 }
