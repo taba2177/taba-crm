@@ -18,8 +18,6 @@ class PreviewController extends Controller
             'data' => request()->input('data', []),
         ], now()->addMinutes(10));
 
-        $categorySlug = $post->postCategory?->slug ?? 'uncategorized';
-
-        return redirect("/{$categorySlug}/{$post->slug}?_preview={$key}");
+        return redirect("/?_preview={$key}");
     }
 }
