@@ -6,14 +6,13 @@ use Jacobtims\FilamentLogger\Resources\ActivityResource as BaseResource;
 
 class ActivityResource extends BaseResource
 {
-    /**
-     * The resource navigation sort order.
-     */
-    protected static ?int $navigationSort = 10;
-    // protected static bool $shouldRegisterNavigation = false;
-    /**
-     * Get the navigation badge for the resource.
-     */
+    protected static ?int $navigationSort = 2;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Administration');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return number_format(static::getModel()::count());

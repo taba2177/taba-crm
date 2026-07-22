@@ -4,13 +4,11 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
-import { register } from 'swiper/element/bundle';
-
-register();
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 
 @Component({
   selector: 'app-post-detail',
-  imports: [RouterLink, ScrollRevealDirective],
+  imports: [RouterLink, ScrollRevealDirective, OptimizedImgDirective],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -63,7 +61,11 @@ export class PostDetail implements OnInit {
           this.meta.updateTag({ name: 'twitter:title', content: title });
           this.meta.updateTag({ name: 'twitter:description', content: desc });
           this.meta.updateTag({ name: 'twitter:image', content: image });
-          setTimeout(() => this.initSwiper(), 500);
+          setTimeout(async () => {
+            const { register } = await import('swiper/element/bundle');
+            register();
+            this.initSwiper();
+          }, 500);
         },
         error: () => this.loading.set(false),
       });

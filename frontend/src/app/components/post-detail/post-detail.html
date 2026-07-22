@@ -8,7 +8,7 @@
     <section class="relative bg-wood-950 text-surface py-32 bg-cover bg-center overflow-hidden">
       @if (getImage(post())) {
         <div class="absolute inset-0 z-0">
-          <img [src]="getImage(post())" alt="Banner" class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
+          <img [src]="getImage(post())" alt="Banner" appImg class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
           <div class="absolute inset-0 bg-gradient-to-t from-wood-950 via-wood-950/80 to-wood-950/50"></div>
         </div>
       }
@@ -47,7 +47,10 @@
           <!-- Featured Image (single, clean) -->
           @if (getImage(post())) {
             <div class="relative -mt-20 mb-16 shadow-2xl border border-wood-200 overflow-hidden" scrollReveal="fade-up">
-              <img [src]="getImage(post())" [alt]="t(post().title)" class="w-full aspect-[16/9] object-cover" />
+              <img [src]="getImage(post())" [srcset]="post().image?.srcset || null"
+                   [attr.width]="post().image?.width" [attr.height]="post().image?.height"
+                   [alt]="t(post().title)" appImg priority sizes="(max-width: 1024px) 100vw, 66vw"
+                   class="w-full aspect-[16/9] object-cover" />
             </div>
           }
 
@@ -80,7 +83,7 @@
                     }
                     @else if (block.type === 'figure' && block.data?.image) {
                       <figure class="my-12">
-                        <img [src]="block.data.image" [alt]="block.data.alt || ''" class="w-full object-cover border border-wood-100" />
+                        <img [src]="block.data.image" [srcset]="block.data.image_srcset || null" [attr.width]="block.data.image_width" [attr.height]="block.data.image_height" [alt]="block.data.alt || ''" appImg sizes="(max-width: 1024px) 100vw, 66vw" class="w-full object-cover border border-wood-100" />
                         @if (block.data.caption) {
                           <figcaption class="text-center text-sm font-semibold uppercase tracking-widest text-wood-500 mt-4">{{ block.data.caption }}</figcaption>
                         }
@@ -110,7 +113,7 @@
                     <div class="group relative overflow-hidden cursor-pointer border border-wood-200 hover:border-accent/50 transition-all duration-500"
                          (click)="openLightbox(img.url)">
                       <div class="aspect-[4/3] overflow-hidden">
-                        <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                        <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                       </div>
                     </div>
@@ -129,7 +132,7 @@
                   <a [routerLink]="['/', category().slug, rp.slug]" class="group block bg-wood-50 border border-wood-100 hover:border-accent/40 transition-all duration-500">
                     @if (getImage(rp)) {
                       <div class="aspect-[16/9] overflow-hidden">
-                        <img [src]="getImage(rp)" [alt]="t(rp.title)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                        <img [src]="getImage(rp)" [srcset]="rp.image?.srcset || null" [attr.width]="rp.image?.width" [attr.height]="rp.image?.height" [alt]="t(rp.title)" appImg sizes="(max-width: 768px) 100vw, 25vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                       </div>
                     }
                     <div class="p-6">
@@ -191,7 +194,7 @@
                     <div class="group relative overflow-hidden cursor-pointer border border-wood-800/50 hover:border-accent/40 transition-all duration-700 shadow-2xl"
                          (click)="openLightbox(img.url)">
                       <div class="aspect-[4/3] overflow-hidden">
-                        <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                        <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                              class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110" loading="lazy" />
                       </div>
                       <div class="absolute inset-0 bg-gradient-to-t from-wood-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -218,7 +221,7 @@
                   <div class="col-span-2 row-span-2 group relative overflow-hidden cursor-pointer"
                        scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
                     <div class="aspect-square overflow-hidden rounded-[2rem_0.5rem_2rem_0.5rem] border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl">
-                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                      <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
                       <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem_0.5rem_2rem_0.5rem]"></div>
                     </div>
@@ -228,7 +231,7 @@
                   <div class="row-span-2 group relative overflow-hidden cursor-pointer"
                        scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
                     <div class="h-full overflow-hidden rounded-3xl border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl">
-                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                      <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
                       <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
                     </div>
@@ -238,7 +241,7 @@
                   <div class="group relative overflow-hidden cursor-pointer flex items-center justify-center"
                        scrollReveal="zoom-in" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
                     <div class="w-full aspect-square overflow-hidden rounded-full border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl hover:shadow-[0_0_30px_rgba(232,184,75,0.2)]">
-                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                      <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
                       <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
                     </div>
@@ -248,7 +251,7 @@
                   <div class="group relative overflow-hidden cursor-pointer flex items-center justify-center p-4"
                        scrollReveal="flip-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
                     <div class="w-full aspect-square overflow-hidden rotate-6 hover:rotate-0 border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl rounded-lg">
-                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                      <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                            class="w-full h-full object-cover -rotate-6 group-hover:rotate-0 group-hover:scale-110 transition-all duration-[2s]" loading="lazy" />
                     </div>
                   </div>
@@ -258,7 +261,7 @@
                        scrollReveal="fade-up" [revealDelay]="i * 60" (click)="openLightbox(img.url)">
                     <div class="aspect-[4/3] overflow-hidden border-2 border-wood-800/30 hover:border-accent/50 transition-all duration-700 shadow-xl"
                          [class]="i % 2 === 0 ? 'rounded-[0.5rem_2rem_0.5rem_2rem]' : 'rounded-[2rem_0.5rem_2rem_0.5rem]'">
-                      <img [src]="img.url" [alt]="t(post().title) + ' - ' + (i + 1)"
+                      <img [src]="img.url" [srcset]="img.srcset || null" [attr.width]="img.width" [attr.height]="img.height" appImg [alt]="t(post().title) + ' - ' + (i + 1)"
                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" loading="lazy" />
                       <div class="absolute inset-0 bg-gradient-to-t from-wood-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
@@ -308,7 +311,7 @@
 
                       @else if (block.type === 'figure' && block.data?.image) {
                         <figure class="my-12">
-                          <img [src]="block.data.image" [alt]="block.data.alt || ''" class="w-full object-cover grayscale-[10%] border border-wood-100" />
+                          <img [src]="block.data.image" [srcset]="block.data.image_srcset || null" [attr.width]="block.data.image_width" [attr.height]="block.data.image_height" [alt]="block.data.alt || ''" appImg sizes="(max-width: 1024px) 100vw, 66vw" class="w-full object-cover grayscale-[10%] border border-wood-100" />
                           @if (block.data.caption) {
                             <figcaption class="text-center text-sm font-semibold uppercase tracking-widest text-wood-500 mt-4">{{ block.data.caption }}</figcaption>
                           }
@@ -342,7 +345,7 @@
                       <a [routerLink]="['/', category().slug, rp.slug]" class="group flex gap-4 items-center hover:bg-wood-100/50 p-2 -mx-2 transition-colors">
                         @if (getImage(rp)) {
                           <div class="w-16 h-16 flex-shrink-0 overflow-hidden border border-wood-200">
-                            <img [src]="getImage(rp)" [alt]="t(rp.title)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                            <img [src]="getImage(rp)" [srcset]="rp.image?.srcset || null" [attr.width]="rp.image?.width" [attr.height]="rp.image?.height" [alt]="t(rp.title)" appImg sizes="(max-width: 768px) 100vw, 25vw" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                           </div>
                         }
                         <span class="text-sm font-semibold text-wood-800 group-hover:text-accent transition-colors">{{ t(rp.title) }}</span>
@@ -388,7 +391,7 @@
         <button class="absolute top-6 left-6 w-12 h-12 bg-surface/10 hover:bg-surface/20 flex items-center justify-center text-surface transition-colors z-10" (click)="closeLightbox()">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
-        <img [src]="lightboxImage()" alt="Gallery Image" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl" (click)="$event.stopPropagation()" />
+        <img [src]="lightboxImage()" alt="Gallery Image" appImg priority class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl" (click)="$event.stopPropagation()" />
       </div>
     }
   </div>

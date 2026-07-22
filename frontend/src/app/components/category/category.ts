@@ -2,11 +2,12 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../../services/api.service';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 import { t } from '../../utils/i18n';
 
 @Component({
   selector: 'app-category',
-  imports: [RouterLink],
+  imports: [RouterLink, OptimizedImgDirective],
   templateUrl: './category.html',
   styleUrl: './category.scss',
 })

@@ -20,7 +20,7 @@ class RecentActivities extends BaseWidget
 
     protected static ?string $heading = null;
 
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 6;
 
     public static function canView(): bool
     {

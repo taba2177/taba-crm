@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 use Taba\Crm\Http\Controllers\GoogleTranslateController;
+use Taba\Crm\Http\Controllers\LlmsController;
 use Taba\Crm\Http\Controllers\PageController;
 use Taba\Crm\Http\Controllers\PostController;
 use Taba\Crm\Http\Controllers\PreviewController;
@@ -79,6 +80,10 @@ Route::get('/sitemap', function () {
 
     return response()->file(public_path('sitemap.xml'));
 })->name('sitemap');
+
+// AI-agent site map (https://llmstxt.org). Registered before the SPA
+// catch-all so it is served as text/plain instead of the Angular shell.
+Route::get('/llms.txt', LlmsController::class)->name('llms');
 
 // lang.switch'
 Route::get('/lang/change/{lang}', function ($lang) {

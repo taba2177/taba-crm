@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 import { t } from '../../utils/i18n';
 
 @Component({
   selector: 'crm-service-section',
   standalone: true,
-  imports: [RouterLink, ScrollRevealDirective],
+  imports: [RouterLink, ScrollRevealDirective, OptimizedImgDirective],
   template: `
     <section class="py-24 lg:py-36 bg-wood-950 text-surface border-t-8 border-accent">
       <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
@@ -34,7 +35,10 @@ import { t } from '../../utils/i18n';
               <a [routerLink]="['/', section.slug, post.slug]" class="group block border border-wood-800 hover:border-accent p-8 transition-all duration-300" scrollReveal="fade-up" [revealDelay]="i * 100">
                 @if (post.image?.url) {
                   <div class="aspect-video overflow-hidden mb-6">
-                    <img [src]="post.image.url" [alt]="t(post.title)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <img [src]="post.image.url" [srcset]="post.image.srcset || null"
+                         [attr.width]="post.image.width" [attr.height]="post.image.height"
+                         [alt]="t(post.title)" appImg sizes="(max-width: 768px) 100vw, 33vw"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 }
                 <h3 class="text-xl font-display font-bold text-surface mb-3 group-hover:text-accent transition-colors">{{ t(post.title) }}</h3>

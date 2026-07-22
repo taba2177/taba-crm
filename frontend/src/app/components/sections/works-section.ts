@@ -1,15 +1,13 @@
 import { Component, Input, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 import { t } from '../../utils/i18n';
-import { register } from 'swiper/element/bundle';
-
-register();
 
 @Component({
   selector: 'crm-works-section',
   standalone: true,
-  imports: [RouterLink, ScrollRevealDirective],
+  imports: [RouterLink, ScrollRevealDirective, OptimizedImgDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styles: `
     :host { display: block; }
@@ -54,7 +52,9 @@ register();
                 <swiper-slide class="!w-[340px] sm:!w-[420px] lg:!w-[500px]">
                   <div class="group relative overflow-hidden bg-wood-900/50 border border-wood-800/50 hover:border-accent/40 transition-all duration-700 shadow-2xl">
                     <div class="overflow-hidden">
-                      <img [src]="img.url" [alt]="(i + 1).toString()"
+                      <img [src]="img.url" [srcset]="img.srcset || null"
+                           [attr.width]="img.width" [attr.height]="img.height"
+                           [alt]="(i + 1).toString()" appImg sizes="(max-width: 640px) 90vw, 500px"
                            class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110" loading="lazy" />
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-t from-wood-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -98,7 +98,14 @@ export class WorksSection implements AfterViewInit {
   t = t;
 
   ngAfterViewInit() {
-    setTimeout(() => this.initSwiper(), 300);
+    // Load Swiper only when this section is actually rendered, so its ~140kB
+    // bundle stays out of the initial JavaScript payload (PageSpeed: reduce
+    // unused JavaScript). `register()` is idempotent across sections.
+    setTimeout(async () => {
+      const { register } = await import('swiper/element/bundle');
+      register();
+      this.initSwiper();
+    }, 300);
   }
 
   private initSwiper() {

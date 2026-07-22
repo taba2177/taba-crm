@@ -1,9 +1,28 @@
 @use 'styles/tokens';
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap');
+// Self-hosted fonts (Arabic + Latin subsets). Inlined into the CSS bundle so
+// there is no render-blocking request to a third-party origin. (PageSpeed:
+// eliminate third parties / render-blocking resources.)
+@use 'styles/fonts';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Below-the-fold homepage sections skip rendering/layout work until they
+// approach the viewport. `contain-intrinsic-size` reserves a placeholder
+// height so this never introduces layout shift. The hero (first section) is
+// intentionally excluded so the LCP element renders immediately.
+// (PageSpeed: reduce DOM work / avoid long main-thread tasks.)
+crm-about-section,
+crm-service-section,
+crm-projects-section,
+crm-works-section,
+crm-cards-section,
+crm-benefit-section,
+crm-why-choose-us-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
 
 @layer base {
   body {

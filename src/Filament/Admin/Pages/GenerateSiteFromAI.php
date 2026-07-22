@@ -23,7 +23,12 @@ class GenerateSiteFromAI extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
     protected string $view = 'crm::filament.pages.generate-site-from-a-i';
-    protected static string|\UnitEnum|null $navigationGroup = 'AI Tools';
+    protected static string|\UnitEnum|null $navigationGroup = null;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('AI Tools');
+    }
     protected static ?int $navigationSort = 1;
 
     public ?array $data = [];

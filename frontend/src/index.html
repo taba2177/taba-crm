@@ -9,9 +9,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <!-- Self-hosted fonts: preload the two above-the-fold Arabic subsets (hero
+       heading + body) so LCP text paints without a third-party round-trip.
+       The full @font-face set is inlined in the CSS bundle. -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="/fonts/tajawal-Iurf6YBj_oCad4k1l5anHrRpiYlJ.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="/fonts/alexandria-UMBXrPdDqW66y0Y2usFeaijdA4M5.woff2">
 </head>
 <body class="bg-surface text-wood-900 font-sans antialiased selection:bg-accent selection:text-white">
   <app-root></app-root>

@@ -20,18 +20,18 @@ class ContactEntryResource extends Resource
     protected static ?string $model = ContactEntry::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string
     {
         return number_format(static::getModel()::count());
     }
-    // protected static string|\UnitEnum|null $navigationGroup = 'Contact';
+
     protected static string|\UnitEnum|null $navigationGroup = null;
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Collections');
+        return __('Communication');
     }
 
     public static function getNavigationLabel(): string

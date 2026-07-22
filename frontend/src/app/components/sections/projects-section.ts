@@ -2,12 +2,13 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, ShieldCheck } from 'lucide-angular';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 import { t } from '../../utils/i18n';
 
 @Component({
   selector: 'crm-projects-section',
   standalone: true,
-  imports: [RouterLink, LucideAngularModule, ScrollRevealDirective],
+  imports: [RouterLink, LucideAngularModule, ScrollRevealDirective, OptimizedImgDirective],
   template: `
     <section class="py-24 bg-wood-50 border-t-4 border-accent">
       <div class="max-w-[100rem] mx-auto px-6 sm:px-12">
@@ -25,7 +26,10 @@ import { t } from '../../utils/i18n';
             <a [routerLink]="['/', section.slug, post.slug]" class="group block relative overflow-hidden bg-surface border border-wood-200 hover:border-accent hover:shadow-xl transition-all duration-500" scrollReveal="fade-up" [revealDelay]="i * 100">
               @if (post.image?.url) {
                 <div class="aspect-[4/3] overflow-hidden">
-                  <img [src]="post.image.url" [alt]="t(post.title)" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
+                  <img [src]="post.image.url" [srcset]="post.image.srcset || null"
+                       [attr.width]="post.image.width" [attr.height]="post.image.height"
+                       [alt]="t(post.title)" appImg sizes="(max-width: 768px) 100vw, 33vw"
+                       class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
                 </div>
               } @else {
                 <div class="aspect-[4/3] bg-gradient-to-br from-wood-100 to-wood-200 flex items-center justify-center">

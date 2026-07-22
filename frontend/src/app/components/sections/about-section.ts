@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { LucideAngularModule, CheckCircle } from 'lucide-angular';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 import { t } from '../../utils/i18n';
 
 @Component({
   selector: 'crm-about-section',
   standalone: true,
-  imports: [LucideAngularModule, ScrollRevealDirective],
+  imports: [LucideAngularModule, ScrollRevealDirective, OptimizedImgDirective],
   template: `
     <section id="about" class="py-24 lg:py-36 bg-surface relative overflow-hidden">
       <div class="absolute inset-0 pointer-events-none grid grid-cols-4 gap-4 opacity-5">
@@ -21,7 +22,9 @@ import { t } from '../../utils/i18n';
           <div class="relative group" scrollReveal="fade-right">
             @if (section.posts && section.posts[0]) {
               <div class="aspect-[3/4] lg:aspect-square overflow-hidden bg-wood-200 relative">
-                <img [src]="section.posts[0].image?.url || ''" alt="About Us"
+                <img [src]="section.posts[0].image?.url || ''" [srcset]="section.posts[0].image?.srcset || null"
+                     [attr.width]="section.posts[0].image?.width" [attr.height]="section.posts[0].image?.height"
+                     alt="About Us" appImg sizes="(max-width: 1024px) 100vw, 50vw"
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out mix-blend-multiply" />
                 <div class="absolute inset-0 bg-wood-900 mix-blend-color opacity-20"></div>
               </div>

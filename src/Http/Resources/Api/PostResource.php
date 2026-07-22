@@ -5,6 +5,7 @@ namespace Taba\Crm\Http\Resources\Api;
 use Awcodes\Curator\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Taba\Crm\Services\ResponsiveImageService;
 
 class PostResource extends JsonResource
 {
@@ -15,13 +16,16 @@ class PostResource extends JsonResource
     {
         $locale = $request->header('Accept-Language', app()->getLocale());
 
+        $image = $this->image instanceof Media ? $this->image : null;
+        $optimized = app(ResponsiveImageService::class)->forMedia($image);
+
         return [
             'id'          => $this->id,
             'title'       => $this->getTranslation('title', $locale, false),
             'slug'        => $this->slug,
             'content'     => $this->resolveContentBlocks($this->getTranslation('content', $locale, false)),
             'excerpt'     => $this->excerpt,
-            'image_url'   => $this->image?->url ?? null,
+            'image_url'   => $optimized['src'] ?? $this->image?->url ?? null,
             'meta_title'  => $this->getTranslation('meta_title', $locale, false),
             'meta_description' => $this->getTranslation('meta_description', $locale, false),
             'metadata'    => $this->getTranslation('metadata', $locale, false),
@@ -70,7 +74,11 @@ class PostResource extends JsonResource
                 !isset($block['data']['image_url'])
             ) {
                 $media = Media::find($block['data']['image_id']);
-                $block['data']['image_url'] = $media?->url ?? null;
+                $optimized = app(ResponsiveImageService::class)->forMedia($media);
+                $block['data']['image_url'] = $optimized['src'] ?? $media?->url ?? null;
+                $block['data']['image_srcset'] = $optimized['srcset'] ?? null;
+                $block['data']['image_width'] = $optimized['width'] ?? null;
+                $block['data']['image_height'] = $optimized['height'] ?? null;
             }
 
             return $block;

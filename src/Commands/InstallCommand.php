@@ -537,9 +537,7 @@ class InstallCommand extends Command
 
     protected function setupFilamentShield(): bool
     {
-        // Ensure the admin panel provider is loaded and registered before Shield runs
         try {
-            // Force reload the AdminPanelProvider
             if (class_exists(\App\Providers\Filament\AdminPanelProvider::class)) {
                 $provider = app()->resolveProvider(\App\Providers\Filament\AdminPanelProvider::class);
                 if (!$provider) {
@@ -548,7 +546,6 @@ class InstallCommand extends Command
                 }
             }
 
-            // Verify the admin panel exists and is set as default
             if (!\Filament\Facades\Filament::getDefaultPanel()) {
                 $panels = \Filament\Facades\Filament::getPanels();
                 if (isset($panels['admin'])) {
@@ -559,7 +556,6 @@ class InstallCommand extends Command
             $this->warn('Note: Could not pre-register panel: ' . $e->getMessage());
         }
 
-        // Publish and patch Shield config so super_admin bypasses Gate
         $this->call('vendor:publish', ['--tag' => 'filament-shield-config', '--force' => false]);
         $shieldConfigPath = config_path('filament-shield.php');
         if (File::exists($shieldConfigPath)) {
@@ -569,23 +565,15 @@ class InstallCommand extends Command
             }
         }
 
-        // Install Filament Shield for admin panel
         $installResult = $this->call('shield:install', ['panel' => 'admin']);
-
         if ($installResult !== 0) {
-            $this->error('Failed to install Filament Shield');
-            return false;
+            $this->warn('Shield install returned non-zero — roles will be created by seeder.');
         }
 
-        // Generate policies and permissions for all resources
-        $generateResult = $this->call('shield:generate', [
-            '--all' => true,
-            '--panel' => 'admin',
-        ]);
-
-        if ($generateResult !== 0) {
-            $this->error('Failed to generate Shield permissions');
-            return false;
+        try {
+            $this->call('shield:generate', ['--all' => true, '--panel' => 'admin']);
+        } catch (\Throwable $e) {
+            $this->warn('Shield generate skipped: ' . $e->getMessage());
         }
 
         return true;

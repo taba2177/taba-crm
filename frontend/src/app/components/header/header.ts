@@ -3,10 +3,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { LucideAngularModule, Phone, Menu, X } from 'lucide-angular';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule, OptimizedImgDirective],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

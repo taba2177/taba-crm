@@ -44,7 +44,7 @@ class PostCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Collections');
+        return __('Content');
     }
 
         protected static ?string $navigationLabel = null;

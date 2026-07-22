@@ -20,6 +20,15 @@ class VisitorAnalytics extends ChartWidget
 
     protected static ?int $sort = 3;
 
+    public static function canView(): bool
+    {
+        try {
+            return \Taba\Crm\Models\User::count() > 1;
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     public function getHeading(): ?string
     {
         return __('New User Registrations');

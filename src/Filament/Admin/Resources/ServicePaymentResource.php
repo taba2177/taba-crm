@@ -29,9 +29,11 @@ class ServicePaymentResource extends Resource
         return number_format(static::getModel()::count());
     }
 
+    protected static ?int $navigationSort = 1;
+
     public static function getNavigationGroup(): ?string
     {
-        return __('Payment Services');
+        return __('Finance');
     }
 
     public static function getNavigationLabel(): string

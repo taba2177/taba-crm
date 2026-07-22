@@ -9,7 +9,7 @@
       <!-- Image fallback as absolute -->
       @if (posts().length && getImage(posts()[0])) {
         <div class="absolute inset-0 z-0">
-          <img [src]="getImage(posts()[0])" alt="Banner" class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
+          <img [src]="getImage(posts()[0])" alt="Banner" appImg priority class="w-full h-full object-cover opacity-20 grayscale brightness-75 contrast-125 mix-blend-luminosity animate-scale-in" />
           <div class="absolute inset-0 bg-wood-950/80"></div>
         </div>
       }
@@ -44,6 +44,8 @@
                  class="group flex flex-col items-start bg-transparent transition-all duration-500">
                 <div class="aspect-[4/3] w-full overflow-hidden mb-8 bg-wood-100 border border-wood-200 group-hover:border-wood-950 transition-colors">
                   <img [src]="getImage(post) || '/images/gallery-placeholder.jpg'" [alt]="t(post.title)"
+                       [srcset]="post.image?.srcset || null" [attr.width]="post.image?.width" [attr.height]="post.image?.height"
+                       appImg sizes="(max-width: 768px) 100vw, 33vw"
                        class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1.5s] ease-out" />
                 </div>
 

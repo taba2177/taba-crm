@@ -34,7 +34,7 @@ class UserResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Collections');
+        return __('Administration');
     }
     protected static ?string $navigationLabel = null;
 
@@ -96,12 +96,9 @@ class UserResource extends Resource
                 Forms\Components\Select::make('roles')
                     ->multiple()
                     ->relationship('roles', 'name')
-                    ->preload(),
-
-                // Using CheckboxList Component
-                Forms\Components\CheckboxList::make('roles')
-                    ->relationship('roles', 'name')
-                    ->searchable(),
+                    ->preload()
+                    ->searchable()
+                    ->translateLabel(),
             ]);
     }
 

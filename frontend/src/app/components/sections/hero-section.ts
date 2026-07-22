@@ -1,16 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { t } from '../../utils/i18n';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 
 @Component({
   selector: 'crm-hero-section',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, OptimizedImgDirective],
   template: `
     <section class="relative min-h-[100vh] bg-wood-950 text-surface overflow-hidden">
       @if (section.posts && section.posts[0]) {
         <div class="absolute inset-0 z-0">
-          <img [src]="section.posts[0].image?.url || ''" alt="Hero Image"
+          <img [src]="section.posts[0].image?.url || ''" [srcset]="section.posts[0].image?.srcset || null"
+               [attr.width]="section.posts[0].image?.width" [attr.height]="section.posts[0].image?.height"
+               alt="Hero Image" appImg priority
                class="w-full h-full object-cover select-none animate-scale-in" />
           <div class="absolute inset-0 bg-wood-950/70"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-wood-950 via-transparent to-wood-950/40"></div>

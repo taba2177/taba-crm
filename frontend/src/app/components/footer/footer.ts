@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { t } from '../../utils/i18n';
 import { LucideAngularModule, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-angular';
+import { OptimizedImgDirective } from '../../directives/optimized-img.directive';
 
 @Component({
   selector: 'app-footer',
-  imports: [RouterLink, LucideAngularModule],
+  imports: [RouterLink, LucideAngularModule, OptimizedImgDirective],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })

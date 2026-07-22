@@ -5,6 +5,7 @@ namespace Taba\Crm\Http\Resources\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use Taba\Crm\Services\ResponsiveImageService;
 
 class PostCategoryResource extends JsonResource
 {
@@ -22,9 +23,8 @@ class PostCategoryResource extends JsonResource
             'description'  => $this->getTranslation('description', $locale, false),
             'subtitle'     => $this->getTranslation('subtitle', $locale, false),
             'image'        => $this->image,
-            'image_url'    => $this->image
-                ? (str_starts_with((string) $this->image, 'http') ? $this->image : Storage::url($this->image))
-                : null,
+            'image_url'    => $this->optimizedImageUrl(),
+            'image_srcset' => $this->optimizedImageSrcset(),
             'order'        => $this->order,
             'is_active'    => $this->is_active,
             'parent_id'    => $this->parent_id,
@@ -49,5 +49,49 @@ class PostCategoryResource extends JsonResource
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
+    }
+
+    /**
+     * Category images are stored as raw paths (not Curator Media). When the
+     * path is a local, resizable file we serve an optimized WebP through Glide;
+     * remote URLs and non-resizable files pass through untouched.
+     */
+    private function optimizedImageUrl(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        $image = (string) $this->image;
+
+        if (str_starts_with($image, 'http')) {
+            return $image;
+        }
+
+        $ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+        if (function_exists('is_media_resizable') && is_media_resizable($ext)) {
+            return app(ResponsiveImageService::class)->url(ltrim($image, '/'), ResponsiveImageService::DEFAULT_WIDTH);
+        }
+
+        return Storage::url($image);
+    }
+
+    private function optimizedImageSrcset(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        $image = (string) $this->image;
+        if (str_starts_with($image, 'http')) {
+            return null;
+        }
+
+        $ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+        if (function_exists('is_media_resizable') && is_media_resizable($ext)) {
+            return app(ResponsiveImageService::class)->srcset(ltrim($image, '/'));
+        }
+
+        return null;
     }
 }
