@@ -19,14 +19,14 @@
     },
     "authors": [
         {
-            "name": "taba2177",
+            "name": "taba",
             "email": "tabadev217@gmail.com"
         }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "althinect/filament-spatie-roles-permissions": "^3.3.2",
         "asosick/filament-layout-manager": "^2.1",
         "awcodes/filament-curator": "^4.0",
@@ -34,7 +34,6 @@
         "bezhansalleh/filament-exceptions": "^4.2",
         "bezhansalleh/filament-google-analytics": "^3.3",
         "bezhansalleh/filament-shield": "^4.2",
-        "canyongbs/filament-tiptap-editor": "^2.3",
         "croustibat/filament-jobs-monitor": "^4.4",
         "diglactic/laravel-breadcrumbs": "^10.0",
         "diogogpinto/filament-auth-ui-enhancer": "^2.0",
