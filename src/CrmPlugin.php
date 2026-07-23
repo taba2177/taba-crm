@@ -89,13 +89,17 @@ class CrmPlugin implements Plugin
                 ->emptyPanelView('crm::filament.login-slideshow'),
         ]);
 
+        // Do not set icons on navigation groups: the resources/pages inside
+        // these groups already declare their own navigation icons, and Filament v4
+        // forbids a group and its items both having icons (it throws a 500 while
+        // rendering the sidebar). Keep the per-item icons and leave groups iconless.
         $panel->navigationGroups([
-            \Filament\Navigation\NavigationGroup::make(__('Content'))->icon('heroicon-o-book-open'),
-            \Filament\Navigation\NavigationGroup::make(__('Communication'))->icon('heroicon-o-envelope'),
-            \Filament\Navigation\NavigationGroup::make(__('Finance'))->icon('heroicon-o-currency-dollar'),
-            \Filament\Navigation\NavigationGroup::make(__('AI Tools'))->icon('heroicon-o-sparkles'),
-            \Filament\Navigation\NavigationGroup::make(__('Administration'))->icon('heroicon-o-shield-check'),
-            \Filament\Navigation\NavigationGroup::make(__('Settings'))->icon('heroicon-o-cog-6-tooth')->collapsed(),
+            \Filament\Navigation\NavigationGroup::make(__('Content')),
+            \Filament\Navigation\NavigationGroup::make(__('Communication')),
+            \Filament\Navigation\NavigationGroup::make(__('Finance')),
+            \Filament\Navigation\NavigationGroup::make(__('AI Tools')),
+            \Filament\Navigation\NavigationGroup::make(__('Administration')),
+            \Filament\Navigation\NavigationGroup::make(__('Settings'))->collapsed(),
         ]);
 
         $panel->middleware([
