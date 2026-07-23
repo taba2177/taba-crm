@@ -4,7 +4,7 @@ return [
     'datetime_format' => 'm/d/Y H:i:s',
     'date_format' => 'm/d/Y',
 
-    'activity_resource' => App\Filament\Resources\ActivityResource::class,
+    'activity_resource' => \Taba\Crm\Filament\Admin\Resources\ActivityResource::class,
 
     'resources' => [
         'enabled' => true,
@@ -12,6 +12,10 @@ return [
         'logger' => \Jacobtims\FilamentLogger\Loggers\ResourceLogger::class,
         'color' => 'success',
         'exclude' => [
+            // Never log the activity log itself: doing so makes creating an
+            // activity create another activity, copying its `properties` each
+            // time and doubling the row size until the DB OOMs. See RecentActivities widget.
+            \Taba\Crm\Filament\Admin\Resources\ActivityResource::class,
             BezhanSalleh\FilamentExceptions\Resources\ExceptionResource::class,
             Croustibat\FilamentJobsMonitor\Resources\QueueMonitorResource::class,
         ],

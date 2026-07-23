@@ -39,7 +39,14 @@ class RecentActivities extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Activity::latest()->limit(5))
+            // Select only the columns the table renders. Never load `properties`
+            // here: it can be very large and would exhaust memory when hydrated.
+            ->query(
+                Activity::query()
+                    ->select(['id', 'log_name', 'description', 'subject_type', 'subject_id', 'causer_type', 'causer_id', 'created_at'])
+                    ->latest()
+                    ->limit(5)
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description')),
