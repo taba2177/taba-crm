@@ -25,6 +25,29 @@ class CrmServiceProvider extends ServiceProvider
         // service providers here — allow those packages to register themselves.
         // Merge the package's config file with the application's.
         $this->mergeConfigFrom(__DIR__.'/../config/crm.php', 'crm');
+
+        // Exclude our own ActivityResource from filament-logger's resource
+        // logging. This is critical: the panel registers our ActivityResource
+        // (model = Spatie\Activitylog Activity). Without the exclusion,
+        // filament-logger observes the Activity model and logs every activity as
+        // a new "Activity Created" activity — copying the previous row's
+        // `properties` each time. That doubles the row on every write and
+        // balloons the DB to gigabytes within seconds, hanging the machine on a
+        // fresh install and timing out admin login.
+        //
+        // We set the config key directly rather than via mergeConfigFrom():
+        // Laravel's mergeConfigFrom() is a *shallow* array_merge, so a package
+        // config file cannot override a nested key (resources.exclude) once
+        // filament-logger has merged its own defaults. Setting it here in the
+        // register phase runs after filament-logger merges its config but before
+        // its packageBooted() registers the model observers, so the exclusion
+        // takes effect. See RecentActivities widget for the read-side guard.
+        config([
+            'filament-logger.resources.exclude' => array_values(array_unique(array_merge(
+                (array) config('filament-logger.resources.exclude', []),
+                [\Taba\Crm\Filament\Admin\Resources\ActivityResource::class],
+            ))),
+        ]);
     }
 
     /**
